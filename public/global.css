@@ -14,6 +14,7 @@
 
 body {
 	background-color: rgb(29, 29, 29);
+    overflow-x: hidden;
 }
 
 .trans-x-2\/4 {
