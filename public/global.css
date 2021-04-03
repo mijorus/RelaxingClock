@@ -1,5 +1,25 @@
-@import url('./vendors/linearicons/style.css');
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('/fonts/webfonts/sourcecodepro-medium.ttf');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DM Mono';
+    src: url('/fonts/webfonts/dmmono-regular.ttf');
+    font-weight: 500;
+    font-display: swap;
+}
 
 body {
 	background-color: rgb(29, 29, 29);
+}
+
+.trans-x-2\/4 {
+    transform: translateX(50%);
+}
+
+.-trans-x-2\/4 {
+    transform: translateX(-50%);
 }

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import BigClock from './components/BigClock.svelte';
+	import Home from './components/Home.svelte';
 </script>
 
 <main class="w-screen h-screen">
-	<BigClock />
+	<Home />
 </main>
 
 <style global>

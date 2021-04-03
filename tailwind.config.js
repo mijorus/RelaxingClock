@@ -16,7 +16,17 @@ module.exports = {
       'primary': 'rgb(29, 29, 29)',
       'secondary': 'rgb(63, 63, 63)',
     }),
-    extend: {},
+    textColor: theme => ({
+      ...theme('colors'),
+      'primary': 'rgb(245, 245, 245)',
+      'screen-saver': 'rgba(245, 245, 245, 0.45)',
+    }),
+    extend: {
+      fontFamily: {
+        'primary': ['Source Code Pro', 'monospace'],
+        'secondary': ['DM Mono', 'monospace'],
+      },
+    },
   },
   variants: {
     extend: {},
