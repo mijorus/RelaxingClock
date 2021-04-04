@@ -12,7 +12,7 @@
     export let btn: SettingsBtn;
 </script>
 
-{#if button.type === 'boolean'}
+{#if btn.type === 'boolean'}
     <button class="text-md transp-btn {btn.state ? 'bg-highlighted':'bg-transparent'}" data-option="on" alt="{btn.label} on">
         ON
     </button>

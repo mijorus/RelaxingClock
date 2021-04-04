@@ -20,6 +20,7 @@ module.exports = {
     textColor: theme => ({
       ...theme('colors'),
       'primary': 'rgb(245, 245, 245)',
+      'secondary': 'rgb(100 100 100)',
       'screen-saver': 'rgba(245, 245, 245, 0.45)',
     }),
     borderColor: theme => ({
@@ -29,9 +30,13 @@ module.exports = {
     }),
     extend: {
       fontFamily: {
-        'primary': ['Source Code Pro', 'monospace'],
-        'secondary': ['DM Mono', 'monospace'],
+        'clock': ['Source Code Pro', 'monospace'],
+        'primary': ['DM Mono', 'monospace'],
       },
+      colors: {
+        'primary': 'rgb(245, 245, 245)',
+        'secondary': 'rgb(63, 63, 63)',
+      }
     },
   },
   variants: {

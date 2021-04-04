@@ -52,7 +52,7 @@
                 </button>
             </div>
         </div>
-        <div class="relative left-2/4" style="transform: translateX({$selectionPosition}%);">
+        <div class="relative left-2/4 whitespace-nowrap" style="transform: translateX({$selectionPosition}%);">
             {#each styles as style, i }
             <span 
                 class="{windowClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === activeStyle ? 'opacity-1' : 'opacity-0'}" 
