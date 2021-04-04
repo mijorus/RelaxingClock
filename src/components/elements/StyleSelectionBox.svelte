@@ -1,7 +1,7 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
 
-    import styles from "../clockStyles/styles";
+    import styles from "../../scripts/clockStyles/styles";
 
     const windowClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';

@@ -15,8 +15,14 @@ module.exports = {
       ...theme('colors'),
       'primary': 'rgb(29, 29, 29)',
       'secondary': 'rgb(63, 63, 63)',
+      'highlighted': 'rgb(245, 245, 245)',
     }),
     textColor: theme => ({
+      ...theme('colors'),
+      'primary': 'rgb(245, 245, 245)',
+      'screen-saver': 'rgba(245, 245, 245, 0.45)',
+    }),
+    borderColor: theme => ({
       ...theme('colors'),
       'primary': 'rgb(245, 245, 245)',
       'screen-saver': 'rgba(245, 245, 245, 0.45)',
