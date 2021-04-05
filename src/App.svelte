@@ -24,14 +24,12 @@
 		}
 		
 		.transp-btn:focus {
-			cursor: pointer;
 			border: none;
 			background-color: transparent;
 			outline: none;
 		}
 		
 		.transp-btn:active {
-			cursor: pointer;
 			border: none;
 			background-color: transparent;
 			outline: none;

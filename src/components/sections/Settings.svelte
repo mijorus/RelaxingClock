@@ -8,7 +8,7 @@
     import Buttons from "../elements/settings/Buttons.svelte";
 </script>
 
-<div class="w-2/4 flex flex-col md:w-8/12 m-auto relative">
+<div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto relative">
     <SettingsBox>
         <Title title="High contrast">
             <TitleIcon>
@@ -20,6 +20,7 @@
             description={{label:'Test descripion'}}
             available={true}
         >
+            <Buttons type={'boolean'} state={true}/>
         </PrimaryBox>
     </SettingsBox>
 

@@ -1,7 +1,4 @@
-<script lang="ts">
-    // import type { SettingsBtn } from "./Buttons.svelte";
-    // import SettingsButtons from "./Buttons.svelte";
-    
+<script lang="ts">    
     interface SettingsLabel {
         text: string,
         bgClass?: string,
@@ -18,9 +15,9 @@
 </script>
 
 <div>
-    <div class="{label.bgClass || 'bg-secondary'} rounded-xl p-3 md:p-4 m-3 md:m-4">
+    <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 md:p-4 m-3 md:m-4">
         <span class="text-primary text-xl font-primary">{label.text}</span>
-        <div class="rounded-md {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
+        <div class="{available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
             <slot></slot>
         </div>
     </div>
