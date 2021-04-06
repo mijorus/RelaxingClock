@@ -8,10 +8,5 @@
 </h2>
 
 <style>
-    i {
-        position: absolute;
-        bottom: 50%;
-        left: -50px;
-        transform: translate(-50%,50%);
-    }
+
 </style>

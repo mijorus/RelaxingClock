@@ -5,7 +5,8 @@
     import TitleIcon from "../elements/settings/TitleIcon.svelte";
     import PrimaryBox from "../elements/settings/PrimaryBox.svelte";
     import NestedBox from "../elements/settings/NestedBox.svelte";
-    import Buttons from "../elements/settings/Buttons.svelte";
+    import Booleans from "../elements/settings/Buttons/Booleans.svelte";
+    import Action from "../elements/settings/Buttons/Action.svelte";
 </script>
 
 <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto relative">
@@ -20,7 +21,7 @@
             description={{label:'Test descripion'}}
             available={true}
         >
-            <Buttons type={'boolean'} state={true}/>
+            <Booleans state={true} label={'test'}/>
         </PrimaryBox>
     </SettingsBox>
 
@@ -35,6 +36,27 @@
             description={{label:'Test descripion'}}
             available={true}
         >
+            <Action label={'CLICK ME'}/>
         </PrimaryBox>
+        <NestedBox label={'I am nested'} bordered={true} available={true}/>
     </SettingsBox>
 </div>
+
+<style global>
+    .settings-btn {
+        cursor: pointer;
+        border: none;
+        transition: color .4s linear;
+        outline: none;
+    }
+    
+    .settings-btn:focus {
+        border: none;
+        outline: none;
+    }
+    
+    .settings-btn:active {
+        border: none;
+        outline: none;
+    }
+</style>

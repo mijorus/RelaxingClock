@@ -8,13 +8,15 @@
 	<Settings />
 </main>
 
-<style global>
+<style global lang="postcss">
 	@import '@csstools/normalize.css';
 	
+	/* purgecss start ignore */
 	@tailwind base;
 	@tailwind components;
+	/* purgecss end ignore */
 	@tailwind utilities;
-	
+
 	@layer utilities {
 		.transp-btn {
 			cursor: pointer;
