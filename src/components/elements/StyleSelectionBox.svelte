@@ -1,11 +1,12 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
-
+    import {activeStyle} from "../../stores/clockStyle";
     import styles from "../../scripts/clockStyles/styles";
 
     const windowClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';
-    let activeStyle: number = 0;
+    const l: number = styles.length; //the number of available styles
+    // let activeStyle: number = 0;
 
     let selectionPosition = spring(0, {
         stiffness: 0.07,
@@ -13,24 +14,26 @@
     });
 
     function changeStyle(toStyle: number) {
-        const l: number = styles.length;
-        
         if (toStyle >= 0 && toStyle <= (l - 1)) {
-            activeStyle = toStyle;
-            selectionPosition.set( - (100 / l) * activeStyle);
+            activeStyle.set(toStyle);
+            selectionPosition.set( - (100 / l) * $activeStyle);
         } else {
-            selectionPosition.set(toStyle > 0 ? ( - ((100 / l) * (l - 1)) - 3) : 3);
-            setTimeout(() => selectionPosition.set(toStyle > 0 ? ( - (100 / l) * (l - 1)) : 0), 100);
+            const overScroll: number = 3; //the amount pixels of the overscroll effect
+            selectionPosition.set((toStyle > 0) ? ( - ((100 / l) * (l - 1)) - overScroll) : overScroll);
+            
+            setTimeout(() => {
+                selectionPosition.set((toStyle > 0) ? ( - (100 / l) * (l - 1)) : 0)
+            }, 100);
         }
     }
 
     function moveLeft() {
-        changeStyle(activeStyle - 1);
+        changeStyle($activeStyle - 1);
     }
 
     
     function moveRight() {
-        changeStyle(activeStyle + 1);
+        changeStyle($activeStyle + 1);
     }
 </script>
 
@@ -42,20 +45,20 @@
                 <button aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
                     on:click={moveLeft}
                 >
-                    <i class="fas fa-caret-left text-primary text-md opacity-{activeStyle === 0 ? '20' : 1} fade"></i>
+                    <i class="fas fa-caret-left text-primary text-md opacity-{$activeStyle === 0 ? '20' : 1} fade"></i>
                 </button>
                 <span class="inline-block {windowClass} opacity-0"></span>
                 <button aria-label="move right" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="forward" 
                     on:click={moveRight}
                 >
-                    <i class="fas fa-caret-right text-primary text-md opacity-{activeStyle === styles.length - 1 ? '20' : '1'} fade"></i>
+                    <i class="fas fa-caret-right text-primary text-md opacity-{$activeStyle === styles.length - 1 ? '20' : '1'} fade"></i>
                 </button>
             </div>
         </div>
         <div class="relative left-2/4 whitespace-nowrap" style="transform: translateX({$selectionPosition}%);">
             {#each styles as style, i }
             <span 
-                class="{windowClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === activeStyle ? 'opacity-1' : 'opacity-0'}" 
+                class="{windowClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
                 data-selection={i}
             >
                 {style.label}
