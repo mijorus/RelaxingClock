@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-    
     interface clockElements {
         [key: string]: HTMLElement;
     }
@@ -30,10 +29,9 @@
     import Divisor from './Divisor.svelte';
     import Seconds from './Seconds.svelte';
     import Minutes from './Minutes.svelte';
-import { windowReady } from 'html-ready';
+    import { windowReady } from 'html-ready';
 
     const styleClass: string = 'font-clock text-primary text-8xl';
-
 </script>
 
 <div class="h-64 flex flex-row items-center relative">
