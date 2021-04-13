@@ -1,3 +1,24 @@
+<script lang="ts" context="module">
+    
+    interface clockElements {
+        [key: string]: HTMLElement;
+    }
+    
+    let elements: clockElements = undefined;
+
+    export async function getClockElements(): Promise<clockElements> {
+        await windowReady;
+
+        if (!elements) elements = {
+            hours: document.getElementById('hours-box'),
+            min: document.getElementById('minutes-box'),
+            sec: document.getElementById('seconds-box'),
+        };
+
+        return new Promise(resolve => resolve(elements));
+    }
+</script>
+
 <script lang="ts">
     import time from '../../stores/time';
     import { activeStyle } from "../../stores/clockStyle";
@@ -9,6 +30,7 @@
     import Divisor from './Divisor.svelte';
     import Seconds from './Seconds.svelte';
     import Minutes from './Minutes.svelte';
+import { windowReady } from 'html-ready';
 
     const styleClass: string = 'font-clock text-primary text-8xl';
 
