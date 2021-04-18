@@ -2,4 +2,4 @@
     export let value: number|string;
 </script>
 
-<span>{value}</span>
+<span id="minutes">{value}</span>

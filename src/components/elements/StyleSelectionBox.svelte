@@ -1,12 +1,12 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
     import {activeStyle} from "../../stores/clockStyle";
-    import styles from "../../scripts/clockStyles/styles";
+    import { screenSaver } from '../../stores/globalState';
+    import styles from "../clock/clockStyles/styles";
 
     const windowClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';
     const l: number = styles.length; //the number of available styles
-    // let activeStyle: number = 0;
 
     let selectionPosition = spring(0, {
         stiffness: 0.07,
@@ -37,7 +37,7 @@
     }
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center overflow-visible animated {$screenSaver ? 'mt-0 h-0 opacity-0 z-0 pointer-events-none' : 'mt-10 h-3.5'}">
     <div class="font-primary text-base text-primary">Select your clock style</div>
     <div class="relative flex">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
@@ -76,5 +76,9 @@
 <style>
     .fade {
         transition: opacity .15s linear;
+    }
+
+    .animated {
+        transition: all 1s ease-out;
     }
 </style>

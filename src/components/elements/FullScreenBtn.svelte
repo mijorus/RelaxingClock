@@ -23,6 +23,6 @@
     }
 </script>
 
-<button class="top-0 right-0 m-1 absolute mx-2 transp-btn" on:click|stopPropagation={handleExpandIcon}>
+<button class="top-0 right-0 m-1 absolute mx-2 transp-btn z-50" on:click|stopPropagation={handleExpandIcon}>
     <span class="lnr text-primary {isFullScreen ? "lnr-frame-contract text-2xl" : "lnr-frame-expand text-xl"}"></span>
 </button>

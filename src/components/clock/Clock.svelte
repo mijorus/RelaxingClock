@@ -1,17 +1,16 @@
 <script lang="ts" context="module">
-    interface clockElements {
-        [key: string]: HTMLElement;
-    }
+    import type { ClockElements } from "../../types";
     
-    let elements: clockElements = undefined;
+    let elements: ClockElements = undefined;
+    export const clockElementsClass: string = 'absolute animated left-1/2 top-1/2';
 
-    export async function getClockElements(): Promise<clockElements> {
+    export async function getClockElements(): Promise<ClockElements> {
         await windowReady;
 
         if (!elements) elements = {
             hours: document.getElementById('hours-box'),
-            min: document.getElementById('minutes-box'),
-            sec: document.getElementById('seconds-box'),
+            minutes: document.getElementById('minutes-box'),
+            seconds: document.getElementById('seconds-box'),
         };
 
         return new Promise(resolve => resolve(elements));
@@ -20,29 +19,32 @@
 
 <script lang="ts">
     import time from '../../stores/time';
-    import { activeStyle } from "../../stores/clockStyle";
+    import { activeStyle, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
+    import { screenSaver } from "../../stores/globalState";
     
     import Classic from './clockStyles/Classic.svelte';
     import Focused from './clockStyles/Focused.svelte';
     
     import Hours from './Hours.svelte';
-    import Divisor from './Divisor.svelte';
-    import Seconds from './Seconds.svelte';
     import Minutes from './Minutes.svelte';
+    import Seconds from './Seconds.svelte';
+    import Divisor from './Divisor.svelte';
     import { windowReady } from 'html-ready';
 
     const styleClass: string = 'font-clock text-primary text-8xl';
+
+    // setTimeout(() => screenSaver.set(true), 5000);
 </script>
 
-<div class="h-64 flex flex-row items-center relative">
+<div class="flex flex-row items-center relative">
     <div id="big-clock" class="{styleClass} whitespace-nowrap relative w-full h-full m-auto">
-        <span id="hours-box" class="absolute animate">
+        <span id="hours-box" class="{clockElementsClass}" style="transform: translateX({$hoursBox.x}) translateY({$hoursBox.y});">
             <Hours value={$time.format('HH')}></Hours>
         </span>
-        <span id="minutes-box" class="absolute animate">
+        <span id="minutes-box" class="{clockElementsClass}" style="transform: translateX({$minutesBox.x}) translateY({$minutesBox.y});">
             <span id="minutes-divisor"><Divisor /></span><Minutes value={$time.format('mm')}></Minutes>
         </span>
-        <span id="seconds-box" class="absolute animate">
+        <span id="seconds-box" class="{clockElementsClass}" style="transform: translateX({$secondsBox.x}) translateY({$secondsBox.y});">
             <span id="seconds-divisor"><Divisor /></span><Seconds value={$time.format('ss')}></Seconds>
         </span>
     </div>
@@ -55,7 +57,11 @@
 </div>
 
 <style>
-    .animate {
+    .animated {
         transition: transform .3s ease-out, opacity .2s linear;
+    }
+
+    .change-height {
+        transition: all .1s linear;
     }
 </style>

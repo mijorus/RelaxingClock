@@ -6,8 +6,8 @@
 
 <FullScreenBtn />
 
-<Clock />
+<div class="h-full flex flex-col justify-center items-center">
+    <Clock />
 
-<div class="mt-10">
     <StyleSelectionBox />
 </div>

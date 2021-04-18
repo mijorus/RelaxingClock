@@ -1,28 +1,26 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
+    import { hoursBox, minutesBox } from '../../../stores/clockStyle';
+    import type { ClockElements } from '../../../types';
     import { getClockElements } from '../Clock.svelte';
+    import { getWidth } from '../../../utils/getBoundingClientRect';
 
-
-    function getWidth(el:HTMLElement): number {
-        return el.getBoundingClientRect().width
-    }
-
+    let clock:ClockElements;
+    
     async function compute() {
-        const { hours, min} = await getClockElements();
-        const minDiv: HTMLElement = document.getElementById('minutes-divisor');
+        clock = await getClockElements();
         
-        [hours, min].forEach((el) => el.classList.add('left-1/2', 'top-1/2'));
-        document.getElementById('seconds-box').classList.add('opacity-0');
-        
-        const divSize: number = getWidth(minDiv);
+        clock.seconds.classList.add('opacity-0');
+        const divSize: number = getWidth(document.getElementById('minutes-divisor'));
 
-        min.style.transform = `translate(${-(divSize / 2)}px, -50%)`;
-        hours.style.transform = `translate(${-(getWidth(hours) + (divSize / 2 ))}px, -50%)`;
+        hoursBox.set({x: `${-(getWidth(clock.hours) + (divSize / 2 ))}px`, y: '-50%'});
+        minutesBox.set({x: `${-(divSize / 2)}px`, y: '-50%'});
+
     }
 
-    async function load() {
-        compute();
-    }
+    onMount(() => compute());
 
-    onMount(() => load());
+    onDestroy(() => {
+        if (clock) clock.seconds.classList.remove('opacity-0');
+    });
 </script>
