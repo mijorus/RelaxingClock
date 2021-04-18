@@ -37,7 +37,7 @@
     }
 </script>
 
-<div class="flex flex-col items-center overflow-visible animated {$screenSaver ? 'mt-0 h-0 opacity-0 z-0 pointer-events-none' : 'mt-10 h-3.5'}">
+<div class="flex flex-col items-center overflow-visible h-0 animated {$screenSaver ? 'mt-0 opacity-0 z-0 pointer-events-none' : 'mt-20 opacity-1'}">
     <div class="font-primary text-base text-primary">Select your clock style</div>
     <div class="relative flex">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">

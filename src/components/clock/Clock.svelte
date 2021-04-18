@@ -33,7 +33,7 @@
 
     const styleClass: string = 'font-clock text-primary text-8xl';
 
-    // setTimeout(() => screenSaver.set(true), 5000);
+    setTimeout(() => screenSaver.set(true), 5000);
 </script>
 
 <div class="flex flex-row items-center relative">
