@@ -20,20 +20,18 @@
 <script lang="ts">
     import time from '../../stores/time';
     import { activeStyle, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
-    import { screenSaver } from "../../stores/globalState";
     
     import Classic from './clockStyles/Classic.svelte';
     import Focused from './clockStyles/Focused.svelte';
-    
     import Hours from './Hours.svelte';
     import Minutes from './Minutes.svelte';
     import Seconds from './Seconds.svelte';
     import Divisor from './Divisor.svelte';
     import { windowReady } from 'html-ready';
 
-    const styleClass: string = 'font-clock text-primary text-8xl';
+    const styleClass: string = 'font-clock text-primary text-giant-1';
 
-    setTimeout(() => screenSaver.set(true), 5000);
+   
 </script>
 
 <div class="flex flex-row items-center relative">

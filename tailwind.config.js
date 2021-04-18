@@ -36,6 +36,12 @@ module.exports = {
       colors: {
         'primary': 'rgb(245, 245, 245)',
         'secondary': 'rgb(63, 63, 63)',
+      },
+      fontSize: {
+        'giant-1': '15rem',
+      },
+      transitionTimingFunction: {
+        'cb-default': 'cubic-bezier(0.37, 0, 0.63, 1)',
       }
     },
   },

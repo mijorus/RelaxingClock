@@ -14,3 +14,5 @@ export interface ClockElementBox {
     x: string;
     y: string;
 }
+
+export type mouseWatcherState = 'watch' | 'hide' | 'leave';
