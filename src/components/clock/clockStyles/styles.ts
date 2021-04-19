@@ -1,4 +1,7 @@
-const styles: Array<{label: string}> = [
+import Focused from "../clockStyles/Focused.svelte";
+import Classic from "../clockStyles/Classic.svelte";
+
+const styles: Array<{label: string, component?: any }> = [
     {
         label: 'Classic',
     },

@@ -15,9 +15,9 @@
         const divSize: number = getWidth(document.getElementById('minutes-divisor'));
         const centerElSize: number = getWidth(clock.minutes);
 
-        hoursBox.set({x: `${-(centerElSize + getWidth(clock.hours) - divSize)}px`, y: '-50%'});
-        minutesBox.set({x: `${-(centerElSize - divSize)}px`, y: '-50%'});
-        secondsBox.set({x: `${(divSize)}px`, y: `-50%`});
+        hoursBox.update(el => el = {...el, x: `${-(centerElSize + getWidth(clock.hours) - divSize)}px`, y: '-50%'});
+        minutesBox.update(el => el = {...el, x: `${-(centerElSize - divSize)}px`, y: '-50%'});
+        secondsBox.update(el => el = {...el, x: `${(divSize)}px`, y: `-50%`});
     }
 
     async function load() {
