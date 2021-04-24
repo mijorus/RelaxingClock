@@ -34,19 +34,19 @@
     <div id="big-clock" class="font-clock text-primary text-giant-1 whitespace-nowrap relative w-full h-full m-auto">
         <span id="hours-box" class="{clockElementsClass}" style="transform: translateX({$hoursBox.x}) translateY({$hoursBox.y});">
             {#if $hoursBox.visible}
-            <Hours value={$time.format('HH')}></Hours>
+                <Hours value={$time.format('HH')}></Hours>
             {/if}
         </span>
 
         <span id="minutes-box" class="{clockElementsClass}" style="transform: translateX({$minutesBox.x}) translateY({$minutesBox.y});">
             {#if $minutesBox.visible}
-            <span id="minutes-divisor"><Divisor /></span><Minutes value={$time.format('mm')}></Minutes>
+                <span id="minutes-divisor"><Divisor /></span><Minutes value={$time.format('mm')}></Minutes>
             {/if}
         </span>
         
         <span id="seconds-box" class="{clockElementsClass}" style="transform: translateX({$secondsBox.x}) translateY({$secondsBox.y});">
             {#if $secondsBox.visible}
-            <span id="seconds-divisor"><Divisor /></span><Seconds value={$time.format('ss')}></Seconds>
+                <span id="seconds-divisor"><Divisor /></span><Seconds value={$time.format('ss')}></Seconds>
             {/if}
         </span>
     </div>
