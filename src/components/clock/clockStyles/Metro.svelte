@@ -1,12 +1,9 @@
 <script lang="ts">
-    import anime from "animejs";
+    import anime from 'animejs';
     import { onDestroy } from 'svelte';
-
     import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from '../../../stores/clockStyle';
+    import { cbDefault } from '../../../utils/animations';
     
-    import { getWidth } from '../../../utils/getBoundingClientRect';
-    import { cbDefault } from "../../../utils/animations";
-
     $: compute($bigClockUpdate);
 
     function animate(forward: boolean) {
@@ -24,16 +21,14 @@
         });
     }   
 
-    async function compute(timestamp: number) {
+    function compute(timestamp: number) {
         if (timestamp > 0) {
-            const divSize: number = getWidth(document.getElementById('minutes-divisor'));
-
-            hoursBox.update(el => ({...el, x: `${-(getWidth($hoursBox.el) + (divSize / 2 ))}px`, y: '-50%'}));
-            minutesBox.update(el => ({...el, x: `${-(divSize / 2)}px`, y: '-50%'}));
+            hoursBox.update(el => ({...el, x: '-50%', y: '-100%'}));
+            minutesBox.update(el => ({...el, x: '-50%', y: '0%'}));
 
             animate(true);
         }
     }
 
-    onDestroy(async () => animate(false));
+    onDestroy(() => animate(false));
 </script>

@@ -11,6 +11,7 @@
 
     import Classic from './clockStyles/Classic.svelte';
     import Focused from './clockStyles/Focused.svelte';
+    import Metro from './clockStyles/Metro.svelte';
     
     import Hours from './Hours.svelte';
     import Minutes from './Minutes.svelte';
@@ -54,6 +55,8 @@
     <Classic />
     {:else if $activeStyle === 1}
     <Focused />
+    {:else if $activeStyle === 2}
+    <Metro />
     {/if}
 </div>
 
