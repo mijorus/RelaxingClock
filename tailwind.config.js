@@ -42,6 +42,10 @@ module.exports = {
       },
       transitionTimingFunction: {
         'cb-default': 'cubic-bezier(0.37, 0, 0.63, 1)',
+      },
+      zIndex: {
+        '-1': '-1',
+        '-10': '-10',
       }
     },
   },
