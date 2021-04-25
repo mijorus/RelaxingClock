@@ -11,9 +11,9 @@
             const divSize: number = getWidth(document.getElementById('minutes-divisor'));
             const centerElSize: number = getWidth($minutesBox.el);
 
-            hoursBox.update(el => ({...el, x: `${-(centerElSize + getWidth($hoursBox.el) - divSize)}px`, y: '-50%'}));
-            minutesBox.update(el => ({...el, x: `${-(centerElSize - divSize)}px`, y: '-50%'}));
-            secondsBox.update(el => ({...el, x: `${(divSize)}px`, y: `-50%`}));
+            hoursBox.update(el => ({...el, x: `${-(centerElSize + getWidth($hoursBox.el) - divSize)}px`, y: '-50%', visible: true}));
+            minutesBox.update(el => ({...el, x: `${-(centerElSize - divSize)}px`, y: '-50%', visible: true}));
+            secondsBox.update(el => ({...el, x: `${(divSize)}px`, y: `-50%`, visible: true}));
         }
     }
 </script>

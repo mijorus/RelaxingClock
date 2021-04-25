@@ -1,7 +1,8 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
     import { activeStyle } from "../../stores/clockStyle";
-    import { screenSaver } from '../../stores/globalState';
+    import { screenSaver, styleChangeLock } from '../../stores/globalState';
+import { lockApp } from '../../utils/animations';
     import styles from "../clock/clockStyles/styles";
 
     const windowClass: string = 'w-44';
@@ -28,12 +29,18 @@
     }
 
     function moveLeft() {
-        changeStyle($activeStyle - 1);
+        if (!$styleChangeLock) {
+            changeStyle($activeStyle - 1);
+            lockApp();
+        }
     }
 
     
     function moveRight() {
-        changeStyle($activeStyle + 1);
+        if (!$styleChangeLock) {
+            changeStyle($activeStyle + 1);
+            lockApp();
+        }
     }
 </script>
 
