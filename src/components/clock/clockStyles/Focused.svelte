@@ -26,6 +26,8 @@
 
     async function compute(timestamp: number) {
         if (timestamp > 0) {
+            console.log(' run');
+            
             const divSize: number = getWidth(document.getElementById('minutes-divisor'));
 
             hoursBox.update(el => ({...el, x: `${-(getWidth($hoursBox.el) + (divSize / 2 ))}px`, y: '-50%'}));

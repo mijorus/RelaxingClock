@@ -1,7 +1,6 @@
 <script lang="ts">
+    import { blink } from '../../stores/clockStyle';
     import time from '../../stores/time';
-
-    export let css: string = 'relative';
 </script>
 
-<span class={css}>{#if ($time.second() % 2)}:{:else}&nbsp;{/if}</span>
+<span class="relative">{#if ($time.second() % 2) && $blink}:{:else}&nbsp;{/if}</span>

@@ -30,7 +30,7 @@
     });
 </script>
 
-<div class="flex flex-row items-center relative">
+<div class="w-full h-full relative overflow-hidden">
     <div id="big-clock" class="font-clock text-primary text-giant-1 whitespace-nowrap relative w-full h-full m-auto">
         <span id="hours-box" class="{clockElementsClass}" style="transform: translateX({$hoursBox.x}) translateY({$hoursBox.y});">
             {#if $hoursBox.visible}
@@ -49,15 +49,15 @@
                 <span id="seconds-divisor"><Divisor /></span><Seconds value={$time.format('ss')}></Seconds>
             {/if}
         </span>
-    </div>
 
-    {#if $activeStyle === 0}
-    <Classic />
-    {:else if $activeStyle === 1}
-    <Focused />
-    {:else if $activeStyle === 2}
-    <Metro />
-    {/if}
+        {#if $activeStyle === 0}
+        <Classic />
+        {:else if $activeStyle === 1}
+        <Focused />
+        {:else if $activeStyle === 2}
+        <Metro />
+        {/if}
+    </div>
 </div>
 
 <style>

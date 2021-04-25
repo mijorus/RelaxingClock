@@ -6,7 +6,7 @@
     import FullScreenBtn from '../elements/FullScreenBtn.svelte';
     import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
 
-    screenSaverHandler.set(5000);
+    screenSaverHandler.set(7000);
 
     function disableScreenSaver() {
         screenSaverHandler.disable();
