@@ -5,7 +5,9 @@
 import { lockApp } from '../../utils/animations';
     import styles from "../clock/clockStyles/styles";
 
-    const windowClass: string = 'w-44';
+    const viewFinderClass: string = 'w-44';
+    let boxHovered = false;
+    let viewFinder: number;
     const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';
     const l: number = styles.length; //the number of available styles
 
@@ -48,13 +50,17 @@ import { lockApp } from '../../utils/animations';
     <div class="font-primary text-base text-primary">Select your clock style</div>
     <div class="relative flex">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
-            <div class="h-full flex flex-row -trans-x-2/4 relative top-0 left-2/4">
+            <div 
+                class="h-full flex flex-row -trans-x-2/4 relative top-0 left-2/4" 
+                on:mouseenter={() => boxHovered = true} 
+                on:mouseleave={() => boxHovered = false}
+            >
                 <button aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
                     on:click={moveLeft}
                 >
                     <i class="fas fa-caret-left text-primary text-md opacity-{$activeStyle === 0 ? '20' : 1} fade"></i>
                 </button>
-                <span class="inline-block {windowClass} opacity-0"></span>
+                <span class="inline-block {viewFinderClass} opacity-0"></span>
                 <button aria-label="move right" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="forward" 
                     on:click={moveRight}
                 >
@@ -65,12 +71,19 @@ import { lockApp } from '../../utils/animations';
         <div class="relative left-2/4 whitespace-nowrap" style="transform: translateX({$selectionPosition}%);">
             {#each styles as style, i }
             <span 
-                class="{windowClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
+                bind:clientWidth={viewFinder}
+                class="{viewFinderClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
                 data-selection={i}
             >
                 {style.label}
             </span>
             {/each}
+        </div>
+    </div>
+    <div style="width: {viewFinder}px" class="relative mb-1 -z-1">
+        <div 
+            style="width: {viewFinder / styles.length}px; transform: translateX({$activeStyle * 100}%" 
+            class="h-0.5 rounded-xl bg-secondary transition-opacity duration-300 delay-500 {boxHovered ? 'opacity-1' : 'opacity-0'}">
         </div>
     </div>
     <div class="flex flex-row">
