@@ -7,19 +7,20 @@
     import { cbDefault, eaElasticDefault } from '../../../utils/animations';
     import { getHeight, getWidth } from '../../../utils/getBoundingClientRect';
     import { cities } from '../../../handlers/citiesBg';
+import { clockTransition } from '../../../handlers/clockTransitions';
     
     let initialized: boolean = false;
 
     let middot: HTMLElement;
     const zoomedOut: number = 0.7;
-    const bgClasses: Array<string> = ['bg-bottom', 'bg-no-repeat', 'opacity-0'];
+    const bgClasses: Array<string> = ['opacity-0', 'bg-bottom', 'bg-no-repeat', ];
     const bigClock: HTMLElement = document.getElementById('big-clock');
     const mainBg: HTMLElement = document.getElementById('main-bg');
     const mainBgAnimProp = {
         targets: mainBg,
         duration: 350,
         easing: cbDefault,
-    }
+    };
 
     $: compute($bigClockUpdate);
     $: toggleScreenSaver($screenSaver);
@@ -40,11 +41,8 @@
     }
 
     function animate(forward: boolean) {
-        return anime.timeline({
-            begin() { 
-                styleChangeLock.set(true);
-                if (!forward) secondsBox.update(el => ({...el, visible: true}));
-            },
+        const transition = anime.timeline({
+            autoplay: false,
             complete() {
                 if (forward) {
                     initialized = true;
@@ -52,12 +50,11 @@
                 } else {
                     bigClockUpdate.set($time.unix());
                 }
-
-                styleChangeLock.set(false);
             },
         })
             .add({
                 targets: bigClock,
+                duration: 800,
                 scale: forward ? zoomedOut : 1,
                 easing: eaElasticDefault,
                 translateY: forward ? getVerticalShift() : 0,
@@ -67,7 +64,9 @@
                 targets: [$secondsBox.el, '#minutes-divisor'],
                 opacity: forward ? 0 : 1,
                 easing: cbDefault,
-            }, forward ? 0 : '+=1');
+            }, forward ? 0 : '-=250');
+
+        clockTransition(transition);
     }
 
     async function compute(timestamp: number) {
@@ -77,8 +76,6 @@
             hoursBox.update(el => ({...el, x: '-50%', y: '-105%'}));
             minutesBox.update(el => ({...el, x: `${-((getWidth($minutesBox.el) / 2) + (divSize / 2))}px`, y: '-5%'}));
 
-            // only run animation if the component has just been initialized,
-            // otherwise skip it
             if (!initialized) animate(true);
         }
     }

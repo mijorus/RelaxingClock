@@ -1,5 +1,3 @@
-
-
 <script lang="ts">
     import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from '../../../stores/clockStyle';
     import { getWidth } from '../../../utils/getBoundingClientRect';

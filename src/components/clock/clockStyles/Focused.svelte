@@ -6,25 +6,27 @@
     
     import { getWidth } from '../../../utils/getBoundingClientRect';
     import { cbDefault } from "../../../utils/animations";
-    import { styleChangeLock } from "../../../stores/globalState";
+    import { clockTransition } from "../../../handlers/clockTransitions";
 
+    let initialized: boolean = false;
     $: compute($bigClockUpdate);
 
     function animate(forward: boolean) {
-        anime({
-            begin() {
-                styleChangeLock.set(true);
-                if (!forward) secondsBox.update(el => ({...el, visible: true}));
-            },
+        const transition = anime({
             targets: $secondsBox.el,
             duration: 200,
+            autoplay: false,
             opacity: forward ? 0 : 1,
             easing: cbDefault,
             complete() {
-                if (forward) secondsBox.update(el => ({...el, visible: false}));
-                styleChangeLock.set(false);
+                if (forward) {
+                    initialized = true;
+                    secondsBox.update(el => ({...el, visible: false}));
+                }
             }
         });
+
+        clockTransition(transition);
     }   
 
     async function compute(timestamp: number) {
@@ -34,7 +36,9 @@
             hoursBox.update(el => ({...el, x: `${-(getWidth($hoursBox.el) + (divSize / 2 ))}px`, y: '-50%', visible: true}));
             minutesBox.update(el => ({...el, x: `${-(divSize / 2)}px`, y: '-50%', visible: true}));
 
-            animate(true);
+            // only run animation if the component has just been initialized,
+            // otherwise skip it
+            if (!initialized) animate(true);
         }
     }
 

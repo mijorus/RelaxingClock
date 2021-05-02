@@ -31,7 +31,7 @@ import { lockApp } from '../../utils/animations';
     function moveLeft() {
         if (!$styleChangeLock) {
             changeStyle($activeStyle - 1);
-            lockApp();
+            // lockApp();
         }
     }
 
@@ -39,7 +39,7 @@ import { lockApp } from '../../utils/animations';
     function moveRight() {
         if (!$styleChangeLock) {
             changeStyle($activeStyle + 1);
-            lockApp();
+            // lockApp();
         }
     }
 </script>
