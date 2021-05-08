@@ -1,10 +1,10 @@
-import { readable, Writable, writable } from "svelte/store";
-import type { ClockElementBox } from "../types";
+import { readable, Writable, writable } from 'svelte/store';
+import type { ClockElementBox } from '../types';
 
-export let activeStyle: Writable<number> = writable(0);
-export let bigClockUpdate: Writable<number> = writable(0);
-export let blink: Writable<boolean> = writable(true);
+export const activeStyle: Writable<number> = writable(0);
+export const bigClockUpdate: Writable<number> = writable(0);
+export const blink: Writable<boolean> = writable(true);
 
-export let hoursBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined});
-export let minutesBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined});
-export let secondsBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined}); 
+export const hoursBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined});
+export const minutesBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined});
+export const secondsBox: Writable<ClockElementBox> = writable({x: '', y: '', visible: true, el: undefined}); 

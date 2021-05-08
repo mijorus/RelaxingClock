@@ -17,6 +17,7 @@
     import Minutes from './Minutes.svelte';
     import Seconds from './Seconds.svelte';
     import Divisor from './Divisor.svelte';
+import Analog from "./clockStyles/Analog.svelte";
     
     
     onMount(async () => {
@@ -33,21 +34,16 @@
 <div id="big-clock-container" class="w-full h-full relative overflow-hidden">
     <div id="big-clock" class="font-clock text-primary text-giant-1 whitespace-nowrap relative w-full h-full m-auto">
         <span id="hours-box" class="{clockElementsClass}" style="transform: translateX({$hoursBox.x}) translateY({$hoursBox.y});">
-            {#if $hoursBox.visible}
-                <Hours value={$time.format('HH')}></Hours>
-            {/if}
+            <Hours value={$hoursBox.visible ? $time.format('HH') : ''}></Hours>
         </span>
 
         <span id="minutes-box" class="{clockElementsClass}" style="transform: translateX({$minutesBox.x}) translateY({$minutesBox.y});">
-            {#if $minutesBox.visible}
-                <span id="minutes-divisor"><Divisor /></span><Minutes value={$time.format('mm')}></Minutes>
-            {/if}
+            <span id="minutes-divisor"><Divisor /></span><Minutes value={$minutesBox.visible ? $time.format('mm') : ''}></Minutes>
+           
         </span>
         
         <span id="seconds-box" class="{clockElementsClass}" style="transform: translateX({$secondsBox.x}) translateY({$secondsBox.y});">
-            {#if $secondsBox.visible}
-                <span id="seconds-divisor"><Divisor /></span><Seconds value={$time.format('ss')}></Seconds>
-            {/if}
+            <span id="seconds-divisor"><Divisor /></span><Seconds value={$secondsBox.visible ? $time.format('ss') : ''}></Seconds>
         </span>
 
         {#if $activeStyle === 0}
@@ -56,6 +52,8 @@
         <Focused />
         {:else if $activeStyle === 2}
         <Metro />
+        {:else if $activeStyle === 3}
+        <Analog />
         {/if}
     </div>
 </div>

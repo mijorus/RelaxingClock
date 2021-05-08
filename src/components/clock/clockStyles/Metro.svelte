@@ -7,7 +7,7 @@
     import { cbDefault, eaElasticDefault } from '../../../utils/animations';
     import { getHeight, getWidth } from '../../../utils/getBoundingClientRect';
     import { cities } from '../../../handlers/citiesBg';
-import { clockTransition } from '../../../handlers/clockTransitions';
+    import { clockTransition } from '../../../handlers/clockTransitions';
     
     let initialized: boolean = false;
 
@@ -73,14 +73,17 @@ import { clockTransition } from '../../../handlers/clockTransitions';
         if (timestamp > 0) {
             const divSize: number = getWidth(document.getElementById('minutes-divisor'));
 
-            hoursBox.update(el => ({...el, x: '-50%', y: '-105%'}));
-            minutesBox.update(el => ({...el, x: `${-((getWidth($minutesBox.el) / 2) + (divSize / 2))}px`, y: '-5%'}));
+            hoursBox.update(el => ({...el, x: '-50%', y: '-105%', visible: true}));
+            minutesBox.update(el => ({...el, x: `${-((getWidth($minutesBox.el) / 2) + (divSize / 2))}px`, y: '-5%', visible: true}));
 
             if (!initialized) animate(true);
         }
     }
 
     onMount(() => {
+        minutesBox.update(el => ({...el, visible: true}));
+        hoursBox.update(el => ({...el, visible: true}));
+        secondsBox.update(el => ({...el, visible: false}));
         if (process.env.CITIES_LANDSCAPES_SOURCE) {
             mainBg.classList.add(...bgClasses);
             mainBg.style.backgroundImage = `url(${process.env.CITIES_LANDSCAPES_SOURCE}${cities[0].imageURL})`;
