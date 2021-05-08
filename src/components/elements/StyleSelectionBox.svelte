@@ -48,7 +48,7 @@ import { lockApp } from '../../utils/animations';
 
 <div class="absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade {$screenSaver ? 'opacity-0' : 'opacity-1'}">
     <div class="font-primary text-base text-primary">Select your clock style</div>
-    <div class="relative flex">
+    <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
             <div 
                 class="h-full flex flex-row -trans-x-2/4 relative top-0 left-2/4" 
