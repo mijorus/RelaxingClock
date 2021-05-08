@@ -4,8 +4,8 @@ import { styleChangeLock } from '../stores/globalState';
 let transitioning = false;
 const queue: Array<AnimeInstance> = [];
 
-export function clockTransition(animation: AnimeInstance) {
-    queue.push(animation);
+export function clockTransition(...animations: Array<AnimeInstance>) {
+    queue.push(...animations);
 
     const unsubscribe = styleChangeLock.subscribe(async locked => {
         
