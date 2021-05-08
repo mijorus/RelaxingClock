@@ -38,12 +38,12 @@ import Analog from "./clockStyles/Analog.svelte";
         </span>
 
         <span id="minutes-box" class="{clockElementsClass}" style="transform: translateX({$minutesBox.x}) translateY({$minutesBox.y});">
-            <span id="minutes-divisor"><Divisor /></span><Minutes value={$minutesBox.visible ? $time.format('mm') : ''}></Minutes>
+            <span id="minutes-divisor"><Divisor /></span><Minutes value={$minutesBox.visible ? $time.format('mm') : '&nbsp;&nbsp'}></Minutes>
            
         </span>
         
         <span id="seconds-box" class="{clockElementsClass}" style="transform: translateX({$secondsBox.x}) translateY({$secondsBox.y});">
-            <span id="seconds-divisor"><Divisor /></span><Seconds value={$secondsBox.visible ? $time.format('ss') : ''}></Seconds>
+            <span id="seconds-divisor"><Divisor /></span><Seconds value={$secondsBox.visible ? $time.format('ss') : '&nbsp;&nbsp'}></Seconds>
         </span>
 
         {#if $activeStyle === 0}
