@@ -6,7 +6,7 @@
     
     interface SettingsDesc {
         iconClass?: string,
-        label: string,
+        text: string,
     }
     
     export let label: SettingsLabel;
@@ -22,11 +22,11 @@
         </div>
     </div>
     {#if description}
-    <div class="pl-3 md:pl-4 ml-3 md:ml-4">
-        {#if description.iconClass}
-        <i class="{description.iconClass} text-xs font-primary"></i>
-        {/if}
-        <span class="text-secondary text-xs font-primary">{description.label}</span>
-    </div>
+        <div class="px-3 md:px-4 mx-3 md:mx-4">
+            {#if description.iconClass}
+                <i class="{description.iconClass} text-xs font-primary"></i>
+            {/if}
+            <span class="text-secondary text-xs font-primary">{description.text}</span>
+        </div>
     {/if}
 </div>
