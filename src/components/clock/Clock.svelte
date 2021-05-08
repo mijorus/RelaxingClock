@@ -17,7 +17,7 @@
     import Minutes from './Minutes.svelte';
     import Seconds from './Seconds.svelte';
     import Divisor from './Divisor.svelte';
-import Analog from "./clockStyles/Analog.svelte";
+    import Analog from "./clockStyles/Analog.svelte";
     
     
     onMount(async () => {
@@ -38,12 +38,12 @@ import Analog from "./clockStyles/Analog.svelte";
         </span>
 
         <span id="minutes-box" class="{clockElementsClass}" style="transform: translateX({$minutesBox.x}) translateY({$minutesBox.y});">
-            <span id="minutes-divisor"><Divisor /></span><Minutes value={$minutesBox.visible ? $time.format('mm') : '&nbsp;&nbsp'}></Minutes>
+            <span id="minutes-divisor"><Divisor visible={$minutesBox.visible}/></span><Minutes value={$minutesBox.visible ? $time.format('mm') : ''}></Minutes>
            
         </span>
         
         <span id="seconds-box" class="{clockElementsClass}" style="transform: translateX({$secondsBox.x}) translateY({$secondsBox.y});">
-            <span id="seconds-divisor"><Divisor /></span><Seconds value={$secondsBox.visible ? $time.format('ss') : '&nbsp;&nbsp'}></Seconds>
+            <span id="seconds-divisor"><Divisor visible={$secondsBox.visible}/></span><Seconds value={$secondsBox.visible ? $time.format('ss') : ''}></Seconds>
         </span>
 
         {#if $activeStyle === 0}

@@ -2,4 +2,4 @@
     export let value: number|string;
 </script>
 
-<span id="minutes">{@html value}</span>
+<span id="minutes">{#if value === ''}&nbsp;&nbsp;{:else}{value}{/if}</span>
