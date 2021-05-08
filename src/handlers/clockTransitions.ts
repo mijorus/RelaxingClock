@@ -25,7 +25,6 @@ export function clockTransition(...animations: Array<AnimeInstance>) {
 
 async function execute() {
     while (queue.length > 0) {
-        console.log(' transiziono');
         const current = queue[0];
         
         current.play();
