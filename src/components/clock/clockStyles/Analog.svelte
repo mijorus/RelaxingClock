@@ -8,6 +8,7 @@
     import time from "../../../stores/time";
     import { cbDefault } from "../../../utils/animations";
 
+    let analogClock: HTMLElement;
     let initialized: boolean = false;
     const handClasses = 'absolute rounded-full top-2/4 left-2/4 origin-right-2/4'
 
@@ -19,9 +20,10 @@
     $: sec = parseInt($time.format('s'));
 
     function animate(forward: boolean) {
+        const targets = forward ? '.clock-element' : ['.clock-element', analogClock];
         const boxes = [secondsBox, minutesBox, hoursBox];
         const transition = anime({
-            targets: '.clock-element',
+            targets,
             opacity: forward ? 0 : 1,
             easing: cbDefault,
             duration: 300,
@@ -51,7 +53,8 @@
     onDestroy(() => animate(false));
 </script>
 
-<div 
+<div
+    bind:this={analogClock}
     class="rounded-full border-2 border-primary w-96 h-96 absolute top-2/4 left-2/4 transition-transform duration-700 transform -translate-x-2/4 {$screenSaver ? '-translate-y-2/4' : '-translate-y-3/4'}"
 >
     <span id="little-dot"></span>
