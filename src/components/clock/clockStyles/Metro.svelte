@@ -81,9 +81,7 @@
     }
 
     onMount(() => {
-        minutesBox.update(el => ({...el, visible: true}));
-        hoursBox.update(el => ({...el, visible: true}));
-        secondsBox.update(el => ({...el, visible: false}));
+        [minutesBox, hoursBox].forEach(box => box.update(el => ({...el, visible: true})));
         if (process.env.CITIES_LANDSCAPES_SOURCE) {
             mainBg.classList.add(...bgClasses);
             mainBg.style.backgroundImage = `url(${process.env.CITIES_LANDSCAPES_SOURCE}${cities[0].imageURL})`;

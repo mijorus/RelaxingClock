@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    export const clockElementsClass: string = 'absolute animated left-1/2 top-1/2';
+    export const clockElementsClass: string = 'absolute animated left-1/2 top-1/2 clock-element';
 </script>
 
 <script lang="ts">
