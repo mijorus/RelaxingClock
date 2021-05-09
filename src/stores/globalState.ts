@@ -1,5 +1,5 @@
-import { readable, Writable, writable } from "svelte/store";
+import { Writable, writable } from 'svelte/store';
 
-export let screenSaver: Writable<boolean> = writable(false);
+export const screenSaver: Writable<boolean> = writable(false);
 // prevent style change until the lock is released
-export let styleChangeLock: Writable<boolean> = writable(false);
+export const styleChangeLock: Writable<boolean> = writable(false);

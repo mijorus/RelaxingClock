@@ -2,7 +2,6 @@
     import { spring } from 'svelte/motion';
     import { activeStyle } from "../../stores/clockStyle";
     import { screenSaver, styleChangeLock } from '../../stores/globalState';
-import { lockApp } from '../../utils/animations';
     import styles from "../clock/clockStyles/styles";
 
     const viewFinderClass: string = 'w-44';

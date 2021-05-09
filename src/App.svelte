@@ -1,7 +1,22 @@
 <script lang="ts">
+	import Rooster from './components/roaster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';
 	import Settings from './components/sections/Settings.svelte';
+	import { summoned } from './stores/rooster';
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.code === 'Space' && event.ctrlKey) {
+			console.log('Rooster summoned');
+			summoned.set(!$summoned);
+		}
+	}
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
+
+{#if $summoned}
+	<Rooster />
+{/if}
 
 <main class="w-screen h-screen">
 	<Home />
