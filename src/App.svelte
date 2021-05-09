@@ -38,21 +38,5 @@
 			background-color: transparent;
 			outline: none;
 		}
-		
-		.trans-x-2\/4 {
-			transform: translateX(50%);
-		}
-		
-		.-trans-x-2\/4 {
-			transform: translateX(-50%);
-		}
-		
-		.trans-y-2\/4 {
-			transform: translateY(50%);
-		}
-		
-		.-trans-y-2\/4 {
-			transform: translateY(-50%);
-		}
 	}
 </style>

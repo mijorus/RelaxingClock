@@ -9,7 +9,7 @@
 <SettingsBox>
     <Title title="Blinking dots">
         <TitleIcon>
-            <i class="lnr lnr-home text-primary settings-title-icon"></i>
+            <i class="lnr lnr-eye text-primary settings-title-icon"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 

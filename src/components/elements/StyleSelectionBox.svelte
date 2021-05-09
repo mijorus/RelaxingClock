@@ -51,7 +51,7 @@ import { lockApp } from '../../utils/animations';
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
             <div 
-                class="h-full flex flex-row -trans-x-2/4 relative top-0 left-2/4" 
+                class="h-full flex flex-row transform -translate-x-2/4 relative top-0 left-2/4" 
                 on:mouseenter={() => boxHovered = true} 
                 on:mouseleave={() => boxHovered = false}
             >
@@ -72,7 +72,7 @@ import { lockApp } from '../../utils/animations';
             {#each styles as style, i }
             <span 
                 bind:clientWidth={viewFinder}
-                class="{viewFinderClass} text-center fade inline-block text-primary font-primary text-xl -trans-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
+                class="{viewFinderClass} text-center fade inline-block text-primary font-primary text-xl transform -translate-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
                 data-selection={i}
             >
                 {style.label}
