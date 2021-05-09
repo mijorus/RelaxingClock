@@ -1,7 +1,8 @@
 module.exports = {
     'env': {
         'browser': true,
-        'es2021': true
+        'es2021': true,
+        'node': true,
     },
     'extends': [
         'eslint:recommended',
@@ -13,7 +14,11 @@ module.exports = {
         'sourceType': 'module'
     },
     'plugins': [
-        '@typescript-eslint'
+        '@typescript-eslint',
+        'svelte3',
+    ],
+    'ignorePatterns': [
+        '/public'
     ],
     'rules': {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -33,5 +38,14 @@ module.exports = {
             'error',
             'always'
         ]
+    },
+    'overrides': [
+        {
+            files: ['*.svelte'],
+            processor: 'svelte3/svelte3'
+        }
+    ],
+    'settings': {
+        'svelte3/typescript': true,
     },
 };

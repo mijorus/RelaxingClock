@@ -46,6 +46,9 @@ module.exports = {
             zIndex: {
                 '-1': '-1',
                 '-10': '-10',
+            },
+            transformOrigin: {
+                'right-2/4': '0% 50%',
             }
         },
     },
