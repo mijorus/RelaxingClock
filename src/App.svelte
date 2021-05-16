@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MainBg from './components/elements/MainBg.svelte';
 	import Rooster from './components/rooster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';
 	import Settings from './components/sections/Settings.svelte';
@@ -21,8 +22,8 @@
 <main class="w-screen h-screen">
 	<Home />
 	<Settings />
-
-	<div id="main-bg" class="absolute top-0 left-0 h-full w-full -z-10"></div>
+	
+	<MainBg />
 </main>
 
 <style global lang="postcss">

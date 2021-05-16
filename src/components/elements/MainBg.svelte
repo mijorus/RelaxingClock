@@ -1,0 +1,1 @@
+<div id="main-bg" class="absolute top-0 left-0 h-full w-full -z-10"></div>

@@ -15,6 +15,8 @@
         damping: 0.3,
     });
 
+    changeStyle($activeStyle);
+
     function changeStyle(toStyle: number) {
         if (toStyle >= 0 && toStyle <= (l - 1)) {
             activeStyle.set(toStyle);

@@ -3,25 +3,18 @@
     import { onDestroy, onMount } from 'svelte';
     import { bigClockUpdate, blink, hoursBox, minutesBox, secondsBox } from '../../../stores/clockStyle';
     import time from '../../../stores/time';
-    import { screenSaver, styleChangeLock } from '../../../stores/globalState'
+    import { screenSaver } from '../../../stores/globalState'
     import { cbDefault, eaElasticDefault } from '../../../utils/animations';
     import { getHeight, getWidth } from '../../../utils/getBoundingClientRect';
     import { cities } from '../../../handlers/citiesBg';
     import { clockTransition } from '../../../handlers/clockTransitions';
+    import { windowReady } from 'html-ready';
     
     let initialized: boolean = false;
 
     let middot: HTMLElement;
-    const zoomedOut: number = 0.7;
-    const bgClasses: Array<string> = ['opacity-0', 'bg-bottom', 'bg-no-repeat', ];
-    const bigClock: HTMLElement = document.getElementById('big-clock');
-    const mainBg: HTMLElement = document.getElementById('main-bg');
-    const mainBgAnimProp = {
-        targets: mainBg,
-        duration: 350,
-        easing: cbDefault,
-    };
-
+    const zoomedOut = 0.7;
+    
     $: compute($bigClockUpdate);
     $: toggleScreenSaver($screenSaver);
 
@@ -32,7 +25,7 @@
     function toggleScreenSaver(enabled: boolean) {
         if (initialized) {
             anime({
-                targets: bigClock,
+                targets: '#big-clock',
                 easing: eaElasticDefault,
                 scale: enabled ? 1 : zoomedOut,
                 translateY: enabled ? 0 : getVerticalShift()
@@ -40,7 +33,9 @@
         }
     }
 
-    function animate(forward: boolean) {
+    async function animate(forward: boolean) {
+        await windowReady;
+        
         const transition = anime.timeline({
             autoplay: false,
             complete() {
@@ -53,7 +48,7 @@
             },
         })
             .add({
-                targets: bigClock,
+                targets: '#big-clock',
                 duration: 800,
                 scale: forward ? zoomedOut : 1,
                 easing: eaElasticDefault,
@@ -80,18 +75,18 @@
         }
     }
 
-    onMount(() => {
-        [minutesBox, hoursBox].forEach(box => box.update(el => ({...el, visible: true})));
-        if (process.env.CITIES_LANDSCAPES_SOURCE) {
-            mainBg.classList.add(...bgClasses);
-            mainBg.style.backgroundImage = `url(${process.env.CITIES_LANDSCAPES_SOURCE}${cities[0].imageURL})`;
-            anime({ ...mainBgAnimProp, opacity: 0.1 });
-        }
-    });
+    async function setBackground(source?: string) {
+        await windowReady;
+        
+        const mainBg: HTMLElement = document.getElementById('main-bg');
+        const bgClasses: Array<string> = ['opacity-0', 'bg-bottom', 'bg-no-repeat'];
+        const mainBgAnimProp = { targets: mainBg, duration: 350, easing: cbDefault };
 
-    onDestroy(() => {
-        animate(false);
-        if (process.env.CITIES_LANDSCAPES_SOURCE) {
+        if (source) {
+            mainBg.classList.add(...bgClasses);
+            mainBg.style.backgroundImage = `url(${source})`;
+            anime({ ...mainBgAnimProp, opacity: 0.1 });
+        } else {
             anime({
                 ...mainBgAnimProp,
                 opacity: 0,
@@ -102,6 +97,16 @@
                 }
             });
         }
+    }
+
+    onMount(() => {
+        [minutesBox, hoursBox].forEach(box => box.update(el => ({...el, visible: true})));
+        if (process.env.CITIES_LANDSCAPES_SOURCE) setBackground(`${process.env.CITIES_LANDSCAPES_SOURCE}${cities[0].imageURL}`);        
+    });
+
+    onDestroy(() => {
+        animate(false);
+        if (process.env.CITIES_LANDSCAPES_SOURCE) setBackground(null);
     });
 </script>
 
