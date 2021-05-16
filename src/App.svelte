@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Rooster from './components/roaster/Rooster.svelte';
+	import Rooster from './components/rooster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';
 	import Settings from './components/sections/Settings.svelte';
 	import { summoned } from './stores/rooster';
