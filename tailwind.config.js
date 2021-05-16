@@ -22,6 +22,7 @@ module.exports = {
             'primary': 'rgb(245, 245, 245)',
             'secondary': 'rgb(100 100 100)',
             'screen-saver': 'rgba(245, 245, 245, 0.45)',
+            'bg': 'rgb(29, 29, 29)',
         }),
         borderColor: theme => ({
             ...theme('colors'),

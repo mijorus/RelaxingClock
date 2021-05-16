@@ -5,8 +5,6 @@
     import styles from "../clock/clockStyles/styles";
 
     const viewFinderClass: string = 'w-44';
-    let boxHovered = false;
-    let viewFinder: number;
     const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';
     const l: number = styles.length; //the number of available styles
 
@@ -32,30 +30,19 @@
     }
 
     function moveLeft() {
-        if (!$styleChangeLock) {
-            changeStyle($activeStyle - 1);
-            // lockApp();
-        }
+        if (!$styleChangeLock) changeStyle($activeStyle - 1);
     }
 
-    
     function moveRight() {
-        if (!$styleChangeLock) {
-            changeStyle($activeStyle + 1);
-            // lockApp();
-        }
+        if (!$styleChangeLock) changeStyle($activeStyle + 1);
     }
 </script>
 
 <div class="absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade {$screenSaver ? 'opacity-0' : 'opacity-1'}">
-    <div class="font-primary text-base text-primary">Select your clock style</div>
+    <div class="font-primary text-xl text-primary">Select your clock style</div>
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
-            <div 
-                class="h-full flex flex-row transform -translate-x-2/4 relative top-0 left-2/4" 
-                on:mouseenter={() => boxHovered = true} 
-                on:mouseleave={() => boxHovered = false}
-            >
+            <div class="h-full flex flex-row transform -translate-x-2/4 relative top-0 left-2/4">
                 <button aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
                     on:click={moveLeft}
                 >
@@ -69,22 +56,15 @@
                 </button>
             </div>
         </div>
-        <div class="relative left-2/4 whitespace-nowrap" style="transform: translateX({$selectionPosition}%);">
+        <div class="relative left-2/4 whitespace-nowrap my-1" style="transform: translateX({$selectionPosition}%);">
             {#each styles as style, i }
             <span 
-                bind:clientWidth={viewFinder}
-                class="{viewFinderClass} text-center fade inline-block text-primary font-primary text-xl transform -translate-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
+                class="{viewFinderClass} text-center fade inline-block transform -translate-x-2/4 {i === $activeStyle ? 'opacity-1' : 'opacity-0'}" 
                 data-selection={i}
             >
-                {style.label}
+                <span class="inline-block text-bg bg-highlighted rounded-2xl font-primary text-xl px-2 py-0">{style.label}</span>
             </span>
             {/each}
-        </div>
-    </div>
-    <div style="width: {viewFinder}px" class="relative mb-1 -z-1">
-        <div 
-            style="width: {viewFinder / styles.length}px; transform: translateX({$activeStyle * 100}%" 
-            class="h-0.5 rounded-xl bg-secondary transition-opacity duration-300 delay-500 {boxHovered ? 'opacity-1' : 'opacity-0'}">
         </div>
     </div>
     <div class="flex flex-row">

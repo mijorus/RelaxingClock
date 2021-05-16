@@ -33,7 +33,7 @@
     });
 </script>
 
-<div id="big-clock-container" class="w-full h-full relative overflow-hidden">
+<div id="big-clock-container" class="w-full h-full relative overflow-hidden z-10">
     <div id="big-clock" class="font-clock text-primary text-giant-1 whitespace-nowrap relative w-full h-full m-auto">
         <span id="hours-box" class="{clockElementsClass}" style="transform: translateX({$hoursBox.x}) translateY({$hoursBox.y});">
             <Hours value={$hoursBox.visible ? $time.format('HH') : ''}></Hours>
