@@ -7,7 +7,8 @@
     import { windowReady } from 'html-ready';
 
     import time from '../../stores/time';
-    import { activeStyle, bigClockUpdate, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
+    import { activeStyle } from "../../stores/settings";
+    import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
 
     import Classic from './clockStyles/Classic.svelte';
     import Focused from './clockStyles/Focused.svelte';
@@ -18,6 +19,7 @@
     import Seconds from './Seconds.svelte';
     import Divisor from './Divisor.svelte';
     import Analog from "./clockStyles/Analog.svelte";
+
     
     
     onMount(async () => {

@@ -37,9 +37,7 @@
         clockTransition(transition);
     }
 
-    function toggleScreenSaver(enabled: boolean) {
-
-    }
+    function toggleScreenSaver(enabled: boolean) {}
 
     function compute(timestamp: number) {
         if (timestamp > 0) {

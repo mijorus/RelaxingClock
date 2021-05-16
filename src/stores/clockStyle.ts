@@ -1,7 +1,6 @@
 import { readable, Writable, writable } from 'svelte/store';
 import type { ClockElementBox } from '../types';
 
-export const activeStyle: Writable<number> = writable(0);
 export const bigClockUpdate: Writable<number> = writable(0);
 export const blink: Writable<boolean> = writable(true);
 
