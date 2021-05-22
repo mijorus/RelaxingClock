@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+
 	import MainBg from './components/elements/MainBg.svelte';
 	import Rooster from './components/rooster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';
 	import Settings from './components/sections/Settings.svelte';
 	import { summoned } from './stores/rooster';
+
+	// onMount(() => initialize());
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.code === 'Space' && event.ctrlKey) {
@@ -27,32 +31,32 @@
 </main>
 
 <style global lang="postcss">
-	@import '@csstools/normalize.css';
-	
-	/* purgecss start ignore */
-	@tailwind base;
-	@tailwind components;
-	/* purgecss end ignore */
-	@tailwind utilities;
+    @import '@csstools/normalize.css';
 
-	@layer utilities {
-		.transp-btn {
-			cursor: pointer;
-			border: none;
-			background-color: transparent;
-			outline: none;
-		}
-		
-		.transp-btn:focus {
-			border: none;
-			background-color: transparent;
-			outline: none;
-		}
-		
-		.transp-btn:active {
-			border: none;
-			background-color: transparent;
-			outline: none;
-		}
-	}
+    /* purgecss start ignore */
+    @tailwind base;
+    @tailwind components;
+    /* purgecss end ignore */
+    @tailwind utilities;
+
+    @layer utilities {
+        .transp-btn {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            outline: none;
+        }
+        
+        .transp-btn:focus {
+            border: none;
+            background-color: transparent;
+            outline: none;
+        }
+        
+        .transp-btn:active {
+            border: none;
+            background-color: transparent;
+            outline: none;
+        }
+    }
 </style>

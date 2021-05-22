@@ -19,4 +19,4 @@ export interface ClockElementBox {
 }
 
 export type mouseWatcherState = 'watch' | 'hide' | 'leave';
-export type userSettingType = 'string' | 'int' | 'float';
+export type userSettingType = 'string' | 'int' | 'float' | 'boolean';
