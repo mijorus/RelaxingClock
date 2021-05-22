@@ -2,11 +2,11 @@ import { Writable, writable } from 'svelte/store';
 import type { userSettingType } from '../types';
 
 function userSetting(key: string, defaultValue: any, type: userSettingType = 'string') {
-    const localStoredKey = localStorage.getItem(key);
+    const locallyStoredKey = localStorage.getItem(key);
     
-    localStoredKey 
-        ? defaultValue = localStoredKey 
-        : localStorage.setItem(key, JSON.stringify(defaultValue));
+    locallyStoredKey 
+        ? defaultValue = locallyStoredKey 
+        : localStorage.setItem(key, defaultValue);
     
     if (typeof defaultValue !== type) {
         switch (typeof defaultValue) {
@@ -15,9 +15,14 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
                 defaultValue = parseInt(defaultValue);
             } else if (type === 'float') {
                 defaultValue = parseFloat(defaultValue);
+            } else if (type === 'boolean') {
+                defaultValue = JSON.parse(defaultValue);
             }
 
             break;
+
+        default:
+            defaultValue = undefined;
         }
     }
 
@@ -37,7 +42,14 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
 }
 
 /**
- * Below we have all the settings that will be stored in localStorage. Each time one of this 
+ * Below we have all the settings that will be stored in localStorage. Each time one of these 
  * setting is updated, we save a stringified reference in the browser
  */
 export const activeStyle = userSetting('defaultPosition', 0, 'int');
+export const clockFormat = userSetting('defaultClockFormat', '24h');
+export const savedAlarm = userSetting('alarmTime', undefined, 'int');
+export const blink = userSetting('blink', true, 'boolean');
+export const userHasLogged = userSetting('userHasLogged', false, 'boolean');
+export const presentation = userSetting('presentation', false, 'boolean');
+export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
+export const remoteTime = userSetting('remoteTime', false, 'boolean');
