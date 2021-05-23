@@ -1,3 +1,3 @@
-import { readable, Readable,  Writable, writable } from 'svelte/store';
+import { Writable, writable } from 'svelte/store';
 
 export const spotifyUrl: Writable<string> = writable(undefined);

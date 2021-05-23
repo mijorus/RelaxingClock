@@ -9,10 +9,15 @@
     import { urlParams } from '../../../utils/utils';
     // import { userHasLogged } from '../../../stores/storedSettings';
     import { spotifyUrl } from '../../../stores/spotify';
+    import { logout } from '../../../handlers/spotify/login';
 
     function handleBtnClick() {
+        console.log($spotifyUrl);
+        
         if ($spotifyUrl) {
             window.location.replace($spotifyUrl);
+        } else {
+            logout();
         }
     }
 </script>

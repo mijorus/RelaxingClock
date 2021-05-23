@@ -2,6 +2,8 @@
     import init from './handlers/init';
 	import { onMount } from 'svelte';
 
+    export const name = 'relaxing clock';
+
 	import MainBg from './components/elements/MainBg.svelte';
 	import Rooster from './components/rooster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';

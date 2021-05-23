@@ -16,7 +16,7 @@ export async function generateSpotifyUrl() {
         queryParams: {
             client_id: process.env.SPOTIFY_CLIENT_ID,
             response_type: 'code',
-            redirect_uri: process.env.SPOTIFY_BASE_URL,
+            redirect_uri: process.env.SPOTIFY_REDIRECT_URL,
             code_challenge_method: 'S256',
             code_challenge: challenge,
             scope: scopes,

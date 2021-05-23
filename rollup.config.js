@@ -90,7 +90,7 @@ export default {
             process: JSON.stringify({
                 env: {
                     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
-                    SPOTIFY_BASE_URL: process.env.SPOTIFY_BASE_URL,
+                    SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,
                     CITIES_LANDSCAPES_SOURCE: process.env.CITIES_LANDSCAPES_SOURCE,
                     production,
                 }
