@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+    import init from './handlers/init';
+	import { onMount } from 'svelte';
 
 	import MainBg from './components/elements/MainBg.svelte';
 	import Rooster from './components/rooster/Rooster.svelte';
@@ -7,7 +8,7 @@
 	import Settings from './components/sections/Settings.svelte';
 	import { summoned } from './stores/rooster';
 
-	// onMount(() => initialize());
+	onMount(() => init());
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.code === 'Space' && event.ctrlKey) {

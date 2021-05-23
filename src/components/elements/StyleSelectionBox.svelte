@@ -1,6 +1,6 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
-    import { activeStyle } from "../../stores/settings";
+    import { activeStyle } from "../../stores/storedSettings";
     import { screenSaver, styleChangeLock } from '../../stores/globalState';
     import styles from "../clock/clockStyles/styles";
 

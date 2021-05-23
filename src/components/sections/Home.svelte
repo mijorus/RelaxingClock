@@ -5,6 +5,7 @@
     import Clock from '../clock/Clock.svelte';
     import FullScreenBtn from '../elements/FullScreenBtn.svelte';
     import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
+    import SpotifyBox from '../spotifyPlayer/SpotifyBox.svelte';
 
     screenSaverHandler.set(7000);
 
@@ -21,4 +22,6 @@
 >
     <Clock />
     <StyleSelectionBox />
+
+    <!-- <SpotifyBox /> -->
 </div>

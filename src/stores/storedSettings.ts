@@ -4,11 +4,14 @@ import type { userSettingType } from '../types';
 function userSetting(key: string, defaultValue: any, type: userSettingType = 'string') {
     const locallyStoredKey = localStorage.getItem(key);
     
-    locallyStoredKey 
-        ? defaultValue = locallyStoredKey 
-        : localStorage.setItem(key, defaultValue);
+    if (locallyStoredKey) {
+        defaultValue = locallyStoredKey;
+    } else if (defaultValue) {
+        localStorage.setItem(key, JSON.stringify(defaultValue));
+    }
     
     if (typeof defaultValue !== type) {
+        // It basically means we are reading from the localStorage here
         switch (typeof defaultValue) {
         case 'string':
             if (type === 'int') {
@@ -49,7 +52,7 @@ export const activeStyle = userSetting('defaultPosition', 0, 'int');
 export const clockFormat = userSetting('defaultClockFormat', '24h');
 export const savedAlarm = userSetting('alarmTime', undefined, 'int');
 export const blink = userSetting('blink', true, 'boolean');
-export const userHasLogged = userSetting('userHasLogged', false, 'boolean');
+// export const userHasLogged = userSetting('userHasLogged', false, 'boolean');
 export const presentation = userSetting('presentation', false, 'boolean');
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
 export const remoteTime = userSetting('remoteTime', false, 'boolean');

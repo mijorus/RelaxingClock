@@ -7,7 +7,7 @@
     import { windowReady } from 'html-ready';
 
     import time from '../../stores/time';
-    import { activeStyle } from "../../stores/settings";
+    import { activeStyle } from "../../stores/storedSettings";
     import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
 
     import Classic from './clockStyles/Classic.svelte';
