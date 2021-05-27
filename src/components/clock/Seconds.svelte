@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let value: number|string;
+    import time from "../../stores/time";
 </script>
 
-<span id="seconds">{#if value === ''}&nbsp;&nbsp;{:else}{value}{/if}</span>
+<span id="seconds">{ $time.format('ss') }</span>

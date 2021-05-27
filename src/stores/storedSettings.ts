@@ -51,3 +51,4 @@ export const blink = userSetting('blink', true, 'boolean');
 export const presentation = userSetting('presentation', false, 'boolean');
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
 export const remoteTime = userSetting('remoteTime', false, 'boolean');
+export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');

@@ -2,13 +2,12 @@
     import init from './handlers/init';
 	import { onMount } from 'svelte';
 
-    export const name = 'relaxing clock';
-
 	import MainBg from './components/elements/MainBg.svelte';
 	import Rooster from './components/rooster/Rooster.svelte';
 	import Home from './components/sections/Home.svelte';
 	import Settings from './components/sections/Settings.svelte';
 	import { summoned } from './stores/rooster';
+    import { loggedWithSpotify } from './stores/storedSettings';
 
 	onMount(() => init());
 
@@ -19,6 +18,10 @@
 		}
 	}
 </script>
+
+<svelte:head>
+    {#if $loggedWithSpotify}<script src="https://sdk.scdn.co/spotify-player.js" defer></script>{/if}
+</svelte:head>
 
 <svelte:window on:keydown={handleKeydown} />
 
