@@ -7,25 +7,20 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
     if (locallyStoredKey) {
         defaultValue = locallyStoredKey;
     } else if (defaultValue) {
-        localStorage.setItem(key, JSON.stringify(defaultValue));
+        localStorage.setItem(key, defaultValue.toString());
     }
     
-    if (typeof defaultValue !== type) {
-        // It basically means we are reading from the localStorage here
-        switch (typeof defaultValue) {
-        case 'string':
-            if (type === 'int') {
-                defaultValue = parseInt(defaultValue);
-            } else if (type === 'float') {
-                defaultValue = parseFloat(defaultValue);
-            } else if (type === 'boolean') {
-                defaultValue = JSON.parse(defaultValue);
-            }
-
+    if (typeof defaultValue !== type && typeof defaultValue === 'string') {
+        switch (type) {
+        case 'int': 
+            defaultValue = parseInt(defaultValue);
             break;
-
-        default:
-            defaultValue = undefined;
+        case 'float': 
+            defaultValue = parseFloat(defaultValue);
+            break;
+        case 'boolean': 
+            defaultValue = JSON.parse(defaultValue);
+            break;
         }
     }
 
