@@ -1,26 +1,24 @@
 import type { AnimeInstance } from 'animejs';
 import { styleChangeLock } from '../stores/globalState';
+import { get } from 'svelte/store';
 
 let transitioning = false;
 const queue: Array<AnimeInstance> = [];
 
-export function clockTransition(...animations: Array<AnimeInstance>) {
+export async function clockTransition(...animations: Array<AnimeInstance>) {
     queue.push(...animations);
 
-    const unsubscribe = styleChangeLock.subscribe(async locked => {
+    get(styleChangeLock)
+
+    if (!get(styleChangeLock) && !transitioning) {
+        transitioning = true;
+        styleChangeLock.set(true);
         
-        if (!locked && !transitioning) {
-            transitioning = true;
-            styleChangeLock.set(true);
-            
-            await execute();
-            
-            styleChangeLock.set(false);
-            transitioning = false;
-            unsubscribe();
-        }
-    });
-    
+        await execute();
+        
+        styleChangeLock.set(false);
+        transitioning = false;
+    }
 }
 
 async function execute() {
