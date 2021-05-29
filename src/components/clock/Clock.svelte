@@ -7,42 +7,29 @@
     import { windowReady } from 'html-ready';
 
     import time from '../../stores/time';
+    import styles from "./clockStyles/styles";
     import { activeStyle } from "../../stores/storedSettings";
-    import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from "../../stores/clockStyle";
+    import { bigClockUpdate } from "../../stores/clockStyle";
 
     import Classic from './clockStyles/Classic.svelte';
     import Focused from './clockStyles/Focused.svelte';
     import Metro from './clockStyles/Metro.svelte';
-    
-    import Hours from './Hours.svelte';
-    import Minutes from './Minutes.svelte';
-    import Seconds from './Seconds.svelte';
-    import Divisor from './Divisor.svelte';
     import Analog from "./clockStyles/Analog.svelte";
 
-    
-    
+    $: currentPosition = $activeStyle * (100 / styles.length)
+
     onMount(async () => {
         await windowReady;
         bigClockUpdate.set($time.unix());
     });
 </script>
 
-<div id="big-clock-container" class="w-full h-full relative overflow-hidden z-10">
-    <div 
-        id="big-clock" 
-        class="font-clock text-primary text-giant-1 whitespace-nowrap relative w-full h-full" 
-        style="transform: translateX({$activeStyle * -100}%);"
-    >
-        <Classic /><Focused />
-        <!-- {:else if $activeStyle === 1} -->
-        <!-- <Focused /> -->
-        <!-- {:else if $activeStyle === 2} -->
-        <!-- <Metro /> -->
-        <!-- {:else if $activeStyle === 3} -->
-        <!-- <Analog /> -->
-        <!-- {/if} -->
-    </div>
+<div 
+    id="big-clock" 
+    class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full animated z-10 absolute top-0 left-0" 
+    style="transform: translateX(-{currentPosition}%);"
+>
+    <Classic /><Focused /><Analog />
 </div>
 
 <style>
