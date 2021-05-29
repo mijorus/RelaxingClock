@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-    export const clockElementsClass: string = 'absolute animated left-1/2 top-1/2 clock-element';
-</script>
-
 <script lang="ts">
     import { onMount } from "svelte";
     import { windowReady } from 'html-ready';
@@ -15,25 +11,34 @@
     import Focused from './clockStyles/Focused.svelte';
     import Metro from './clockStyles/Metro.svelte';
     import Analog from "./clockStyles/Analog.svelte";
+    import anime from "animejs";
+    import { eaElasticDefault } from "../../utils/animations";
 
-    $: currentPosition = $activeStyle * (100 / styles.length)
+    let bigClock: HTMLElement;
+    $: setCurrentPosition($activeStyle)
+
+    async function setCurrentPosition(activeStyle: number) {
+        await windowReady;
+        anime({
+            targets: bigClock,
+            duration: 750,
+            easing: eaElasticDefault,
+            translateX: `${activeStyle * (-100 / styles.length)}%`
+        })
+    }
 
     onMount(async () => {
         await windowReady;
         bigClockUpdate.set($time.unix());
     });
+
 </script>
 
 <div 
+    bind:this={bigClock}
     id="big-clock" 
-    class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full animated z-10 absolute top-0 left-0" 
-    style="transform: translateX(-{currentPosition}%);"
+    class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0" 
+    
 >
     <Classic /><Focused /><Analog /><Metro />
 </div>
-
-<style>
-    .animated {
-        transition: transform .3s ease-out;
-    }
-</style>
