@@ -5,11 +5,11 @@ const styles: Array<{label: string, component?: any }> = [
     {
         label: 'Focused',
     },
-    // {
-    //     label: 'Metropolis',
-    // },
     {
         label: 'Analog',
+    },
+    {
+        label: 'Metropolis',
     },
     // {
     //     label: 'Globetrotter',

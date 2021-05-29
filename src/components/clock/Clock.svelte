@@ -29,7 +29,7 @@
     class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full animated z-10 absolute top-0 left-0" 
     style="transform: translateX(-{currentPosition}%);"
 >
-    <Classic /><Focused /><Analog />
+    <Classic /><Focused /><Analog /><Metro />
 </div>
 
 <style>
