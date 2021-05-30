@@ -2,13 +2,14 @@
     import Hours from '../Hours.svelte';
     import Minutes from '../Minutes.svelte';
     import Seconds from '../Seconds.svelte';
-    import { bigClockUpdate, hoursBox, minutesBox, secondsBox } from '../../../stores/clockStyle';
     import { getWidth } from '../../../utils/getBoundingClientRect';
     import Divisor from '../Divisor.svelte';
     import StyleBase from './StyleBase.svelte';
+    import { activeStyleId, nextStyleId, visibleStylesId } from '../../../stores/clockStyle';
 
     // $: compute($bigClockUpdate);
-
+    const styleId = 0;
+    
     // async function compute(timestamp: number) {
     //     if (timestamp) {
     //         const divSize: number = getWidth(document.getElementById('minutes-divisor'));
@@ -22,5 +23,7 @@
 </script>
 
 <StyleBase>
-    <Hours /><Divisor /><Minutes /><Divisor /><Seconds />
+    {#if $visibleStylesId.includes(styleId)}
+        <Hours /><Divisor /><Minutes /><Divisor /><Seconds />
+    {/if}
 </StyleBase>
