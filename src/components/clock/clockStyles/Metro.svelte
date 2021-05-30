@@ -5,7 +5,6 @@
     import { screenSaver } from '../../../stores/globalState'
     import { cbDefault, eaElasticDefault } from '../../../utils/animations';
     import { cities } from '../../../handlers/citiesBg';
-    import { clockTransition } from '../../../handlers/clockTransitions';
     import { windowReady } from 'html-ready';
     import Hours from '../Hours.svelte';
     import Minutes from '../Minutes.svelte';
