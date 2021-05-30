@@ -40,7 +40,7 @@
     }
 </script>
 
-<div class="absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade {$screenSaver ? 'opacity-0' : 'opacity-1'}">
+<div class="absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}">
     <div class="font-primary text-xl text-primary">Select your clock style</div>
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
