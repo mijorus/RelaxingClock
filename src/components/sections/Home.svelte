@@ -6,6 +6,7 @@
     import FullScreenBtn from '../elements/FullScreenBtn.svelte';
     import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
     import SpotifyBox from '../spotifyPlayer/SpotifyBox.svelte';
+    import { spotifyPlayerStatus } from '../../stores/spotify';
 
     screenSaverHandler.set(7000);
 
@@ -22,6 +23,9 @@
 >
     <Clock />
     <StyleSelectionBox />
-
-    <!-- <SpotifyBox /> -->
 </div>
+<!-- 
+{#if $spotifyPlayerStatus !== 'disconnected' || $spotifyPlayerStatus !== 'error' }
+    <SpotifyBox />
+{/if} -->
+<SpotifyBox />
