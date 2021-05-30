@@ -27,12 +27,7 @@
         outline: none;
     }
     
-    .settings-btn:focus {
-        border: none;
-        outline: none;
-    }
-    
-    .settings-btn:active {
+    .settings-btn:focus, .settings-btn:active {
         border: none;
         outline: none;
     }

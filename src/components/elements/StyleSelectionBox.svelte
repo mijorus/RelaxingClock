@@ -14,8 +14,6 @@
     });
 
     changeStyle($activeStyle);
-    console.log($activeStyle);
-    
 
     function changeStyle(toStyle: number) {
         if (toStyle >= 0 && toStyle <= (l - 1)) {

@@ -4,21 +4,26 @@
     import TitleIcon from "../../elements/settings/TitleIcon.svelte";
     import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
     import Action from "../../elements/settings/Buttons/Action.svelte";
-    import { onMount } from 'svelte';
-    import { generateSpotifyUrl } from '../../../lib/spotify/generateSpotifyUrl';
-    import { urlParams } from '../../../utils/utils';
-    // import { userHasLogged } from '../../../stores/storedSettings';
-    import { spotifyUrl } from '../../../stores/spotify';
+    import { spotifyPlayerStatus, spotifyUrl } from '../../../stores/spotify';
     import { logout } from '../../../handlers/spotify/login';
 
+    let boxLabel: string;
+    $: switch($spotifyPlayerStatus) {
+        case 'disconnected':
+            boxLabel = 'Login with Spotify';
+            break;
+        case 'connecting':
+            boxLabel = 'Connecting...';
+            break;
+        case 'ready':
+            boxLabel = 'Logged in as you_name_here';
+            break;
+    }
+
+
+
     function handleBtnClick() {
-        console.log($spotifyUrl);
-        
-        if ($spotifyUrl) {
-            window.location.replace($spotifyUrl);
-        } else {
-            logout();
-        }
+        $spotifyUrl ? window.location.replace($spotifyUrl) : logout();
     }
 </script>
 
@@ -29,7 +34,7 @@
         </TitleIcon>
     </Title>
     <PrimaryBox 
-        label={{text: 'Login with Spotify'}} 
+        label={{text: boxLabel}} 
         description={{text:''}}
         available={true}
     >

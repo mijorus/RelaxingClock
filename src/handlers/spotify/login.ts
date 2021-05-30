@@ -3,11 +3,7 @@ import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
 import { spotifyUrl } from '../../stores/spotify';
 import { createNewSpotifyPlayer } from './player';
 
-declare let process: any;
-
 export async function attemptSpotifyLogin() {
-    console.log(localStorage.getItem('userHasLogged') === 'true' );
-    
     if (!localStorage.getItem('userHasLogged')) {
         if (!urlParams.get('state')) {
             //The user has never logged before to the app
@@ -31,9 +27,7 @@ export async function attemptSpotifyLogin() {
             //Spotify responded with an error during the authentication process
             throwAuthError(urlParams.get('error'));
         }
-    } else if (localStorage.getItem('userHasLogged') === 'true' && localStorage.getItem('code')) {
-        console.log('sonoqui');
-        
+    } else if (localStorage.getItem('userHasLogged') == 'true') {
         window.onSpotifyWebPlaybackSDKReady = () => {
             createNewSpotifyPlayer();
         };
@@ -41,12 +35,8 @@ export async function attemptSpotifyLogin() {
 }
 
 export function logout() {
-    if (localStorage.getItem('userHasLogged')) localStorage.removeItem('userHasLogged');
-    if (sessionStorage.accessToken) sessionStorage.removeItem('accessToken');
-    if (sessionStorage.expires_at) sessionStorage.removeItem('expires_at');
-    if (localStorage.refreshToken) localStorage.removeItem('refreshToken');
-    localStorage.removeItem('verifier');
-    localStorage.removeItem('state');
+    ['userHasLogged', 'refreshToken', 'verifier', 'state'].forEach(el => localStorage.removeItem(el));
+    ['accessToken', 'expires_at'].forEach(el => sessionStorage.removeItem(el));
     window.location.reload();
 }
 
