@@ -24,6 +24,7 @@ export async function createNewSpotifyPlayer() {
         }
     } catch (err) {
         console.error(err);
+        spotifyPlayerStatus.set('error');
         return;
     }
     

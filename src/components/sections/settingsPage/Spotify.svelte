@@ -18,6 +18,9 @@
         case 'ready':
             boxLabel = 'Logged in as you_name_here';
             break;
+        case 'error':
+            boxLabel = 'Error!';
+            break;
     }
 
 
