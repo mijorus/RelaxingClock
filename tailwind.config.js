@@ -5,7 +5,7 @@ module.exports = {
         options: {
             defaultExtractor: content => [
                 ...(content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []),
-                ...(content.match(/(?<=class:)[^=>\/\s]*/g) || []),
+                ...(content.match(/(?<=class:)[^=>/\s]*/g) || []),
             ],
         },
     },

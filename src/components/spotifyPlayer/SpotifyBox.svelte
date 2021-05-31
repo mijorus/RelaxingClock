@@ -1,8 +1,10 @@
 <script lang="ts">
     import { spotifyPlayerStatus } from "../../stores/spotify";
     import type { SpotifyPlayerStatus } from "../../types";
-
-    let label: string = '';
+    import AnimatedText from "../elements/AnimatedText.svelte";
+    
+    let label = '';
+    let loader = '';
     $: setLabel($spotifyPlayerStatus);
 
     let interval: NodeJS.Timeout;
@@ -10,12 +12,14 @@
         clearInterval(interval);
         if (spotifyStatus === 'connecting') {
             label = 'Loading';
-
             let count = 0
             interval = setInterval(() => {
-                if (count < 3) { label += '.'; count++ }
-                else { count = 0; label = label.replaceAll('.', '') }
+                if (count < 3) { loader += '.'; count++ }
+                else { count = 0; loader = '' }
             }, 250);
+        }  else if (spotifyStatus === 'ready') {
+            loader = '';
+            label = 'Ready to play!';
         }
     }
 </script>
@@ -25,7 +29,7 @@
         <i class="fab fa-spotify text-spotify text-5xl"></i>
     </span>
     <span class="text-xl font-primary flex-grow">
-        {label}
+       <AnimatedText text={label}><span>{loader}</span></AnimatedText>
     </span>
     <span class="justify-self-end text-xl">
         <i class="fas fa-play"></i>

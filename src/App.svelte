@@ -9,7 +9,7 @@
 	import { summoned } from './stores/rooster';
     import { loggedWithSpotify } from './stores/storedSettings';
 
-	// onMount(() => init());
+	onMount(() => init());
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.code === 'Space' && event.ctrlKey) {
