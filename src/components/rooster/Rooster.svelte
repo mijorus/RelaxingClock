@@ -12,17 +12,15 @@
 
     const shortcuts = {
         spotify: {
-            actions: ['playlist', 'podcast'],
+            arguments: ['playlist', 'podcast'],
         },
         alarm: {
-            actions: ['set', 'dismiss'],
+            arguments: ['set', 'dismiss'],
         }
     };
 
     $: handleCommand(command);
     $: handleArgument(argument);
-
-    let match = { command: null, action: null, current: null };
 
     function handleCommand(command: string) {
         if (!command || command === '') {
@@ -31,7 +29,6 @@
 
         for (const [key, value] of Object.entries(shortcuts)) {
             if (key.startsWith(command)) {
-                Object.assign(match, {command: key, current: 'command'});
                 suggestion = key.replace(command, '') + ':';
                 return;
             }
@@ -46,11 +43,11 @@
             return;
         }
         
-        if (match.command) {
-            for (const action of shortcuts[match.command].actions) {
-                if (action.startsWith(argument)) {
-                    Object.assign(match, {action, current: 'action'});
-                    suggestion = action.replace(argument, '');
+        const c = command.replace(/:$/, '');
+        if (shortcuts[c]) {
+            for (const a of shortcuts[c].arguments) {
+                if (a.startsWith(argument)) {
+                    suggestion = a.replace(argument, '');
                     return;
                 }
             }
@@ -60,24 +57,23 @@
     }
 
     async function fill() {
-        if (match.current === 'command') {
+        if (document.activeElement === commandBox) {
             command += suggestion;
             await tick();
             argumentBox.focus();
-        } 
-        
-        else if (match.current === 'action') {
+        }
+
+        else if (document.activeElement === argumentBox) {
             argument += suggestion;
             await tick();
             caretToEnd(argumentBox);
         }
-
-        suggestion = '';
     }
 
     function handleInputKeydown(event: KeyboardEvent) {
         if (event.code === 'ArrowRight') {
             fill();
+            suggestion = '';
         }
         
         else if (event.code === 'Backspace') {
@@ -89,8 +85,9 @@
         }
 
         else if (event.code === 'Space') {
-            if (document.activeElement === commandBox && command.endsWith(':')) {
+            if (document.activeElement === commandBox) {
                 event.preventDefault();
+                command += ':';
                 argumentBox.focus();
             }
         }
@@ -107,6 +104,11 @@
             if($summoned) summoned.set(false);
         }
 	}
+
+    function handleFocus() {
+        const toFocus = argument.length ? argumentBox : commandBox;
+        caretToEnd(toFocus);
+    }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -117,7 +119,7 @@
         class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center" 
         in:fade={{ duration: 100 }}
         out:fade={{ duration: 100 }}
-        on:click={() => {if (argument.length > 0) argumentBox.focus()}}
+        on:click={handleFocus}
     >
         <i class="lnr lnr-chevron-right text-primary justify-self-start	inline-block px-3 text-xl"></i>
         <span
@@ -132,7 +134,7 @@
             bind:textContent={argument}
             bind:this={argumentBox}
             contenteditable
-            class="bg-transparent text-primary text-xl font-primary"
+            class="bg-transparent text-primary text-xl font-primary underline"
         />
         {#if command.length > 2}
             <span class="text-secondary text-xl font-primary select-none">{suggestion}</span>
