@@ -19,8 +19,19 @@
         }
     };
 
+    $: handleSummon($summoned);
     $: handleCommand(command);
     $: handleArgument(argument);
+
+    function resetInputs() {
+        command = '';
+        argument = '';
+        suggestion = '';
+    }
+
+    function handleSummon(summoned: boolean) {
+        if (!summoned) resetInputs();
+    }
 
     function handleCommand(command: string) {
         if (!command || command === '') {
