@@ -9,25 +9,14 @@
 	import { summoned } from './stores/rooster';
     import { loggedWithSpotify } from './stores/storedSettings';
 
-	onMount(() => init());
-
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.code === 'Space' && event.ctrlKey) {
-			console.log('Rooster summoned');
-			summoned.set(!$summoned);
-		}
-	}
+	// onMount(() => init());
 </script>
 
 <svelte:head>
     {#if $loggedWithSpotify}<script src="https://sdk.scdn.co/spotify-player.js" defer></script>{/if}
 </svelte:head>
 
-<svelte:window on:keydown={handleKeydown} />
-
-{#if $summoned}
-	<Rooster />
-{/if}
+<Rooster />
 
 <main class="w-screen h-screen">
 	<Home />
