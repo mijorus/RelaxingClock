@@ -29,8 +29,8 @@ import { shortcuts } from "../../stores/rooster";
     onMount(() => {
         shortcuts.set('spotify', {
             playlist: {
-                callback() {
-                    console.log('playlist set to ');
+                callback(params) {
+                    console.log('playlist set to ', params);
                 }
             }
         })

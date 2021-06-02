@@ -5,10 +5,15 @@
     import { caretToEnd } from "../../utils/utils";
     
     let command = '';
-    let argument = '';
-    let suggestion = '';
     let commandBox: HTMLInputElement;
+
+    let argument = '';
     let argumentBox: HTMLElement;
+
+    let params = '';
+    let paramsBox: HTMLElement;
+
+    let suggestion = '';
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -84,6 +89,12 @@
                 commandBox.focus();
                 caretToEnd(commandBox);
             }
+
+            if (document.activeElement === paramsBox && params === '') {
+                event.preventDefault();
+                argumentBox.focus();
+                caretToEnd(argumentBox);
+            }
         }
 
         else if (event.code === 'Space') {
@@ -92,13 +103,18 @@
                 command += ':';
                 argumentBox.focus();
             }
+
+            if (document.activeElement === argumentBox) {
+                event.preventDefault();
+                paramsBox.focus();
+            }
         }
 
         else if(event.code === 'Enter') {
             event.preventDefault();
             const currentCommand = shortcuts.get(command.replace(/:$/, ''));
             if (currentCommand && currentCommand[argument]) {
-                currentCommand[argument].callback();
+                currentCommand[argument].callback(params);
             }
         }
     }
@@ -117,7 +133,10 @@
 
     function handleFocus() {
         tick().then(() => {
-            const toFocus = argument.length ? argumentBox : commandBox;
+            let toFocus: HTMLElement;
+            if (params.length) toFocus = paramsBox;
+            else if (argument.length) toFocus = argumentBox;
+            else toFocus = commandBox;
             toFocus.childNodes[0] ? caretToEnd(toFocus) : toFocus.focus();
         });
     }
@@ -146,7 +165,14 @@
             bind:textContent={argument}
             bind:this={argumentBox}
             contenteditable
-            class="bg-transparent text-primary text-xl font-primary underline"
+            class="bg-transparent text-primary text-xl font-primary underline mr-2"
+        />
+        <span
+            on:keydown={handleInputKeydown}
+            bind:textContent={params}
+            bind:this={paramsBox}
+            contenteditable
+            class="bg-transparent text-primary text-xl font-primary"
         />
         {#if command.length > 2}
             <span class="text-secondary text-xl font-primary select-none">{suggestion}</span>

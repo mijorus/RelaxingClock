@@ -24,7 +24,7 @@ export type userSettingType = 'string' | 'int' | 'float' | 'boolean';
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting';
 
 export interface RoosterArgument {
-    callback: () => void;
+    callback: (params?: string) => void;
     active?: boolean;
 }
 
