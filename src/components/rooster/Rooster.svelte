@@ -39,12 +39,14 @@
             return;
         }
 
-        for (const [key, value] of Object.entries(shortcuts.getAll())) {
-            if (key.startsWith(command)) {
-                suggestion = key.replace(command, '') + ':';
-                commandPill.background = shortcuts.get(key).background ?? null;
-                commandPill.color = shortcuts.get(key).color ?? null
-                return;
+        if (command.length > 2) {
+            for (const [key, value] of Object.entries(shortcuts.getAll())) {
+                if (key.startsWith(command)) {
+                    suggestion = key.replace(command, '') + ':';
+                    commandPill.background = shortcuts.get(key).background ?? null;
+                    commandPill.color = shortcuts.get(key).color ?? null
+                    return;
+                }
             }
         }
 
@@ -85,13 +87,17 @@
             argument += suggestion;
             await tick();
             caretToEnd(argumentBox);
+            paramsBox.focus();
         }
     }
 
     function handleInputKeydown(event: KeyboardEvent) {
-        if (event.code === 'ArrowRight') {
-            fill();
-            suggestion = '';
+        if (event.code === 'ArrowRight' || event.code === 'Tab') {
+            if (document.activeElement === argumentBox || document.activeElement === commandBox) {
+                event.preventDefault();
+                fill();
+                suggestion = '';
+            }
         }
         
         else if (event.code === 'Backspace') {
@@ -124,8 +130,8 @@
         else if(event.code === 'Enter') {
             event.preventDefault();
             const currentCommand = shortcuts.get(clearCommand(command));
-            if (currentCommand && currentCommand[argument]) {
-                currentCommand[argument].callback(params);
+            if (currentCommand && currentCommand.arguments[argument]) {
+                currentCommand.arguments[argument].callback(params);
             }
         }
     }
