@@ -119,16 +119,13 @@
         }
     }
 
-    async function handleKeydown(event: KeyboardEvent) {
+    function handleKeydown(event: KeyboardEvent) {
 		if (event.code === 'Space' && event.ctrlKey) {
 			summoned.set(!$summoned);
-            await tick();
-            commandBox.focus();
+            tick().then(() => commandBox.focus())
 		}
         
-        if (event.code === 'Escape') {
-            if($summoned) summoned.set(false);
-        }
+        if (event.code === 'Escape' && $summoned) summoned.set(false);
 	}
 
     function handleFocus() {
