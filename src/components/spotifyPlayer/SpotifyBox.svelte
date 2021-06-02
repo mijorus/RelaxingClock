@@ -3,6 +3,8 @@
     import type { SpotifyPlayerStatus } from "../../types";
     import AnimatedText from "../elements/AnimatedText.svelte";
     import { fade } from "svelte/transition";
+import { onMount } from "svelte";
+import { shortcuts } from "../../stores/rooster";
 
     let label = '';
     let loader = '';
@@ -23,6 +25,16 @@
             label = 'Ready to play!';
         }
     }
+
+    onMount(() => {
+        shortcuts.set('spotify', {
+            playlist: {
+                callback() {
+                    console.log('playlist set to ');
+                }
+            }
+        })
+    })
 </script>
 
 <div class="absolute bottom-5 left-5">

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from "svelte";
-    import { summoned } from "../../stores/rooster";
+    import { shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd } from "../../utils/utils";
     
@@ -9,15 +9,6 @@
     let suggestion = '';
     let commandBox: HTMLInputElement;
     let argumentBox: HTMLElement;
-
-    const shortcuts = {
-        spotify: {
-            arguments: ['playlist', 'podcast'],
-        },
-        alarm: {
-            arguments: ['set', 'dismiss'],
-        }
-    };
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -38,7 +29,7 @@
             return;
         }
 
-        for (const [key, value] of Object.entries(shortcuts)) {
+        for (const [key, value] of Object.entries(shortcuts.getAll())) {
             if (key.startsWith(command)) {
                 suggestion = key.replace(command, '') + ':';
                 return;
@@ -54,11 +45,11 @@
             return;
         }
         
-        const c = command.replace(/:$/, '');
-        if (shortcuts[c]) {
-            for (const a of shortcuts[c].arguments) {
-                if (a.startsWith(argument)) {
-                    suggestion = a.replace(argument, '');
+        const currentCommand = shortcuts.get(command.replace(/:$/, ''));
+        if (currentCommand) {
+            for (const [key, value] of Object.entries(currentCommand)) {
+                if (key.startsWith(argument) && value.active !== false) {
+                    suggestion = key.replace(argument, '');
                     return;
                 }
             }
@@ -102,6 +93,14 @@
                 argumentBox.focus();
             }
         }
+
+        else if(event.code === 'Enter') {
+            event.preventDefault();
+            const currentCommand = shortcuts.get(command.replace(/:$/, ''));
+            if (currentCommand && currentCommand[argument]) {
+                currentCommand[argument].callback();
+            }
+        }
     }
 
     async function handleKeydown(event: KeyboardEvent) {
@@ -117,8 +116,10 @@
 	}
 
     function handleFocus() {
-        const toFocus = argument.length ? argumentBox : commandBox;
-        caretToEnd(toFocus);
+        tick().then(() => {
+            const toFocus = argument.length ? argumentBox : commandBox;
+            toFocus.childNodes[0] ? caretToEnd(toFocus) : toFocus.focus();
+        });
     }
 </script>
 

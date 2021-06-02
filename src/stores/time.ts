@@ -2,7 +2,7 @@ import { Readable, readable } from 'svelte/store';
 import moment, { Moment } from 'moment';
 
 const time:Readable<Moment> = readable(moment(), (set) => {
-    const i:number = setInterval(() => {
+    const i = setInterval(() => {
         set(moment());
     }, 1000);
 
