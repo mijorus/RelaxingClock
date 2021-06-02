@@ -6,10 +6,14 @@ export const summoned: Writable<boolean> = writable(false);
 export const shortcuts: RoosterShortcuts = {
     state: {
         alarm: {
-            set: {
-                active: true,
-                callback() {
-                    console.log('alarm set');
+            color: process.env.BACKGROUND_DARK, 
+            background: 'red',
+            arguments: {
+                set: {
+                    active: true,
+                    callback() {
+                        console.log('alarm set');
+                    }
                 }
             }
         },

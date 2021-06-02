@@ -5,6 +5,7 @@
     import { caretToEnd } from "../../utils/utils";
     
     let command = '';
+    let commandPill = {color: null, background: null};
     let commandBox: HTMLInputElement;
 
     let argument = '';
@@ -18,6 +19,10 @@
     $: handleSummon($summoned);
     $: handleCommand(command);
     $: handleArgument(argument);
+
+    function clearCommand(c: string) {
+        return c.replace(/:$/, '');
+    }
 
     function resetInputs() {
         command = '';
@@ -37,8 +42,14 @@
         for (const [key, value] of Object.entries(shortcuts.getAll())) {
             if (key.startsWith(command)) {
                 suggestion = key.replace(command, '') + ':';
+                commandPill.background = shortcuts.get(key).background ?? null;
+                commandPill.color = shortcuts.get(key).color ?? null
                 return;
             }
+        }
+
+        if (!shortcuts.get(clearCommand(command)) || !command.endsWith(':')) {
+            commandPill = { background: null, color: null };
         }
 
         suggestion = '';
@@ -50,9 +61,9 @@
             return;
         }
         
-        const currentCommand = shortcuts.get(command.replace(/:$/, ''));
-        if (currentCommand) {
-            for (const [key, value] of Object.entries(currentCommand)) {
+        const currentCommand = shortcuts.get(clearCommand(command));
+        if (currentCommand && currentCommand.arguments) {
+            for (const [key, value] of Object.entries(currentCommand.arguments)) {
                 if (key.startsWith(argument) && value.active !== false) {
                     suggestion = key.replace(argument, '');
                     return;
@@ -100,7 +111,7 @@
         else if (event.code === 'Space') {
             if (document.activeElement === commandBox) {
                 event.preventDefault();
-                command += ':';
+                if (!command.endsWith(':')) command += ':';
                 argumentBox.focus();
             }
 
@@ -112,7 +123,7 @@
 
         else if(event.code === 'Enter') {
             event.preventDefault();
-            const currentCommand = shortcuts.get(command.replace(/:$/, ''));
+            const currentCommand = shortcuts.get(clearCommand(command));
             if (currentCommand && currentCommand[argument]) {
                 currentCommand[argument].callback(params);
             }
@@ -144,7 +155,7 @@
 {#if $summoned}
     <div 
         id="rooster" 
-        class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center" 
+        class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center"
         in:fade={{ duration: 100 }}
         out:fade={{ duration: 100 }}
         on:click={handleFocus}
@@ -155,7 +166,8 @@
             bind:this={commandBox}
             bind:textContent={command}
             contenteditable
-            class="bg-highlighted text-secondary text-xl font-primary rounded-lg p-0.5 mr-2 opacity-80 focus:opacity-100"
+            style="color: {commandPill.color}; background-color: {commandPill.background}"
+            class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2"
         />
         <span
             on:keydown={handleInputKeydown}
@@ -172,7 +184,7 @@
             class="bg-transparent text-primary text-xl font-primary"
         />
         {#if command.length > 2}
-            <span class="text-secondary text-xl font-primary select-none">{suggestion}</span>
+            <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
         {/if}
     </div>
 {/if}

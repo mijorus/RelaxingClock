@@ -29,7 +29,9 @@ export interface RoosterArgument {
 }
 
 export interface RoosterShortcut {
-    [key: string]: RoosterArgument;
+    arguments: {[key: string]: RoosterArgument};
+    color?: string;
+    background?: string;
 }
 
 export interface RoosterShortcuts {

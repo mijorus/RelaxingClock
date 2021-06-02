@@ -37,7 +37,8 @@ module.exports = {
             colors: {
                 'primary': 'rgb(245, 245, 245)',
                 'secondary': 'rgb(63, 63, 63)',
-                'spotify': 'rgb(29, 185, 84)'
+                'spotify': 'rgb(29, 185, 84)',
+                'dark': 'rgb(29, 29, 29)',
             },
             fontSize: {
                 'giant-1': '15rem',
@@ -55,7 +56,9 @@ module.exports = {
         },
     },
     variants: {
-        extend: {},
+        extend: {
+            margin: ['focus'],
+        },
     },
     plugins: [],
 };
