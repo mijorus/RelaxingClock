@@ -194,3 +194,10 @@
         {/if}
     </div>
 {/if}
+
+
+<style>
+    #rooster {
+        box-shadow: 0px -15px 50px 0px var(--primary);
+    }
+</style>
