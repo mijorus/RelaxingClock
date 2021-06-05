@@ -11,12 +11,14 @@
     import BlinkingDots from './settingsPage/BlinkingDots.svelte';
     import HighContrast from './settingsPage/HighContrast.svelte';
     import Spotify from './settingsPage/Spotify.svelte';
+    import Reminders from './settingsPage/Reminders.svelte';
 </script>
 
 <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto relative">
     <Spotify />
     <HighContrast />
     <BlinkingDots />
+    <Reminders />
 </div>
 
 <style global>

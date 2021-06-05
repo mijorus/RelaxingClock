@@ -33,7 +33,7 @@
 <SettingsBox>
     <Title title="Spotify">
         <TitleIcon>
-            <i class="icon-lightbulb text-primary settings-title-icon"></i>
+            <i class="fab fa-spotify settings-title-icon text-spotify text-7xl transform -translate-y-2"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 

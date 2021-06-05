@@ -9,7 +9,7 @@
 <SettingsBox>
     <Title title="High contrast">
         <TitleIcon>
-            <i class="icon-lightbulb text-primary settings-title-icon"></i>
+            <i class="icon-lightbulb text-primary settings-title-icon" style="color: #fcf4ac;"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 

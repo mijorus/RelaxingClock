@@ -22,11 +22,11 @@
         </div>
     </div>
     {#if description}
-        <div class="px-3 md:px-4 mx-3 md:mx-4">
+        <div class="px-3 md:px-4 mx-3 md:mx-4 text-secondary">
             {#if description.iconClass}
-                <i class="{description.iconClass} text-xs font-primary"></i>
+                <i class="{description.iconClass} text-xs"></i>
             {/if}
-            <span class="text-secondary text-xs font-primary">{description.text}</span>
+            <span class="text-xs font-primary leading-none">{description.text}</span>
         </div>
     {/if}
 </div>
