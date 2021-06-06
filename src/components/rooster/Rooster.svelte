@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, tick } from "svelte";
-    import { shortcuts, summoned } from "../../stores/rooster";
+    import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd } from "../../utils/utils";
     
@@ -137,6 +137,10 @@
     }
 
     function handleKeydown(event: KeyboardEvent) {
+        if (!$canBeSummoned) {
+            return;
+        }
+
 		if (event.code === 'Space' && event.ctrlKey) {
 			summoned.set(!$summoned);
             tick().then(() => commandBox.focus())
@@ -158,10 +162,10 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-{#if $summoned}
+{#if $summoned && $canBeSummoned}
     <div 
         id="rooster" 
-        class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center"
+        class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center shadow-box"
         in:fade={{ duration: 100 }}
         out:fade={{ duration: 100 }}
         on:click={handleFocus}
@@ -194,10 +198,3 @@
         {/if}
     </div>
 {/if}
-
-
-<style>
-    #rooster {
-        box-shadow: 0px -15px 50px 0px var(--primary);
-    }
-</style>

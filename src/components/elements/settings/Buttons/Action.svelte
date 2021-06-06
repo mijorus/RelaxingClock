@@ -1,6 +1,24 @@
 <script lang="ts">
     export let label: string;
-    const btnsClass: string = 'text-md settings-btn px-2 py-1 border-primary border-2 rounded-xl font-primary font-bold relative z-10';
+    export let custom = false;
+    export let customClass = '';
+    export let zoomOnFocus = false;
+    let btnsClass: string = 'text-md px-2 py-1 rounded-xl font-primary font-bold relative z-10 settings-btn';
+    if (zoomOnFocus) btnsClass += ' zoom-on-focus';
 </script>
 
-<button class="{btnsClass} text-secondary bg-highlighted" alt="{label}" on:click>{label}</button>
+{#if custom}
+    <button class="{btnsClass} {customClass}" alt="{label}" on:click>{label}</button>
+{:else}
+    <button class="{btnsClass} text-secondary bg-highlighted border-primary border-2 {customClass}" alt="{label}" on:click>{label}</button>
+{/if}
+
+<style>
+    button {
+        transition: .075s ease-out;
+    }
+
+    .zoom-on-focus:focus,.zoom-on-focus:hover, .zoom-on-focus:active {
+        transform: scale(1.1);
+    }
+</style>

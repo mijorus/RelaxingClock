@@ -24,13 +24,11 @@
 <style global>
     .settings-btn {
         cursor: pointer;
-        border: none;
         transition: color .4s linear;
         outline: none;
     }
     
-    .settings-btn:focus, .settings-btn:active {
-        border: none;
+    .settings-btn:focus, .settings-btn:active, .settings-btn:hover {
         outline: none;
     }
 </style>

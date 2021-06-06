@@ -2,6 +2,7 @@ import { Writable, writable } from 'svelte/store';
 import type { RoosterShortcuts } from '../types';
 
 export const summoned: Writable<boolean> = writable(false);
+export const canBeSummoned: Writable<boolean> = writable(true);
 
 export const shortcuts: RoosterShortcuts = {
     state: {

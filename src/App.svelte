@@ -53,5 +53,9 @@
             background-color: transparent;
             outline: none;
         }
+
+        .shadow-box {
+            box-shadow: 0px -15px 50px 0px var(--primary);
+        }
     }
 </style>
