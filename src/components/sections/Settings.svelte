@@ -23,7 +23,6 @@
 
 <style global>
     .settings-btn {
-        cursor: pointer;
         transition: color .4s linear;
         outline: none;
     }

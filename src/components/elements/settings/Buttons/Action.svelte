@@ -18,7 +18,7 @@
         transition: .075s ease-out;
     }
 
-    .zoom-on-focus:focus,.zoom-on-focus:hover, .zoom-on-focus:active {
+    .zoom-on-focus:focus,.zoom-on-focus:hover {
         transform: scale(1.1);
     }
 </style>
