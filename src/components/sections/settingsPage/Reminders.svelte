@@ -6,63 +6,76 @@
     import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
     import Action from '../../elements/settings/Buttons/Action.svelte';
     import NestedBox from '../../elements/settings/NestedBox.svelte';
-    import { onMount, tick } from 'svelte';
+    import { onDestroy, onMount, tick } from 'svelte';
     import { canBeSummoned } from '../../../stores/rooster';
-    import moment, { duration } from 'moment';
-    import { fade, fly, slide } from 'svelte/transition';
-import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
+    import moment, { Moment } from 'moment';
+    import { fly } from 'svelte/transition';
+    import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
+    import time from '../../../stores/time';
 
     let ready = false;
-
     let title: HTMLInputElement;
     let minutesFromNow = 10;
     let creationBoxOpened = true;
     let isPersistent = false;
+    let db: IDBDatabase;
+
+    $: periodicCheck(ready, $time)
 
     function initDB() {
-        const request = window.indexedDB.open('data', 1);
+        const requestDB = window.indexedDB.open('data', 1);
 
-        request.onupgradeneeded = function(event) {
-            event.target.result.createObjectStore('reminders', {keyPath: 'createdAt'});
-            ready = true;
+        requestDB.onupgradeneeded = function(event) {
+            const db: IDBDatabase = event.target.result;
+            db.createObjectStore('reminders', { keyPath: 'id', autoIncrement: true });
+            setReadyState(db);
         }
 
-        request.onsuccess = function() {
-            ready = true;
+        requestDB.onsuccess = function(event) {
+            const db: IDBDatabase = event.target.result;
+            setReadyState(db);
         }
     }
 
-    function saveReminder(title:string, createdAt: number, data = {}) {
-        const requestDB = window.indexedDB.open('data', 1);
-        requestDB.onsuccess = function(event) {
-            const db: IDBDatabase = event.target.result;
-            const t = db.transaction('reminders', 'readwrite')
+    function periodicCheck(readyState: boolean, time: Moment) {
+        if (readyState && time.format('s') === '59') {
+            const t = db.transaction('reminders', 'readonly')
                 .objectStore('reminders')
-                .add({
-                    title,
-                    createdAt,
-                    ...data
-                });
-            
-            t.onsuccess = function() {
-                creationBoxOpened = false;
-                console.log('reminder created');
+                .openCursor();
+
+            t.onsuccess = function(event) {
+                const cursor: IDBCursorWithValue = event.target.result;
+                if (!cursor) return;
+                
+                if (cursor.value.at < moment().unix()) {
+                    console.log(cursor.value.title);
+                }
+
+                cursor.continue();
             }
         }
     }
 
-    function handleReminderCreationClick() {
-        if (title.value === '' || !minutesFromNow) {
-            return;
-        }
-
-        saveReminder(title.value, moment().add(minutesFromNow, 'minutes').unix(), {
-            type: 'simple',
-        })
+    function setReadyState(database: IDBDatabase) {
+        db = database;
+        ready = true;
     }
 
-    function setPersistent() {
-        isPersistent = !isPersistent;
+    function saveReminder(title: string, at: Moment, data = {}, callback: () => void = null) {
+        if (!db) return;
+
+        const t = db.transaction('reminders', 'readwrite')
+            .objectStore('reminders')
+            .add({ title, at: at.unix(), createdAt: moment().unix(), ...data });
+
+        t.onsuccess = () => { if (callback) callback() };
+    }
+
+    function handleReminderCreationClick() {
+        if (title.value === '' || !minutesFromNow) return;
+
+        const timestamp = moment().add(minutesFromNow, 'minutes');
+        saveReminder(title.value, timestamp, { type: 'simple' }, () => creationBoxOpened = false);
     }
 
     onMount(async () => {
@@ -70,7 +83,11 @@ import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
         title.focus();
         canBeSummoned.set(false);
 
-        if (window.indexedDB) initDB();     
+        initDB();     
+    });
+
+    onDestroy(() => {
+        canBeSummoned.set(true);
     })
 
 </script>
@@ -93,7 +110,7 @@ import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
                 </div>
                 <div class="my-2 ">
 
-                    <Checkbox checked={isPersistent} on:change={setPersistent}/><span>Persistent</span>
+                    <Checkbox checked={isPersistent} on:change={() => isPersistent = !isPersistent}/><span>Persistent</span>
                 </div>
             </div>
             <div class="m-auto pt-8">
