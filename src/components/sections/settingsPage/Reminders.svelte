@@ -12,63 +12,31 @@
     import { fly } from 'svelte/transition';
     import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
     import time from '../../../stores/time';
+    import { Reminders } from '../../../handlers/Reminder';
 
     let ready = false;
     let title: HTMLInputElement;
     let minutesFromNow = 10;
     let creationBoxOpened = true;
     let isPersistent = false;
-    let db: IDBDatabase;
 
     $: periodicCheck(ready, $time)
 
-    function initDB() {
-        const requestDB = window.indexedDB.open('data', 1);
-
-        requestDB.onupgradeneeded = function(event) {
-            const db: IDBDatabase = event.target.result;
-            db.createObjectStore('reminders', { keyPath: 'id', autoIncrement: true });
-            setReadyState(db);
-        }
-
-        requestDB.onsuccess = function(event) {
-            const db: IDBDatabase = event.target.result;
-            setReadyState(db);
-        }
-    }
-
-    function periodicCheck(readyState: boolean, time: Moment) {
+    async function periodicCheck(readyState: boolean, time: Moment) {
         if (readyState && time.format('s') === '59') {
-            const t = db.transaction('reminders', 'readonly')
-                .objectStore('reminders')
-                .openCursor();
+            const reminders = await Reminders.getAllByExpirationDate();
 
-            t.onsuccess = function(event) {
-                const cursor: IDBCursorWithValue = event.target.result;
-                if (!cursor) return;
-                
-                if (cursor.value.at < moment().unix()) {
-                    console.log(cursor.value.title);
+            for (const reminder of reminders) {
+                if (reminder.at > time.unix()) {
+                    console.log('ring', reminder.title);
                 }
-
-                cursor.continue();
             }
         }
     }
 
-    function setReadyState(database: IDBDatabase) {
-        db = database;
-        ready = true;
-    }
-
-    function saveReminder(title: string, at: Moment, data = {}, callback: () => void = null) {
-        if (!db) return;
-
-        const t = db.transaction('reminders', 'readwrite')
-            .objectStore('reminders')
-            .add({ title, at: at.unix(), createdAt: moment().unix(), ...data });
-
-        t.onsuccess = () => { if (callback) callback() };
+    async function saveReminder(title: string, at: Moment, data = {}, callback: () => void = null) {
+        await Reminders.create(title, at, data);
+        callback(); 
     }
 
     function handleReminderCreationClick() {
@@ -78,17 +46,26 @@
         saveReminder(title.value, timestamp, { type: 'simple' }, () => creationBoxOpened = false);
     }
 
-    onMount(async () => {
+    async function openCreationBox() {
+        creationBoxOpened = true;
         await tick();
-        title.focus();
         canBeSummoned.set(false);
+        title.focus();
+    }
 
-        initDB();     
-    });
-
-    onDestroy(() => {
+    function closeCreationBox() {
+        creationBoxOpened = false;
         canBeSummoned.set(true);
-    })
+    }
+
+    onMount(async () => {
+        try {
+            await Reminders.initDB();
+            ready = true;
+        } catch(err) {
+            console.error(err);
+        }
+    }); 
 
 </script>
 
@@ -122,7 +99,7 @@
         </div>
         <div class="flex w-full justify-center mt-4">
             <span class="mx-1"><Action zoomOnFocus label="Create" on:click={handleReminderCreationClick}/></span>
-            <span class="mx-1"><Action zoomOnFocus label="Dismiss" custom customClass="border-2 border-red-400 text-red-400" on:click={() => creationBoxOpened = false} /></span>
+            <span class="mx-1"><Action zoomOnFocus label="Dismiss" custom customClass="border-2 border-red-400 text-red-400" on:click={closeCreationBox} /></span>
         </div>
     </div>
 {/if}
@@ -138,7 +115,7 @@
         description={{text:'Set and manage reminders', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Action label="Create" on:click={() => creationBoxOpened = true}></Action>
+        <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
     <NestedBox available={true} label="test"></NestedBox>
 </SettingsBox>

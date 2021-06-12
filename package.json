@@ -44,6 +44,7 @@
     "build-url": "^6.0.1",
     "dotenv": "^8.2.0",
     "html-ready": "^2.1.0",
+    "idb": "^6.1.2",
     "linearicons": "^1.0.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
