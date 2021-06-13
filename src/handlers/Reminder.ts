@@ -6,7 +6,7 @@ export class Reminders {
     static db: IDBPDatabase<RemindersDB>;
 
     static async initDB() {
-        this.db = await openDB<RemindersDB>('Reminders', 1, {
+        const db = await openDB<RemindersDB>('Reminders', 1, {
             upgrade(db) {
                 const store = db.createObjectStore('reminders', {
                     keyPath: 'id', 
@@ -15,11 +15,13 @@ export class Reminders {
 
                 store.createIndex('at', 'at');
             },
-
-            terminated() {
-                throw 'connection to db terminated';
-            }
         });
+
+        if (!db) {
+            throw 'connection to db terminated';
+        }
+
+        this.db = db;
     }
 
     static async create(title: string, at: Moment, data = {}) {
