@@ -18,17 +18,6 @@ export const shortcuts: RoosterShortcuts = {
                 }
             }
         },
-        reminder: {
-            background: '#57ceff',
-            arguments: {
-                create: {
-                    active: true,
-                    callback(p) {
-                        console.log('reminder created!', p);
-                    }
-                }
-            }
-        },
     },
 
     set(key, value) {

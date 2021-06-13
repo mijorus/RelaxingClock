@@ -28,6 +28,7 @@
         command = '';
         argument = '';
         suggestion = '';
+        params = '';
     }
 
     function handleSummon(summoned: boolean) {
@@ -91,7 +92,7 @@
         }
     }
 
-    function handleInputKeydown(event: KeyboardEvent) {
+    async function handleInputKeydown(event: KeyboardEvent) {
         if (event.code === 'ArrowRight' || event.code === 'Tab') {
             if (document.activeElement === argumentBox || document.activeElement === commandBox) {
                 event.preventDefault();
@@ -127,11 +128,16 @@
             }
         }
 
-        else if(event.code === 'Enter') {
+        else if(event.code === 'Enter' || event.code === 'NumpadEnter') {
             event.preventDefault();
             const currentCommand = shortcuts.get(clearCommand(command));
             if (currentCommand && currentCommand.arguments[argument]) {
-                currentCommand.arguments[argument].callback(params);
+                const res = await currentCommand.arguments[argument].callback(params);
+                
+                if (res) {
+                    resetInputs();
+                    summoned.set(false);
+                }
             }
         }
     }
@@ -146,7 +152,10 @@
             tick().then(() => commandBox.focus())
 		}
         
-        if (event.code === 'Escape' && $summoned) summoned.set(false);
+        if (event.code === 'Escape' && $summoned) {
+            resetInputs();
+            summoned.set(false);
+        }
 	}
 
     function handleFocus() {
@@ -177,24 +186,31 @@
             bind:textContent={command}
             contenteditable
             style="color: {commandPill.color}; background-color: {commandPill.background}"
-            class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2"
+            class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2 contenteditable"
         />
         <span
             on:keydown={handleInputKeydown}
             bind:textContent={argument}
             bind:this={argumentBox}
             contenteditable
-            class="bg-transparent text-primary text-xl font-primary underline mr-2"
+            class="bg-transparent text-primary text-xl font-primary underline mr-2 contenteditable"
         />
         <span
             on:keydown={handleInputKeydown}
             bind:textContent={params}
             bind:this={paramsBox}
             contenteditable
-            class="bg-transparent text-primary text-xl font-primary"
+            class="bg-transparent text-primary text-xl font-primary contenteditable"
         />
         {#if command.length > 2}
             <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
         {/if}
     </div>
 {/if}
+
+<style>
+    .contenteditable:focus-visible {
+        border: none;
+        outline: none;
+    }
+</style>
