@@ -1,7 +1,8 @@
 <script lang="ts">
     import { screenSaver } from '../../stores/globalState';
     import screenSaverHandler from "../../handlers/screenSaver";
-
+    
+    import Tips from '../tips/Tips.svelte';
     import Clock from '../clock/Clock.svelte';
     import FullScreenBtn from '../elements/FullScreenBtn.svelte';
     import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
@@ -25,7 +26,8 @@
     <StyleSelectionBox />
 </div>
 <!-- 
-{#if $spotifyPlayerStatus !== 'disconnected' || $spotifyPlayerStatus !== 'error' }
+    {#if $spotifyPlayerStatus !== 'disconnected' || $spotifyPlayerStatus !== 'error' }
     <SpotifyBox />
-{/if} -->
+    {/if} -->
 <SpotifyBox />
+<Tips />
