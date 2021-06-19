@@ -45,3 +45,10 @@ export interface Tip {
     name: string;
     shortcut: string;
 }
+
+export interface Notification {
+    title: string;
+    content: string;
+    icon: string;
+    color?: string;
+}
