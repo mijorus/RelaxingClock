@@ -3,6 +3,9 @@
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd } from "../../utils/utils";
+    import anime from "animejs";
+
+    let rooster: HTMLElement;
     
     let command = '';
     let commandPill = {color: null, background: null};
@@ -20,15 +23,23 @@
     $: handleCommand(command);
     $: handleArgument(argument);
 
+    function shake() {
+        anime({
+            targets: rooster,
+            duration: 70,
+            translateX: [10, -10, 0],
+            easing: 'linear',
+            loop: 4,
+            direction: 'alternate'
+        });
+    }
+
     function clearCommand(c: string) {
         return c.replace(/:$/, '');
     }
 
     function resetInputs() {
-        command = '';
-        argument = '';
-        suggestion = '';
-        params = '';
+        command = ''; argument = ''; suggestion = ''; params = '';
     }
 
     function handleSummon(summoned: boolean) {
@@ -40,7 +51,7 @@
             return;
         }
 
-        if (command.length > 2) {
+        if (command.length > 1) {
             for (const [key, value] of Object.entries(shortcuts.getAll())) {
                 if (key.startsWith(command)) {
                     suggestion = key.replace(command, '') + ':';
@@ -137,6 +148,8 @@
                 if (res) {
                     resetInputs();
                     summoned.set(false);
+                } else {
+                    shake();
                 }
             }
         }
@@ -172,39 +185,41 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if $summoned && $canBeSummoned}
-    <div 
-        id="rooster" 
-        class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary fixed bottom-0 left-2/4 transform -translate-x-2/4 z-50 items-center shadow-box"
-        in:fade={{ duration: 100 }}
-        out:fade={{ duration: 100 }}
-        on:click={handleFocus}
-    >
-        <i class="lnr lnr-chevron-right text-primary justify-self-start	inline-block px-3 text-xl"></i>
-        <span
-            on:keydown={handleInputKeydown}
-            bind:this={commandBox}
-            bind:textContent={command}
-            contenteditable
-            style="color: {commandPill.color}; background-color: {commandPill.background}"
-            class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2 contenteditable"
-        />
-        <span
-            on:keydown={handleInputKeydown}
-            bind:textContent={argument}
-            bind:this={argumentBox}
-            contenteditable
-            class="bg-transparent text-primary text-xl font-primary underline mr-2 contenteditable"
-        />
-        <span
-            on:keydown={handleInputKeydown}
-            bind:textContent={params}
-            bind:this={paramsBox}
-            contenteditable
-            class="bg-transparent text-primary text-xl font-primary contenteditable"
-        />
-        {#if command.length > 2}
-            <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
-        {/if}
+    <div class="fixed bottom-0 w-full flex justify-center z-50">
+        <div
+            bind:this={rooster}
+            class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
+            in:fade={{ duration: 100 }}
+            out:fade={{ duration: 100 }}
+            on:click={handleFocus}
+        >
+            <i class="lnr lnr-chevron-right text-primary justify-self-start	inline-block px-3 text-xl"></i>
+            <span
+                on:keydown={handleInputKeydown}
+                bind:this={commandBox}
+                bind:textContent={command}
+                contenteditable
+                style="color: {commandPill.color}; background-color: {commandPill.background}"
+                class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2 contenteditable"
+            />
+            <span
+                on:keydown={handleInputKeydown}
+                bind:textContent={argument}
+                bind:this={argumentBox}
+                contenteditable
+                class="bg-transparent text-primary text-xl font-primary underline mr-2 contenteditable"
+            />
+            <span
+                on:keydown={handleInputKeydown}
+                bind:textContent={params}
+                bind:this={paramsBox}
+                contenteditable
+                class="bg-transparent text-primary text-xl font-primary contenteditable"
+            />
+            {#if command.length > 1}
+                <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
+            {/if}
+        </div>
     </div>
 {/if}
 
