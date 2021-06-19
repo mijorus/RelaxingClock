@@ -8,6 +8,7 @@
 	import Settings from './components/sections/Settings.svelte';
 	import { summoned } from './stores/rooster';
     import { loggedWithSpotify } from './stores/storedSettings';
+    import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
 
 	// onMount(() => init());
 </script>
@@ -21,7 +22,8 @@
 <main class="w-screen h-screen">
 	<Home />
 	<Settings />
-	
+    <NotificationsPanel />
+    
 	<MainBg />
 </main>
 

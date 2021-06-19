@@ -11,8 +11,9 @@
     import { fly } from 'svelte/transition';
     import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
     import time from '../../../stores/time';
-    import { Reminders } from '../../../handlers/Reminder';
+    import { RemindersDB } from '../../../handlers/RemindersDB';
     import { tips } from '../../../stores/globalState';
+    import { notifications } from '../../../stores/notifications';
 
     let ready = false;
     let title: HTMLInputElement;
@@ -20,11 +21,13 @@
     let creationBoxOpened = false;
     let isPersistent = false;
 
+    const color = '57ceff';
+
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
         if (readyState && time.format('s') === '59') {
-            const reminders = await Reminders.getAllByExpirationDate();
+            const reminders = await RemindersDB.getAllByExpirationDate();
 
             for (const reminder of reminders) {
                 if (reminder.at > time.unix()) {
@@ -35,7 +38,7 @@
     }
 
     function createReminder(title: string, at: Moment, data = {}) {
-        return Reminders.create(title, at, {type: 'simple'});
+        return RemindersDB.create(title, at, {type: 'simple'});
     }
     
     async function saveInput() {
@@ -79,31 +82,41 @@
         console.log(tokens);
         
         
-        if (tokens[0].startsWith('today@')) {
-            at = moment(tokens[0].replace(/^today@/, ''), 'HH:mm');
+        if (tokens[0].startsWith('tomorrow@') || tokens[0].startsWith('tm@')) {
+            at = moment(tokens[0].replace(/[^@]+/, ''), 'HH:mm');
             title = tokens[1];
         }
 
-        else if (tokens[0].match(/^\d{1,2}m/)) {
-            at = moment().add(parseInt(tokens[0].match(/^\d{1,2}/)[0]));
+        else if (tokens[0].match(/^\d{1,2}m/) || tokens[0].match(/^\d{1,2}h/)) {
+            const unit = tokens[0].match(/^\d{1,2}m/) ? 'm' : 'h';
+            at = moment().add(parseInt(tokens[0].match(/^\d{1,2}/)[0]), unit);
             title = tokens[1];
         }
 
         else {
             return false;
         }
+        console.log(at.format('HH:mm'));
+        
 
         await createReminder(title, at, {});
+        notifications.create({ 
+            title: 'Reminder set!', 
+            content: `${at.fromNow()} ${title}`,
+            icon: 'lnr lnr-calendar-full',
+            color
+        });
+        
         return true;
     }
 
     onMount(async () => {
         try {
-            await Reminders.initDB();
+            await RemindersDB.initDB();
             ready = true;
 
             shortcuts.set('reminder', {
-                background: '#57ceff',
+                background: color,
                 arguments: {
                     create: {
                         active: true,
@@ -158,7 +171,7 @@
 <SettingsBox unsupported={!ready}>
     <Title title="Reminders">
         <TitleIcon>
-            <i class="lnr lnr-calendar-full text-primary settings-title-icon" style="color: #57ceff;"></i>
+            <i class="lnr lnr-calendar-full text-primary settings-title-icon" style="color: {color}};"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 

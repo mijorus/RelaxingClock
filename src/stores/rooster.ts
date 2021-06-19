@@ -12,8 +12,9 @@ export const shortcuts: RoosterShortcuts = {
             arguments: {
                 set: {
                     active: true,
-                    callback() {
+                    async callback() {
                         console.log('alarm set');
+                        return true;
                     }
                 }
             }

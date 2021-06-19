@@ -2,7 +2,7 @@ import type { Moment } from "moment";
 import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema } from 'idb';
 
 
-export class Reminders {
+export class RemindersDB {
     static db: IDBPDatabase<RemindersDB>;
 
     static async initDB() {
@@ -25,7 +25,7 @@ export class Reminders {
     }
 
     static async create(title: string, at: Moment, data = {}) {
-        return Reminders.db.add('reminders', {
+        return RemindersDB.db.add('reminders', {
             title,
             at: at.unix(),
             ...data,
@@ -34,11 +34,11 @@ export class Reminders {
 
 
     static getAllByExpirationDate() {
-        return Reminders.db.getAllFromIndex('reminders', 'at');
+        return RemindersDB.db.getAllFromIndex('reminders', 'at');
     }
 
     static remove(key: number) {
-        Reminders.db.delete('reminders', key)
+        RemindersDB.db.delete('reminders', key)
     }
 }
 

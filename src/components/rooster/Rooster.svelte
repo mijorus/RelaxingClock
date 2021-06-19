@@ -111,7 +111,7 @@
                 suggestion = '';
             }
         }
-        
+
         else if (event.code === 'Backspace') {
             if (document.activeElement === argumentBox && argument === '') {
                 event.preventDefault();
