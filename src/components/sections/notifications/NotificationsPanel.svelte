@@ -10,7 +10,7 @@
     function setToShow(n: Notification) {
         if (notificationToShow) notificationToShow = null; 
         notificationToShow = n;
-        const timeout = setTimeout(() => notificationToShow = null, 4000);
+        const timeout = setTimeout(() => notificationToShow = null, 8000);
     }
 </script>
 
