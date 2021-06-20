@@ -14,38 +14,59 @@
     import { RemindersDB } from '../../../handlers/RemindersDB';
     import { tips } from '../../../stores/globalState';
     import { notifications } from '../../../stores/notifications';
-    import type { ReminderType } from '../../../types';
+    import type { ReminderType, StoredReminder } from '../../../types';
 
     let ready = false;
     let title: HTMLInputElement;
     let minutesFromNow = 10;
     let creationBoxOpened = false;
     let isPersistent = false;
+    let reminders: Array<StoredReminder>;
+    let futureReminders: Array<StoredReminder> = [];
 
     const color = '#57ceff';
 
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
-        if (readyState && time.format('s') === '59') {
-            const reminders = await RemindersDB.getAllByExpirationDate();
-
+        if (readyState && time.format('s') === '1') {
+            reminders = await RemindersDB.getAllByExpirationDate();
+        
             for (const reminder of reminders) {
-                if (reminder.at > time.unix()) {
-                    console.log('ring', reminder.title);
+                if (reminder.at < time.unix() && !reminder.done) {
                     notifications.create({ 
                         title: reminder.title, 
                         content: reminder.type === 'repeated' ? 'Interact to dismiss' : '',
                         icon: 'lnr lnr-calendar-full',
                         color
                     });
+
+                    if (reminder.type === 'simple') {
+                        RemindersDB.setDone(reminder.id);
+                    }
+
+                    else if (reminder.type === 'repeated') {
+                        RemindersDB.setDueTime(reminder.id, time.add(5, 'minutes'));
+                    }
                 }
             }
         }
     }
 
-    function createReminder(title: string, at: Moment, type: ReminderType) {
-        return RemindersDB.create({ title, at: at.unix(), type, done: false });
+    async function runListCheck() {
+        reminders = await RemindersDB.getAllByExpirationDate();
+
+        futureReminders = []
+        for (const r of reminders) {
+            if (!r.done) {
+                futureReminders = [...futureReminders, r];
+            }
+        }
+    }
+
+    async function createReminder(title: string, at: Moment, type: ReminderType) {
+        await RemindersDB.create({ title, at: at.unix(), type, done: false });
+        runListCheck();
     }
     
     async function saveInput() {
@@ -86,8 +107,6 @@
     async function handleRoosterShortcut(params: string) {
         let title: string, at: Moment;
         const tokens = params.split(/\s(.+)/);
-        console.log(tokens);
-        
         
         if (tokens[0].startsWith('tomorrow@') || tokens[0].startsWith('tm@')) {
             at = moment(tokens[0].replace(/[^@]+/, ''), 'HH:mm');
@@ -103,19 +122,17 @@
         else {
             return false;
         }
-
-        console.log(at.format('HH:mm'));
         
         let type: ReminderType = 'simple';
-        if (params.endsWith(' !')) {
+        if (params.match(/\s!$/)) {
            type = 'repeated';
            title = title.replace(/!$/, '');
         }
-
+        
         await createReminder(title, at, type);
         notifications.create({ 
             title: 'Reminder set!', 
-            content: `${at.fromNow()} ${title}`,
+            content: `${at.fromNow()} "${title}"`,
             icon: 'lnr lnr-calendar-full',
             color
         });
@@ -126,6 +143,8 @@
     onMount(async () => {
         try {
             await RemindersDB.initDB();
+            reminders = await RemindersDB.getAllByExpirationDate();
+            runListCheck();
             ready = true;
 
             shortcuts.set('reminder', {
@@ -194,5 +213,18 @@
     >
         <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
-    <NestedBox available={true} label="test"></NestedBox>
+    <NestedBox label="All your reminders" bordered={false} available={futureReminders.length > 0}>
+        {#if futureReminders.length}
+        <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
+            {#each futureReminders as r }
+                <div class="my-2 overflow-x-hidden border-b border-black">
+                    <bold>{r.title}</bold> <span class="text-secondary">{moment(r.at, 'X').format('HH:mm')}</span>
+                    <span class="float-right cursor-pointer" on:click={() => { RemindersDB.setDone(r.id); runListCheck() }} >
+                        <i class="lnr lnr-circle-minus text-red-600"></i>
+                    </span>
+                </div>
+            {/each}
+        </div>
+        {/if}
+    </NestedBox>
 </SettingsBox>

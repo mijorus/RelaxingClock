@@ -1,5 +1,6 @@
 import type { Moment } from "moment";
 import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema } from 'idb';
+import type { Reminder, StoredReminder } from "../types";
 
 
 export class RemindersDB {
@@ -24,12 +25,8 @@ export class RemindersDB {
         this.db = db;
     }
 
-    static async create(title: string, at: Moment, data = {}) {
-        return RemindersDB.db.add('reminders', {
-            title,
-            at: at.unix(),
-            ...data,
-        });
+    static async create(reminder: Reminder) {
+        return RemindersDB.db.add('reminders', reminder);
     }
 
 
@@ -40,12 +37,22 @@ export class RemindersDB {
     static remove(key: number) {
         RemindersDB.db.delete('reminders', key)
     }
+
+    static async setDone(key: number) {
+        const reminder = await RemindersDB.db.get('reminders', key);
+        RemindersDB.db.put('reminders', { ...reminder, done: true });
+    }
+
+    static async setDueTime(key: number, at: Moment) {
+        const reminder = await RemindersDB.db.get('reminders', key);
+        RemindersDB.db.put('reminders', { ...reminder, done: true, at: at.unix() });
+    }
 }
 
 export interface RemindersDB extends DBSchema {
     reminders: {
         key: number;
-        value: any;
+        value: StoredReminder;
         indexes: {
             at: number
         }

@@ -52,3 +52,15 @@ export interface Notification {
     icon: string;
     color?: string;
 }
+
+export type ReminderType = 'simple' | 'repeated';
+export interface Reminder {
+    title: string;
+    at: number;
+    type: ReminderType;
+    done: boolean;
+}
+
+export interface StoredReminder extends Reminder {
+    id?: number;
+}
