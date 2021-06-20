@@ -14,6 +14,7 @@
     import { RemindersDB } from '../../../handlers/RemindersDB';
     import { tips } from '../../../stores/globalState';
     import { notifications } from '../../../stores/notifications';
+    import type { ReminderType } from '../../../types';
 
     let ready = false;
     let title: HTMLInputElement;
@@ -21,7 +22,7 @@
     let creationBoxOpened = false;
     let isPersistent = false;
 
-    const color = '57ceff';
+    const color = '#57ceff';
 
     $: periodicCheck(ready, $time);
 
@@ -32,20 +33,26 @@
             for (const reminder of reminders) {
                 if (reminder.at > time.unix()) {
                     console.log('ring', reminder.title);
+                    notifications.create({ 
+                        title: reminder.title, 
+                        content: reminder.type === 'repeated' ? 'Interact to dismiss' : '',
+                        icon: 'lnr lnr-calendar-full',
+                        color
+                    });
                 }
             }
         }
     }
 
-    function createReminder(title: string, at: Moment, data = {}) {
-        return RemindersDB.create(title, at, {type: 'simple'});
+    function createReminder(title: string, at: Moment, type: ReminderType) {
+        return RemindersDB.create({ title, at: at.unix(), type, done: false });
     }
     
     async function saveInput() {
         if (title.value === '' || !minutesFromNow) return;
 
         const timestamp = moment().add(minutesFromNow, 'minutes');
-        await createReminder(title.value, timestamp, {type: 'simple'});
+        await createReminder(title.value, timestamp, 'simple');
         creationBoxOpened = false;
     }
 
@@ -96,10 +103,16 @@
         else {
             return false;
         }
+
         console.log(at.format('HH:mm'));
         
+        let type: ReminderType = 'simple';
+        if (params.endsWith(' !')) {
+           type = 'repeated';
+           title = title.replace(/!$/, '');
+        }
 
-        await createReminder(title, at, {});
+        await createReminder(title, at, type);
         notifications.create({ 
             title: 'Reminder set!', 
             content: `${at.fromNow()} ${title}`,
