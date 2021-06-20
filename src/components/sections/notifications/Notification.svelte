@@ -17,9 +17,9 @@
                     <i class="{data.icon} text-5xl" style="color: {data.color};"/>
                 </span>
             </div>
-            <div>
+            <div class="overflow-x-hidden">
                 <h4 class="text-3xl font-bold">{data.title}</h4>
-                <p>{data.content}</p>
+                <p class="whitespace-nowrap">{data.content}</p>
             </div>
         </div>
     </Bubble>

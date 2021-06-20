@@ -12,6 +12,8 @@
         notificationToShow = n;
         const timeout = setTimeout(() => notificationToShow = null, 8000);
     }
+
+
 </script>
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
