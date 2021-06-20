@@ -2,8 +2,6 @@ import type { Readable } from "stream";
 import { derived, writable, Writable } from "svelte/store";
 import type { Notification } from "../types";
 
-// export const notifications: Writable<Array<Notification>> = writable([]);
-
 function createNotification() {
 	const stored: Writable<Array<Notification>> = writable([]);
 
