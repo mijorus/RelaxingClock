@@ -59,6 +59,7 @@ export interface Reminder {
     at: number;
     type: ReminderType;
     done: boolean;
+    doneAt?: number; 
 }
 
 export interface StoredReminder extends Reminder {

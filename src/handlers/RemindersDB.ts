@@ -1,6 +1,7 @@
 import type { Moment } from "moment";
 import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema } from 'idb';
 import type { Reminder, StoredReminder } from "../types";
+import moment from "moment";
 
 
 export class RemindersDB {
@@ -40,7 +41,7 @@ export class RemindersDB {
 
     static async setDone(key: number) {
         const reminder = await RemindersDB.db.get('reminders', key);
-        RemindersDB.db.put('reminders', { ...reminder, done: true });
+        RemindersDB.db.put('reminders', { ...reminder, done: true, doneAt: moment().unix() });
     }
 
     static async setDueTime(key: number, at: Moment) {
