@@ -137,9 +137,7 @@
             event.preventDefault();
             const currentCommand = shortcuts.get(clearCommand(command));
             if (currentCommand && currentCommand.arguments[argument]) {
-                const res = await currentCommand.arguments[argument].callback(params);
-                
-                if (res) {
+                if (await currentCommand.arguments[argument].callback(params)) {
                     resetInputs();
                     summoned.set(false);
                 } else {
