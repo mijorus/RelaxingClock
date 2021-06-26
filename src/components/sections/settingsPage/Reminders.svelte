@@ -30,7 +30,7 @@
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
-        if (readyState && (time.unix() % 10 === 0)) {
+        if (readyState && (time.unix() % 20 === 0)) {
             runListCheck();
         
             for (const reminder of reminders) {
@@ -56,12 +56,8 @@
 
     async function runListCheck() {
         reminders = await RemindersDB.getAllByExpirationDate();
-
         futureReminders = reminders.filter(r => r.done === false);
-        doneReminders = reminders.filter(r => r.done === true);
-
-        console.log(doneReminders);
-        
+        doneReminders = reminders.filter(r => r.done === true).reverse();
     }
 
     async function createReminder(title: string, at: Moment, type: ReminderType) {
@@ -95,13 +91,9 @@
     }
 
     function handleShortcuts(event: KeyboardEvent) {
-        if (event.ctrlKey && event.code === 'Enter') {
-            saveInput();
-        }
+        if (event.ctrlKey && event.code === 'Enter') { saveInput() }
 
-        else if (event.code === 'Escape') {
-            closeCreationBox();
-        }
+        else if (event.code === 'Escape') { closeCreationBox() }
     }
 
     async function handleRoosterShortcut(params: string) {
@@ -110,19 +102,16 @@
         
         if (tokens[0].startsWith('tomorrow@') || tokens[0].startsWith('tm@')) {
             at = moment(tokens[0].replace(/[^@]+/, ''), 'HH:mm');
-            title = tokens[1];
         }
 
         else if (tokens[0].match(/^\d{1,2}m/) || tokens[0].match(/^\d{1,2}h/)) {
             const unit = tokens[0].match(/^\d{1,2}m/) ? 'm' : 'h';
             at = moment().add(parseInt(tokens[0].match(/^\d{1,2}/)[0]), unit);
-            title = tokens[1];
-        }
-
-        else {
-            return false;
         }
         
+        else { return false };
+        
+        title = tokens[1];
         let type: ReminderType = 'simple';
         if (params.match(/\s!$/)) {
            type = 'repeated';
@@ -218,7 +207,7 @@
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
             {#each futureReminders as r }
                 <div class="my-2 overflow-x-hidden border-b border-black">
-                    <bold>{r.title}</bold> <span class="text-secondary">{moment(r.at, 'X').format('HH:mm')}</span>
+                    <bold>{r.title}</bold> <span class="text-secondary">{moment(r.at, 'X').fromNow()}</span>
                     <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
                         <i class="lnr lnr-circle-minus text-red-600"></i>
                     </span>
@@ -228,7 +217,7 @@
         {/if}
         {#if doneReminders.length}
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
-            {#each doneReminders.reverse() as r }
+            {#each doneReminders as r }
                 <div class="my-2 overflow-x-hidden border-b border-black done-reminder">
                     <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                     <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
