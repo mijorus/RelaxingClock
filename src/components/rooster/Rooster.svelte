@@ -2,7 +2,7 @@
     import { onMount, tick } from "svelte";
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
-    import { caretToEnd } from "../../utils/utils";
+    import { caretToEnd, shakeElement } from "../../utils/utils";
     import anime from "animejs";
 
     let rooster: HTMLElement;
@@ -22,17 +22,6 @@
     $: handleSummon($summoned);
     $: handleCommand(command);
     $: handleArgument(argument);
-
-    function shake() {
-        anime({
-            targets: rooster,
-            duration: 70,
-            translateX: [10, -10, 0],
-            easing: 'linear',
-            loop: 4,
-            direction: 'alternate'
-        });
-    }
 
     function clearCommand(c: string) {
         return c.replace(/:$/, '');
@@ -129,13 +118,18 @@
         else if (event.code === 'Space') {
             if (document.activeElement === commandBox) {
                 event.preventDefault();
-                if (!command.endsWith(':')) command += ':';
-                argumentBox.focus();
+                if (command !== '') {
+                    if (!command.endsWith(':')) command += ':';
+                    argumentBox.focus();
+                }
             }
 
             if (document.activeElement === argumentBox) {
                 event.preventDefault();
-                paramsBox.focus();
+                if (argument !== '') {
+                    paramsBox.focus();
+                    suggestion = ''
+                }
             }
         }
 
@@ -149,7 +143,7 @@
                     resetInputs();
                     summoned.set(false);
                 } else {
-                    shake();
+                    shakeElement(rooster);
                 }
             }
         }
