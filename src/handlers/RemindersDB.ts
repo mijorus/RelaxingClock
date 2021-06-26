@@ -31,8 +31,10 @@ export class RemindersDB {
     }
 
 
-    static getAllByExpirationDate() {
-        return RemindersDB.db.getAllFromIndex('reminders', 'at');
+    static async getAllByExpirationDate() {
+        return (await RemindersDB.db.getAllFromIndex('reminders', 'at')).filter(r => {
+            return (!r.done || (r.doneAt && (moment().unix() - r.doneAt < 30 * 86000)))
+        })
     }
 
     static remove(key: number) {
