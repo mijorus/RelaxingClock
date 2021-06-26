@@ -21,16 +21,17 @@
     let minutesFromNow = 10;
     let creationBoxOpened = false;
     let isPersistent = false;
-    let reminders: Array<StoredReminder>;
+    let reminders: Array<StoredReminder> = [];
     let futureReminders: Array<StoredReminder> = [];
+    let doneReminders: Array<StoredReminder> = [];
 
     const color = '#57ceff';
 
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
-        if (readyState && time.format('s') === '1') {
-            reminders = await RemindersDB.getAllByExpirationDate();
+        if (readyState && (time.unix() % 10 === 0)) {
+            runListCheck();
         
             for (const reminder of reminders) {
                 if (reminder.at < time.unix() && !reminder.done) {
@@ -56,12 +57,11 @@
     async function runListCheck() {
         reminders = await RemindersDB.getAllByExpirationDate();
 
-        futureReminders = []
-        for (const r of reminders) {
-            if (!r.done) {
-                futureReminders = [...futureReminders, r];
-            }
-        }
+        futureReminders = reminders.filter(r => r.done === false);
+        doneReminders = reminders.filter(r => r.done === true);
+
+        console.log(doneReminders);
+        
     }
 
     async function createReminder(title: string, at: Moment, type: ReminderType) {
@@ -213,14 +213,27 @@
     >
         <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
-    <NestedBox label="All your reminders" bordered={false} available={futureReminders.length > 0}>
+    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} expandable>
         {#if futureReminders.length}
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
             {#each futureReminders as r }
                 <div class="my-2 overflow-x-hidden border-b border-black">
                     <bold>{r.title}</bold> <span class="text-secondary">{moment(r.at, 'X').format('HH:mm')}</span>
-                    <span class="float-right cursor-pointer" on:click={() => { RemindersDB.setDone(r.id); runListCheck() }} >
+                    <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
                         <i class="lnr lnr-circle-minus text-red-600"></i>
+                    </span>
+                </div>
+            {/each}
+        </div>
+        {/if}
+        {#if doneReminders.length}
+        <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
+            {#each doneReminders.reverse() as r }
+                <div class="my-2 overflow-x-hidden border-b border-black done-reminder">
+                    <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
+                    <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
+                        <i class="lnr lnr-checkmark-circle text-green-400 delete-rem-i-check" ></i>
+                        <i class="lnr lnr-cross-circle text-red-600 delete-rem-i-cross hidden"></i>
                     </span>
                 </div>
             {/each}
@@ -228,3 +241,13 @@
         {/if}
     </NestedBox>
 </SettingsBox>
+
+<style>
+    .done-reminder:hover .delete-rem-i-check {
+        display: none;
+    }
+
+    .done-reminder:hover .delete-rem-i-cross {
+        display: inline !important;
+    }
+</style>

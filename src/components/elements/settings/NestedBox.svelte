@@ -16,9 +16,7 @@
         <span>{label}</span>
         {#if expandable}<i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click={() => expanded = !expanded}></i>{/if}
     </div>
-    <div class="unfold max-h-80">
-        {#if expanded }
-            <div in:slide out:slide><slot></slot></div>
-        {/if}
-    </div>
+    {#if expanded }
+    <div in:slide out:slide><slot></slot></div>
+    {/if}
 </div>
