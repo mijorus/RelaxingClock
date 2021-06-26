@@ -12,7 +12,7 @@
     {available ? 'opacity-100' : 'opacity-50 pointer-events-none'} 
     {bordered ? 'border-l-4 border-primary' : 'border-none'}"
 >
-    <div class="text-primary font-primary text-md w-full flex items-center" style="justify-content: space-between;">
+    <div class="text-primary font-primary text-md w-full flex items-center overscroll-x-hidden" style="justify-content: space-between;">
         <span>{label}</span>
         {#if expandable}<i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click={() => expanded = !expanded}></i>{/if}
     </div>
