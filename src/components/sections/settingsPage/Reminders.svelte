@@ -15,12 +15,17 @@
     import { tips } from '../../../stores/globalState';
     import { notifications } from '../../../stores/notifications';
     import type { ReminderType, StoredReminder } from '../../../types';
+import { shakeElement } from '../../../utils/utils';
+
+    type BoxAtType = 'minutes' | 'hour';
+
+    let minutesFromNow: number; let isPersistent: boolean; let reminderAtBox: string;
+    let boxSelectedAt: BoxAtType = 'minutes';
+    let creationBox: HTMLElement;
 
     let ready = false;
     let title: HTMLInputElement;
-    let minutesFromNow = 10;
     let creationBoxOpened = false;
-    let isPersistent = false;
     let reminders: Array<StoredReminder> = [];
     let futureReminders: Array<StoredReminder> = [];
     let doneReminders: Array<StoredReminder> = [];
@@ -66,14 +71,25 @@
     }
     
     async function saveInput() {
-        if (title.value === '' || !minutesFromNow) return;
+        if (title.value === '' || !minutesFromNow || reminderAtBox === '') {
+            shakeElement(creationBox);
+            return;
+        }
 
-        const timestamp = moment().add(minutesFromNow, 'minutes');
-        await createReminder(title.value, timestamp, 'simple');
-        creationBoxOpened = false;
+        const timestamp = boxSelectedAt === 'minutes' ? moment().add(minutesFromNow, 'minutes') : moment(reminderAtBox, 'HH:mm');
+        if (!timestamp.isValid()) {
+            shakeElement(creationBox);
+            return;
+        }
+
+        await createReminder(title.value, timestamp, isPersistent ? 'repeated' : 'simple');
+        closeCreationBox();
     }
 
     async function openCreationBox() {
+        minutesFromNow = 10;
+        reminderAtBox = moment().add(10, 'minutes').format('HH:mm');
+        isPersistent = false;
         creationBoxOpened = true;
         await tick();
         canBeSummoned.set(false);
@@ -111,11 +127,11 @@
         
         else { return false };
         
-        title = tokens[1];
+        title = tokens[1].trim();
         let type: ReminderType = 'simple';
         if (params.match(/\s!$/)) {
            type = 'repeated';
-           title = title.replace(/!$/, '');
+           title = title.replace(/\s!$/, '');
         }
         
         await createReminder(title, at, type);
@@ -153,38 +169,39 @@
 </script>
 
 {#if creationBoxOpened}
-    <div 
-        transition:fly={{y: 100, duration: 300}}
+    <div class="w-full bottom-2 left-0 flex justify-center fixed z-30"
+        bind:this={creationBox}
         on:keydown={handleShortcuts}
-        class="fixed bottom-2 p-4 h-auto font-primary bg-secondary text-primary transform -translate-x-2/4 left-2/4 rounded-2xl z-50 shadow-box">
-        <h2 class="text-4xl font-bold mr-20 text-center w-full">Create a reminder</h2>
-        <div class="my-2 flex flex-col justify-center">
-            <div class="inline-block m-auto">
-                <div class="my-2">
-                    <h3 class="text-xl font-bold">Title</h3>
-                    <input type="text" class="bg-white bg-opacity-20 text-primary w-72 rounded-md p-1" bind:this={title}>
-                </div>
-                <div>
-                    <span>in</span>
-                    <input type="number" class="mx-2 bg-white bg-opacity-20 text-primary w-10 rounded-md px-1" bind:value={minutesFromNow}>
-                    <span>minutes</span>
-                </div>
-                <div class="my-2 ">
-
-                    <Checkbox checked={isPersistent} on:change={() => isPersistent = !isPersistent}/><span>Repeat</span>
-                    <div class="text-secondary text-sm">every 5 min until dismiss</div>
+        transition:fly={{y: 100, duration: 300}}
+    >
+        <div
+            class=" p-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
+            <h2 class="text-4xl font-bold mr-20 text-center w-full">Create a reminder</h2>
+            <div class="my-2 flex flex-col justify-center">
+                <div class="inline-block m-auto">
+                    <div class="my-2">
+                        <h3 class="text-xl font-bold">Title</h3>
+                        <input type="text" class="bg-white bg-opacity-20 text-primary w-72 rounded-md p-1" bind:this={title}>
+                    </div>
+                    <div class="{boxSelectedAt === 'minutes' ? '' : 'opacity-25'}" on:click={() => boxSelectedAt = 'minutes'}>
+                        <span>in</span>
+                        <input type="number" class="mx-2 bg-white bg-opacity-20 text-primary w-10 rounded-md px-1" bind:value={minutesFromNow}>
+                        <span>minutes</span>
+                    </div>
+                    <div class="mt-2 {boxSelectedAt === 'hour' ? '' : 'opacity-25'}" on:click={() => boxSelectedAt = 'hour'}>
+                        <span>at</span>
+                        <input type="text" class="mx-2 bg-white bg-opacity-20 text-primary w-16 rounded-md px-1" bind:value={reminderAtBox}>
+                    </div>
+                    <div class="my-3">
+                        <Checkbox checked={isPersistent} on:change={() => isPersistent = !isPersistent}/><span>Repeat</span>
+                        <div class="text-secondary text-sm">every 5 min until dismiss</div>
+                    </div>
                 </div>
             </div>
-            <div class="m-auto pt-8">
-                <span class="opacity-60">Advenced <i class="lnr lnr-arrow-down font-bold"></i></span>
-                <div>
-
-                </div>
+            <div class="flex w-full justify-center mt-4">
+                <span class="mx-1"><Action label="Create" on:click={saveInput}/></span>
+                <span class="mx-1"><Action label="Dismiss" custom customClass="border-2 border-red-400 text-red-400" on:click={closeCreationBox} /></span>
             </div>
-        </div>
-        <div class="flex w-full justify-center mt-4">
-            <span class="mx-1"><Action label="Create" on:click={saveInput}/></span>
-            <span class="mx-1"><Action label="Dismiss" custom customClass="border-2 border-red-400 text-red-400" on:click={closeCreationBox} /></span>
         </div>
     </div>
 {/if}
@@ -192,7 +209,7 @@
 <SettingsBox unsupported={!ready}>
     <Title title="Reminders">
         <TitleIcon>
-            <i class="lnr lnr-calendar-full text-primary settings-title-icon" style="color: {color}};"></i>
+            <i class="lnr lnr-calendar-full text-primary settings-title-icon" style="color: {color};"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 
@@ -207,7 +224,11 @@
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
             {#each futureReminders as r }
                 <div class="my-2 overflow-x-hidden border-b border-black">
-                    <bold>{r.title}</bold> <span class="text-secondary">{moment(r.at, 'X').fromNow()}</span>
+                    <bold>{r.title}</bold> 
+                    <span class="text-secondary">
+                        {moment(r.at, 'X').fromNow()}
+                        {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
+                    </span>
                     <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
                         <i class="lnr lnr-circle-minus text-red-600"></i>
                     </span>
