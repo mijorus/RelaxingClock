@@ -242,8 +242,8 @@ import { shakeElement } from '../../../utils/utils';
                 <div class="my-2 overflow-x-hidden border-b border-black done-reminder">
                     <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                     <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
-                        <i class="lnr lnr-checkmark-circle text-green-400 delete-rem-i-check" ></i>
-                        <i class="lnr lnr-cross-circle text-red-600 delete-rem-i-cross hidden"></i>
+                        <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
+                        <i class="icon-cross r-icon text-red-600 delete-rem-i-cross hidden"></i>
                     </span>
                 </div>
             {/each}
@@ -259,5 +259,14 @@ import { shakeElement } from '../../../utils/utils';
 
     .done-reminder:hover .delete-rem-i-cross {
         display: inline !important;
+    }
+
+    .r-icon {
+        animation: reveal .2s linear;
+    }
+
+    @keyframes reveal {
+        0% { opacity: 0; transform: translateX(-20%);}
+        100% { opacity: 1; transform: translateX(0%);}
     }
 </style>
