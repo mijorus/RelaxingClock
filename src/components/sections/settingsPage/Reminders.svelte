@@ -223,7 +223,7 @@ import { shakeElement } from '../../../utils/utils';
         {#if futureReminders.length}
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
             {#each futureReminders as r }
-                <div class="my-2 overflow-x-hidden border-b border-black">
+                <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
                     <bold>{r.title}</bold> 
                     <span class="text-secondary">
                         {moment(r.at, 'X').fromNow()}
@@ -239,7 +239,7 @@ import { shakeElement } from '../../../utils/utils';
         {#if doneReminders.length}
         <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
             {#each doneReminders as r }
-                <div class="my-2 overflow-x-hidden border-b border-black done-reminder">
+                <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">
                     <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                     <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
                         <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
@@ -253,6 +253,12 @@ import { shakeElement } from '../../../utils/utils';
 </SettingsBox>
 
 <style>
+    .reminder { transition: background .2s linear;}
+
+    .reminder:hover {
+        background-color: rgba(255, 255, 255, 0.13);
+    }
+
     .done-reminder:hover .delete-rem-i-check {
         display: none;
     }
