@@ -15,13 +15,14 @@
     import { tips } from '../../../stores/globalState';
     import { notifications } from '../../../stores/notifications';
     import type { ReminderType, StoredReminder } from '../../../types';
-import { shakeElement } from '../../../utils/utils';
+    import { shakeElement } from '../../../utils/utils';
 
     type BoxAtType = 'minutes' | 'hour';
 
     let minutesFromNow: number; let isPersistent: boolean; let reminderAtBox: string;
     let boxSelectedAt: BoxAtType = 'minutes';
     let creationBox: HTMLElement;
+    let expanded = false;
 
     let ready = false;
     let title: HTMLInputElement;
@@ -219,35 +220,40 @@ import { shakeElement } from '../../../utils/utils';
     >
         <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
-    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} expandable>
-        {#if futureReminders.length}
-        <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
-            {#each futureReminders as r }
-                <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
-                    <bold>{r.title}</bold> 
-                    <span class="text-secondary">
-                        {moment(r.at, 'X').fromNow()}
-                        {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
-                    </span>
-                    <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
-                        <i class="lnr lnr-circle-minus text-red-600"></i>
-                    </span>
-                </div>
-            {/each}
-        </div>
-        {/if}
-        {#if doneReminders.length}
-        <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
-            {#each doneReminders as r }
-                <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">
-                    <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
-                    <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
-                        <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
-                        <i class="icon-cross r-icon text-red-600 delete-rem-i-cross hidden"></i>
-                    </span>
-                </div>
-            {/each}
-        </div>
+    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} 
+        expandable on:click={() => expanded = !expanded}
+        expanded={expanded}
+    >
+        {#if expanded}
+            {#if futureReminders.length}
+            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
+                {#each futureReminders as r }
+                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
+                        <bold>{r.title}</bold> 
+                        <span class="text-secondary">
+                            {moment(r.at, 'X').fromNow()}
+                            {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
+                        </span>
+                        <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
+                            <i class="lnr lnr-circle-minus text-red-600"></i>
+                        </span>
+                    </div>
+                {/each}
+            </div>
+            {/if}
+            {#if doneReminders.length}
+            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
+                {#each doneReminders as r }
+                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">
+                        <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
+                        <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
+                            <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
+                            <i class="icon-cross r-icon text-red-600 delete-rem-i-cross hidden"></i>
+                        </span>
+                    </div>
+                {/each}
+            </div>
+            {/if}
         {/if}
     </NestedBox>
 </SettingsBox>
