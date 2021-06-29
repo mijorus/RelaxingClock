@@ -1,6 +1,8 @@
 <script lang="ts">
     import { fly, fade } from "svelte/transition";
-    export let examples = [{argument: 'create', example: '10m Cook some food'},{argument: 'create', example: '10m Cook some food'},{argument: 'create', example: '10m Cook some food'}]
+    import type { RoosterExample } from "../../types"; 
+    
+    export let examples: Array<RoosterExample> = [];
     export let command: string;
     export let argument: string;
 </script>
@@ -11,11 +13,10 @@
             <h4 class="px-8 text-xl font-bold">Examples</h4>
             <div class="bg-tertiary px-8 rounded-t-lg pb-9 text-lg w-full ">
                 {#each examples as e}
-                    {#if e.argument.startsWith(argument) || !argument.length}
-                        <div class="py-2 " in:fly={{ y: 5, duration: 200 }} out:fade={{ duration:100 }}>
-                            <span class="underline">{e.argument}</span> <span>{e.example}</span>
-                        </div>
-                    {/if}
+                <div class="py-2 " in:fly={{ y: 5, duration: 200 }} out:fade={{ duration:100 }}>
+                    <span class="underline">{e.argument}</span> <span class="font-bold">{e.example}</span> 
+                    <span class="text-secondary text-md">{e.tip ? e.tip : ''}</span>
+                </div>
                 {/each}
             </div>
         </div>

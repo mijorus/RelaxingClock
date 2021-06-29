@@ -4,6 +4,7 @@
     import { fade } from "svelte/transition";
     import { caretToEnd, shakeElement } from "../../utils/utils";
     import Examples from "./Examples.svelte";
+import type { RoosterExample } from "../../types";
 
     let rooster: HTMLElement;
     
@@ -18,6 +19,7 @@
     let paramsBox: HTMLElement;
 
     let suggestion = '';
+    let examples: Array<RoosterExample>;
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -128,16 +130,22 @@
             }
         }
 
-        else if(event.code === 'Enter' || event.code === 'NumpadEnter') {
+        const currentCommand = shortcuts.get(clearCommand(command));
+        if (!currentCommand) return;
+
+        if(event.code === 'Enter' || event.code === 'NumpadEnter') {
             event.preventDefault();
-            const currentCommand = shortcuts.get(clearCommand(command));
-            if (currentCommand && currentCommand.arguments[argument]) {
+            if (currentCommand.arguments[argument]) {
                 if (await currentCommand.arguments[argument].callback(params)) {
                     resetInputs();
                     summoned.set(false);
                 } else {
                     shakeElement(rooster);
                 }
+            }
+        } else {
+            if (currentCommand.examples) {
+                examples = await currentCommand.examples(argument);
             }
         }
     }
@@ -152,7 +160,7 @@
             tick().then(() => commandBox.focus())
 		}
         
-        if (event.code === 'Escape' && $summoned) {
+        else if (event.code === 'Escape' && $summoned) {
             resetInputs();
             summoned.set(false);
         }
@@ -173,7 +181,7 @@
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
-        <Examples command={command} argument={argument} suggestion={suggestion}/>
+        <Examples command={command} argument={argument} examples={examples} />
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
