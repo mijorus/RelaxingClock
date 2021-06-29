@@ -37,8 +37,8 @@ export class RemindersDB {
         })
     }
 
-    static remove(key: number) {
-        RemindersDB.db.delete('reminders', key)
+    static async remove(key: number) {
+        await RemindersDB.db.delete('reminders', key)
     }
 
     static async setDone(key: number) {

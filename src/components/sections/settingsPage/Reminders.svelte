@@ -8,13 +8,13 @@
     import { onMount, tick } from 'svelte';
     import { canBeSummoned, shortcuts } from '../../../stores/rooster';
     import moment, { Moment } from 'moment';
-    import { fly } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
     import time from '../../../stores/time';
     import { RemindersDB } from '../../../handlers/RemindersDB';
     import { tips } from '../../../stores/globalState';
     import { notifications } from '../../../stores/notifications';
-    import type { ReminderType, StoredReminder } from '../../../types';
+    import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
     import { shakeElement } from '../../../utils/utils';
 
     type BoxAtType = 'minutes' | 'hour';
@@ -109,7 +109,6 @@
 
     function handleShortcuts(event: KeyboardEvent) {
         if (event.ctrlKey && event.code === 'Enter') { saveInput() }
-
         else if (event.code === 'Escape') { closeCreationBox() }
     }
 
@@ -159,7 +158,34 @@
                     create: {
                         active: true,
                         callback: p => handleRoosterShortcut(p),
+                    },
+                    dismiss: {
+                        active: true,
+                        callback: async p => {
+                            const r = futureReminders.find(f => f.id.toString() == p.match(/\d+/)[0]);
+                            if (r) {
+                                await RemindersDB.setDone(r.id);
+                                runListCheck();
+                            }
+
+                            return r ? true : false;
+                        },
                     }
+                },
+                async examples(arg, p) {
+                    let tips: Array<RoosterExample> = [];
+                    if (arg.startsWith('d') ) {
+                        if (!futureReminders.length) tips.push({ argument: 'dismiss', example: 'No pending reminders' })
+                        else futureReminders.forEach(r => tips.push({ argument: 'dismiss', example: +r.id, tip: r.title }));
+                    } else {
+                        tips = [ 
+                            { argument: 'create', example: '10m Do some yoga', tip: 'Set a reminder in 10 minutes' },
+                            { argument: 'create', example: '1h Check for new emails !', tip: 'Use trailing ! for persistent reminders' },
+                            { argument: 'dismiss', example: '#', tip: 'Dismiss reminder #'}
+                        ]
+                    }
+
+                    return tips;
                 }
             });
         } catch(err) {
