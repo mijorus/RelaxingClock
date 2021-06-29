@@ -3,6 +3,7 @@
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd, shakeElement } from "../../utils/utils";
+    import Examples from "./Examples.svelte";
 
     let rooster: HTMLElement;
     
@@ -171,7 +172,8 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if $summoned && $canBeSummoned}
-    <div class="fixed bottom-0 w-full flex justify-center z-50">
+    <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
+        <Examples command={command} argument={argument} suggestion={suggestion}/>
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"

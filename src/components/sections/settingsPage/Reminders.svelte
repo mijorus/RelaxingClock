@@ -37,9 +37,9 @@
 
     async function periodicCheck(readyState: boolean, time: Moment) {
         if (readyState && (time.unix() % 20 === 0)) {
-            runListCheck();
+            await runListCheck();
         
-            for (const reminder of reminders) {
+            for (const reminder of futureReminders) {
                 if (reminder.at < time.unix() && !reminder.done) {
                     notifications.create({ 
                         title: reminder.title, 
