@@ -10,7 +10,7 @@
 </script>
 
 <div in:fly="{ expire ? { x: 200, duration: 750 } : {}}" out:fade="{{ duration: 300 }}">
-    <Bubble>
+    <Bubble classes="bg-secondary">
         <div class="flex items-center">
             <div>
                 <span class="pr-2">
