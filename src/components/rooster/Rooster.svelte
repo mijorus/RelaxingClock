@@ -3,7 +3,6 @@
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd, shakeElement } from "../../utils/utils";
-    import anime from "animejs";
 
     let rooster: HTMLElement;
     
@@ -36,18 +35,16 @@
     }
 
     function handleCommand(command: string) {
-        if (!command || command === '') {
+        if (!command || command === '' || command.length < 1) {
             return;
         }
 
-        if (command.length > 1) {
-            for (const [key, value] of Object.entries(shortcuts.getAll())) {
-                if (key.startsWith(command)) {
-                    suggestion = key.replace(command, '') + ':';
-                    commandPill.background = shortcuts.get(key).background ?? null;
-                    commandPill.color = shortcuts.get(key).color ?? null
-                    return;
-                }
+        for (const [key, value] of Object.entries(shortcuts.getAll())) {
+            if (key.startsWith(command)) {
+                suggestion = key.replace(command, '') + ':';
+                commandPill.background = shortcuts.get(key).background ?? null;
+                commandPill.color = shortcuts.get(key).color ?? null
+                return;
             }
         }
 
@@ -59,21 +56,18 @@
     }
 
     function handleArgument(argument: string) {
-        if (!argument || argument === '') {
-            suggestion = '';
-            return;
-        }
-        
-        const currentCommand = shortcuts.get(clearCommand(command));
-        if (currentCommand && currentCommand.arguments) {
-            for (const [key, value] of Object.entries(currentCommand.arguments)) {
-                if (key.startsWith(argument) && value.active !== false) {
-                    suggestion = key.replace(argument, '');
-                    return;
+        if (argument && argument.length) {
+            const currentCommand = shortcuts.get(clearCommand(command));
+            if (currentCommand && currentCommand.arguments) {
+                for (const [key, value] of Object.entries(currentCommand.arguments)) {
+                    if (key.startsWith(argument) && value.active !== false) {
+                        suggestion = key.replace(argument, '');
+                        return;
+                    }
                 }
             }
         }
-
+        
         suggestion = '';
     }
 
