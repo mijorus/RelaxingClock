@@ -176,7 +176,7 @@
                     let tips: Array<RoosterExample> = [];
                     if (arg.startsWith('d') ) {
                         if (!futureReminders.length) tips.push({ argument: 'dismiss', example: 'No pending reminders' })
-                        else futureReminders.forEach(r => tips.push({ argument: 'dismiss', example: +r.id, tip: r.title }));
+                        else futureReminders.forEach(r => tips.push({ argument: 'dismiss', example: r.id.toString(), tip: r.title }));
                     } else {
                         tips = [ 
                             { argument: 'create', example: '10m Do some yoga', tip: 'Set a reminder in 10 minutes' },
@@ -274,7 +274,7 @@
                         <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
                             <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
-                            <i class="icon-cross r-icon text-red-600 delete-rem-i-cross hidden"></i>
+                            <i class="lnr lnr-trash r-icon text-red-600 delete-rem-i-cross hidden"></i>
                         </span>
                     </div>
                 {/each}
