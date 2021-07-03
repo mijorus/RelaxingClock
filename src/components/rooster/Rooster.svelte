@@ -145,7 +145,7 @@ import type { RoosterExample } from "../../types";
             }
         } else {
             if (currentCommand.examples) {
-                examples = await currentCommand.examples(argument);
+                examples = await currentCommand.examples(argument, params);
             }
         }
     }

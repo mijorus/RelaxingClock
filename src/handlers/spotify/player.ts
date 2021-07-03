@@ -1,6 +1,8 @@
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
-import { spotifyAccessToken, spotifyPlayerStatus } from '../../stores/spotify';
-import { logout } from './login';
+import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
+import { shortcuts } from '../../stores/rooster';
+import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
+import type { RoosterExample } from '../../types';
 
 export let player: Spotify.Player;
 const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
@@ -15,7 +17,6 @@ export async function createNewSpotifyPlayer() {
             //We request a token for the first time
             if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
                 response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
-                localStorage.setItem('refreshToken', response.refresh_token);
                 localStorage.removeItem('verifier');
             }
             
@@ -31,6 +32,8 @@ export async function createNewSpotifyPlayer() {
             }
             
             localStorage.removeItem('code');
+            localStorage.setItem('refreshToken', response.refresh_token);
+            SpotifyClient.setAccessToken(response.access_token);
             spotifyAccessToken.set(response.access_token);
             callback(response.access_token);
         }
@@ -49,5 +52,44 @@ export async function createNewSpotifyPlayer() {
     player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
         spotifyPlayerStatus.set('ready');
+        createShortcuts();
     });
+}
+
+async function loadSearch(query: string): Promise<RoosterExample[]> {
+    if (!query || query.length < 2) return [];
+    const res = await SpotifyClient.search(query, ['track', 'album', 'playlist', 'artist'], { limit: 5 });
+    
+    let examples: RoosterExample[] = [];
+    for (const item of res.tracks.items) {
+        let artist = '';
+        item.artists.forEach(a => artist += ` ${a.name}`) 
+        examples.push({'argument': 'search', 'example': item.name, 'tip': artist})
+    }
+
+    return examples;
+}
+
+function createShortcuts() {
+    shortcuts.set('spotify', {
+        background: process.env.SPOTIFY_COLOR,
+        color: process.env.BACKGROUND_DARK,
+        arguments: {
+            search: {
+                async callback(p) {
+                    console.log(p);
+                    
+                    return true;
+                }
+            }
+        }, 
+        async examples(arg, params) {
+            console.log(arg, params);
+            if (arg === 'search') {
+                return loadSearch(params);
+            }
+
+            return []
+        }
+    })
 }

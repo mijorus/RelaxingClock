@@ -17,7 +17,6 @@
 
     async function getUserData(accessToken: string) {
         if (accessToken) {
-            SpotifyClient.setAccessToken(accessToken);
             const me = await SpotifyClient.getMe();
             spotifyUserData.set(me);
             if (me.product !== 'premium') { 

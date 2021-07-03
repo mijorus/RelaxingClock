@@ -21,32 +21,34 @@
                 if (count < 3) { loader += '.'; count++ }
                 else { count = 0; loader = '' }
             }, 250);
-        }  else if (spotifyStatus === 'ready') {
+        }  else {
             loader = '';
-            label = 'Ready to play!';
-        } else if (spotifyStatus !==  'disconnected') {
-            label = 'Ooops!';
+            if (spotifyStatus === 'ready') {
+                label = 'Ready to play!';
+            } else if (spotifyStatus !==  'disconnected') {
+                label = 'Ooops!';
+            }
         }
     }
 
-    onMount(() => {
-        shortcuts.set('spotify', {
-            background: process.env.SPOTIFY_COLOR,
-            color: process.env.BACKGROUND_DARK,
-            arguments: {
-                playlist: {
-                    async callback(params) {
-                        console.log('playlist set to ', params);
-                        return true;
-                    }
-                }
-            }
-        })
-    })
+    // onMount(() => {
+    //     shortcuts.set('spotify', {
+    //         background: process.env.SPOTIFY_COLOR,
+    //         color: process.env.BACKGROUND_DARK,
+    //         arguments: {
+    //             playlist: {
+    //                 async callback(params) {
+    //                     console.log('playlist set to ', params);
+    //                     return true;
+    //                 }
+    //             }
+    //         }
+    //     })
+    // })
 </script>
 
 <div class="absolute bottom-5 left-5">
-    <Bubble classes={$spotifyPlayerStatus === 'ready' ? 'border-2 transition-all	rounded-xl border-primary' : ''}>
+    <Bubble classes={$spotifyPlayerStatus === 'ready' ? 'border-2 transition-all rounded-xl border-primary' : ''}>
        <div class="flex flex-row items-center">
             <span class="pr-2">
                 <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />

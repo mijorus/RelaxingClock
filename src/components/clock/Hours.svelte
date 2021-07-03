@@ -10,10 +10,9 @@ import { eaElasticDefault } from "../../utils/animations";
 
     let oldFormat: string;
     function setHours(time: Moment, clockFormat) {
-        if (oldFormat === clockFormat) {
+        if (!oldFormat || oldFormat === clockFormat) {
             hours = time.format(clockFormat === '24h' ? 'HH' : 'hh');
         } else {
-            oldFormat = clockFormat;
             anime({
                 targets: '#hours',
                 duration: 500,
@@ -21,6 +20,8 @@ import { eaElasticDefault } from "../../utils/animations";
                 complete() {time.format(clockFormat === '24h' ? 'HH' : 'hh')}
             })
         }
+        
+        oldFormat = clockFormat;
     }
 </script>
 
