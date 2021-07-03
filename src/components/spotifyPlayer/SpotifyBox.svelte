@@ -5,7 +5,7 @@
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
     import { shortcuts } from "../../stores/rooster";
-import Bubble from "../elements/Bubble.svelte";
+    import Bubble from "../elements/Bubble.svelte";
 
     let label = '';
     let loader = '';
@@ -24,6 +24,8 @@ import Bubble from "../elements/Bubble.svelte";
         }  else if (spotifyStatus === 'ready') {
             loader = '';
             label = 'Ready to play!';
+        } else if (spotifyStatus !==  'disconnected') {
+            label = 'Ooops!';
         }
     }
 
@@ -33,8 +35,9 @@ import Bubble from "../elements/Bubble.svelte";
             color: process.env.BACKGROUND_DARK,
             arguments: {
                 playlist: {
-                    callback(params) {
+                    async callback(params) {
                         console.log('playlist set to ', params);
+                        return true;
                     }
                 }
             }
@@ -43,16 +46,26 @@ import Bubble from "../elements/Bubble.svelte";
 </script>
 
 <div class="absolute bottom-5 left-5">
-    <Bubble>
+    <Bubble classes={$spotifyPlayerStatus === 'ready' ? 'border-2 transition-all	rounded-xl border-primary' : ''}>
        <div class="flex flex-row items-center">
             <span class="pr-2">
-                <i class="fab fa-spotify text-spotify text-5xl" />
+                <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />
             </span>
             <span class="text-xl font-primary flex-grow">
                 <AnimatedText text={label}><span>{loader}</span></AnimatedText>
             </span>
             <span class="justify-self-end text-xl">
+                {#if $spotifyPlayerStatus === 'ready'}
                 <i class="fas fa-play" />
+                {:else if $spotifyPlayerStatus === 'connecting'}
+                <div class="transform scale-50 relative">
+                    <div class="line-scale">
+                        <div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                </div>
+                {:else if $spotifyPlayerStatus !== 'disconnected'}
+                <i class="fas fa-exclamation-triangle"></i>
+                {/if}
             </span>
        </div>
     </Bubble>
