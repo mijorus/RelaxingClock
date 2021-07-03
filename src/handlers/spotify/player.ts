@@ -1,61 +1,53 @@
-import { spotifyAuthClient } from '../../lib/spotify/requests';
-import { spotifyPlayerStatus } from '../../stores/spotify';
+import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
+import { spotifyAccessToken, spotifyPlayerStatus } from '../../stores/spotify';
+import { logout } from './login';
 
 export let player: Spotify.Player;
-
-const client = new spotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
+const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
 
 export async function createNewSpotifyPlayer() {
     console.log('creating spotify player');
-    spotifyPlayerStatus.set('connecting');
-    
-    let response;
-    
-    try {
-        //We request a token for the first time
-        if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
-            response = await client.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
-            localStorage.removeItem('verifier');
-        }
-        
-        else if (localStorage.getItem('refreshToken')) {
-            //We need to request a new token using refreshToken
-            response = await client.refreshToken(localStorage.getItem('refreshToken'));
-        }
-    } catch (err) {
-        console.error(err);
-        spotifyPlayerStatus.set('error');
-        return;
-    }
-    
-    localStorage.removeItem('code');
 
-    if (response.refresh_token && response.access_token) {
-        localStorage.setItem('refreshToken', response.refresh_token);
-
-        player = new Spotify.Player({
-            name: 'Relaxing Clock',
-            getOAuthToken: async (callback) => {
-                callback(response.access_token);
+    player = new Spotify.Player({
+        name: 'Relaxing Clock',
+        getOAuthToken: async (callback) => {
+            let response;
+            //We request a token for the first time
+            if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
+                response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
+                localStorage.setItem('refreshToken', response.refresh_token);
+                localStorage.removeItem('verifier');
             }
-        });
+            
+            else if (localStorage.getItem('refreshToken')) {
+                //We need to request a new token using refreshToken
+                try { 
+                    response = await authClient.refreshToken(localStorage.getItem('refreshToken'));
+                } catch(err) {
+                    console.error(err);
+                    if (err.status === 400 && err.data.error === 'invalid_grant') spotifyPlayerStatus.set('expired');
+                    throw err;
+                }
+            }
+            
+            localStorage.removeItem('code');
+            spotifyAccessToken.set(response.access_token);
+            callback(response.access_token);
+        }
+    });
 
-        // Error handling
-        player.addListener('initialization_error', ({ message }) => { console.error(message); });
-        player.addListener('authentication_error', ({ message }) => { console.error(message); });
-        player.addListener('account_error', ({ message }) => { console.error(message); });
-        player.addListener('playback_error', ({ message }) => { console.error(message); });
+    // Error handling
+    player.addListener('initialization_error', ({ message }) => { console.error(message); });
+    player.addListener('authentication_error', ({ message }) => { console.error(message); });
+    player.addListener('account_error', ({ message }) => { console.error(message); });
+    player.addListener('playback_error', ({ message }) => { console.error(message); });
 
+    if (!await player.connect()) {
+        throw 'Failed to connect to the Spotify Player';
+    } 
 
-        const success = await player.connect();
-        if (!success) {
-            console.log('Failed to connect to the Spotify Player');
-            return;
-        } 
-
-        player.addListener('ready', ({ device_id }) => {
-            console.log('Ready with Device ID', device_id);
-            spotifyPlayerStatus.set('ready');
-        });
-    }
+    player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+        spotifyPlayerStatus.set('ready');
+    });
 }

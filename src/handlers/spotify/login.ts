@@ -1,6 +1,6 @@
 import { urlParams } from '../../utils/utils';
 import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
-import { spotifyUrl } from '../../stores/spotify';
+import { spotifyPlayerStatus, spotifyUrl } from '../../stores/spotify';
 import { createNewSpotifyPlayer } from './player';
 
 export async function attemptSpotifyLogin() {
@@ -29,7 +29,12 @@ export async function attemptSpotifyLogin() {
         }
     } else if (localStorage.getItem('userHasLogged') == 'true') {
         window.onSpotifyWebPlaybackSDKReady = () => {
-            createNewSpotifyPlayer();
+            spotifyPlayerStatus.set('connecting');
+            createNewSpotifyPlayer()
+                .catch(err => {
+                    spotifyPlayerStatus.set('error');
+                    console.log(err);
+                }) 
         };
     }
 }
@@ -37,7 +42,6 @@ export async function attemptSpotifyLogin() {
 export function logout() {
     ['userHasLogged', 'refreshToken', 'verifier', 'state'].forEach(el => localStorage.removeItem(el));
     ['accessToken', 'expires_at'].forEach(el => sessionStorage.removeItem(el));
-    window.location.reload();
 }
 
 function throwAuthError(reason = '') {
