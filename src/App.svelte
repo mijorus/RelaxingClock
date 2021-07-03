@@ -1,5 +1,4 @@
 <script lang="ts">
-    import init from './handlers/init';
 	import { onMount } from 'svelte';
 
 	import MainBg from './components/elements/MainBg.svelte';
@@ -9,8 +8,27 @@
 	import { summoned } from './stores/rooster';
     import { loggedWithSpotify } from './stores/storedSettings';
     import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
+    import { onlineStatus } from './stores/globalState';
+    import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
+    import { attemptSpotifyLogin } from './handlers/spotify/login';
+    import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 
-	// onMount(() => init());
+    $: getUserData($spotifyAccessToken);
+
+    async function getUserData(accessToken: string) {
+        if (accessToken) {
+            SpotifyClient.setAccessToken(accessToken);
+            const me = await SpotifyClient.getMe();
+            spotifyUserData.set(me);
+            if (me.product !== 'premium') { 
+                spotifyPlayerStatus.set('non-premium');
+            }
+        }
+    }   
+
+	onMount(() => {
+        if ($onlineStatus) attemptSpotifyLogin();
+    });
 </script>
 
 <svelte:head>
@@ -29,6 +47,7 @@
 
 <style global>
     @import '@csstools/normalize.css';
+    @import 'loaders.css/loaders.min.css';
 
     /* purgecss start ignore */
     @tailwind base;
