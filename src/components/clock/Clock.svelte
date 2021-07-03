@@ -4,11 +4,6 @@
     import styles from "./clockStyles/styles";
     import { activeStyle } from "../../stores/storedSettings";
     import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
-
-    // import Classic from './clockStyles/Classic.svelte';
-    // import Focused from './clockStyles/Focused.svelte';
-    // import Metro from './clockStyles/Metro.svelte';
-    // import Analog from "./clockStyles/Analog.svelte";
     import anime from "animejs";
     import { eaElasticDefault } from "../../utils/animations";
 

@@ -1,11 +1,11 @@
 <script lang="ts">
     import { spring } from 'svelte/motion';
-    import { activeStyle } from "../../stores/storedSettings";
+    import { activeStyle, clockFormat } from "../../stores/storedSettings";
     import { screenSaver, styleChangeLock } from '../../stores/globalState';
     import styles from "../clock/clockStyles/styles";
 
     const viewFinderClass: string = 'w-44';
-    const buttonClass: string = 'text-primary outline-none border-none focus:outline-none';
+    const buttonClass: string = 'text-primary outline-none c-format focus:outline-none cursor-pointer';
     const l: number = styles.length; //the number of available styles
 
     let selectionPosition = spring(0, {
@@ -38,7 +38,7 @@
     }
 </script>
 
-<div class="absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}">
+<div class="z-20 absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}">
     <div class="font-primary text-xl text-primary">Select your clock style</div>
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
@@ -67,15 +67,27 @@
             {/each}
         </div>
     </div>
-    <div class="flex flex-row">
-        <button aria-label="format 12 hours" class="{buttonClass}">12H</button>
+    <div class="flex flex-row font-primary text-primary">
+        <button aria-label="format 12 hours" class="{buttonClass} {$clockFormat === '12h' ? 'active-format' : ''} c-format" on:click={() => clockFormat.set('12h')}>12H</button>
         <div class="w-6"></div>
-        <button aria-label="format 24 hours" class="{buttonClass}">24H</button>
+        <button aria-label="format 24 hours" class="{buttonClass} {$clockFormat === '24h' ? 'active-format' : ''} c-format" on:click={() => clockFormat.set('24h')}>24H</button>
     </div>
 </div>
 
 <style>
     .fade {
         transition: opacity .3s linear;
+    }
+
+    .c-format {
+        border: 2px solid transparent;
+        transition: all .2s linear;
+        opacity: 0.5;
+    }
+
+    .active-format {
+        opacity: 1;
+        transform: scale(1.1);
+        border-bottom: 2px solid white !important;
     }
 </style>
