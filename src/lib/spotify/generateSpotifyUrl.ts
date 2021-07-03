@@ -1,6 +1,6 @@
 import buildUrl from 'build-url';
 
-const scopes = 'user-read-email,user-read-private,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,user-library-modify,user-library-read,streaming,playlist-read-collaborative';
+const scope = 'user-read-email,user-read-private,user-read-playback-state,user-modify-playback-state,user-read-currently-playing,user-library-modify,user-library-read,streaming,playlist-read-collaborative';
 
 export async function generateSpotifyUrl() {
     const state: string = generateRandomString();
@@ -9,7 +9,7 @@ export async function generateSpotifyUrl() {
     const verifier: string = generateRandomString();
     localStorage.setItem('verifier', verifier);
 
-    const challenge: string = await generateChallenge(verifier);
+    const code_challenge: string = await generateChallenge(verifier);
 
     return buildUrl('https://accounts.spotify.com/', {
         path: 'authorize',
@@ -18,8 +18,8 @@ export async function generateSpotifyUrl() {
             response_type: 'code',
             redirect_uri: process.env.SPOTIFY_REDIRECT_URL,
             code_challenge_method: 'S256',
-            code_challenge: challenge,
-            scope: scopes,
+            code_challenge,
+            scope,
             state,
         }
     });

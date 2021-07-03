@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { error } from 'console';
 import qs from 'qs';
 
-export class spotifyAuthClient {
+export class SpotifyAuthClient {
     clientId: string;
     baseURL: string;
 
@@ -19,7 +20,8 @@ export class spotifyAuthClient {
             },
             data: qs.stringify(data)
         })
-            .then(res => res.data);
+            .then(res => res.data)
+            .catch(err => { throw err.response })
     }
 
     requestToken(code: string, redirect_uri: string, code_verifier: string) {
