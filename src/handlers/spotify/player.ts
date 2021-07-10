@@ -56,21 +56,23 @@ export async function createNewSpotifyPlayer() {
     });
 }
 
-async function loadSearch(query: string): Promise<RoosterExamples> {
+async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | 'search'): Promise<RoosterExamples> {
     if (!query || query.length < 2) return {};
-    const res = await SpotifyClient.search(query, ['track', 'album', 'playlist', 'artist'], { limit: 5 });
+    if (type === 'search') type = 'track';
+    const res = await SpotifyClient.search(query, [type], { limit: 5 });
     console.log(res);
     
     let examples: RoosterExamples = {};
     for (const key of (Object.keys(res))) {
-        let list = [];
+        let list: RoosterExample[] = [];
         res[key].items.forEach(item => {
             let artist = '';
             if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
-            list.push({'argument': 'search', 'example': item.name, 'tip': artist})
+            const image = key === 'tracks' ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
+            list.push({'example': item.name, 'tip': artist, image})
         });
 
-        examples[key] = list;
+        examples[key].group = list;
     }
     
     return examples;
@@ -81,7 +83,25 @@ function createShortcuts() {
         background: process.env.SPOTIFY_COLOR,
         color: process.env.BACKGROUND_DARK,
         arguments: {
+            track: {
+                async callback(p) {
+                    
+                    return true;
+                }
+            },
             search: {
+                async callback(p) {
+                    
+                    return true;
+                }
+            },
+            playlist: {
+                async callback(p) {
+                    
+                    return true;
+                }
+            },
+            album: {
                 async callback(p) {
                     
                     return true;
@@ -89,9 +109,9 @@ function createShortcuts() {
             }
         }, 
         async examples(arg, params) {
-            console.log(arg, params);
-            if (arg === 'search') {
-                return loadSearch(params);
+            if (['search','album','playlist', 'track'].find(a => a === arg)) {
+                //@ts-ignore
+                return loadSearch(params, arg);
             }
 
             return {}

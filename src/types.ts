@@ -28,12 +28,13 @@ export interface RoosterArgument {
     active?: boolean;
 }
 
-export type RoosterExamples = {[key: string]: RoosterExample[]};
+export type RoosterExamples = {[key: string]: {group: RoosterExample[], callback?: (id: string | number) => Promise<boolean>}};
 export interface RoosterExample {
-    argument: string; 
+    argument?: string; 
     example: string; 
     tip?: string;
     image?: string;
+    id?: string | number;
 }
 
 export interface RoosterShortcut {

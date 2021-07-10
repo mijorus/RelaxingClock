@@ -36,7 +36,7 @@ export const shortcuts: RoosterShortcuts = {
                 }
             },
             async examples() {
-                return [{ argument: 'format', 'example': '12h or 24h', 'tip': 'change the format of the clock'}]
+                return {'examples': {'group': [{ argument: 'format', 'example': '12h or 24h', 'tip': 'change the format of the clock'}]}}
             }
         },
     },
