@@ -62,8 +62,8 @@
 
     async function runListCheck() {
         reminders = await RemindersDB.getAllByExpirationDate();
-        futureReminders = reminders.filter(r => r.done === false);
-        doneReminders = reminders.filter(r => r.done === true).reverse();
+        futureReminders = []; doneReminders = [];
+        reminders.forEach(r => r.done ? doneReminders.unshift(r) : futureReminders.push(r));
     }
 
     async function createReminder(title: string, at: Moment, type: ReminderType) {
@@ -88,10 +88,8 @@
     }
 
     async function openCreationBox() {
-        minutesFromNow = 10;
-        reminderAtBox = moment().add(10, 'minutes').format('HH:mm');
-        isPersistent = false;
-        creationBoxOpened = true;
+        minutesFromNow = 10; isPersistent = false; creationBoxOpened = true;
+        reminderAtBox = moment().add(minutesFromNow, 'minutes').format('HH:mm');
         await tick();
         canBeSummoned.set(false);
         title.focus();
@@ -173,7 +171,7 @@
                     }
                 },
                 async examples(arg, p) {
-                    let tips: Array<RoosterExample> = [];
+                    let tips: RoosterExample[] = [];
                     if (arg.startsWith('d') ) {
                         if (!futureReminders.length) tips.push({ argument: 'dismiss', example: 'No pending reminders' })
                         else futureReminders.forEach(r => tips.push({ argument: 'dismiss', example: r.id.toString(), tip: r.title }));
@@ -185,7 +183,7 @@
                         ]
                     }
 
-                    return tips;
+                    return {'examples': tips};
                 }
             });
         } catch(err) {

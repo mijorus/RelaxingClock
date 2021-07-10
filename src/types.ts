@@ -28,15 +28,19 @@ export interface RoosterArgument {
     active?: boolean;
 }
 
+export type RoosterExamples = {[key: string]: RoosterExample[]};
 export interface RoosterExample {
-    argument: string; example: string; tip?: string;
+    argument: string; 
+    example: string; 
+    tip?: string;
+    image?: string;
 }
 
 export interface RoosterShortcut {
     arguments: {[key: string]: RoosterArgument};
     color?: string;
     background?: string;
-    examples?: (arg: string, params?: string) => Promise<Array<RoosterExample>>;
+    examples?: (arg: string, params?: string) => Promise<RoosterExamples>;
 }
 
 export interface RoosterShortcuts {

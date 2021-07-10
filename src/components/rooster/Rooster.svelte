@@ -4,7 +4,7 @@
     import { fade } from "svelte/transition";
     import { caretToEnd, shakeElement } from "../../utils/utils";
     import Examples from "./Examples.svelte";
-import type { RoosterExample } from "../../types";
+    import type { RoosterExample, RoosterExamples } from "../../types";
 
     let rooster: HTMLElement;
     
@@ -19,7 +19,7 @@ import type { RoosterExample } from "../../types";
     let paramsBox: HTMLElement;
 
     let suggestion = '';
-    let examples: Array<RoosterExample>;
+    let examples: RoosterExamples;
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -181,7 +181,7 @@ import type { RoosterExample } from "../../types";
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
-        <Examples command={command} argument={argument} examples={examples} />
+        <Examples command={command} examples={examples} />
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
