@@ -20,6 +20,7 @@
 
     let suggestion = '';
     let examples: RoosterExamples;
+    let selectedExample = 1;
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -96,6 +97,16 @@
                 fill();
                 suggestion = '';
             }
+        }
+
+        if (event.code === 'ArrowUp') {
+            event.preventDefault();
+            selectedExample = 1;
+        }
+
+        if (event.code === 'ArrowDown') {
+            event.preventDefault();
+            selectedExample = -1;
         }
 
         else if (event.code === 'Backspace') {
@@ -181,7 +192,7 @@
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
-        <Examples command={command} examples={examples} />
+        <Examples command={command} examples={examples} move={selectedExample}/>
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"

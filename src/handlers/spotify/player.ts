@@ -72,7 +72,7 @@ async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | '
             list.push({'example': item.name, 'tip': artist, image})
         });
 
-        examples[key].group = list;
+        examples[key] = {group: list};
     }
     
     return examples;
