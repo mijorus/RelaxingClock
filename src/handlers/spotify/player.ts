@@ -2,7 +2,7 @@ import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { shortcuts } from '../../stores/rooster';
 import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
-import type { RoosterExample } from '../../types';
+import type { RoosterExample, RoosterExamples } from '../../types';
 
 export let player: Spotify.Player;
 const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
@@ -56,17 +56,23 @@ export async function createNewSpotifyPlayer() {
     });
 }
 
-async function loadSearch(query: string): Promise<RoosterExample[]> {
-    if (!query || query.length < 2) return [];
+async function loadSearch(query: string): Promise<RoosterExamples> {
+    if (!query || query.length < 2) return {};
     const res = await SpotifyClient.search(query, ['track', 'album', 'playlist', 'artist'], { limit: 5 });
+    console.log(res);
     
-    let examples: RoosterExample[] = [];
-    for (const item of res.tracks.items) {
-        let artist = '';
-        item.artists.forEach(a => artist += ` ${a.name}`) 
-        examples.push({'argument': 'search', 'example': item.name, 'tip': artist})
-    }
+    let examples: RoosterExamples = {};
+    for (const key of (Object.keys(res))) {
+        let list = [];
+        res[key].items.forEach(item => {
+            let artist = '';
+            if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
+            list.push({'argument': 'search', 'example': item.name, 'tip': artist})
+        });
 
+        examples[key] = list;
+    }
+    
     return examples;
 }
 
@@ -77,7 +83,6 @@ function createShortcuts() {
         arguments: {
             search: {
                 async callback(p) {
-                    console.log(p);
                     
                     return true;
                 }
@@ -89,7 +94,7 @@ function createShortcuts() {
                 return loadSearch(params);
             }
 
-            return []
+            return {}
         }
     })
 }
