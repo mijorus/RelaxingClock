@@ -183,7 +183,7 @@
                         ]
                     }
 
-                    return {'examples': {'group': tips}};
+                    return {'group': tips};
                 }
             });
         } catch(err) {

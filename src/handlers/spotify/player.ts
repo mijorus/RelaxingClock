@@ -69,7 +69,7 @@ async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | '
             let artist = '';
             if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
             const image = key === 'tracks' ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
-            list.push({'example': item.name, 'tip': artist, image})
+            list.push({'example': item.name, 'tip': artist, image, 'selectable': true})
         });
 
         examples[key] = {group: list};
