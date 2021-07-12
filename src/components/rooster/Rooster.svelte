@@ -20,7 +20,7 @@
 
     let suggestion = '';
     let examples: RoosterExamples;
-    let selectedExample = 1;
+    let exampleComponent: Examples;
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -99,14 +99,14 @@
             }
         }
 
-        if (event.code === 'ArrowUp') {
+        else if (event.code === 'ArrowUp') {
             event.preventDefault();
-            selectedExample = 1;
+            exampleComponent.move(true);
         }
 
-        if (event.code === 'ArrowDown') {
+        else if (event.code === 'ArrowDown') {
             event.preventDefault();
-            selectedExample = -1;
+            exampleComponent.move(false);
         }
 
         else if (event.code === 'Backspace') {
@@ -147,7 +147,7 @@
         if(event.code === 'Enter' || event.code === 'NumpadEnter') {
             event.preventDefault();
             if (currentCommand.arguments[argument]) {
-                if (await currentCommand.arguments[argument].callback(params)) {
+                if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
                     resetInputs();
                     summoned.set(false);
                 } else {
@@ -192,7 +192,7 @@
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
-        <Examples command={command} examples={examples} move={selectedExample}/>
+        <Examples bind:this={exampleComponent} command={command} examples={examples}/>
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"

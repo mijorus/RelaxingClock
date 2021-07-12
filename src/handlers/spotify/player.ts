@@ -64,14 +64,15 @@ async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | '
     
     let examples: RoosterExamples = {};
     for (const key of (Object.keys(res))) {
-        const list: RoosterExample[] = res[key].items.map(item => {
+        const list: RoosterExample[] = res[key].items.map((item) => {
             let artist = '';
             if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
             const image = key === 'tracks' ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
-            return {'example': item.name, 'tip': artist, image, 'selectable': true};
+            return {'example': item.name, 'tip': artist, image, 'selectable': true, 'id': item.id};
         });
 
         examples.group = list;
+        examples.namespace = type;
     }
     
     return examples;
@@ -89,7 +90,8 @@ function createShortcuts() {
                 }
             },
             search: {
-                async callback(p) {
+                async callback(p, id) {
+                    console.log(p, id);
                     
                     return true;
                 }

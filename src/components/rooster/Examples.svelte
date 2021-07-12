@@ -1,40 +1,37 @@
 <script lang="ts">
-    import { tick } from "svelte";
-    import { fly, fade } from "svelte/transition";
+    import { fly, fade, slide } from "svelte/transition";
     import type { RoosterExample, RoosterExamples } from "../../types"; 
     import { capitalize } from "../../utils/utils";
     
+    let selected = 0;
     export let examples: RoosterExamples = {group: []};
     export let command: string;
-    export let move: number;
-
-    let selected = 0;
-
-    $: {
-        tick().then(() => {
-            if (!examples.group) return;
-
-            if (move) {
-                selected < examples.group.length ? selected ++ : selected;
-            } else {
-                selected > 0 ? selected-- : selected; 
-            }
-        })
+    export function move(d: boolean) {
+        if (!examples.group) return;
+        const l = (examples.group.filter(e => e.selectable)).length
+        d ? (selected > 0 ? selected-- : selected) : (selected < l - 1 ? selected ++ : selected);
     }
 
+    export function trigger() {
+        if (!(examples.group.filter(e => e.selectable).length)) return null;
+        const id = examples.group[selected].id || selected; 
+        return id;
+    }
 </script>
 
 <div class="text-primary md:w-2/5 font-secondary -mb-8" >
     {#if Object.keys(examples).length && command.length && command.endsWith(':')}
         <div out:fly={{ y: 5, duration: 200 }} >
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
-                <div class="bg-tertiary pr-8 rounded-t-lg pb-9 text-lg w-full ">
+                <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1">
                     {#if examples.group}
                         {#each examples.group as example, i}
-                        <div class="py-1 {example.image ? 'pl-2' : 'pl-8'} overflow-x-hidden {(i === selected && example.selectable) ? 'bg-tertiary' :'' }" 
+                            <div class:bg-primary={(i === selected && example.selectable)}
+                                class="py-1 {example.image ? 'pl-2' : 'pl-8'} m-1 rounded-lg pr-8 overflow-x-hidden" 
                                 in:fly={{ y: 5, duration: 200 }} 
                                 out:fade={{ duration:100 }}
                             >
+                                {#if i === selected && example.selectable}<span class="grow">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
                                 {#if example.image}<img src="{example.image}" class="h-16 w-16 rounded-md inline-block">{/if} 
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
@@ -47,3 +44,15 @@
         </div>
     {/if}
 </div>
+
+<style>
+    .grow {
+        animation: grow .2s linear;
+        display: inline-block;
+        position: relative;
+    }
+    @keyframes grow {
+        0% { max-width: 0;}
+        100% { max-width: 20px;}
+    }
+</style>

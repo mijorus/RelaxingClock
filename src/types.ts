@@ -24,11 +24,11 @@ export type userSettingType = 'string' | 'int' | 'float' | 'boolean';
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium';
 
 export interface RoosterArgument {
-    callback: (params?: string) => Promise<boolean>;
+    callback: (params?: string, selectedItem?: string | number) => Promise<boolean>;
     active?: boolean;
 }
 
-export type RoosterExamples = {group?: RoosterExample[], callback?: (id: string | number) => Promise<boolean>, namespace?: string};
+export type RoosterExamples = {group?: RoosterExample[], namespace?: string};
 export interface RoosterExample {
     argument?: string; 
     example: string; 
