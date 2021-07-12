@@ -28,7 +28,7 @@ export interface RoosterArgument {
     active?: boolean;
 }
 
-export type RoosterExamples = {group: RoosterExample[], callback?: (id: string | number) => Promise<boolean>, namespace?: string};
+export type RoosterExamples = {group?: RoosterExample[], callback?: (id: string | number) => Promise<boolean>, namespace?: string};
 export interface RoosterExample {
     argument?: string; 
     example: string; 
