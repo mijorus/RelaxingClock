@@ -18,7 +18,7 @@ import { cbDefault } from "../../utils/animations";
     }
 </script>
 
-<span bind:this={el}>
+<span bind:this={el} style="letter-spacing: 0px;">
     { displayedText }
     <slot></slot>
 </span>
