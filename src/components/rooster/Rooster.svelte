@@ -31,7 +31,7 @@
     }
 
     function resetInputs() {
-        command = ''; argument = ''; suggestion = ''; params = '';
+        command = ''; argument = ''; suggestion = ''; params = ''; examples = null;
     }
 
     function handleSummon(summoned: boolean) {
