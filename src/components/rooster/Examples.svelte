@@ -4,23 +4,22 @@
     import { capitalize } from "../../utils/utils";
     
     let selected = 0;
-    export let examples: RoosterExamples = {group: []};
+    export let examples: RoosterExamples = null;
     export let command: string;
     export function move(d: boolean) {
-        if (!examples.group) return;
+        if (!examples || !examples.group) return;
         const l = (examples.group.filter(e => e.selectable)).length
         d ? (selected > 0 ? selected-- : selected) : (selected < l - 1 ? selected ++ : selected);
     }
 
     export function trigger() {
-        if (!(examples.group.filter(e => e.selectable).length)) return null;
-        const id = examples.group[selected].id || selected; 
-        return id;
+        if (!examples || !(examples.group.filter(e => e.selectable).length)) return null;
+        return examples.group[selected].id || selected; 
     }
 </script>
 
 <div class="text-primary md:w-2/5 font-secondary -mb-8" >
-    {#if Object.keys(examples).length && command.length && command.endsWith(':')}
+    {#if examples?.group?.length && command.length && command.endsWith(':')}
         <div out:fly={{ y: 5, duration: 200 }} >
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
                 <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1">

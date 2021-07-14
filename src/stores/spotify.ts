@@ -5,3 +5,4 @@ export const spotifyUrl: Writable<string> = writable(undefined);
 export const spotifyAccessToken: Writable<string> = writable(undefined);
 export const spotifyPlayerStatus: Writable<SpotifyPlayerStatus> = writable('disconnected');
 export const spotifyUserData: Writable<SpotifyApi.CurrentUsersProfileResponse> = writable(undefined);
+export const track_window: Writable<Spotify.PlaybackTrackWindow> = writable(undefined);

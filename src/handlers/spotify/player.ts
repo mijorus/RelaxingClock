@@ -1,10 +1,10 @@
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
-import { shortcuts } from '../../stores/rooster';
-import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
-import type { RoosterExample, RoosterExamples } from '../../types';
+import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData, track_window } from '../../stores/spotify';
+import { createShortcuts } from './shortcuts';
 
 export let player: Spotify.Player;
+export let device_id: string;
 const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
 
 export async function createNewSpotifyPlayer() {
@@ -49,73 +49,15 @@ export async function createNewSpotifyPlayer() {
         throw 'Failed to connect to the Spotify Player';
     } 
 
-    player.addListener('ready', ({ device_id }) => {
+    player.addListener('ready', (state) => {
+        device_id = state.device_id;
         console.log('Ready with Device ID', device_id);
         spotifyPlayerStatus.set('ready');
         createShortcuts();
     });
+
+    player.addListener('player_state_changed', (state) => {
+        track_window.set({...state.track_window});
+    });
 }
 
-async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | 'search'): Promise<RoosterExamples> {
-    if (!query || query.length < 2) return {};
-    if (type === 'search') type = 'track';
-    const res = await SpotifyClient.search(query, [type], { limit: 5 });
-    console.log(res);
-    
-    let examples: RoosterExamples = {};
-    for (const key of (Object.keys(res))) {
-        const list: RoosterExample[] = res[key].items.map((item) => {
-            let artist = '';
-            if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
-            const image = key === 'tracks' ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
-            return {'example': item.name, 'tip': artist, image, 'selectable': true, 'id': item.id};
-        });
-
-        examples.group = list;
-        examples.namespace = type;
-    }
-    
-    return examples;
-}
-
-function createShortcuts() {
-    shortcuts.set('spotify', {
-        background: process.env.SPOTIFY_COLOR,
-        color: process.env.BACKGROUND_DARK,
-        arguments: {
-            track: {
-                async callback(p) {
-                    
-                    return true;
-                }
-            },
-            search: {
-                async callback(p, id) {
-                    console.log(p, id);
-                    
-                    return true;
-                }
-            },
-            playlist: {
-                async callback(p) {
-                    
-                    return true;
-                }
-            },
-            album: {
-                async callback(p) {
-                    
-                    return true;
-                }
-            }
-        }, 
-        async examples(arg, params) {
-            if (['search','album','playlist', 'track'].find(a => a === arg)) {
-                //@ts-ignore
-                return loadSearch(params, arg);
-            }
-
-            return {}
-        }
-    })
-}
