@@ -11,6 +11,8 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { SpotifyClient } from '../../../lib/spotify/SpotifyClient';
 import { slide } from 'svelte/transition';
 import SpotifyWebApi from 'spotify-web-api-js';
+import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
+import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 
     let boxLabel: string;
     let favLocationExp = false;
@@ -112,11 +114,11 @@ import SpotifyWebApi from 'spotify-web-api-js';
             </NestedBox>
         </div>
     {/if}
-    <NestedBox expandable label="Favorite location" 
+    <NestedBox label="Save in library" 
         bordered={true} 
-        expanded={true}
         available={$spotifyPlayerStatus === 'ready'}
-        description="Choose where to save the songs that you like on Relaxing Clock"
+        description="Whether to save songs that you like in your library on in Relaxing Clock's playlist"
     >
+        <Booleans state={true} label={'save in user library'}/>
     </NestedBox>
 </SettingsBox>

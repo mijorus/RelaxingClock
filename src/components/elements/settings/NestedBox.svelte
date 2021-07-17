@@ -15,10 +15,16 @@ export let description: string = undefined;
 >
     <div class="text-primary font-primary text-md w-full flex items-center overscroll-x-hidden" style="justify-content: space-between;">
         <span>{label}</span>
-        {#if expandable}<i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click on:click={() => expanded = !expanded}></i>{/if}
+        {#if expandable}
+            <i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click on:click={() => expanded = !expanded}></i>
+        {:else}
+            <slot></slot>
+        {/if}
     </div>
 
-    {#if expanded } <div in:slide out:slide><slot></slot></div> {/if}
+    {#if expandable && expanded } 
+        <div in:slide out:slide><slot></slot></div> 
+    {/if}
 </div>
 {#if description}
     <div class="w-full md:w-9/12 self-end">
