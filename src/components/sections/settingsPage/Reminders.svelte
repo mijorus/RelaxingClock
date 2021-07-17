@@ -22,7 +22,6 @@
     let minutesFromNow: number; let isPersistent: boolean; let reminderAtBox: string;
     let boxSelectedAt: BoxAtType = 'minutes';
     let creationBox: HTMLElement;
-    let expanded = false;
 
     let ready = false;
     let title: HTMLInputElement;
@@ -244,12 +243,8 @@
     >
         <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
-    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} 
-        expandable on:click={() => expanded = !expanded}
-        expanded={expanded}
-    >
-        {#if expanded}
-            {#if futureReminders.length}
+    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} expandable>
+        {#if futureReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
@@ -277,7 +272,6 @@
                     </div>
                 {/each}
             </div>
-            {/if}
         {/if}
     </NestedBox>
 </SettingsBox>
