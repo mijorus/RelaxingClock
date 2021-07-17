@@ -2,7 +2,7 @@
     export let state: boolean;
     export let label: string;
 
-    const btnsClass: string = 'text-md text-center settings-btn px-2 py-1 border-primary border-2 rounded-xl font-primary font-bold relative z-10';
+    const btnsClass: string = 'text-md text-center settings-btn px-2 py-1 rounded-xl font-primary font-bold relative z-10';
 
     function handleBtnClick({target}) {
         state = target.dataset.option === 'on' ? true : false;
