@@ -1,4 +1,7 @@
-<script lang="ts">    
+<script lang="ts">
+import Hint from "./Hint.svelte";
+
+    
     interface SettingsLabel {
         text: string,
         bgClass?: string,
@@ -23,10 +26,7 @@
     </div>
     {#if description}
         <div class="px-3 md:px-4 mx-3 md:mx-4 text-secondary">
-            {#if description.iconClass}
-                <i class="{description.iconClass} text-xs"></i>
-            {/if}
-            <span class="text-xs font-primary leading-none">{description.text}</span>
+            <Hint text={description.text} iconClass={description.iconClass}></Hint>
         </div>
     {/if}
 </div>
