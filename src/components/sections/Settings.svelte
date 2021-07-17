@@ -14,7 +14,7 @@
     import Reminders from './settingsPage/Reminders.svelte';
 </script>
 
-<div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative">
+<div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative text-primary font-primary">
     <Spotify />
     <HighContrast />
     <BlinkingDots />
