@@ -1,8 +1,13 @@
 <script lang="ts">
-    import { spotifyPlayerStatus, track_window } from "../../stores/spotify";
-    import type { SpotifyPlayerStatus } from "../../types";
-    import AnimatedText from "../elements/AnimatedText.svelte";
-    import Bubble from "../elements/Bubble.svelte";
+import { fade } from "svelte/transition";
+
+import { SpotifyPlayer } from "../../handlers/spotify/player";
+import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
+import { spotifyPlayerStatus, spotifyPlayerState, track_window } from "../../stores/spotify";
+import type { SpotifyPlayerStatus } from "../../types";
+import { createCommaArray } from "../../utils/utils";
+import AnimatedText from "../elements/AnimatedText.svelte";
+import Bubble from "../elements/Bubble.svelte";
 
     let preloadLabel = '';
     let loader = '';
@@ -12,20 +17,24 @@
     function setLabel(spotifyStatus: SpotifyPlayerStatus) {
         clearInterval(interval);
         if (spotifyStatus === 'connecting') {
-            preloadLabel = 'Loading';
-            let count = 0
+            preloadLabel = 'Loading'; let count = 0;
             interval = setInterval(() => {
                 if (count < 3) { loader += '.'; count++ }
                 else { count = 0; loader = '' }
             }, 250);
         }  else {
             loader = '';
-            if (spotifyStatus === 'ready') {
-                preloadLabel = 'Ready to play!';
-            } else if (spotifyStatus !==  'disconnected') {
-                preloadLabel = 'Ooops!';
-            }
+            if (spotifyStatus === 'ready') preloadLabel = 'Ready to play!';
+            else if (spotifyStatus !==  'disconnected') preloadLabel = 'Ooops!';
         }
+    }
+
+    function togglePlay() {
+        if (SpotifyPlayer) SpotifyPlayer.togglePlay();
+    }
+
+    function togglePause() {
+        if (SpotifyPlayer) SpotifyPlayer.pause();
     }
 </script>
 
@@ -35,12 +44,28 @@
             <span class="pr-2">
                 <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />
             </span>
-            <span class="text-xl font-primary flex-grow">
-                <AnimatedText text={$track_window ? $track_window.current_track.name : preloadLabel}><span>{loader}</span></AnimatedText>
-            </span>
+            <div class="text-xl font-primary flex-grow whitespace-nowrap overflow-hidden">
+                <!-- Track title -->
+                <div class="whitespace-nowrap tracking-normal">
+                    <AnimatedText text={$spotifyPlayerState?.track_window ? $spotifyPlayerState.track_window.current_track.name : preloadLabel}>
+                        {#if $spotifyPlayerStatus !== 'ready'}<span>{loader}</span>{/if}
+                    </AnimatedText>
+                </div>
+                <!-- Artist and stuff -->
+                {#if $spotifyPlayerState?.track_window}
+                    <div class="text-secondary text-sm whitespace-nowrap tracking-tight">
+                        <AnimatedText text={createCommaArray($spotifyPlayerState.track_window.current_track.artists.map(a => a.name))}>
+                        </AnimatedText>
+                    </div>
+                {/if}
+            </div>
             <span class="justify-self-end text-xl">
                 {#if $spotifyPlayerStatus === 'ready'}
-                <i class="fas fa-play" />
+                    {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
+                        <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
+                    {:else}
+                        <i class="fas fa-pause cursor-pointer" on:click={togglePause}/>
+                    {/if}
                 {:else if $spotifyPlayerStatus === 'connecting'}
                 <div class="transform scale-50 relative">
                     <div class="line-scale">

@@ -1,16 +1,16 @@
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
-import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData, track_window } from '../../stores/spotify';
+import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData, track_window } from '../../stores/spotify';
 import { createShortcuts } from './shortcuts';
 
-export let player: Spotify.Player;
+export let SpotifyPlayer: Spotify.Player;
 export let device_id: string;
 const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
 
 export async function createNewSpotifyPlayer() {
     console.log('creating spotify player');
 
-    player = new Spotify.Player({
+    SpotifyPlayer = new Spotify.Player({
         name: 'Relaxing Clock',
         getOAuthToken: async (callback) => {
             let response;
@@ -40,24 +40,25 @@ export async function createNewSpotifyPlayer() {
     });
 
     // Error handling
-    player.addListener('initialization_error', ({ message }) => { console.error(message); });
-    player.addListener('authentication_error', ({ message }) => { console.error(message); });
-    player.addListener('account_error', ({ message }) => { console.error(message); });
-    player.addListener('playback_error', ({ message }) => { console.error(message); });
+    SpotifyPlayer.addListener('initialization_error', ({ message }) => { console.error(message); });
+    SpotifyPlayer.addListener('authentication_error', ({ message }) => { console.error(message); });
+    SpotifyPlayer.addListener('account_error', ({ message }) => { console.error(message); });
+    SpotifyPlayer.addListener('playback_error', ({ message }) => { console.error(message); });
 
-    if (!await player.connect()) {
+    if (!await SpotifyPlayer.connect()) {
         throw 'Failed to connect to the Spotify Player';
     } 
 
-    player.addListener('ready', (state) => {
+    SpotifyPlayer.addListener('ready', (state) => {
         device_id = state.device_id;
         console.log('Ready with Device ID', device_id);
         spotifyPlayerStatus.set('ready');
         createShortcuts();
     });
 
-    player.addListener('player_state_changed', (state) => {
-        track_window.set({...state.track_window});
+    SpotifyPlayer.addListener('player_state_changed', (state) => {
+        console.log(state);
+        spotifyPlayerState.set({...state});
     });
 }
 

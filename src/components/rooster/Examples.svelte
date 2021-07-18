@@ -35,7 +35,7 @@
                                 {#if example.image}<img src="{example.image}" class="h-16 w-16 rounded-md inline-block">{/if} 
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
                                 <span class="font-bold">{example.example}</span> 
-                                <span class="text-secondary text-md">{example.tip ? example.tip : ''}</span>
+                                <span class="text-secondary text-md" class:block={example.image}>{example.tip ?? ''}</span>
                             </div>
                         {/each}
                     {/if}

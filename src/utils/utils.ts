@@ -52,3 +52,9 @@ export function capitalize(str: string) {
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export function createCommaArray(array: Array<string>) {
+  let string = '';
+  array.forEach((s, i) => (i < array.length - 1) ? string += `${s}, ` : string += s)
+  return string;
+}

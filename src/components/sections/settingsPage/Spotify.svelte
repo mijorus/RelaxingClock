@@ -10,8 +10,6 @@ import type { SpotifyPlayerStatus } from '../../../types';
 import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { SpotifyClient } from '../../../lib/spotify/SpotifyClient';
 import { fade, slide } from 'svelte/transition';
-import SpotifyWebApi from 'spotify-web-api-js';
-import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 
     let boxLabel: string;

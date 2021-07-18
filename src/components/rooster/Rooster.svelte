@@ -141,24 +141,27 @@
             }
         }
 
-        const currentCommand = shortcuts.get(clearCommand(command));
-        if (!currentCommand) return;
-
-        if(event.code === 'Enter' || event.code === 'NumpadEnter') {
+        else if (event.code === 'Enter' || event.code === 'NumpadEnter') {
             event.preventDefault();
-            if (currentCommand.arguments[argument]) {
-                if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
-                    resetInputs();
-                    summoned.set(false);
-                } else {
-                    shakeElement(rooster);
+        }
+
+        const currentCommand = shortcuts.get(clearCommand(command));
+        if (currentCommand) {
+            if(event.code === 'Enter' || event.code === 'NumpadEnter') {
+                if (currentCommand.arguments[argument]) {
+                    if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
+                        resetInputs();
+                        summoned.set(false);
+                    } else {
+                        shakeElement(rooster);
+                    }
+                }
+            } else {
+                if (event.key.length === 1 && event.key.match(/[a-zA-Z]|\d/) && currentCommand.examples) {
+                    examples = await currentCommand.examples(argument, params);
                 }
             }
-        } else {
-            if (event.key.length === 1 && event.key.match(/[a-zA-Z]|\d/) && currentCommand.examples) {
-                examples = await currentCommand.examples(argument, params);
-            }
-        }
+        };
     }
 
     function handleKeydown(event: KeyboardEvent) {
