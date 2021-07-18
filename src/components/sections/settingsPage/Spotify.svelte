@@ -9,7 +9,7 @@ import { logout } from '../../../handlers/spotify/login';
 import type { SpotifyPlayerStatus } from '../../../types';
 import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { SpotifyClient } from '../../../lib/spotify/SpotifyClient';
-import { slide } from 'svelte/transition';
+import { fade, slide } from 'svelte/transition';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
@@ -23,7 +23,7 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
     
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
-            featuredPlaylists = await SpotifyClient.getFeaturedPlaylists({'country': $spotifyUserData.country, 'limit': 15});
+            featuredPlaylists = await SpotifyClient.getFeaturedPlaylists({'country': $spotifyUserData.country, 'limit': 16});
             myPlaylists = await SpotifyClient.getUserPlaylists($spotifyUserData.id, {'limit': 10});
             console.log(myPlaylists);
             
@@ -85,8 +85,8 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
                   <div class="loader text-center transform scale-75">
                       <div class="line-scale"><div></div><div></div><div></div><div></div><div></div></div></div>
                 {:else}  
-                    <div class="max-h-96 mt-2 overflow-y-scroll w-full">
-                        <div class="w-full text-center font-bold w pt-3">Favorites</div>
+                    <div class="max-h-96 mt-2 overflow-y-scroll w-full" transition:fade>
+                        <div class="w-full text-center font-bold w pt-3">From your library</div>
                         {#each myPlaylists.items as m}
                             <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex">
                                 <img src={m.images[0].url} alt={m.name} class="inline-block w-14 rounded-md">
@@ -107,18 +107,18 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
                             </div>
                         {/each}
                         {#if !moreP}
-                            <div class="text-center cursor-pointer text-sm" on:click={() => {moreP = true}}>Load more</div>
+                            <div class="text-center cursor-pointer text-sm underline" on:click={() => {moreP = true}}>Load more</div>
                         {/if}
                     </div>
                 {/if }
             </NestedBox>
         </div>
     {/if}
-    <NestedBox label="Save in library" 
+    <NestedBox label="Save in a separate playlist" 
         bordered={true} 
         available={$spotifyPlayerStatus === 'ready'}
         description="Whether to save songs that you like in your library on in Relaxing Clock's playlist"
     >
-        <Booleans state={true} label={'save in user library'}/>
+        <Booleans state={false} label={'save in user library'}/>
     </NestedBox>
 </SettingsBox>
