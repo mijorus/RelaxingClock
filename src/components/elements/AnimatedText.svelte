@@ -29,7 +29,7 @@ import { cbDefault } from "../../utils/animations";
     }
 
     function resetScrollPosition() {
-        el.style.transform = 'translateX(0)';
+        el.style.transform = 'translateX(0px)';
     }
 
     function scrollText(el: HTMLElement) {

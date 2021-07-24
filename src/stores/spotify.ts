@@ -7,3 +7,4 @@ export const spotifyPlayerStatus: Writable<SpotifyPlayerStatus> = writable('disc
 export const spotifyUserData: Writable<SpotifyApi.CurrentUsersProfileResponse> = writable(undefined);
 export const track_window: Writable<Spotify.PlaybackTrackWindow> = writable(undefined);
 export const spotifyPlayerState: Writable<Spotify.PlaybackState> = writable(undefined);
+export const inQueue: Writable<boolean> = writable(false);

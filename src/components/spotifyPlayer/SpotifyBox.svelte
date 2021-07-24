@@ -3,7 +3,7 @@ import { fade } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { spotifyPlayerStatus, spotifyPlayerState, track_window } from "../../stores/spotify";
+import { spotifyPlayerStatus, spotifyPlayerState, track_window, inQueue } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
@@ -11,6 +11,22 @@ import Bubble from "../elements/Bubble.svelte";
 
     let preloadLabel = '';
     let loader = '';
+    let trackName = '';
+    let artistsName = [];
+
+    $: {
+        console.log($inQueue, 'dfsdf');
+        if ($inQueue && $spotifyPlayerState?.track_window?.next_tracks.length) {
+            trackName = '[Queued] ' + ($spotifyPlayerState.track_window.next_tracks.pop()).name;
+            artistsName = ($spotifyPlayerState.track_window.next_tracks.pop()).artists.map(a => a.name);
+            setTimeout(() => { inQueue.set(false) }, 5000);
+
+        } else if ($spotifyPlayerState?.track_window && !$inQueue) {
+            trackName = $spotifyPlayerState.track_window.current_track.name;
+            artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
+        }
+    }
+
     $: setLabel($spotifyPlayerStatus);
 
     let interval: NodeJS.Timeout;
@@ -47,14 +63,14 @@ import Bubble from "../elements/Bubble.svelte";
             <div class="text-xl font-primary flex-grow whitespace-nowrap overflow-hidden">
                 <!-- Track title -->
                 <div class="whitespace-nowrap tracking-normal">
-                    <AnimatedText text={$spotifyPlayerState?.track_window ? $spotifyPlayerState.track_window.current_track.name : preloadLabel}>
+                    <AnimatedText text={$spotifyPlayerState?.track_window ? trackName : preloadLabel}>
                         {#if $spotifyPlayerStatus !== 'ready'}<span>{loader}</span>{/if}
                     </AnimatedText>
                 </div>
                 <!-- Artist and stuff -->
                 {#if $spotifyPlayerState?.track_window}
                     <div class="text-secondary text-sm whitespace-nowrap tracking-tight">
-                        <AnimatedText text={createCommaArray($spotifyPlayerState.track_window.current_track.artists.map(a => a.name))}>
+                        <AnimatedText text={createCommaArray(artistsName)}>
                         </AnimatedText>
                     </div>
                 {/if}

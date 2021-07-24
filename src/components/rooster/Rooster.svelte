@@ -157,7 +157,7 @@
                     }
                 }
             } else {
-                if (event.key.length === 1 && event.key.match(/[a-zA-Z]|\d/) && currentCommand.examples) {
+                if (event.key.length === 1 && event.key.length === 1 && currentCommand.examples) {
                     examples = await currentCommand.examples(argument, params);
                 }
             }

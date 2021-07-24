@@ -26,20 +26,24 @@
                     {#if examples.group}
                         {#each examples.group as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}
-                                class="py-1 {example.image ? 'pl-2' : 'pl-8'} m-1 rounded-lg pr-8 overflow-x-hidden" 
+                                class="py-1 {example.image ? 'pl-2' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden" 
                                 in:fly={{ y: 5, duration: 200 }} 
                                 out:fade={{ duration:100 }}
                             >
                                 {#if i === selected && example.selectable}<span class="grow">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
-                                {#if example.image}<img src="{example.image}" class="h-16 w-16 rounded-md inline-block">{/if} 
+                                {#if example.image}<img src="{example.image}" class="h-16 w-16 mr-2 rounded-md inline-block">{/if} 
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
-                                <span class="font-bold">{example.example}</span> 
-                                <span class="text-secondary text-md" class:block={example.image}>{example.tip ?? ''}</span>
+                                <div class="inline-block">
+                                    <div class="{example.image ? 'flex flex-col' : 'inline'}">
+                                        <span class="font-bold">{example.example}</span>
+                                        <span class="text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
+                                    </div>
+                                </div>
                             </div>
                         {/each}
                     {/if}
-                </div>
+                </div>s
         </div>
     {/if}
 </div>
