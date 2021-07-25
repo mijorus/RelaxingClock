@@ -33,7 +33,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 
     function scrollText(el: HTMLElement) {
-        const duration = 15000;
+        const duration = getRandomIntInclusive(13000, 16000);
         scrollTl = anime.timeline({
             targets: el,
             easing: cbDefault,
