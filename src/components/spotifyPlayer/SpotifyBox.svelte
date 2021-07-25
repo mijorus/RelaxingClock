@@ -60,9 +60,9 @@ import Bubble from "../elements/Bubble.svelte";
 <div class="absolute bottom-5 left-5">
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? 'border-2 transition-all rounded-xl border-primary' : ''}>
        <div class="flex flex-row items-center">
-            <span class="pr-2">
+            <span class="pr-2" class:flex={albumCover}>
                 {#if albumCover}
-                    <img src="{albumCover}" alt="" class="rounded-md w-14">
+                    <span class="bg-cover w-14 h-14 inline-block rounded-md bg-no-repeat" style="background-image: url({albumCover});"></span>
                 {:else}
                     <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />
                 {/if}
