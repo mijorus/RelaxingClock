@@ -5,6 +5,7 @@
     
     let selected = 0;
     export let examples: RoosterExamples = null;
+    export let wait = false;
     export let command: string;
     export function move(d: boolean) {
         if (!examples || !examples.group) return;
@@ -19,7 +20,7 @@
 </script>
 
 <div class="text-primary md:w-2/5 font-secondary -mb-8" >
-    {#if examples?.group?.length && command.length && command.endsWith(':')}
+    {#if !wait && examples?.group?.length && command.length && command.endsWith(':')}
         <div out:fly={{ y: 5, duration: 200 }} >
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
                 <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1">
@@ -34,7 +35,7 @@
                                 <!-- svelte-ignore a11y-missing-attribute -->
                                 {#if example.image}<img src="{example.image}" class="h-16 w-16 mr-2 rounded-md inline-block">{/if} 
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
-                                <div class="inline-block">
+                                <div class="inline-block ml-2">
                                     <div class="{example.image ? 'flex flex-col' : 'inline'}">
                                         <span class="font-bold">{example.example}</span>
                                         <span class="text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
@@ -44,6 +45,12 @@
                         {/each}
                     {/if}
                 </div>s
+        </div>
+    {:else if wait}
+        <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 text-center">
+            <div class="transform scale-50 relative inline-block">
+                <div class="line-scale"><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
         </div>
     {/if}
 </div>

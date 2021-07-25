@@ -1,9 +1,7 @@
 <script lang="ts">
-import { fade } from "svelte/transition";
-
 import { SpotifyPlayer } from "../../handlers/spotify/player";
-import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { spotifyPlayerStatus, spotifyPlayerState, track_window, inQueue } from "../../stores/spotify";
+import { notifications } from "../../stores/notifications";
+import { spotifyPlayerStatus, spotifyPlayerState, inQueue } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
@@ -11,19 +9,20 @@ import Bubble from "../elements/Bubble.svelte";
 
     let preloadLabel = '';
     let loader = '';
+
     let trackName = '';
     let artistsName = [];
+    let albumCover: string;
 
     $: {
-        console.log($inQueue, 'dfsdf');
-        if ($inQueue && $spotifyPlayerState?.track_window?.next_tracks.length) {
-            trackName = '[Queued] ' + ($spotifyPlayerState.track_window.next_tracks.pop()).name;
-            artistsName = ($spotifyPlayerState.track_window.next_tracks.pop()).artists.map(a => a.name);
-            setTimeout(() => { inQueue.set(false) }, 5000);
-
+        if ($inQueue && ($spotifyPlayerState?.track_window?.next_tracks.length > 0)) {
+            const queued = $spotifyPlayerState.track_window.next_tracks.find(t => t.uri === $inQueue);
+            if (queued) notifications.create({'title': 'Added to queue', 'content': queued.name, 'icon': 'fab fa-spotify'});
+            inQueue.set(undefined);
         } else if ($spotifyPlayerState?.track_window && !$inQueue) {
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
+            albumCover = $spotifyPlayerState.track_window.current_track.album.images[0].url;
         }
     }
 
@@ -52,13 +51,21 @@ import Bubble from "../elements/Bubble.svelte";
     function togglePause() {
         if (SpotifyPlayer) SpotifyPlayer.pause();
     }
+
+    function handleForward() {
+        if (SpotifyPlayer) SpotifyPlayer.nextTrack();
+    }
 </script>
 
 <div class="absolute bottom-5 left-5">
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? 'border-2 transition-all rounded-xl border-primary' : ''}>
        <div class="flex flex-row items-center">
             <span class="pr-2">
-                <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />
+                {#if albumCover}
+                    <img src="{albumCover}" alt="" class="rounded-md w-14">
+                {:else}
+                    <i class="fab fa-spotify {$spotifyPlayerStatus === 'ready' ? 'text-spotify' : 'text-secondary'} text-5xl" />
+                {/if}
             </span>
             <div class="text-xl font-primary flex-grow whitespace-nowrap overflow-hidden">
                 <!-- Track title -->
@@ -75,12 +82,12 @@ import Bubble from "../elements/Bubble.svelte";
                     </div>
                 {/if}
             </div>
-            <span class="justify-self-end text-xl">
+            <span class="justify-self-end text-xl absolute p-1 right-4 rounded-full bg-opacity-60 bg-primary" style="box-shadow: 0px 0px 20px {process.env.BACKGROUND_DARK};">
                 {#if $spotifyPlayerStatus === 'ready'}
                     {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                         <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
                     {:else}
-                        <i class="fas fa-pause cursor-pointer" on:click={togglePause}/>
+                        <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
                     {/if}
                 {:else if $spotifyPlayerStatus === 'connecting'}
                 <div class="transform scale-50 relative">

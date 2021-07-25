@@ -7,6 +7,8 @@
     import type { RoosterExample, RoosterExamples } from "../../types";
 
     let rooster: HTMLElement;
+    let commandHistory: {command: string, argument: string, params?: string}[] = [];
+    let chc = -1;
     
     let command = '';
     let commandPill = {color: null, background: null};
@@ -21,6 +23,7 @@
     let suggestion = '';
     let examples: RoosterExamples;
     let exampleComponent: Examples;
+    let exampleWait = false;
 
     $: handleSummon($summoned);
     $: handleCommand(command);
@@ -31,7 +34,7 @@
     }
 
     function resetInputs() {
-        command = ''; argument = ''; suggestion = ''; params = ''; examples = null;
+        command = ''; argument = ''; suggestion = ''; params = ''; examples = null; chc = 0; exampleWait = false;
     }
 
     function handleSummon(summoned: boolean) {
@@ -109,6 +112,19 @@
             exampleComponent.move(false);
         }
 
+        else if (event.code === 'PageUp' || event.code === 'PageDown') {
+            if (commandHistory.length) {
+                event.preventDefault();
+                
+                if (chc < 0) chc = 0;
+                else if (event.code === 'PageUp') (chc === (commandHistory.length - 1)) ? shakeElement(rooster) : chc = chc + 1;
+                else if (event.code === 'PageDown') chc === 0 ? shakeElement(rooster) : chc = chc -1
+
+                command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
+                paramsBox.focus();
+            }
+        }
+
         else if (event.code === 'Backspace') {
             if (document.activeElement === argumentBox && argument === '') {
                 event.preventDefault();
@@ -145,11 +161,18 @@
             event.preventDefault();
         }
 
+        // Command execution
         const currentCommand = shortcuts.get(clearCommand(command));
         if (currentCommand) {
             if(event.code === 'Enter' || event.code === 'NumpadEnter') {
                 if (currentCommand.arguments[argument]) {
                     if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
+                        // commandHistory.push({command: clearCommand(command), argument, params}); @todo
+                        const lastCommand = commandHistory.length > 0 ? commandHistory[commandHistory.length - 1] : undefined;
+                        if (!lastCommand || (command !== lastCommand.command && argument !== lastCommand.argument)) {
+                            commandHistory.push({command: clearCommand(command), argument, params});
+                        }
+
                         resetInputs();
                         summoned.set(false);
                     } else {
@@ -157,8 +180,9 @@
                     }
                 }
             } else {
-                if (event.key.length === 1 && event.key.length === 1 && currentCommand.examples) {
-                    examples = await currentCommand.examples(argument, params);
+                if (event.key.length === 1 && event.key.length === 1 && currentCommand.examples) { //@todo commands are sent with one key - delay
+                    exampleWait = true;
+                    currentCommand.examples(argument, params).then((res) => {examples = res; exampleWait = false;})
                 }
             }
         };
@@ -195,7 +219,7 @@
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
-        <Examples bind:this={exampleComponent} command={command} examples={examples}/>
+        <Examples bind:this={exampleComponent} command={command} examples={examples} wait={exampleWait}/>
         <div
             bind:this={rooster}
             class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"

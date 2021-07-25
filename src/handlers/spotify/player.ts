@@ -1,6 +1,6 @@
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
-import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData, track_window } from '../../stores/spotify';
+import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
 import { createShortcuts } from './shortcuts';
 
 export let SpotifyPlayer: Spotify.Player;

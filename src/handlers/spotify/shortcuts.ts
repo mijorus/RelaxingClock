@@ -1,4 +1,5 @@
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
+import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { inQueue } from '../../stores/spotify';
 import type { RoosterExample, RoosterExamples } from '../../types';
@@ -42,7 +43,7 @@ export function createShortcuts() {
                     try {
                         if (id.startsWith('>>queue<<')) {
                             await SpotifyClient.queue(id.replace(/^>>queue<</, ''));
-                            inQueue.set(true);
+                            inQueue.set(id.replace(/^>>queue<</, ''));
                         }
 
                         else await SpotifyClient.play({uris: [id], device_id});

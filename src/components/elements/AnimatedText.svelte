@@ -1,17 +1,17 @@
 <script lang="ts">
 import anime from "animejs";
 import { cbDefault } from "../../utils/animations";
+import { getRandomIntInclusive } from "../../utils/utils";
 
     export let text: string;
 
     let el: HTMLElement;
     let displayedText = '';
-    let oldText: string;
     let scrollTl: anime.AnimeTimelineInstance;
 
     $: {
         if (el && (text !== displayedText)) {
-            if (scrollTl) scrollTl = undefined;
+            if (scrollTl) scrollTl.pause();
             resetScrollPosition();
 
             anime({
@@ -38,13 +38,14 @@ import { cbDefault } from "../../utils/animations";
             targets: el,
             easing: cbDefault,
             loop: true,
-            delay: 5000,
+            delay: getRandomIntInclusive(5000, 7000),
         })
             .add({
-                translateX: - el.scrollWidth, duration,
-                complete() { resetScrollPosition() }
+                translateX: - el.scrollWidth, 
+                duration,
+                complete() { el.clientWidth + 10 }
             }, '+=50')
-            .add({ translateX: [(el.clientWidth + 10), 0],duration });
+            .add({ translateX: [(el.clientWidth + 10), 0], duration });
     }
 </script> 
 
