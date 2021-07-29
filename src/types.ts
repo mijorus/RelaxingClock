@@ -29,11 +29,13 @@ export interface RoosterArgument {
 }
 
 export type RoosterExamples = {group?: RoosterExample[], namespace?: string};
+export type RoosterExampleImageSize = 'md' | 'sm';
 export interface RoosterExample {
     argument?: string; 
     example: string; 
     tip?: string;
     image?: string;
+    size?: RoosterExampleImageSize;
     id?: string | number;
     selectable?: boolean;
 }

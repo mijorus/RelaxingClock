@@ -27,13 +27,13 @@
                     {#if examples.group}
                         {#each examples.group as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}
-                                class="py-1 {example.image ? 'pl-2' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden" 
+                                class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden" 
                                 in:fly={{ y: 5, duration: 200 }} 
                                 out:fade={{ duration:100 }}
                             >
-                                {#if i === selected && example.selectable}<span class="grow">&middot;</span>{/if}
+                                {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
-                                {#if example.image}<img src="{example.image}" class="h-16 w-16 mr-2 rounded-md inline-block">{/if} 
+                                {#if example.image}<img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block">{/if} 
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
                                 <div class="inline-block ml-2">
                                     <div class="{example.image ? 'flex flex-col' : 'inline'}">

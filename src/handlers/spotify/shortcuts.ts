@@ -2,33 +2,53 @@ import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { inQueue } from '../../stores/spotify';
-import type { RoosterExample, RoosterExamples } from '../../types';
+import type { RoosterExample, RoosterExampleImageSize, RoosterExamples } from '../../types';
+import { createCommaArray } from '../../utils/utils';
 import { device_id } from './player';
 
-async function loadSearch(query: string, type: 'album'| 'playlist' | 'track' | 'search'): Promise<RoosterExamples> {
+type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
+async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
     let toQueue = false;
 
     if (!query || query.length < 2) return {};
-    else if (query.endsWith('>>') || query.endsWith('>')) {
+    else if (query.endsWith(' >>')) {
         toQueue = true; query = query.replace(/>+$/g, '');
     }
 
-    if (type === 'search') type = 'track';
-    const res = await SpotifyClient.search(query, [type], { limit: 5 });
+    const seachTy: searchType[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
+    // @ts-ignore
+    const res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 3 : 5 });
     
     let examples: RoosterExamples = {};
+    console.log(res);
+    
+    let exampleList = [];
     for (const key of (Object.keys(res))) {
         const list: RoosterExample[] = res[key].items.map((item) => {
-            let artist = '';
-            if (item.artists) item.artists.forEach(a => artist += ` ${a.name}`) 
-            const image = key === 'tracks' ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
+            let tip = ''; let size: RoosterExampleImageSize = 'sm';
+            if (key === 'tracks') {
+                item.artists.forEach(a => tip += ` ${a.name}`);
+            }
             
-            return {'example': item.name, 'tip': artist, image, 'selectable': true, 'id': (toQueue ? '>>queue<<' : '') + item.uri};
+            else if (key === 'artists') {
+                tip = createCommaArray(item.genres ?? []);
+                size = 'md';
+            }
+            
+            else if (key === 'albums') {
+                tip = `[Album${item.release_date ? (' - ' + item.release_date) : ''}]`;
+            }
+            
+            
+            const image = (key === 'tracks') ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
+            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue ? '>>queue<<' : '') + item.uri, size};
         });
 
-        examples.group = list;
+        exampleList.push(...list);
     }
     
+    examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
+    console.log(exampleList);
     examples.namespace = type;
     return examples;
 }
