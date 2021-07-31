@@ -7,6 +7,7 @@
     import type { RoosterExample, RoosterExamples } from "../../types";
 
     let rooster: HTMLElement;
+
     let commandHistory: {command: string, argument: string, params?: string}[] = [];
     let chc = -1;
     

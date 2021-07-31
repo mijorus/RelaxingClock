@@ -91,6 +91,7 @@ export default {
                 env: {
                     SPOTIFY_COLOR: 'rgb(29, 185, 84)',
                     BACKGROUND_DARK: 'rgb(29, 29, 29)',
+                    TEXT_SECONDARY: 'rgb(100 100 100)',
                     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
                     SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,
                     CITIES_LANDSCAPES_SOURCE: process.env.CITIES_LANDSCAPES_SOURCE,

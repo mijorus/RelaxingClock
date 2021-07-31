@@ -2,12 +2,14 @@
 import { fly } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
+import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { notifications } from "../../stores/notifications";
 import { spotifyPlayerStatus, spotifyPlayerState, inQueue } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
+import SmoothImage from "../elements/SmoothImage.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
 
@@ -18,6 +20,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     let artistsName = [];
     let albumCover: Spotify.Image[];
     let expandedBox = false;
+
     $: boxClasses = $spotifyPlayerState?.track_window ? "border-transparent	text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
     
     $: {
@@ -65,12 +68,16 @@ import Shuffle from "../icons/Shuffle.svelte";
 
 <div class="absolute bottom-5 left-5 font-primary">
     {#if expandedBox && albumCover}
-        <div transition:fly={{ y: 50, duration: 400 }} class="bg-cover mb-3 max-w-72 p-2 rounded-md flex flex-col items-center text-primary bg-tertiary">
-            <img src="{albumCover[albumCover.length - 1].url}" class="w-72 h-auto rounded-xl" alt="">
+        <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-md flex flex-col items-center text-primary bg-tertiary">
+            <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-80 h-auto rounded-xl" />
             <p class="mt-1"><b>[Album]</b>: {$spotifyPlayerState?.track_window.current_track.album.name}</p>
             <p>
-                <i class="cursor-pointer inline-block"><Shuffle color={process.env.SPOTIFY_COLOR}/></i>
-                <i class="cursor-pointer inline-block"><Repeat color={process.env.SPOTIFY_COLOR}/></i>
+                <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
+                    <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
+                </i>
+                <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
+                    <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
+                </i>
             </p>
         </div>
     {/if}
