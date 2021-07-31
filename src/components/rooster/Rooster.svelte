@@ -34,7 +34,7 @@
     }
 
     function resetInputs() {
-        command = ''; argument = ''; suggestion = ''; params = ''; examples = null; chc = 0; exampleWait = false;
+        command = ''; argument = ''; suggestion = ''; params = ''; examples = null; chc = -1; exampleWait = false;
     }
 
     function handleSummon(summoned: boolean) {
@@ -113,15 +113,23 @@
         }
 
         else if (event.code === 'PageUp' || event.code === 'PageDown') {
+            event.preventDefault();
             if (commandHistory.length) {
-                event.preventDefault();
+                if (event.code === 'PageUp') {
+                    if (chc < 0) chc = commandHistory.length - 1;
+                    else if (chc === 0) { shakeElement(rooster); return }
+                    else chc = chc - 1;  
+                } 
                 
-                if (chc < 0) chc = 0;
-                else if (event.code === 'PageUp') (chc === (commandHistory.length - 1)) ? shakeElement(rooster) : chc = chc + 1;
-                else if (event.code === 'PageDown') chc === 0 ? shakeElement(rooster) : chc = chc -1
-
+                else if (event.code === 'PageDown') {
+                    if (chc < 0 || chc === commandHistory.length - 1) { shakeElement(rooster); return; }
+                    else { chc = chc + 1 }
+                }
+                                
                 command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
                 paramsBox.focus();
+            } else {
+                shakeElement(rooster);
             }
         }
 
