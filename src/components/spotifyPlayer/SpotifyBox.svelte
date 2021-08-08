@@ -19,11 +19,13 @@ import Shuffle from "../icons/Shuffle.svelte";
     let artistsName = [];
     let albumCover: Spotify.Image[];
     let expandedBox = false;
+    let playbackStarted = false;
 
-    $: boxClasses = $spotifyPlayerState?.track_window ? "border-transparent	text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
+    $: boxClasses = playbackStarted ? "border-transparent	text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
     
     $: {
         if ($spotifyPlayerState?.track_window) {
+            playbackStarted = true;
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
@@ -63,9 +65,9 @@ import Shuffle from "../icons/Shuffle.svelte";
 
 <div class="absolute bottom-5 left-5 font-primary">
     {#if expandedBox && albumCover}
-        <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-md flex flex-col items-center text-primary bg-tertiary">
+        <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-80 h-auto rounded-xl" />
-            <p class="mt-1"><b>[Album]</b>: {$spotifyPlayerState?.track_window.current_track.album.name}</p>
+            <p class="mt-1"><AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/></p>
             <p>
                 <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
@@ -74,6 +76,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
                 </i>
             </p>
+            <p class="mt-2 text-xs text-secondary text-center" style="line-height: 1;">Use Spotify Connect to control "<b>Relaxing Clock</b>" with the phone app</p>
         </div>
     {/if}
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? boxClasses + ' rounded-xl border-2 transition-all rounded-xl': ''}>
@@ -103,23 +106,23 @@ import Shuffle from "../icons/Shuffle.svelte";
                     </div>
                 {/if}
             </div>
-            <span class="justify-self-end text-xl absolute p-1 right-4 {$spotifyPlayerState?.track_window ? 'rounded-full bg-opacity-60 bg-primary' : ''}" 
-                style="box-shadow: 0px 0px 20px {$spotifyPlayerState?.track_window ? process.env.BACKGROUND_DARK : 'transparent'};"
+            <span class="justify-self-end text-xl absolute p-1 right-4 transition-all {playbackStarted ? 'rounded-full bg-opacity-60 bg-primary' : ''}" 
+                style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};"
             >
                 {#if $spotifyPlayerStatus === 'ready'}
                     {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                         <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
                     {:else}
                         <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
-                    {/if}
+                    {/if} 
                 {:else if $spotifyPlayerStatus === 'connecting'}
-                <div class="transform scale-50 relative">
-                    <div class="line-scale">
-                        <div></div><div></div><div></div><div></div><div></div>
+                    <div class="transform scale-50 relative">
+                        <div class="line-scale">
+                            <div></div><div></div><div></div><div></div><div></div>
+                        </div>
                     </div>
-                </div>
                 {:else if $spotifyPlayerStatus !== 'disconnected'}
-                <i class="fas fa-exclamation-triangle"></i>
+                    <i class="fas fa-exclamation-triangle"></i>
                 {/if}
             </span>
        </div>

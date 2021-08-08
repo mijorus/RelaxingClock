@@ -30,7 +30,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             }
             
             else if (key === 'artists') {
-                tip = createCommaArray(item.genres ?? []);
+                tip = '[Artist]';
                 size = 'md';
             }
             
