@@ -1,7 +1,6 @@
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
-import { inQueue } from '../../stores/spotify';
 import type { RoosterExample, RoosterExampleImageSize, RoosterExamples } from '../../types';
 import { createCommaArray } from '../../utils/utils';
 import { device_id } from './player';
@@ -9,12 +8,12 @@ import { device_id } from './player';
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
     let toQueue = false;
-
+    
     if (!query || query.length < 2) return {};
-    else if (query.endsWith(' >>')) {
+    else if (query.endsWith(' >>') || query.endsWith(' >')) {
         toQueue = true; query = query.replace(/>+$/g, '');
     }
-
+    
     const seachTy: searchType[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
     const res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 3 : 5 });
@@ -41,7 +40,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             
             
             const image = (key === 'tracks') ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
-            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue ? '>>queue<<' : '') + item.uri, size};
+            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue ? `>>${item.name}<<` : '') + item.uri, size};
         });
 
         exampleList.push(...list);
@@ -54,45 +53,35 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
 }
 
 export function createShortcuts() {
+    let args: any = {};
+    ['search','album','playlist', 'track'].forEach(el => {
+        args[el] = {
+            async callback(p, id: string) {
+                try {
+                    const isQueue = />>(.*)<</.exec(id);
+                    if (isQueue) {
+                        await SpotifyClient.queue(id.replace(isQueue[0], ''));
+                        notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});
+                    } else {
+                        let params: SpotifyApi.PlayParameterObject = {device_id};
+                        id.match("spotify:track:") ? params.uris = [id] : params.context_uri = id; 
+                        await SpotifyClient.play(params);
+                    }
+                    
+                    return true;
+                } catch(err) {
+                    console.log(err);
+                    return false;
+                }
+            }
+        }
+    });
+
     shortcuts.set('spotify', {
         background: process.env.SPOTIFY_COLOR,
         color: process.env.BACKGROUND_DARK,
         arguments: {
-            track: {
-                async callback(p, id: string) {
-                    try {
-                        if (id.startsWith('>>queue<<')) {
-                            await SpotifyClient.queue(id.replace(/^>>queue<</, ''));
-                            inQueue.set(id.replace(/^>>queue<</, ''));
-                        }
-
-                        else await SpotifyClient.play({uris: [id], device_id});
-                        return true;
-                    } catch(err) {
-                        console.log(err);
-                        return false;
-                    }
-                }
-            },
-            search: {
-                async callback(p, id) {
-                    console.log(p, id);
-                    
-                    return true;
-                }
-            },
-            playlist: {
-                async callback(p) {
-                    
-                    return true;
-                }
-            },
-            album: {
-                async callback(p) {
-                    
-                    return true;
-                }
-            },
+            ...args,
             pause: {
                 async callback() {
                     try { await SpotifyClient.pause({device_id}); return true;}

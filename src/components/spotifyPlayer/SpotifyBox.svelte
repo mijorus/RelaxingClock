@@ -3,8 +3,7 @@ import { fly } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { notifications } from "../../stores/notifications";
-import { spotifyPlayerStatus, spotifyPlayerState, inQueue } from "../../stores/spotify";
+import { spotifyPlayerStatus, spotifyPlayerState } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
@@ -24,11 +23,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     $: boxClasses = $spotifyPlayerState?.track_window ? "border-transparent	text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
     
     $: {
-        if ($inQueue && ($spotifyPlayerState?.track_window?.next_tracks.length > 0)) {
-            const queued = $spotifyPlayerState.track_window.next_tracks.find(t => t.uri === $inQueue);
-            if (queued) notifications.create({'title': 'Added to queue', 'content': queued.name, 'icon': 'fab fa-spotify'});
-            inQueue.set(undefined);
-        } else if ($spotifyPlayerState?.track_window && !$inQueue) {
+        if ($spotifyPlayerState?.track_window) {
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
