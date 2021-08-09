@@ -1,6 +1,7 @@
 <script lang="ts">
     export let state: boolean;
     export let label: string;
+    export let states = ['ON', 'OFF'];
 
     const btnsClass: string = 'text-md text-center settings-btn px-2 py-1 rounded-xl font-primary font-bold relative z-10';
 
@@ -15,14 +16,14 @@
         alt="{label} on"
         on:click|stopPropagation={handleBtnClick}
     >
-        ON
+        {states[0]}
     </button>
     <button class="{btnsClass} {!state ? 'text-secondary':'text-primary'} w-12" 
         data-option="off" 
         alt="{label} off"
         on:click|stopPropagation={handleBtnClick}
     >
-        OFF
+        {states[1]}
     </button>
     <div class="absolute h-full bg-highlighted top-0 rounded-xl settings-btr-pill {state ? 'push-left w-10' : 'push-right w-12'}"></div>
 </div>
