@@ -4,28 +4,29 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from '../../elements/settings/Buttons/Action.svelte';
-import { onMount, tick } from 'svelte';
-import { canBeSummoned, shortcuts } from '../../../stores/rooster';
+import { tick } from 'svelte';
 import moment, { Moment } from 'moment';
-import { fade, fly } from 'svelte/transition';
-import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
+import { fly } from 'svelte/transition';
 import time from '../../../stores/time';
 import { tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
-import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
 import { shakeElement } from '../../../utils/utils';
 import { clockFormat } from '../../../stores/storedSettings';
+import AnimatedText from '../../elements/AnimatedText.svelte';
+import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 
     let hours: HTMLElement;
     let minutes: HTMLElement;
     let alarm: Moment;
-
     let creationBox: HTMLElement;
-    let primaryBoxDefaultTitle = 'Set an alarm';
-    $: format = $clockFormat === '24h' ? 'HH:mm' : 'h:mm'
-    $: primaryBoxTitle = alarm 
-        ? `${localStorage.getItem('alarmTitle') ? localStorage.getItem('alarmTitle') + ' r' : 'R'}ings ${alarm.date() === moment().date() ? '' : 'tomorrow'} at ${alarm.format(format)}` 
-        : primaryBoxDefaultTitle;
+    let alarmIsSet = false;
+    let isAM = true;
+
+    $: format = $clockFormat === '24h' ? 'HH:mm' : 'h:mm a';
+    $: alarmIsTomorrow = false;
+    $: primaryBoxTitle = alarmIsSet 
+        ? `${localStorage.getItem('alarmTitle') ? '"'+localStorage.getItem('alarmTitle') + '" r' : 'R'}ings ${alarmIsTomorrow ? 'tomorrow' : ''} at ${alarm.format(format)}` 
+        : 'Set an alarm';
 
     let ready = false;
     let title: HTMLInputElement;
@@ -34,28 +35,15 @@ import { clockFormat } from '../../../stores/storedSettings';
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
-        if (time.minute() === 0) {
-            // await runListCheck();
-        
-            // for (const reminder of futureReminders) {
-            //     if (reminder.at < time.unix() && !reminder.done) {
-            //         notifications.create({ 
-            //             title: reminder.title, 
-            //             content: reminder.type === 'repeated' ? 'Interact to dismiss' : '',
-            //             icon: 'lnr lnr-calendar-full',
-            //             color
-            //         });
-
-            //         if (reminder.type === 'simple') {
-            //             RemindersDB.setDone(reminder.id);
-            //         }
-
-            //         else if (reminder.type === 'repeated') {
-            //             RemindersDB.setDueTime(reminder.id, time.add(5, 'minutes'));
-            //         }
-            //     }
-            // }
+        if (time.seconds() === 1) {
+            if (localStorage.getItem('alarmTime') && (parseInt(localStorage.getItem('alarmTime')) <= time.unix())) {
+                console.log('Ring!');
+            }
         }
+    }
+
+    function clearAlarmMemory() {
+        ['alarmTime', 'alarmTitle'].forEach(el => {if (localStorage.getItem(el)) localStorage.removeItem(el)});
     }
 
     function handleAlarmKeyDown(event: KeyboardEvent) {
@@ -64,13 +52,19 @@ import { clockFormat } from '../../../stores/storedSettings';
         }
     }
 
+    function handleAlarmKeyUp() {
+        let timeCompensation = $clockFormat === '12h' && parseInt(hours.textContent) < moment().hours() ? 12 : 0;
+        alarm = moment().hours(parseInt(hours.textContent) + timeCompensation).minutes(parseInt(minutes.textContent));
+        alarmIsTomorrow =  alarm.isBefore(moment());
+    }
+
     function handleShortcuts(event: KeyboardEvent) {
         if (event.ctrlKey && event.code === 'Enter') { saveInput() }
         else if (event.code === 'Escape') { closeCreationBox() }
     }
 
     async function openCreationBox() {
-        if (localStorage.getItem('alarmTitle')) localStorage.removeItem('alarmTitle');
+        alarm = moment().minutes(0).add(2, 'm'); alarmIsTomorrow = false;
         creationBoxOpened = true;
         await tick();
         hours.focus();
@@ -81,23 +75,24 @@ import { clockFormat } from '../../../stores/storedSettings';
     }
 
     function saveInput() {
-        if (parseInt(hours.textContent) > 24 || parseInt(minutes.textContent) > 59) {
+        if (!alarm.isValid() || parseInt(hours.textContent) > ($clockFormat === '24h' ? 24 : 12) || parseInt(minutes.textContent) > 59) {
             shakeElement(creationBox);
             return;
         }
 
-        alarm = moment().hours(parseInt(hours.textContent)).minutes(parseInt(minutes.textContent));
-        if (alarm.isBefore(moment())) alarm.add(1, 'day');
+        clearAlarmMemory();
+
+        if (alarm && alarm.isBefore(moment())) alarm.add(1, 'day');
         localStorage.setItem('alarmTime', alarm.unix().toString());
         if (title.value.length > 0) localStorage.setItem('alarmTitle', title.value);
         notifications.create({
-            'content': `Set ${alarm.date() === moment().date() ? '' : ' tomorrow'} at ${alarm.format(format)}`, 
+            'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, 
             title: 'Alarm created',
             icon: 'lnr lnr-clock',
         });
 
-        primaryBoxTitle = `Rings ${alarm.date() === moment().date() ? '' : 'tomorrow'} at ${alarm.format(format)}`;
         closeCreationBox();
+        alarmIsSet = true;
     }
 
     function closeCreationBox() {
@@ -106,8 +101,8 @@ import { clockFormat } from '../../../stores/storedSettings';
     }
 
     function dismissAlarm() {
-        alarm = undefined;
-        localStorage.removeItem('alarmTime');
+        alarmIsSet = undefined;
+        clearAlarmMemory();
     }
 </script>
 
@@ -121,15 +116,19 @@ import { clockFormat } from '../../../stores/storedSettings';
             class="py-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
             <h2 class="text-4xl font-bold mr-20 text-center w-full">Set the alarm</h2>
             <div class="my-2 flex flex-col justify-center">
-                <div class="text-8xl p-2 my-4 text-center time-input font-extrabold font-clock">
+                <div class="text-8xl p-2 mt-4 mb-1 text-center font-bold font-clock">
                     <span 
                         bind:this={hours} contenteditable class="time-input"
-                        on:keydown={handleAlarmKeyDown}>
-                            {moment().format('HH')}</span>:<span 
+                        on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
+                            {moment().format(format.split(':')[0])}</span><span class="opacity-70">:</span><span 
                         bind:this={minutes} contenteditable class="time-input"
-                        on:keydown={handleAlarmKeyDown}>
+                        on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
                             {moment().add(2, 'm').format('mm')}
                     </span>
+                    <div class="text-sm mt-1">
+                        <div class="text-secondary my-1"><AnimatedText text={alarmIsTomorrow ? 'tomorrow' : ''}/></div>
+                        {#if $clockFormat === '12h'}<div class="inline-block"><Booleans state={isAM} states={['AM', 'PM']} label=""/></div>{/if}
+                    </div>
                 </div>
                 <div class="inline-block m-auto">
                     <div class="my-2">
@@ -158,8 +157,8 @@ import { clockFormat } from '../../../stores/storedSettings';
     >
         <Action 
             custom
-            label={alarm ? 'Dismiss' : "Set"} on:click={alarm ? dismissAlarm :openCreationBox} 
-            customClass={alarm ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
+            label={alarmIsSet ? 'Dismiss' : "Set"} on:click={alarmIsSet ? dismissAlarm :openCreationBox} 
+            customClass={alarmIsSet ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
         ></Action>
     </PrimaryBox>
 </SettingsBox>
