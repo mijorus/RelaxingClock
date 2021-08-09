@@ -30,8 +30,8 @@
     $: handleCommand(command);
     $: handleArgument(argument);
 
-    function clearCommand(c: string) {
-        return c.replace(/:$/, '');
+    function clearCommand() {
+        return command.replace(/:$/, '');
     }
 
     function resetInputs() {
@@ -56,7 +56,7 @@
             }
         }
 
-        if (!shortcuts.get(clearCommand(command)) || !command.endsWith(':')) {
+        if (!shortcuts.get(clearCommand()) || !command.endsWith(':')) {
             commandPill = { background: null, color: null };
         }
 
@@ -65,7 +65,7 @@
 
     function handleArgument(argument: string) {
         if (argument && argument.length) {
-            const currentCommand = shortcuts.get(clearCommand(command));
+            const currentCommand = shortcuts.get(clearCommand());
             if (currentCommand && currentCommand.arguments) {
                 for (const [key, value] of Object.entries(currentCommand.arguments)) {
                     if (key.startsWith(argument) && value.active !== false) {
@@ -128,6 +128,7 @@
                 }
                                 
                 command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
+                commandPill.color = shortcuts.get(clearCommand()).color ?? null
                 paramsBox.focus();
             } else {
                 shakeElement(rooster);
@@ -171,15 +172,15 @@
         }
 
         // Command execution
-        const currentCommand = shortcuts.get(clearCommand(command));
+        const currentCommand = shortcuts.get(clearCommand());
         if (currentCommand) {
             if(event.code === 'Enter' || event.code === 'NumpadEnter') {
                 if (currentCommand.arguments[argument]) {
                     if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
-                        // commandHistory.push({command: clearCommand(command), argument, params}); @todo
+                        // commandHistory.push({command: clearCommand(), argument, params}); @todo
                         const lastCommand = commandHistory.length > 0 ? commandHistory[commandHistory.length - 1] : undefined;
                         if (!lastCommand || (command !== lastCommand.command && argument !== lastCommand.argument)) {
-                            commandHistory.push({command: clearCommand(command), argument, params});
+                            commandHistory.push({command: clearCommand(), argument, params});
                         }
 
                         resetInputs();
@@ -191,7 +192,7 @@
             } else {
                 if (event.key.length === 1 && event.key.length === 1 && currentCommand.examples) { //@todo commands are sent with one key - delay
                     exampleWait = true;
-                    currentCommand.examples(argument, params).then((res) => {examples = res; exampleWait = false;})
+                    currentCommand.examples(argument, `${params}${event.key.length === 1 ? event.key : ''}`).then((res) => {examples = res; exampleWait = false;})
                 }
             }
         };

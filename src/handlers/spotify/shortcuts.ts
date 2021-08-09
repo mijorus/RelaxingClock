@@ -2,24 +2,26 @@ import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import type { RoosterExample, RoosterExampleImageSize, RoosterExamples } from '../../types';
-import { createCommaArray } from '../../utils/utils';
 import { device_id } from './player';
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
+
+let oldExamples;
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
     let toQueue = false;
     
     if (!query || query.length < 2) return {};
-    else if (query.endsWith(' >>') || query.endsWith(' >')) {
+    else if (query.endsWith('>>') || query.endsWith('>')) {
         toQueue = true; query = query.replace(/>+$/g, '');
+        
+        if (oldExamples) return oldExamples;
     }
     
     const seachTy: searchType[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
-    const res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 3 : 5 });
+    const res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 });
     
     let examples: RoosterExamples = {};
-    console.log(res);
     
     let exampleList = [];
     for (const key of (Object.keys(res))) {
@@ -47,8 +49,9 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     }
     
     examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
-    console.log(exampleList);
     examples.namespace = type;
+
+    oldExamples = examples;
     return examples;
 }
 
