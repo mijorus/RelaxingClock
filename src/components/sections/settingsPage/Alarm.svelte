@@ -14,17 +14,22 @@ import { tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
 import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
 import { shakeElement } from '../../../utils/utils';
-
-    type BoxAtType = 'minutes' | 'hour';
+import { clockFormat } from '../../../stores/storedSettings';
 
     let hours: HTMLElement;
     let minutes: HTMLElement;
+    let alarm: Moment;
+
     let creationBox: HTMLElement;
+    let primaryBoxDefaultTitle = 'Set an alarm';
+    $: format = $clockFormat === '24h' ? 'HH:mm' : 'h:mm'
+    $: primaryBoxTitle = alarm 
+        ? `${localStorage.getItem('alarmTitle') ? localStorage.getItem('alarmTitle') + ' r' : 'R'}ings ${alarm.date() === moment().date() ? '' : 'tomorrow'} at ${alarm.format(format)}` 
+        : primaryBoxDefaultTitle;
 
     let ready = false;
     let title: HTMLInputElement;
     let creationBoxOpened = false;
-    // const color = '#57ceff';
 
     $: periodicCheck(ready, $time);
 
@@ -54,7 +59,7 @@ import { shakeElement } from '../../../utils/utils';
     }
 
     function handleAlarmKeyDown(event: KeyboardEvent) {
-        if (event.key.length === 1 && (!event.code.match(/\d/) || (hours.textContent.length > 1 && minutes.textContent.length > 1))) {
+        if (event.code.match(/enter/i) || event.key.length === 1 && (!event.code.match(/\d/) || (hours.textContent.length > 1 && minutes.textContent.length > 1))) {
             event.preventDefault();
         }
     }
@@ -65,17 +70,44 @@ import { shakeElement } from '../../../utils/utils';
     }
 
     async function openCreationBox() {
+        if (localStorage.getItem('alarmTitle')) localStorage.removeItem('alarmTitle');
         creationBoxOpened = true;
         await tick();
         hours.focus();
+        tips.set([
+            {name: 'Create', shortcut: 'Ctrl+Enter'},
+            {name: 'Dismiss', shortcut: 'Esc'},
+        ]);
     }
 
     function saveInput() {
+        if (parseInt(hours.textContent) > 24 || parseInt(minutes.textContent) > 59) {
+            shakeElement(creationBox);
+            return;
+        }
 
+        alarm = moment().hours(parseInt(hours.textContent)).minutes(parseInt(minutes.textContent));
+        if (alarm.isBefore(moment())) alarm.add(1, 'day');
+        localStorage.setItem('alarmTime', alarm.unix().toString());
+        if (title.value.length > 0) localStorage.setItem('alarmTitle', title.value);
+        notifications.create({
+            'content': `Set ${alarm.date() === moment().date() ? '' : ' tomorrow'} at ${alarm.format(format)}`, 
+            title: 'Alarm created',
+            icon: 'lnr lnr-clock',
+        });
+
+        primaryBoxTitle = `Rings ${alarm.date() === moment().date() ? '' : 'tomorrow'} at ${alarm.format(format)}`;
+        closeCreationBox();
     }
 
     function closeCreationBox() {
         creationBoxOpened = false;
+        tips.set(null);
+    }
+
+    function dismissAlarm() {
+        alarm = undefined;
+        localStorage.removeItem('alarmTime');
     }
 </script>
 
@@ -120,11 +152,15 @@ import { shakeElement } from '../../../utils/utils';
         </TitleIcon>
     </Title>
     <PrimaryBox 
-        label={{text: 'Set an Alarm'}} 
-        description={{text:'Set an alarm', iconClass: 'lnr lnr-question-circle'}}
+        label={{text: primaryBoxTitle}} 
+        description={{text:'Set an alarm that wakes you up with beautiful colors. And don\'t worry if you accidentally close the tab, I\'ll keep that in mind :)', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Action label="Set" on:click={openCreationBox}></Action>
+        <Action 
+            custom
+            label={alarm ? 'Dismiss' : "Set"} on:click={alarm ? dismissAlarm :openCreationBox} 
+            customClass={alarm ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
+        ></Action>
     </PrimaryBox>
 </SettingsBox>
 

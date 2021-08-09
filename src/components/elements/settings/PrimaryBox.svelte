@@ -1,4 +1,5 @@
 <script lang="ts">
+import AnimatedText from "../AnimatedText.svelte";
 import Hint from "./Hint.svelte";
 
     
@@ -19,7 +20,7 @@ import Hint from "./Hint.svelte";
 
 <div>
     <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 md:p-4 m-3 md:m-4">
-        <span class="text-primary text-xl font-primary">{label.text}</span>
+        <span class="text-primary text-xl font-primary"><AnimatedText text={label.text}/></span>
         <div class="{available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
             <slot></slot>
         </div>
