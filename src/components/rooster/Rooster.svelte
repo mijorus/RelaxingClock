@@ -201,7 +201,7 @@
         };
     }
 
-    function handleKeydown(event: KeyboardEvent) {
+    function handleWindowKeydown(event: KeyboardEvent) {
         if (!$canBeSummoned) {
             return;
         }
@@ -228,7 +228,7 @@
     }
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window on:keydown={handleWindowKeydown} />
 
 {#if $summoned && $canBeSummoned}
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">

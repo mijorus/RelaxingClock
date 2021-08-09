@@ -122,7 +122,9 @@
             at = moment().add(parseInt(tokens[0].match(/^\d{1,2}/)[0]), unit);
         }
         
-        else { return false };
+        else { 
+            at = moment().add(10, 'm');
+        }
         
         title = tokens[1].trim();
         let type: ReminderType = 'simple';
@@ -199,7 +201,7 @@
         transition:fly={{y: 100, duration: 300}}
     >
         <div
-            class=" p-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
+            class="py-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
             <h2 class="text-4xl font-bold mr-20 text-center w-full">Create a reminder</h2>
             <div class="my-2 flex flex-col justify-center">
                 <div class="inline-block m-auto">
