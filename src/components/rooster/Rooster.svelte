@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
+    import { tick } from "svelte";
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
     import { caretToEnd, shakeElement } from "../../utils/utils";
     import Examples from "./Examples.svelte";
-    import type { RoosterExample, RoosterExamples } from "../../types";
+    import type { RoosterExamples } from "../../types";
 
     let rooster: HTMLElement;
 
@@ -51,7 +51,7 @@
             if (key.startsWith(command)) {
                 suggestion = key.replace(command, '') + ':';
                 commandPill.background = shortcuts.get(key).background ?? null;
-                commandPill.color = shortcuts.get(key).color ?? null
+                commandPill.color = shortcuts.get(key).color ?? null;
                 return;
             }
         }
@@ -128,7 +128,10 @@
                 }
                                 
                 command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
-                commandPill.color = shortcuts.get(clearCommand()).color ?? null
+                commandPill.background = shortcuts.get(clearCommand()).background ?? null;
+                commandPill.color = shortcuts.get(clearCommand()).color ?? null;
+                handleCommand(command);
+                
                 paramsBox.focus();
             } else {
                 shakeElement(rooster);
