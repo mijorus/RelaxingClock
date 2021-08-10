@@ -7,19 +7,6 @@ export const canBeSummoned: Writable<boolean> = writable(true);
 
 export const shortcuts: RoosterShortcuts = {
     state: {
-        alarm: {
-            color: process.env.BACKGROUND_DARK, 
-            background: 'red',
-            arguments: {
-                set: {
-                    active: true,
-                    async callback() {
-                        console.log('alarm set');
-                        return true;
-                    }
-                }
-            }
-        },
         clock: {
             color: process.env.BACKGROUND_DARK, 
             background: 'white',

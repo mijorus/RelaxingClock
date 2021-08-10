@@ -4,7 +4,7 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from '../../elements/settings/Buttons/Action.svelte';
-import { tick } from 'svelte';
+import { onMount, tick } from 'svelte';
 import moment, { Moment } from 'moment';
 import { fly } from 'svelte/transition';
 import time from '../../../stores/time';
@@ -14,13 +14,16 @@ import { shakeElement } from '../../../utils/utils';
 import { clockFormat } from '../../../stores/storedSettings';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
+import anime  from 'animejs';
+import { shortcuts } from '../../../stores/rooster';
+import { ring } from '../../../handlers/alarm';
 
-    let hours: HTMLElement;
-    let minutes: HTMLElement;
-    let alarm: Moment;
+    let hours: string;
+    let minutes: string;
+    let alarm: Moment; // local object used to set an alarm, valid until saveInput() is called
     let creationBox: HTMLElement;
     let alarmIsSet = false;
-    let isAM = true;
+    let isAM = moment().hours() < 12;
 
     $: format = $clockFormat === '24h' ? 'HH:mm' : 'h:mm a';
     $: alarmIsTomorrow = false;
@@ -28,18 +31,26 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
         ? `${localStorage.getItem('alarmTitle') ? '"'+localStorage.getItem('alarmTitle') + '" r' : 'R'}ings ${alarmIsTomorrow ? 'tomorrow' : ''} at ${alarm.format(format)}` 
         : 'Set an alarm';
 
-    let ready = false;
     let title: HTMLInputElement;
     let creationBoxOpened = false;
+    const minutesPassedCheck = 15;
 
-    $: periodicCheck(ready, $time);
+    $: periodicCheck($time);
 
-    async function periodicCheck(readyState: boolean, time: Moment) {
+    function periodicCheck(time: Moment) {
         if (time.seconds() === 1) {
-            if (localStorage.getItem('alarmTime') && (parseInt(localStorage.getItem('alarmTime')) <= time.unix())) {
+            const alarmTime = localStorage.getItem('alarmTime');
+            if (alarmTime && (parseInt(alarmTime) <= time.unix()) && (time.unix() - parseInt(alarmTime) <= minutesPassedCheck * 60)) {
                 console.log('Ring!');
+            } else if (alarmTime && (time.unix() - parseInt(alarmTime) > minutesPassedCheck * 60)) {
+                localStorage.removeItem('alarmTime');
             }
         }
+    }
+
+    function snoozeAlarm() {
+        const alarmTime = localStorage.getItem('alarmTime');
+        if (alarmTime) localStorage.setItem('alarmTime', (parseInt(alarmTime) + minutesPassedCheck * 60).toString());
     }
 
     function clearAlarmMemory() {
@@ -47,14 +58,14 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
     }
 
     function handleAlarmKeyDown(event: KeyboardEvent) {
-        if (event.code.match(/enter/i) || event.key.length === 1 && (!event.code.match(/\d/) || (hours.textContent.length > 1 && minutes.textContent.length > 1))) {
+        if (event.code.match(/enter/i) || event.key.length === 1 && (!event.code.match(/\d/) || (hours.length > 1 && minutes.length > 1))) {
             event.preventDefault();
         }
     }
 
     function handleAlarmKeyUp() {
-        let timeCompensation = $clockFormat === '12h' && parseInt(hours.textContent) < moment().hours() ? 12 : 0;
-        alarm = moment().hours(parseInt(hours.textContent) + timeCompensation).minutes(parseInt(minutes.textContent));
+        let timeCompensation = $clockFormat === '12h' && parseInt(hours) < moment().hours() ? 12 : 0;
+        alarm = moment().hours(parseInt(hours) + timeCompensation).minutes(parseInt(minutes));
         alarmIsTomorrow =  alarm.isBefore(moment());
     }
 
@@ -67,7 +78,8 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
         alarm = moment().minutes(0).add(2, 'm'); alarmIsTomorrow = false;
         creationBoxOpened = true;
         await tick();
-        hours.focus();
+        //@ts-ignore
+        document.querySelector('#alarm-h-input').focus();
         tips.set([
             {name: 'Create', shortcut: 'Ctrl+Enter'},
             {name: 'Dismiss', shortcut: 'Esc'},
@@ -75,7 +87,7 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
     }
 
     function saveInput() {
-        if (!alarm.isValid() || parseInt(hours.textContent) > ($clockFormat === '24h' ? 24 : 12) || parseInt(minutes.textContent) > 59) {
+        if (!alarm.isValid() || parseInt(hours) > ($clockFormat === '24h' ? 24 : 12) || parseInt(minutes) > 59) {
             shakeElement(creationBox);
             return;
         }
@@ -85,13 +97,10 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
         if (alarm && alarm.isBefore(moment())) alarm.add(1, 'day');
         localStorage.setItem('alarmTime', alarm.unix().toString());
         if (title.value.length > 0) localStorage.setItem('alarmTitle', title.value);
-        notifications.create({
-            'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, 
-            title: 'Alarm created',
-            icon: 'lnr lnr-clock',
-        });
+        notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock' });
 
         closeCreationBox();
+        alarm = null;
         alarmIsSet = true;
     }
 
@@ -104,6 +113,22 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
         alarmIsSet = undefined;
         clearAlarmMemory();
     }
+
+    onMount(() => {
+        shortcuts.set('alarm', {
+            color: process.env.BACKGROUND_DARK, 
+            background: 'red',
+            arguments: {
+                set: {
+                    async callback(p) {
+                        return true;
+                    }
+                }
+            }
+        })
+
+        ring();
+    })
 </script>
 
 {#if creationBoxOpened}
@@ -118,10 +143,10 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
             <div class="my-2 flex flex-col justify-center">
                 <div class="text-8xl p-2 mt-4 mb-1 text-center font-bold font-clock">
                     <span 
-                        bind:this={hours} contenteditable class="time-input"
+                        id="alarm-h-input" bind:innerHTML={hours} contenteditable class="time-input"
                         on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
                             {moment().format(format.split(':')[0])}</span><span class="opacity-70">:</span><span 
-                        bind:this={minutes} contenteditable class="time-input"
+                        bind:innerHTML={minutes} contenteditable class="time-input"
                         on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
                             {moment().add(2, 'm').format('mm')}
                     </span>

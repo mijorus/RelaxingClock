@@ -42,6 +42,7 @@
     <NotificationsPanel />
     
 	<MainBg />
+    <div id="alarm-ring" class="absolute top-0 left-0 d-none w-screen h-screen"></div>
 </main>
 
 <style global>
