@@ -42,7 +42,11 @@
     <NotificationsPanel />
     
 	<MainBg />
-    <div id="alarm-ring" class="absolute top-0 left-0 d-none w-screen h-screen"></div>
+    <div id="alarm-ring" class="absolute top-0 left-0 d-none w-screen h-screen flex justify-center items-center">
+        <div><button class="alarm-btn icon-bell-off text-8xl p-4"></button></div>
+        <div><span id="alarm-clock-ring" class="lnr lnr-clock text-giant-3 mx-36 inline-block"></span></div>
+        <div><button class="alarm-btn lnr lnr-cross text-8xl font-bold"></button></div>
+    </div>
 </main>
 
 <style global>
@@ -78,5 +82,13 @@
         .shadow-box {
             box-shadow: 0px -15px 50px 0px var(--primary);
         }
+    }
+
+    .alarm-btn {
+        transition: transform .1s linear;
+    }
+
+    .alarm-btn:hover {
+        transform: scale(1.2);
     }
 </style>

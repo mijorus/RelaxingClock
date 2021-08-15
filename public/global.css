@@ -42,6 +42,16 @@ input::-webkit-inner-spin-button {
 margin: 0;
 }
 
+button::selection {
+    border: none;
+    outline: none;
+}
+
+button:active {
+    border: none;
+    outline: none;
+}
+
 /* Firefox */
 input[type=number] {
 -moz-appearance: textfield;

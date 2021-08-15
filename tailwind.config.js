@@ -43,6 +43,9 @@ module.exports = {
             },
             fontSize: {
                 'giant-1': '15rem',
+                'giant-2': '20rem',
+                'giant-3': '25rem',
+                'giant-4': '30rem',
             },
             transitionTimingFunction: {
                 'cb-default': 'cubic-bezier(0.37, 0, 0.63, 1)',

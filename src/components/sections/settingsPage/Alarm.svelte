@@ -127,7 +127,7 @@ import { ring } from '../../../handlers/alarm';
             }
         })
 
-        ring();
+        setTimeout(() => ring(), 1000);
     })
 </script>
 
