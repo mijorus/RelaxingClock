@@ -4,27 +4,31 @@ import type { userSettingType } from '../types';
 function userSetting(key: string, defaultValue: any, type: userSettingType = 'string') {
     const locallyStoredKey = localStorage.getItem(key);
     
+    let value;
     if (locallyStoredKey) {
-        defaultValue = locallyStoredKey;
+        value = locallyStoredKey;
     } else if (defaultValue) {
         localStorage.setItem(key, defaultValue.toString());
     }
     
-    if (typeof defaultValue !== type && typeof defaultValue === 'string') {
+    // cast the stored key in the correct type
+    if (value === 'undefined' || value === 'null') {
+        value = undefined;
+    } else if (typeof value !== type && typeof value === 'string') {
         switch (type) {
         case 'int': 
-            defaultValue = parseInt(defaultValue);
+            value = parseInt(value);
             break;
         case 'float': 
-            defaultValue = parseFloat(defaultValue);
+            value = parseFloat(value);
             break;
         case 'boolean': 
-            defaultValue = JSON.parse(defaultValue);
+            value = JSON.parse(value);
             break;
         }
     }
 
-    const stored: Writable<any> = writable(defaultValue);
+    const stored: Writable<any> = writable(value);
 
     function set(value: string | number) {
         stored.set(value);
@@ -45,6 +49,7 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
  */
 export const activeStyle = userSetting('defaultPosition', 0, 'int');
 export const clockFormat = userSetting('defaultClockFormat', '24h');
+export const alarmTime = userSetting('alarmTime', undefined, 'int');
 export const blink = userSetting('blink', true, 'boolean');
 export const presentation = userSetting('presentation', false, 'boolean');
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');

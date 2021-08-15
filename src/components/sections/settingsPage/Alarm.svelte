@@ -8,53 +8,42 @@ import { onMount, tick } from 'svelte';
 import moment, { Moment } from 'moment';
 import { fly } from 'svelte/transition';
 import time from '../../../stores/time';
-import { tips } from '../../../stores/globalState';
+import { alarmIsRinging, tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
 import { shakeElement } from '../../../utils/utils';
-import { clockFormat } from '../../../stores/storedSettings';
+import { alarmTime, clockFormat } from '../../../stores/storedSettings';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
-import anime  from 'animejs';
 import { shortcuts } from '../../../stores/rooster';
-import { ring } from '../../../handlers/alarm';
+import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 
     let hours: string;
     let minutes: string;
     let alarm: Moment; // local object used to set an alarm, valid until saveInput() is called
     let creationBox: HTMLElement;
-    let alarmIsSet = false;
     let isAM = moment().hours() < 12;
 
     $: format = $clockFormat === '24h' ? 'HH:mm' : 'h:mm a';
     $: alarmIsTomorrow = false;
-    $: primaryBoxTitle = alarmIsSet 
-        ? `${localStorage.getItem('alarmTitle') ? '"'+localStorage.getItem('alarmTitle') + '" r' : 'R'}ings ${alarmIsTomorrow ? 'tomorrow' : ''} at ${alarm.format(format)}` 
+    $: primaryBoxTitle = ($alarmTime && moment($alarmTime, 'X').isValid())
+        ? `${localStorage.getItem('alarmTitle') ? '"'+localStorage.getItem('alarmTitle') + '" r' : 'R'}ings ${alarmIsTomorrow ? 'tomorrow' : ''} at ${moment($alarmTime, 'X').format(format)}` 
         : 'Set an alarm';
 
     let title: HTMLInputElement;
     let creationBoxOpened = false;
     const minutesPassedCheck = 15;
-
+    
     $: periodicCheck($time);
 
     function periodicCheck(time: Moment) {
-        if (time.seconds() === 1) {
-            const alarmTime = localStorage.getItem('alarmTime');
-            if (alarmTime && (parseInt(alarmTime) <= time.unix()) && (time.unix() - parseInt(alarmTime) <= minutesPassedCheck * 60)) {
-                console.log('Ring!');
-            } else if (alarmTime && (time.unix() - parseInt(alarmTime) > minutesPassedCheck * 60)) {
-                localStorage.removeItem('alarmTime');
+        if (time.seconds() === 0) {
+            if (!$alarmIsRinging && $alarmTime && ($alarmTime <= time.unix()) && (time.unix() - $alarmTime <= (minutesPassedCheck * 60))) {
+                ring();
+                console.log('ring');
+            } else if (alarmTime && (time.unix() - $alarmTime > minutesPassedCheck * 60)) {
+                clearAlarmMemory();
             }
         }
-    }
-
-    function snoozeAlarm() {
-        const alarmTime = localStorage.getItem('alarmTime');
-        if (alarmTime) localStorage.setItem('alarmTime', (parseInt(alarmTime) + minutesPassedCheck * 60).toString());
-    }
-
-    function clearAlarmMemory() {
-        ['alarmTime', 'alarmTitle'].forEach(el => {if (localStorage.getItem(el)) localStorage.removeItem(el)});
     }
 
     function handleAlarmKeyDown(event: KeyboardEvent) {
@@ -75,9 +64,12 @@ import { ring } from '../../../handlers/alarm';
     }
 
     async function openCreationBox() {
-        alarm = moment().minutes(0).add(2, 'm'); alarmIsTomorrow = false;
+        alarmIsTomorrow = false;
+        alarm = moment().add(2, 'm');
         creationBoxOpened = true;
+        
         await tick();
+        handleAlarmKeyUp();
         //@ts-ignore
         document.querySelector('#alarm-h-input').focus();
         tips.set([
@@ -86,22 +78,30 @@ import { ring } from '../../../handlers/alarm';
         ]);
     }
 
+    function alarmTimeIsValid(h: number, m: number) {
+        return (h <= ($clockFormat === '24h' ? 24 : 12) || m <= 59)
+    }
+
     function saveInput() {
-        if (!alarm.isValid() || parseInt(hours) > ($clockFormat === '24h' ? 24 : 12) || parseInt(minutes) > 59) {
+        if (!alarm.isValid() || !alarmTimeIsValid(parseInt(hours), parseInt(minutes))) {
             shakeElement(creationBox);
             return;
         }
 
-        clearAlarmMemory();
-
-        if (alarm && alarm.isBefore(moment())) alarm.add(1, 'day');
-        localStorage.setItem('alarmTime', alarm.unix().toString());
-        if (title.value.length > 0) localStorage.setItem('alarmTitle', title.value);
-        notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock' });
+        createAlarm(title.value);
 
         closeCreationBox();
         alarm = null;
-        alarmIsSet = true;
+    }
+
+    function createAlarm(alarmTitle?: string) {
+        clearAlarmMemory();
+
+        if (alarm && alarm.isBefore(moment())) alarm.add(1, 'day');
+        alarmTime.set(alarm.seconds(0).unix());
+        
+        if (alarmTitle && alarmTitle.length > 0) localStorage.setItem('alarmTitle', alarmTitle);
+        notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock' });
     }
 
     function closeCreationBox() {
@@ -109,25 +109,37 @@ import { ring } from '../../../handlers/alarm';
         tips.set(null);
     }
 
-    function dismissAlarm() {
-        alarmIsSet = undefined;
+    function dismissAlarm(notify = false) {
         clearAlarmMemory();
+        if (notify) notifications.create({ 'content': ``, title: 'Alarm dismissed', icon: 'lnr lnr-clock' });
     }
 
     onMount(() => {
+        periodicCheck(moment());
+    
         shortcuts.set('alarm', {
             color: process.env.BACKGROUND_DARK, 
             background: 'red',
             arguments: {
                 set: {
                     async callback(p) {
+                        alarm = moment(p.split(' ')[0], format)
+                        if (!alarm.isValid()) return false;
+                        // @todo handle 12h format
+                        createAlarm(p.match(/\s/) ? p.slice(p.match(/\s/).index + 1) : null);
+                        return true;
+                    }
+                },
+                dismiss: {
+                    async callback() {
+                        if (!$alarmTime) return false;
+
+                        dismissAlarm(true);
                         return true;
                     }
                 }
             }
         })
-
-        setTimeout(() => ring(), 1000);
     })
 </script>
 
@@ -145,10 +157,10 @@ import { ring } from '../../../handlers/alarm';
                     <span 
                         id="alarm-h-input" bind:innerHTML={hours} contenteditable class="time-input"
                         on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
-                            {moment().format(format.split(':')[0])}</span><span class="opacity-70">:</span><span 
+                            {alarm ? alarm.format(format.split(':')[0]) : ''}</span><span class="opacity-70">:</span><span 
                         bind:innerHTML={minutes} contenteditable class="time-input"
                         on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
-                            {moment().add(2, 'm').format('mm')}
+                            {alarm ? alarm.format('mm') : ''}
                     </span>
                     <div class="text-sm mt-1">
                         <div class="text-secondary my-1"><AnimatedText text={alarmIsTomorrow ? 'tomorrow' : ''}/></div>
@@ -182,8 +194,8 @@ import { ring } from '../../../handlers/alarm';
     >
         <Action 
             custom
-            label={alarmIsSet ? 'Dismiss' : "Set"} on:click={alarmIsSet ? dismissAlarm :openCreationBox} 
-            customClass={alarmIsSet ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
+            label={$alarmTime ? 'Dismiss' : "Set"} on:click={$alarmTime ? dismissAlarm : openCreationBox} 
+            customClass={$alarmTime ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
         ></Action>
     </PrimaryBox>
 </SettingsBox>

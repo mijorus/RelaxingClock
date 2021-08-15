@@ -26,3 +26,4 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
 });
 // tips
 export const tips: Writable<Array<Tip>> = writable(null);
+export const alarmIsRinging: Writable<boolean> = writable(false);
