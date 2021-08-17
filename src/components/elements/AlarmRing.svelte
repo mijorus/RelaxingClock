@@ -23,13 +23,13 @@ import AnimatedText from "./AnimatedText.svelte";
 
 {#if $alarmIsRinging}
 <div id="alarm-ring" class="top-0 left-0 d-none w-screen h-screen flex flex-col justify-center items-center fixed" transition:fade={{duration: 100}} style="z-index: 999;">
-    <div class="mt-24 text-3xl">{localStorage.getItem('alarmTitle') ?? ''}</div>
-    <div class="flex justify-center items-center">
+    <div class="text-3xl">{localStorage.getItem('alarmTitle') ?? ''}</div>
+    <div class="flex justify-center items-center my-24">
         <div><button class="alarm-btn icon-bell-off text-8xl p-4" on:mouseenter={() => action = 'Snooze'} on:mouseleave={resetAction} on:click={snoozeAlarm}></button></div>
         <div><span id="alarm-clock-ring" class="lnr lnr-clock text-giant-3 mx-36 inline-block"></span></div>
-        <div><button class="alarm-btn lnr lnr-cross text-8xl font-bold" on:mouseenter={() => action = 'Dismiss'} on:mouseleave={resetAction} on:click={dismiss}></button></div>
+        <div><button class="alarm-btn lnr lnr-cross text-8xl font-bold" on:mouseenter={() => action = 'Dismiss'} on:mouseleave={resetAction} on:click={() => dismiss()}></button></div>
     </div>
-    <div class="mt-24 text-3xl"><AnimatedText text={action} /></div>
+    <div class="text-3xl"><AnimatedText text={action} /></div>
 </div>
 {/if}
 

@@ -89,9 +89,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         }
 
         createAlarm(title.value);
-
         closeCreationBox();
-        alarm = null;
     }
 
     function createAlarm(alarmTitle?: string) {
@@ -107,6 +105,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     function closeCreationBox() {
         creationBoxOpened = false;
         tips.set(null);
+        alarm = null;
     }
 
     function dismissAlarm(notify = false) {
@@ -133,11 +132,20 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
                 dismiss: {
                     async callback() {
                         if (!$alarmTime) return false;
-
                         dismissAlarm(true);
                         return true;
                     }
                 }
+            },
+            async examples(a, p) {
+                return {
+                    'namespace': 'Examples', 
+                    'group': [
+                        {'argument': 'set', 'example': (a !== 'dismiss' && p.match(' ')) ? '[optional] Title of the alarm' : '[time]'},
+                        {'argument': 'set', 'example': '16:20 My power nap'},
+                        {'argument': 'dismiss', 'example': '', 'tip': 'Dimiss the alarm'},
+                    ]
+                };
             }
         })
     })
