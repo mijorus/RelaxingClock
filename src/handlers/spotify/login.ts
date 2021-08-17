@@ -45,6 +45,12 @@ export function logout() {
 }
 
 function throwAuthError(reason = '') {
+    spotifyUrl.set(undefined);
+    spotifyPlayerStatus.set(reason === 'access_denied' ? 'access_denied' : 'error');
     console.error('Authentication Error!: ' + reason);
+
+    if (reason === 'access_denied') {
+        window.location.replace('/');
+    }
 }
 

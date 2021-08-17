@@ -3,7 +3,7 @@ import { fly } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { spotifyPlayerStatus, spotifyPlayerState } from "../../stores/spotify";
+import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
@@ -89,7 +89,8 @@ import Shuffle from "../icons/Shuffle.svelte";
                         <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" on:click={() => expandedBox = !expandedBox}/>
                     </div>
                 {:else}
-                    <i class="fab fa-spotify text-5xl" class:text-secondary={$spotifyPlayerStatus !== 'ready'} />
+                    <!-- user did not log in -->
+                    <i class="fab fa-spotify text-5xl" class:text-secondary={$spotifyPlayerStatus !== 'ready'} class:cursor-pointer={$spotifyUrl} on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
                 {/if}
             </span>
             <div class="text-xl flex-grow whitespace-nowrap overflow-hidden">

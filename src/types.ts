@@ -21,7 +21,7 @@ export interface ClockElementBox {
 export type mouseWatcherState = 'watch' | 'hide' | 'leave';
 export type userSettingType = 'string' | 'int' | 'float' | 'boolean';
 
-export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium';
+export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
 
 export interface RoosterArgument {
     callback: (params?: string, selectedItem?: string | number) => Promise<boolean>;

@@ -48,18 +48,21 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             case 'non-premium':
                 boxLabel = 'Sorry, but you need a premium subscription in order to user third-party players :(';
                 break;
+            case 'access_denied':
+                boxLabel = 'Access denied!';
+                break;
             case 'error':
-                boxLabel = 'Error!';
+                boxLabel = 'Unknown error!';
                 break;
         }
     }
 
     function handleBtnClick() {
         if ($spotifyUrl) {
-            window.location.replace($spotifyUrl)
+            window.location.replace($spotifyUrl);
         }  else {
             logout();
-            window.location.reload();
+            window.location.replace('/');
         }
     }
 </script>
