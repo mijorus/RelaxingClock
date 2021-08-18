@@ -86,7 +86,7 @@ import { onMount, tick } from "svelte";
     let c = 0;
     function handleClockCM(e) {
         e.preventDefault();
-        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright' }));
+        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random' }));
         c > 10 ? c = 0 : c++;
     }
 
