@@ -1,18 +1,20 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+import { onMount } from 'svelte';
 
-	import MainBg from './components/elements/MainBg.svelte';
-	import Rooster from './components/rooster/Rooster.svelte';
-	import Home from './components/sections/Home.svelte';
-	import Settings from './components/sections/Settings.svelte';
-	import { summoned } from './stores/rooster';
-    import { loggedWithSpotify } from './stores/storedSettings';
-    import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
-    import { onlineStatus } from './stores/globalState';
-    import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
-    import { attemptSpotifyLogin } from './handlers/spotify/login';
-    import { SpotifyClient } from "./lib/spotify/SpotifyClient";
+import MainBg from './components/elements/MainBg.svelte';
+import Rooster from './components/rooster/Rooster.svelte';
+import Home from './components/sections/Home.svelte';
+import Settings from './components/sections/Settings.svelte';
+import { loggedWithSpotify } from './stores/storedSettings';
+import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
+import { onlineStatus } from './stores/globalState';
+import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
+import { attemptSpotifyLogin } from './handlers/spotify/login';
+import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 import AlarmRing from './components/elements/AlarmRing.svelte';
+import screenSaverHandler from "./handlers/screenSaver";
+
+    screenSaverHandler.set(20 * 1000);
 
     $: getUserData($spotifyAccessToken);
 
