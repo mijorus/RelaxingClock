@@ -97,6 +97,10 @@ import { onMount, tick } from "svelte";
     })
 </script>
 
-<span bind:this={hours} id="hours" on:mousedown={handleClockMousedown} on:mouseup={handleClockMouseUp} on:contextmenu={handleClockCM} style="transition: color .05s linear;">
+<span bind:this={hours} id="hours" 
+    on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
+    on:mousedown={handleClockMousedown} 
+    on:mouseup={handleClockMouseUp} 
+    on:contextmenu={handleClockCM} style="transition: color .05s linear;">
     { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
 </span>
