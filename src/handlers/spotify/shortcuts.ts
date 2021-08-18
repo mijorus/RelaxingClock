@@ -6,24 +6,24 @@ import { device_id } from './player';
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
-let oldExamples;
+let oldRes;
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
-    let toQueue = false;
+    let toQueue = false; let res;
     
     if (!query || query.length < 2) return {};
     else if (query.endsWith('>>') || query.endsWith('>')) {
-        toQueue = true; query = query.replace(/>+$/g, '');
-        
-        if (oldExamples) return oldExamples;
+        toQueue = true; 
+        query = query.replace(/>+$/g, '');
+        if (oldRes) res = oldRes;
     }
     
     const seachTy: searchType[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
-    const res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 });
-    
+    if (!res) res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 });
+
     let examples: RoosterExamples = {};
-    
     let exampleList = [];
+    
     for (const key of (Object.keys(res))) {
         const list: RoosterExample[] = res[key].items.map((item) => {
             let tip = ''; let size: RoosterExampleImageSize = 'sm';
@@ -50,8 +50,8 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     
     examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
     examples.namespace = type;
+    oldRes = res;
 
-    oldExamples = examples;
     return examples;
 }
 
@@ -62,6 +62,7 @@ export function createShortcuts() {
             async callback(p, id: string) {
                 try {
                     const isQueue = />>(.*)<</.exec(id);
+                    
                     if (isQueue) {
                         await SpotifyClient.queue(id.replace(isQueue[0], ''));
                         notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});
