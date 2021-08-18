@@ -3,6 +3,7 @@ import { fly } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
+import { screenSaver } from "../../stores/globalState";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
@@ -21,7 +22,9 @@ import Shuffle from "../icons/Shuffle.svelte";
     let expandedBox = false;
     let playbackStarted = false;
 
-    $: boxClasses = playbackStarted ? "border-transparent	text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
+    $: boxClasses = $screenSaver && !playbackStarted 
+        ? 'bg-transparent border-transparent' 
+        : playbackStarted ? "border-transparent text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
     
     $: {
         if ($spotifyPlayerState?.track_window) {
@@ -81,6 +84,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     {/if}
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? boxClasses + ' rounded-xl border-2 transition-all rounded-xl': ''}>
         <div class="flex flex-row items-center">
+            <!-- the spotify or album icon -->
             <span class="pr-2" class:flex={albumCover}>
                 {#if albumCover}
                     <div class="bg-cover w-14 h-14 rounded-md bg-no-repeat flex items-center justify-center" 
@@ -90,32 +94,41 @@ import Shuffle from "../icons/Shuffle.svelte";
                     </div>
                 {:else}
                     <!-- user did not log in -->
-                    <i class="fab fa-spotify text-5xl" class:text-secondary={$spotifyPlayerStatus !== 'ready'} class:cursor-pointer={$spotifyUrl} on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
+                    <i class="fab fa-spotify text-5xl" 
+                        class:text-spotify={$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver} 
+                        class:text-secondary={$spotifyPlayerStatus !== 'ready'} 
+                        class:cursor-pointer={$spotifyUrl} 
+                        on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
                 {/if}
             </span>
-            <div class="text-xl flex-grow whitespace-nowrap overflow-hidden">
-                <!-- Track title -->
-                <div class="whitespace-nowrap tracking-normal font-bold">
-                    <AnimatedText text={$spotifyPlayerState?.track_window ? trackName : preloadLabel}>
-                        {#if $spotifyPlayerStatus !== 'ready'}<span>{loader}</span>{/if}
-                    </AnimatedText>
-                </div>
-                <!-- Artist and stuff -->
-                {#if $spotifyPlayerState?.track_window}
-                    <div class="text-secondary font-bold text-sm whitespace-nowrap tracking-tight">
-                        <AnimatedText text={createCommaArray(artistsName)}/>
+            <!-- the center textarea -->
+            {#if playbackStarted || !$screenSaver}
+                <div class="text-xl flex-grow whitespace-nowrap overflow-hidden">
+                    <!-- Track title -->
+                    <div class="whitespace-nowrap tracking-normal font-bold">
+                        <AnimatedText text={$spotifyPlayerState?.track_window ? trackName : preloadLabel}>
+                            {#if $spotifyPlayerStatus !== 'ready'}<span>{loader}</span>{/if}
+                        </AnimatedText>
                     </div>
-                {/if}
-            </div>
+                    <!-- Artist and stuff -->
+                    {#if $spotifyPlayerState?.track_window}
+                        <div class="text-secondary font-bold text-sm whitespace-nowrap tracking-tight">
+                            <AnimatedText text={createCommaArray(artistsName)}/>
+                        </div>
+                    {/if}
+                </div>
+            {/if}
+            <!-- the box to the right of the bubble where the play button is located -->
             <span class="justify-self-end text-xl absolute p-1 right-4 transition-all {playbackStarted ? 'rounded-full bg-opacity-60 bg-primary' : ''}" 
-                style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};"
-            >
+                style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};">
                 {#if $spotifyPlayerStatus === 'ready'}
-                    {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
+                    {#if playbackStarted || !$screenSaver}
+                        {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                         <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
-                    {:else}
-                        <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
-                    {/if} 
+                        {:else}
+                            <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
+                        {/if} 
+                    {/if}
                 {:else if $spotifyPlayerStatus === 'connecting'}
                     <div class="transform scale-50 relative">
                         <div class="line-scale">
