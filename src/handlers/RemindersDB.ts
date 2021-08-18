@@ -48,7 +48,7 @@ export class RemindersDB {
 
     static async setDueTime(key: number, at: Moment) {
         const reminder = await RemindersDB.db.get('reminders', key);
-        RemindersDB.db.put('reminders', { ...reminder, at: at.unix() });
+        RemindersDB.db.put('reminders', { ...reminder, at: at.unix(), done: false });
     }
 }
 
