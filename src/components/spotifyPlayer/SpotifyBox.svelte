@@ -61,7 +61,8 @@ import Shuffle from "../icons/Shuffle.svelte";
         if (SpotifyPlayer) SpotifyPlayer.pause();
     }
 
-    function handleForward() {
+    function handleForward(e) {
+        e.preventDefault(); e.stopPropagation();
         if (SpotifyPlayer) SpotifyPlayer.nextTrack();
     }
 </script>
