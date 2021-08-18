@@ -67,7 +67,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     }
 </script>
 
-<div class="absolute bottom-5 left-5 font-primary">
+<div class="absolute bottom-5 left-5 font-primary}">
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-80 h-auto rounded-xl" />
@@ -95,8 +95,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                     </div>
                 {:else}
                     <!-- user did not log in -->
-                    <i class="fab fa-spotify text-5xl" 
-                        class:text-spotify={$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver} 
+                    <i class="fab fa-spotify text-5xl {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}" 
                         class:text-secondary={$spotifyPlayerStatus !== 'ready'} 
                         class:cursor-pointer={$spotifyUrl} 
                         on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
