@@ -52,7 +52,7 @@
                     }
 
                     else if (reminder.type === 'repeated') {
-                        RemindersDB.setDueTime(reminder.id, time.add(5, 'minutes'));
+                        RemindersDB.setDueTime(reminder.id, moment().add(5, 'minutes'));
                     }
                 }
             }
@@ -128,16 +128,16 @@
         
         title = tokens[1].trim();
         let type: ReminderType = 'simple';
-        if (params.match(/\s!$/)) {
+        if (params.match(/!$/)) {
            type = 'repeated';
-           title = title.replace(/\s!$/, '');
+           title = title.replace(/!$/, '');
         }
         
         await createReminder(title, at, type);
         notifications.create({ 
             title: 'Reminder set!', 
             content: `${at.fromNow()} "${title}"`,
-            icon: 'lnr lnr-calendar-full',
+            icon: `lnr ${type === 'repeated' ? 'lnr-history' :'lnr-calendar-full'}`,
             color
         });
         
