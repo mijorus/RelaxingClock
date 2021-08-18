@@ -4,9 +4,12 @@ import { clockFormat } from "../../stores/storedSettings";
 import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
+import { onMount, tick } from "svelte";
 
     $: setHours($time, $clockFormat);
+    let hours: HTMLElement;
 
+    // change clock format
     let oldFormat: string;
     function setHours(time: Moment, clockFormat) {
         if (oldFormat && oldFormat !== clockFormat) {
@@ -15,67 +18,85 @@ import randomcolor from 'randomcolor';
                 duration: 500,
                 rotateX: [0, 360],
                 complete() {time.format(clockFormat === '24h' ? 'HH' : 'hh')}
-            })
+            });
         }
         
         oldFormat = clockFormat;
     }
 
-    let tl;
-    function handleClockMousedown(e) {
-        if (tl) tl.pause();
-        if (e.button == 0) {
-            tl = anime({
-                begin() { document.querySelector('#hours').classList.add('scaling') },
-                targets: '#hours',
-                duration: 500,
-                scale: document.querySelector('#hours').classList.contains('scaled') ? 1 : [1, 1.3, 1.2],
+    // change hours size
+    let tl: anime.AnimeInstance;
+    function scaleUp(up: boolean, animation = true) {
+        tl = anime({
+                begin() { hours.classList.add('scaling') },
+                targets: hours,
+                duration: animation ? 500 : 0,
+                scale: !up ? 1 : [1, 1.3, 1.2],
                 rotate: [5, -5, 5, -5, 5, -5, 5, -5, 0],
                 easing: 'easeOutElastic',
                 complete() {
-                    document.querySelector('#hours').classList.contains('scaled') 
-                    ? document.querySelector('#hours').classList.remove('font-extrabold', 'scaled')
-                    : document.querySelector('#hours').classList.add('font-extrabold', 'scaled');
+                    if (!up) {
+                        localStorage.removeItem('hours');
+                        hours.classList.remove('font-extrabold');
+                    } else {
+                        localStorage.setItem('hours', 'scaled');
+                        hours.classList.add('font-extrabold');
+                    }
                 }
             })
+    }
+
+    function changeColor(color = null, animation = true) {
+        tl = anime({
+            targets: hours,
+            duration: animation ? 250 : 0,
+            rotate: [5, -5, 5, -5, 0],
+            easing: 'linear',
+            complete() { 
+                hours.style.color = color; 
+                if (color) localStorage.setItem('hoursColor', color) 
+                else localStorage.removeItem('hoursColor') 
+            }
+        })
+    }
+
+    function handleClockMousedown(e) {
+        if (tl) tl.pause();
+        if ((!e || e.button == 0) && hours) {
+            scaleUp(!(localStorage.getItem('hours') === 'scaled'));
         }
     }
 
     function handleClockMouseUp(e) {
-        if (e.button !== 0) return;
+        if (e.button !== 0 || !hours) return;
         if (tl) tl.pause();
 
         let animation: any = {
-            targets: '#hours',
+            targets: hours,
             duration: 200,
             rotate: 0,
             easing: 'easeOutElastic',
-            complete() {
-                document.querySelector('#hours').classList.remove('scaling')
-            }
+            complete() { hours.classList.remove('scaling') }
         };
 
-        if (!document.querySelector('#hours').classList.contains('scaled')) animation.scale = 1;
+        if (!(localStorage.getItem('hours') === 'scaled')) animation.scale = 1;
         tl = anime(animation)
     }
 
     let c = 0;
     function handleClockCM(e) {
         e.preventDefault();
-        
-        tl = anime({
-            targets: '#hours',
-            duration: 250,
-            rotate: [5, -5, 5, -5, 0],
-            easing: 'linear',
-            complete() {
-                document.getElementById('hours').style.color = c > 10 ? null : randomcolor({ luminosity: 'bright' });
-                c > 10 ? c = 0 : c++;
-            }
-        })
+        changeColor(c > 10 ? null : randomcolor({ luminosity: 'bright' }));
+        c > 10 ? c = 0 : c++;
     }
+
+    onMount(async() => {
+        await tick();
+        if (localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
+        if (localStorage.getItem('hoursColor')) changeColor(localStorage.getItem('hoursColor'), false);
+    })
 </script>
 
-<span id="hours" on:mousedown={handleClockMousedown} on:mouseup={handleClockMouseUp} on:contextmenu={handleClockCM}>
+<span bind:this={hours} id="hours" on:mousedown={handleClockMousedown} on:mouseup={handleClockMouseUp} on:contextmenu={handleClockCM} style="transition: color .05s linear;">
     { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
 </span>
