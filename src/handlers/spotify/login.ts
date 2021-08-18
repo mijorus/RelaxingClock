@@ -3,7 +3,13 @@ import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
 import { spotifyPlayerStatus, spotifyUrl } from '../../stores/spotify';
 import { createNewSpotifyPlayer } from './player';
 
+let loginTimeout: NodeJS.Timeout;
 export async function attemptSpotifyLogin() {
+    loginTimeout = setTimeout(() => {
+        spotifyPlayerStatus.set('error');
+        throw 'Login request timed out'
+    }, 60 * 1000);
+
     if (!localStorage.getItem('userHasLogged')) {
         if (!urlParams.get('state')) {
             //The user has never logged before to the app
@@ -31,6 +37,7 @@ export async function attemptSpotifyLogin() {
         window.onSpotifyWebPlaybackSDKReady = () => {
             spotifyPlayerStatus.set('connecting');
             createNewSpotifyPlayer()
+                .then(() => clearTimeout(loginTimeout))
                 .catch(err => {
                     spotifyPlayerStatus.set('error');
                     console.log(err);

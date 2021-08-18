@@ -29,7 +29,10 @@ import screenSaverHandler from "./handlers/screenSaver";
     }   
 
 	onMount(() => {
-        if ($onlineStatus) attemptSpotifyLogin();
+        if ($onlineStatus) {
+            attemptSpotifyLogin()
+                .catch((e) => console.error(e))
+        }
     });
 </script>
 
