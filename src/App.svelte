@@ -14,7 +14,7 @@ import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 import AlarmRing from './components/elements/AlarmRing.svelte';
 import screenSaverHandler from "./handlers/screenSaver";
 
-    screenSaverHandler.set(20 * 1000);
+    screenSaverHandler.set(1 * 1000);
 
     $: getUserData($spotifyAccessToken);
 

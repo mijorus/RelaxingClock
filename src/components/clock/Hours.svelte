@@ -97,7 +97,7 @@ import { onMount, tick } from "svelte";
     })
 </script>
 
-<span bind:this={hours} id="hours" 
+<span bind:this={hours} id="hours" class="inline-block"
     on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
     on:mousedown={handleClockMousedown} 
     on:mouseup={handleClockMouseUp} 

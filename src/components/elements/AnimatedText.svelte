@@ -33,18 +33,20 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 
     function scrollText(el: HTMLElement) {
-        scrollTl = anime.timeline({
-            targets: el,
-            easing: cbDefault,
-            loop: true,
-            direction: 'alternate',
-            autoplay: true,
-            delay: getRandomIntInclusive(5000, 7000),
-        })
-            .add({
-                translateX: - (el.scrollWidth - el.clientWidth), 
-                duration: getRandomIntInclusive(13000, 16000),
-            }, '+=50');
+        if (el) {
+            scrollTl = anime.timeline({
+                targets: el,
+                easing: cbDefault,
+                loop: true,
+                direction: 'alternate',
+                autoplay: true,
+                delay: getRandomIntInclusive(5000, 7000),
+            })
+                .add({
+                    translateX: - (el.scrollWidth - el.clientWidth), 
+                    duration: getRandomIntInclusive(13000, 16000),
+                }, '+=50');
+        }
     }
 </script> 
 
