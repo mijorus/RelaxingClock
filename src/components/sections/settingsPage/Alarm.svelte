@@ -36,11 +36,11 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     $: periodicCheck($time);
 
     function periodicCheck(time: Moment) {
-        if (time.seconds() === 0) {
-            if (!$alarmIsRinging && $alarmTime && ($alarmTime <= time.unix()) && (time.unix() - $alarmTime <= (minutesPassedCheck * 60))) {
+        if (time.seconds() === 0 && $alarmTime) {
+            if (!$alarmIsRinging && (time.unix() >= $alarmTime) && ((time.unix() - $alarmTime) < (minutesPassedCheck * 60))) {
                 ring();
-                console.log('ring');
-            } else if (alarmTime && (time.unix() - $alarmTime > minutesPassedCheck * 60)) {
+            } else if (((moment($alarmTime, 'X').isSameOrBefore(moment().subtract(minutesPassedCheck, 'm'))))) {
+                console.log('removing old alarms');
                 clearAlarmMemory();
             }
         }
@@ -52,10 +52,13 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         }
     }
 
+    function timeCompensation() {
+        return ($clockFormat === '12h' && (parseInt(hours) < moment().hours()) ? 12 : 0);
+    }
+
     function handleAlarmKeyUp() {
-        let timeCompensation = $clockFormat === '12h' && parseInt(hours) < moment().hours() ? 12 : 0;
-        alarm = moment().hours(parseInt(hours) + timeCompensation).minutes(parseInt(minutes));
-        alarmIsTomorrow =  alarm.isBefore(moment());
+        const a = moment().hours(parseInt(hours) + timeCompensation()).minutes(parseInt(minutes));
+        alarmIsTomorrow =  a.isBefore(moment());
     }
 
     function handleShortcuts(event: KeyboardEvent) {
@@ -78,12 +81,9 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         ]);
     }
 
-    function alarmTimeIsValid(h: number, m: number) {
-        return (h <= ($clockFormat === '24h' ? 24 : 12) || m <= 59)
-    }
-
     function saveInput() {
-        if (!alarm.isValid() || !alarmTimeIsValid(parseInt(hours), parseInt(minutes))) {
+        alarm = moment().hours(parseInt(hours) + timeCompensation()).minutes(parseInt(minutes))
+        if (!alarm.isValid() || (parseInt(hours) > ($clockFormat === '24h' ? 24 : 12) || parseInt(minutes) > 59)) {
             shakeElement(creationBox);
             return;
         }
@@ -202,7 +202,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     >
         <Action 
             custom
-            label={$alarmTime ? 'Dismiss' : "Set"} on:click={$alarmTime ? dismissAlarm : openCreationBox} 
+            label={$alarmTime ? 'Dismiss' : "Set"} on:click={(e) =>{ $alarmTime ? dismissAlarm() : openCreationBox()} } 
             customClass={$alarmTime ? 'bg-red-700 border-red-700 text-primary' : 'text-secondary bg-highlighted border-primary'}  
         ></Action>
     </PrimaryBox>

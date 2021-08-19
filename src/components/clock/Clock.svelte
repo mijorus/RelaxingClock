@@ -1,17 +1,19 @@
 <script lang="ts">
-    import { windowReady } from 'html-ready';
+import { windowReady } from 'html-ready';
 
-    import styles from "./clockStyles/styles";
-    import { activeStyle } from "../../stores/storedSettings";
-    import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
-    import anime from "animejs";
-    import { eaElasticDefault } from "../../utils/animations";
+import styles from "./clockStyles/styles";
+import { activeStyle } from "../../stores/storedSettings";
+import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
+import anime from "animejs";
+import { eaElasticDefault } from "../../utils/animations";
+import { onMount } from 'svelte';
 
     let bigClock: HTMLElement;
     $: setCurrentPosition($activeStyle)
 
     async function setCurrentPosition(activeStyle: number) {
         await windowReady;
+
         const toStyleId: number =  styles[activeStyle].id;
 
         anime({
@@ -23,6 +25,10 @@
             complete() { activeStyleId.set(toStyleId) }
         })
     }
+
+    onMount(() => {
+        if (!$activeStyle) activeStyle.set(0);
+    })
 </script>
 
 <div 

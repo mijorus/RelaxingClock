@@ -1,5 +1,6 @@
 <script lang="ts">
 import anime from "animejs";
+import { tick } from "svelte";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
 
@@ -21,8 +22,9 @@ import { getRandomIntInclusive } from "../../utils/utils";
                 opacity: [1, 0],
                 direction: 'alternate',
                 loopComplete() { displayedText = text },
-                complete() {
-                    if (el.scrollWidth - 5 > el.clientWidth) scrollText(el);
+                async complete() {
+                    await tick();
+                    if (el && el.scrollWidth - 5 > el.clientWidth) scrollText(el);
                 }
             });
         }

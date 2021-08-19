@@ -32,9 +32,12 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
 
     function set(value: string | number) {
         stored.set(value);
-        
-        if (typeof value !== 'string') value = JSON.stringify(value);
-        localStorage.setItem(key, value);
+        if (value === undefined || value === null) {
+            localStorage.removeItem(key);
+        } else {
+            if (typeof value !== 'string') value = JSON.stringify(value);
+            localStorage.setItem(key, value);
+        }
     }
 
     return {

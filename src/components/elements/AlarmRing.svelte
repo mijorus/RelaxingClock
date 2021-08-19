@@ -30,6 +30,8 @@ import AnimatedText from "./AnimatedText.svelte";
         <div><button class="alarm-btn lnr lnr-cross text-8xl font-bold" on:mouseenter={() => action = 'Dismiss'} on:mouseleave={resetAction} on:click={() => dismiss()}></button></div>
     </div>
     <div class="text-3xl"><AnimatedText text={action} /></div>
+    <!-- svelte-ignore a11y-media-has-caption -->
+    <audio id="alarm-audio" loop autoplay src="/media/static_media_alarm.mp3" />
 </div>
 {/if}
 

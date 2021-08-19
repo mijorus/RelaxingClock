@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { fly, fade, slide } from "svelte/transition";
-    import type { RoosterExample, RoosterExamples } from "../../types"; 
+
+    import { fly, fade } from "svelte/transition";
+    import type { RoosterExamples } from "../../types"; 
     import { capitalize } from "../../utils/utils";
     
     let selected = 0;
@@ -17,6 +18,7 @@
         if (!examples || !(examples.group.filter(e => e.selectable).length)) return null;
         return examples.group[selected].id || selected; 
     }
+
 </script>
 
 <div class="text-primary md:w-2/5 font-secondary -mb-8" >
@@ -29,7 +31,7 @@
                             <div class:bg-primary={(i === selected && example.selectable)}
                                 class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden" 
                                 in:fly={{ y: 5, duration: 200 }} 
-                                out:fade={{ duration:100 }}
+                                out:fade={{ duration: 100 }}
                             >
                                 {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
