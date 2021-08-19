@@ -22,5 +22,7 @@
                 <p class="whitespace-nowrap">{data.content}</p>
             </div>
         </div>
+        <!-- svelte-ignore a11y-media-has-caption -->
+        {#if data?.sound} <audio autoplay src="/media/static_media_notification.mp3"/> {/if}
     </Bubble>
 </div>

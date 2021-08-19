@@ -7,10 +7,12 @@
 
     $: setToShow($latestNotification)
 
+    let timeout;
     function setToShow(n: Notification) {
+        clearTimeout(timeout);
         if (notificationToShow) notificationToShow = null; 
         notificationToShow = n;
-        const timeout = setTimeout(() => notificationToShow = null, 8000);
+        timeout = setTimeout(() => notificationToShow = null, 8000);
     }
 
 
@@ -19,11 +21,5 @@
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
     {#if notificationToShow}
         <NotificationComponent data={notificationToShow} expire={true} />
-    {/if}
-
-    {#if false}
-        {#each $notifications as notification}
-            <NotificationComponent data={notification} />
-        {/each}
     {/if}
 </aside>

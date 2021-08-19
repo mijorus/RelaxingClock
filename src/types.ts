@@ -64,6 +64,7 @@ export interface Notification {
     content: string;
     icon: string;
     color?: string;
+    sound?: boolean;
 }
 
 export type ReminderType = 'simple' | 'repeated';
