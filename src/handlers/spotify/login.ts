@@ -1,7 +1,7 @@
 import { urlParams } from '../../utils/utils';
 import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
 import { spotifyPlayerStatus, spotifyUrl } from '../../stores/spotify';
-import { createNewSpotifyPlayer, getOAuthToken, refershOrGetOAuthToken } from './player';
+import { createNewSpotifyPlayer, refershOrGetOAuthToken } from './player';
 import time from '../../stores/time';
 import { setTokenTtl, tokenTtl } from '../../lib/spotify/SpotifyClient';
 
