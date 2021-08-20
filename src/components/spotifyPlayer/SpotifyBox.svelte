@@ -1,5 +1,5 @@
 <script lang="ts">
-import { fly } from "svelte/transition";
+import { fade, fly } from "svelte/transition";
 
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
@@ -130,8 +130,8 @@ import Shuffle from "../icons/Shuffle.svelte";
                         {/if} 
                     {/if}
                 {:else if $spotifyPlayerStatus === 'connecting' || ($spotifyPlayerStatus === 'ready' && $spotifyPlayerState?.loading)}
-                    <div class="transform scale-50 relative">
-                        <div class="line-scale">
+                    <div class="transform scale-50 relative" style="transform-origin: right;">
+                        <div class="line-scale m-0 p-0">
                             <div></div><div></div><div></div><div></div><div></div>
                         </div>
                     </div>

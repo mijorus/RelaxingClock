@@ -40,8 +40,8 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
                 tip = `[Album${item.release_date ? (' - ' + item.release_date) : ''}]`;
             }
             
-            
-            const image = (key === 'tracks') ? item.album.images[item.album.images.length - 1].url : item.images[item.images.length - 1].url;
+            const images =  item?.album?.images ? item.album.images : item.images;
+            const image = images.length ? images[images.length - 1].url : '';
             return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue ? `>>${item.name}<<` : '') + item.uri, size};
         });
 
