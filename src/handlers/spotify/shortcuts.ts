@@ -48,7 +48,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
         exampleList.push(...list);
     }
     
-    examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
+    examples.group = exampleList.reverse().sort((a, b) => b.size === 'md' ? 1 : -1);
     examples.namespace = type;
     oldRes = res;
 
