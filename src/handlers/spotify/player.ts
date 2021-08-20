@@ -1,5 +1,6 @@
+import moment from 'moment';
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
-import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
+import { setTokenTtl, SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
 import { createShortcuts } from './shortcuts';
 
@@ -7,35 +8,41 @@ export let SpotifyPlayer: Spotify.Player;
 export let device_id: string;
 const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
 
+export async function refershOrGetOAuthToken() {
+    let response;
+    //We request a token for the first time
+    if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
+        response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
+        localStorage.removeItem('verifier');
+    }
+    
+    else if (localStorage.getItem('refreshToken')) {
+        //We need to request a new token using refreshToken
+        try { 
+            response = await authClient.refreshToken(localStorage.getItem('refreshToken'));
+        } catch(err) {
+            console.error(err);
+            if (err.status === 400 && err.data.error === 'invalid_grant') spotifyPlayerStatus.set('expired');
+            throw err;
+        }
+    }
+    
+    localStorage.removeItem('code');
+    localStorage.setItem('refreshToken', response.refresh_token);
+    if (response.expires_in) setTokenTtl(~~(Date.now() / 1000) + response.expires_in);
+    SpotifyClient.setAccessToken(response.access_token);
+    spotifyAccessToken.set(response.access_token);
+    return response.access_token;
+}
+
 export async function createNewSpotifyPlayer() {
     console.log('creating spotify player');
 
     SpotifyPlayer = new Spotify.Player({
         name: 'Relaxing Clock',
         getOAuthToken: async (callback) => {
-            let response;
-            //We request a token for the first time
-            if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
-                response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
-                localStorage.removeItem('verifier');
-            }
-            
-            else if (localStorage.getItem('refreshToken')) {
-                //We need to request a new token using refreshToken
-                try { 
-                    response = await authClient.refreshToken(localStorage.getItem('refreshToken'));
-                } catch(err) {
-                    console.error(err);
-                    if (err.status === 400 && err.data.error === 'invalid_grant') spotifyPlayerStatus.set('expired');
-                    throw err;
-                }
-            }
-            
-            localStorage.removeItem('code');
-            localStorage.setItem('refreshToken', response.refresh_token);
-            SpotifyClient.setAccessToken(response.access_token);
-            spotifyAccessToken.set(response.access_token);
-            callback(response.access_token);
+            const access_token = await refershOrGetOAuthToken().catch((e) => console.error(e));
+            callback(access_token);
         }
     });
 

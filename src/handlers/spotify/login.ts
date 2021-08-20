@@ -1,7 +1,9 @@
 import { urlParams } from '../../utils/utils';
 import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
 import { spotifyPlayerStatus, spotifyUrl } from '../../stores/spotify';
-import { createNewSpotifyPlayer } from './player';
+import { createNewSpotifyPlayer, getOAuthToken, refershOrGetOAuthToken } from './player';
+import time from '../../stores/time';
+import { setTokenTtl, tokenTtl } from '../../lib/spotify/SpotifyClient';
 
 let loginTimeout: NodeJS.Timeout;
 export async function attemptSpotifyLogin() {
@@ -37,7 +39,10 @@ export async function attemptSpotifyLogin() {
         window.onSpotifyWebPlaybackSDKReady = () => {
             spotifyPlayerStatus.set('connecting');
             createNewSpotifyPlayer()
-                .then(() => clearTimeout(loginTimeout))
+                .then(() => {
+                    clearTimeout(loginTimeout);
+                    autoRefeshToken();
+                })
                 .catch(err => {
                     spotifyPlayerStatus.set('error');
                     console.log(err);
@@ -61,3 +66,14 @@ function throwAuthError(reason = '') {
     }
 }
 
+function autoRefeshToken(enable = true) {
+    let working = false;
+    time.subscribe((t) => {
+        if (!working && (t.unix() >= tokenTtl)) {
+            working = true;
+            console.log('Auto-refresh spotify token');
+            refershOrGetOAuthToken()
+                .finally(() => working = false)
+        }
+    })
+}
