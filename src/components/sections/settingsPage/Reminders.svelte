@@ -127,7 +127,7 @@
             at = moment().add(10, 'm');
         }
         
-        title = tokens[1].trim();
+        title = (tokens[1] ?? tokens[0]).trim();
         let type: ReminderType = 'simple';
         if (params.match(/!$/)) {
            type = 'repeated';
@@ -246,7 +246,7 @@
     >
         <Action label="Create" on:click={openCreationBox}></Action>
     </PrimaryBox>
-    <NestedBox label="All your reminders" bordered={false} available={reminders.length > 0} expandable>
+    <NestedBox label="{futureReminders.length ? '• ' : ''}All your reminders" bordered={false} available={reminders.length > 0} expandable>
         {#if futureReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
