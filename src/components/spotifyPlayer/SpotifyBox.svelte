@@ -121,7 +121,7 @@ import Shuffle from "../icons/Shuffle.svelte";
             <!-- the box to the right of the bubble where the play button is located -->
             <span class="justify-self-end text-xl absolute p-1 right-4 transition-all {playbackStarted ? 'rounded-full bg-opacity-60 bg-primary' : ''}" 
                 style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};">
-                {#if $spotifyPlayerStatus === 'ready'}
+                {#if $spotifyPlayerStatus === 'ready' && !$spotifyPlayerState?.loading}
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                         <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
@@ -129,7 +129,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                             <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
                         {/if} 
                     {/if}
-                {:else if $spotifyPlayerStatus === 'connecting'}
+                {:else if $spotifyPlayerStatus === 'connecting' || ($spotifyPlayerStatus === 'ready' && $spotifyPlayerState?.loading)}
                     <div class="transform scale-50 relative">
                         <div class="line-scale">
                             <div></div><div></div><div></div><div></div><div></div>
