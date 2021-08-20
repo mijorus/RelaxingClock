@@ -40,13 +40,13 @@ export async function attemptSpotifyLogin() {
             spotifyPlayerStatus.set('connecting');
             createNewSpotifyPlayer()
                 .then(() => {
-                    clearTimeout(loginTimeout);
                     autoRefeshToken();
                 })
                 .catch(err => {
                     spotifyPlayerStatus.set('error');
                     console.log(err);
                 }) 
+                .finally(() => clearTimeout(loginTimeout))
         };
     }
 }
