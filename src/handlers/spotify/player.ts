@@ -65,7 +65,7 @@ export async function createNewSpotifyPlayer() {
 
     SpotifyPlayer.addListener('player_state_changed', (state) => {
         console.log(state);
-        spotifyPlayerState.set({...state});
+        spotifyPlayerState.set(state ? {...state} : null);
     });
 }
 

@@ -87,7 +87,7 @@ import Shuffle from "../icons/Shuffle.svelte";
         <div class="flex flex-row items-center">
             <!-- the spotify or album icon -->
             <span class="pr-2" class:flex={albumCover}>
-                {#if albumCover}
+                {#if albumCover && $spotifyPlayerState}
                     <div class="bg-cover w-14 h-14 rounded-md bg-no-repeat flex items-center justify-center" 
                         style="background-image: url({expandedBox ? '' : albumCover[0].url})"
                     >
