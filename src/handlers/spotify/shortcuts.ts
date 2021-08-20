@@ -1,6 +1,8 @@
+import { get } from 'svelte/store';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
+import { spotifyPlayerState } from '../../stores/spotify';
 import type { RoosterExample, RoosterExampleImageSize, RoosterExamples } from '../../types';
 import { device_id } from './player';
 
@@ -55,6 +57,27 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     return examples;
 }
 
+async function loadQueue(): Promise<RoosterExamples> {
+    const playerState = get(spotifyPlayerState);
+
+    if (playerState.track_window?.next_tracks.length) {
+        return {
+            'namespace': 'Queue',
+            'group': playerState.track_window.next_tracks.map((el, i) => {
+                return {
+                    'argument': '#' + (i + 1).toString(),
+                    'example': el.name,
+                    'selectable': false,
+                    'size': 'sm',
+                    'image': el?.album?.images[0]?.url || '',
+                }
+            })
+        }
+    } else {
+        return {'group': [], 'namespace': 'Queue'};
+    }
+}
+
 export function createShortcuts() {
     let args: any = {};
     ['search','album','playlist', 'track'].forEach(el => {
@@ -91,12 +114,21 @@ export function createShortcuts() {
                     try { await SpotifyClient.pause({device_id}); return true;}
                     catch(e) { console.error(e); return false;}
                 }
+            },
+            queue: {
+                async callback() {
+                    return false;
+                }
             }
         }, 
         async examples(arg, params) {
             if (['search','album','playlist', 'track'].find(a => a === arg)) {
                 //@ts-ignore
                 return loadSearch(params, arg);
+            }
+
+            else if (arg === 'queue') {
+                return loadQueue();
             }
 
             return null;

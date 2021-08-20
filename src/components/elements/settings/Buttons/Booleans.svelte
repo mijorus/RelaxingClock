@@ -1,7 +1,7 @@
 <script lang="ts">
     export let state: boolean;
     export let label: string;
-    export let states = ['ON', 'OFF'];
+    const states = ['ON', 'OFF'];
 
     const btnsClass: string = 'text-md text-center settings-btn px-2 py-1 rounded-xl font-primary font-bold relative z-10';
 

@@ -9,6 +9,7 @@ import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
+import Booleans from "../elements/settings/Buttons/Booleans.svelte";
 import SmoothImage from "../elements/SmoothImage.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
@@ -71,7 +72,9 @@ import Shuffle from "../icons/Shuffle.svelte";
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-80 h-auto rounded-xl" />
-            <p class="mt-1"><AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/></p>
+            <p class="mt-1 flex">
+                <b class="pr-1">[Album]</b><AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/>
+            </p>
             <p>
                 <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
@@ -80,7 +83,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
                 </i>
             </p>
-            <p class="mt-2 text-xs text-secondary text-center" style="line-height: 1;">Use Spotify Connect to control "<b>Relaxing Clock</b>" with the phone app</p>
+            <p class="mt-2 text-xs text-secondary text-center" style="line-height: 1;"><span class="lnr lnr-question-circle"></span> Use Spotify Connect to control "<b>Relaxing Clock</b>" with the phone app</p>
         </div>
     {/if}
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? boxClasses + ' rounded-xl border-2 transition-all rounded-xl': ''}>
