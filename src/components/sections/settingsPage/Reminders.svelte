@@ -40,7 +40,8 @@
         
             for (const reminder of futureReminders) {
                 if (reminder.at < time.unix() && !reminder.done) {
-                    notifications.create({ 
+                    notifications.create({
+                        sound: true,
                         title: reminder.title, 
                         content: reminder.type === 'repeated' ? 'Interact to dismiss' : '',
                         icon: 'lnr lnr-calendar-full',
