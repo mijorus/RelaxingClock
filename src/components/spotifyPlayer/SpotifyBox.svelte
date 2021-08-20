@@ -1,18 +1,21 @@
 <script lang="ts">
+import moment from "moment";
+import momentDurationFormatSetup from 'moment-duration-format';
 import { fade, fly } from "svelte/transition";
-
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { screenSaver } from "../../stores/globalState";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
+import time from "../../stores/time";
 import type { SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
-import Booleans from "../elements/settings/Buttons/Booleans.svelte";
 import SmoothImage from "../elements/SmoothImage.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
+
+    momentDurationFormatSetup(moment);
 
     let preloadLabel = '';
     let loader = '';
@@ -22,6 +25,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     let albumCover: Spotify.Image[];
     let expandedBox = false;
     let playbackStarted = false;
+    let songPosition = 0;
 
     $: boxClasses = $screenSaver && !playbackStarted 
         ? 'bg-transparent border-transparent' 
@@ -33,6 +37,14 @@ import Shuffle from "../icons/Shuffle.svelte";
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
+            songPosition = ~~($spotifyPlayerState.position / 1000);
+        }
+    }
+
+    $: {
+        if (!$spotifyPlayerState?.paused && $spotifyPlayerState?.duration && $time) {
+            songPosition = $spotifyPlayerState.duration === songPosition ? songPosition : songPosition + 1;
+            console.log(songPosition);
         }
     }
 
@@ -72,10 +84,10 @@ import Shuffle from "../icons/Shuffle.svelte";
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-80 h-auto rounded-xl" />
-            <p class="mt-1 flex">
-                <b class="pr-1">[Album]</b><AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/>
+            <p class="mt-1 relative w-full text-center">
+                <AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/>
             </p>
-            <p>
+            <p class="mt-1">
                 <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
                 </i>
@@ -83,7 +95,13 @@ import Shuffle from "../icons/Shuffle.svelte";
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
                 </i>
             </p>
-            <p class="mt-2 text-xs text-secondary text-center" style="line-height: 1;"><span class="lnr lnr-question-circle"></span> Use Spotify Connect to control "<b>Relaxing Clock</b>" with the phone app</p>
+            <p class="text-secondary mt-1">
+                {moment.duration(songPosition, 's').format('mm:ss', { trim: false })}/{moment.duration($spotifyPlayerState?.duration, 'millisecond').format('mm:ss', { trim: false })}
+            </p>
+            <p class="mt-1 text-xs text-secondary text-center" style="line-height: 1;">
+                <span class="lnr lnr-question-circle"></span> Use Spotify Connect to control <br>
+                "<b>Relaxing Clock</b>" with the phone app
+            </p>
         </div>
     {/if}
     <Bubble classes={$spotifyPlayerStatus === 'ready' ? boxClasses + ' rounded-xl border-2 transition-all rounded-xl': ''}>
