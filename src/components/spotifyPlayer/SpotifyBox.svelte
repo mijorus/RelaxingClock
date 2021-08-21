@@ -38,6 +38,8 @@ import Shuffle from "../icons/Shuffle.svelte";
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
             songPosition = ~~($spotifyPlayerState.position / 1000);
+        } else {
+            expandedBox = false;
         }
     }
 
@@ -87,13 +89,17 @@ import Shuffle from "../icons/Shuffle.svelte";
             <p class="mt-1 relative w-full text-center">
                 <AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name}/>
             </p>
-            <p class="mt-1">
-                <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
+            <p class="mt-1 flex items-center">
+                <i class="mx-2 cursor-pointer inline-block fas fa-backward text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
+                    on:click={() => SpotifyPlayer.previousTrack()}></i>
+                <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
                 </i>
-                <i class="cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
+                <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
                 </i>
+                <i class="mx-2 fas fa-forward cursor-pointer inline-block text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
+                    on:click={() => SpotifyPlayer.nextTrack()}></i>
             </p>
             <p class="text-secondary mt-1">
                 {moment.duration(songPosition, 's').format('mm:ss', { trim: false })}/{moment.duration($spotifyPlayerState?.duration, 'millisecond').format('mm:ss', { trim: false })}

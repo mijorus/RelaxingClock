@@ -14,7 +14,7 @@
     </Title>
     <PrimaryBox 
         label={{text: 'Keep the colors vibrant'}} 
-        description={{text:'Keep the colors bright and vivid when the screen saver is active, super useful if you want'}}
+        description={{text:'Keep the colors bright and vivid when the screen saver is active, super useful if you want <b>Relaxing Clock</b> to shine!'}}
         available={true}
     >
         <Booleans state={true} label={'test'}/>

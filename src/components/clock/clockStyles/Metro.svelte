@@ -1,16 +1,17 @@
 <script lang="ts">
-    import anime from 'animejs';
-    import { blink, visibleStylesId } from '../../../stores/clockStyle';
-    import time from '../../../stores/time';
-    import { screenSaver } from '../../../stores/globalState'
-    import { cbDefault, eaElasticDefault } from '../../../utils/animations';
-    import { cities } from '../../../handlers/citiesBg';
-    import { windowReady } from 'html-ready';
-    import Hours from '../Hours.svelte';
-    import Minutes from '../Minutes.svelte';
-    import StyleBase from './StyleBase.svelte';
+import anime from 'animejs';
+import { visibleStylesId } from '../../../stores/clockStyle';
+import time from '../../../stores/time';
+import { screenSaver } from '../../../stores/globalState'
+import { cbDefault, eaElasticDefault } from '../../../utils/animations';
+import { cities } from '../../../handlers/citiesBg';
+import { windowReady } from 'html-ready';
+import Hours from '../Hours.svelte';
+import Minutes from '../Minutes.svelte';
+import StyleBase from './StyleBase.svelte';
+import { blink } from '../../../stores/storedSettings';
     
-    const styleId = 3;
+const styleId = 3;
     let container: HTMLElement;
     const zoomedOut = 0.8;
     const shiftedUp = '-25%';

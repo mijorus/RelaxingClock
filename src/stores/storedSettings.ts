@@ -23,7 +23,7 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
             value = parseFloat(value);
             break;
         case 'boolean': 
-            value = JSON.parse(value);
+            value = (value === 'true');
             break;
         }
     }

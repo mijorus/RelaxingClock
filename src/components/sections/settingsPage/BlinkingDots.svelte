@@ -1,9 +1,10 @@
 <script lang="ts">
-    import SettingsBox from '../../elements/SettingsBox.svelte';
-    import Title from "../../elements/settings/Title.svelte";
-    import TitleIcon from "../../elements/settings/TitleIcon.svelte";
-    import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
-    import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
+import SettingsBox from '../../elements/SettingsBox.svelte';
+import Title from "../../elements/settings/Title.svelte";
+import TitleIcon from "../../elements/settings/TitleIcon.svelte";
+import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
+import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
+import { blink } from '../../../stores/storedSettings';
 </script>
 
 <SettingsBox>
@@ -14,9 +15,9 @@
     </Title>
     <PrimaryBox 
         label={{text: 'Let the dots pulsing at rhythm'}} 
-        description={{text:'Keep the colors bright and vivid when the screen saver is active, super useful if you want'}}
+        description={{text:'You can keep the dots fixed if you find them distracting'}}
         available={true}
     >
-        <Booleans state={true} label={'test'}/>
+        <Booleans state={$blink} label={'test'} on:change={(e) => blink.set(e.detail)}/>
     </PrimaryBox>
 </SettingsBox>

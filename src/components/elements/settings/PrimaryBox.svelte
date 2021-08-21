@@ -2,7 +2,6 @@
 import AnimatedText from "../AnimatedText.svelte";
 import Hint from "./Hint.svelte";
 
-    
     interface SettingsLabel {
         text: string,
         bgClass?: string,
