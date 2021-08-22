@@ -222,6 +222,21 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
             summoned.set(false);
         }
 
+<<<<<<< HEAD
+=======
+        // Spotify's quick shortcut
+        // else if ($spotifyPlayerStatus === 'ready' && event.altKey) {
+        //     if (event.key === 'l') {
+        //         summoned.set(true);
+        //         injectAction('spotify', 'search');
+        //     } 
+            
+        //     else if (event.key === 't') {
+        //         summoned.set(true);
+        //         injectAction('spotify', 'track');
+        //     }
+        // }
+>>>>>>> edec2306aef671f6ddc9c7a3c920285f4ca4d11e
         else if (event.altKey) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
