@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { tick } from "svelte";
-    import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
-    import { fade } from "svelte/transition";
-    import { caretToEnd, shakeElement } from "../../utils/utils";
-    import Examples from "./Examples.svelte";
-    import type { RoosterExamples } from "../../types";
+import { tick } from "svelte";
+import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
+import { fade } from "svelte/transition";
+import { caretToEnd, shakeElement } from "../../utils/utils";
+import Examples from "./Examples.svelte";
+import type { RoosterExamples } from "../../types";
+import { spotifyPlayerStatus } from "../../stores/spotify";
 
     let rooster: HTMLElement;
 
@@ -29,6 +30,15 @@
     $: handleSummon($summoned);
     $: handleCommand(command);
     $: handleArgument(argument);
+
+    function injectAction(cmd: string, arg: string) {
+        command = cmd + ':'; 
+        argument = arg;
+        commandPill.background = shortcuts.get(clearCommand()).background ?? null;
+        commandPill.color = shortcuts.get(clearCommand()).color ?? null;
+        handleCommand(command);
+        tick().then(() => paramsBox.focus());
+    }
 
     function clearCommand() {
         return command.replace(/:$/, '');
@@ -127,12 +137,8 @@
                     else { chc = chc + 1 }
                 }
                                 
-                command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
-                commandPill.background = shortcuts.get(clearCommand()).background ?? null;
-                commandPill.color = shortcuts.get(clearCommand()).color ?? null;
-                handleCommand(command);
-                
-                paramsBox.focus();
+                // command = commandHistory[chc].command + ':'; argument = commandHistory[chc].argument;
+                injectAction(commandHistory[chc].command, commandHistory[chc].argument);
             } else {
                 shakeElement(rooster);
             }
@@ -214,6 +220,20 @@
         else if (event.code === 'Escape' && $summoned) {
             resetInputs();
             summoned.set(false);
+        }
+
+        else if (event.altKey) {
+            for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
+                for (const [a, arg] of Object.entries(cmd.arguments)) {
+                    console.log(arg.quickLaunch);
+                    if (arg.quickLaunch === event.key) {
+                        event.preventDefault();
+                        summoned.set(true);
+                        injectAction(c, a);
+                        return;
+                    }
+                }
+            }
         }
 	}
 
