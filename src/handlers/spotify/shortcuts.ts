@@ -3,7 +3,7 @@ import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
-import type { RoosterExample, RoosterExampleImageSize, RoosterExamples } from '../../types';
+import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
 import { device_id } from './player';
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
@@ -79,7 +79,7 @@ async function loadQueue(): Promise<RoosterExamples> {
 }
 
 export function createShortcuts() {
-    let args: any = {};
+    let args: {[key: string]: RoosterArgument} = {};
     ['search','album','playlist', 'track'].forEach(el => {
         args[el] = {
             async callback(p, id: string) {
@@ -103,6 +103,9 @@ export function createShortcuts() {
             }
         }
     });
+
+    args.search.quickLaunch = 'l';
+    args.track.quickLaunch = 't';
 
     shortcuts.set('spotify', {
         background: process.env.SPOTIFY_COLOR,

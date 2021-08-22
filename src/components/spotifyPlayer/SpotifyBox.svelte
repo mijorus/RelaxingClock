@@ -46,7 +46,6 @@ import Shuffle from "../icons/Shuffle.svelte";
     $: {
         if (!$spotifyPlayerState?.paused && $spotifyPlayerState?.duration && $time) {
             songPosition = $spotifyPlayerState.duration === songPosition ? songPosition : songPosition + 1;
-            console.log(songPosition);
         }
     }
 
