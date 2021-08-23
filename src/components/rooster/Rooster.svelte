@@ -295,4 +295,8 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
         border: none;
         outline: none;
     }
+
+    .contenteditable {
+        white-space: nowrap;
+    }
 </style>
