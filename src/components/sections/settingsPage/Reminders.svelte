@@ -111,8 +111,8 @@
     }
 
     async function handleRoosterShortcut(params: string) {
-        let title: string, at: Moment;
         const tokens = params.split(/\s(.+)/);
+        let title = (tokens[1] ?? tokens[0]).trim(), at: Moment;
         
         if (tokens[0].startsWith('tomorrow@') || tokens[0].startsWith('tm@')) {
             at = moment(tokens[0].replace(/[^@]+/, ''), 'HH:mm');
@@ -124,10 +124,10 @@
         }
         
         else { 
+            title = params.trim()
             at = moment().add(10, 'm');
         }
         
-        title = (tokens[1] ?? tokens[0]).trim();
         let type: ReminderType = 'simple';
         if (params.match(/!$/)) {
            type = 'repeated';
@@ -157,6 +157,7 @@
                 arguments: {
                     create: {
                         active: true,
+                        quickLaunch: 'r',
                         callback: p => handleRoosterShortcut(p),
                     },
                     dismiss: {
