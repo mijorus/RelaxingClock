@@ -5,14 +5,28 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import { blink } from '../../../stores/storedSettings';
-import time from '../../../stores/time';
+import anime from 'animejs';
+import { cbDefault } from '../../../utils/animations';
+
+$: {
+    if ($blink) {
+        anime({
+            targets: '.blick-icon',
+            opacity: [0.3, 1],
+            duration: 400,
+            loop: 5,
+            direction: 'alternate',
+            easing: cbDefault,
+        })
+    }
+}
 
 </script>
 
 <SettingsBox>
     <Title title="Blinking dots">
         <TitleIcon>
-            <i class="lnr lnr-eye text-primary settings-title-icon transition-opacity" class:opacity-30={$blink && ($time.seconds() % 2)}></i>
+            <i class="lnr blick-icon lnr-eye text-primary settings-title-icon" class:opacityy-30={!$blink}></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 
@@ -23,3 +37,9 @@ import time from '../../../stores/time';
         <Booleans state={$blink} label={'test'} on:change={(e) => blink.set(e.detail)}/>
     </PrimaryBox>
 </SettingsBox>
+
+<style>
+    .opacityy-30 {
+        opacity: 0.3 !important;
+    }
+</style>
