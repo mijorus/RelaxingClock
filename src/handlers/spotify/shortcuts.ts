@@ -41,6 +41,10 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             else if (key === 'albums') {
                 tip = `[Album${item.release_date ? (' - ' + item.release_date) : ''}]`;
             }
+
+            else if (key === 'playlists') {
+                if (item?.owner?.display_name) tip = 'by ' + item?.owner?.display_name;
+            }
             
             const images =  item?.album?.images ? item.album.images : item.images;
             const image = images.length ? images[images.length - 1].url : '';

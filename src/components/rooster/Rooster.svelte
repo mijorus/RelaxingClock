@@ -225,7 +225,6 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
         else if (event.altKey) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
-                    console.log(arg.quickLaunch);
                     if (arg.quickLaunch === event.key) {
                         event.preventDefault();
                         summoned.set(true);
