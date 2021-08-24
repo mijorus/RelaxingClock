@@ -29,7 +29,7 @@ import Shuffle from "../icons/Shuffle.svelte";
 
     $: boxClasses = $screenSaver && !playbackStarted 
         ? 'bg-transparent border-transparent' 
-        : playbackStarted ? "border-transparent text-primary bg-tertiary text-primary" : 'border-spotify bg-spotify text-bg';
+        : playbackStarted ? "border-transparent text-primary bg-tertiary text-primary" : 'border-transparent bg-tertiary text-primary';
     
     $: {
         if ($spotifyPlayerState?.track_window) {
@@ -120,8 +120,8 @@ import Shuffle from "../icons/Shuffle.svelte";
                         <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" on:click={() => expandedBox = !expandedBox}/>
                     </div>
                 {:else}
-                    <!-- user did not log in -->
-                    <i class="fab fa-spotify text-5xl {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}" 
+                    <!-- the spotify icon -->
+                    <i class="fab fa-spotify text-5xl {($spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver) ? 'text-primary opacity-80' : 'text-spotify'}" 
                         class:text-secondary={$spotifyPlayerStatus !== 'ready'} 
                         class:cursor-pointer={$spotifyUrl} 
                         on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
