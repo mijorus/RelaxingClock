@@ -8,13 +8,13 @@ import { spotifyPlayerStatus, spotifyUrl, spotifyUserData } from '../../../store
 import { logout } from '../../../handlers/spotify/login';
 import type { SpotifyPlayerStatus } from '../../../types';
 import NestedBox from '../../elements/settings/NestedBox.svelte';
-import { SpotifyClient } from '../../../lib/spotify/SpotifyClient';
 import { fade, slide } from 'svelte/transition';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import AnimatedText from '../../elements/AnimatedText.svelte';
+import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
+import { device_id } from '../../../handlers/spotify/player';
 
     let boxLabel: string;
-    let favLocationExp = false;
     let moreP = false;
     $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
     let featuredPlaylists: SpotifyApi.ListOfFeaturedPlaylistsResponse;
@@ -65,6 +65,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             window.location.replace('/');
         }
     }
+
+
 </script>
 
 <SettingsBox>
@@ -90,7 +92,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                     <div class="max-h-96 mt-2 overflow-y-scroll w-full relative" transition:fade>
                         <div class="w-full text-center font-bold w pt-3">From your library</div>
                         {#each myPlaylists.items as m}
-                            <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex">
+                            <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex cursor-pointer"
+                                on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': m.uri, device_id })}}>
                                 <img src={m.images[0].url} alt={m.name} class="inline-block w-14 rounded-md">
                                 <div class="flex flex-col justify-center ml-2">
                                     <div>{m.name}</div>
@@ -100,7 +103,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                         {/each}
                         <div class="w-full text-center font-bold w pt-3">Featured</div>
                         {#each featuredPlaylists.playlists.items as p, index}
-                            <div class="bg-tertiary rounded-lg my-1 p-2 max-w-full overflow-x-hidden whitespace-nowrap flex" class:hidden={(index > 8 && !moreP)}>
+                            <div class="bg-tertiary rounded-lg my-1 p-2 max-w-full overflow-x-hidden whitespace-nowrap flex cursor-pointer" class:hidden={(index > 8 && !moreP)}
+                                    on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': p.uri, device_id })}}>
                                 <img src={p.images[0].url} alt={p.name} class="inline-block w-14 rounded-md z-10">
                                 <div class="flex flex-col justify-center ml-2 max-w-full">
                                     <div><AnimatedText text={p.name}/></div>
