@@ -6,10 +6,12 @@ import HighContrast from './settingsPage/HighContrast.svelte';
 import Spotify from './settingsPage/Spotify.svelte';
 import Reminders from './settingsPage/Reminders.svelte';
 import Alarm from './settingsPage/Alarm.svelte';
+import Weather from './settingsPage/Weather.svelte';
 </script>
 
 <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative text-primary font-primary">
     <Spotify />
+    <Weather />
     <HighContrast />
     <BlinkingDots />
     <Alarm />

@@ -86,7 +86,7 @@ import Shuffle from "../icons/Shuffle.svelte";
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-full h-auto rounded-xl" />
             <p class="mt-1 relative text-center whitespace-nowrap w-full overflow-hidden">
-                <AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name + ($spotifyPlayerState.context.uri.match('playlist') ? ` - ${$spotifyPlayerState.context.metadata.context_description}` : '')}/>
+                <AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name + ($spotifyPlayerState?.context?.uri.match('playlist') ? ` - ${$spotifyPlayerState.context.metadata.context_description}` : '')}/>
             </p>
             <p class="mt-1 flex items-center">
                 <i class="mx-2 cursor-pointer inline-block fas fa-backward text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
