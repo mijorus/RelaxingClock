@@ -4,6 +4,7 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
+import NestedBox from '../../elements/settings/NestedBox.svelte';
 
 </script>
 
@@ -14,10 +15,17 @@ import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
         </TitleIcon>
     </Title>
     <PrimaryBox 
-        label={{text: ''}} 
+        label={{text: 'Enable weather'}} 
         description={{text:'Forecasts provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
         <Booleans state={true} label={'weather'} />
     </PrimaryBox>
+    <NestedBox expandable label="Manually set location" >
+        <div class="p-2">
+            <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary py-1 px-2 rounded-md">
+                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" class="bg-transparent">
+            </div>
+        </div>
+    </NestedBox>
 </SettingsBox>
