@@ -6,25 +6,28 @@ import { activeStyle } from "../../stores/storedSettings";
 import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
 import anime from "animejs";
 import { eaElasticDefault } from "../../utils/animations";
-import { onMount } from 'svelte';
+import { onMount, tick } from 'svelte';
+import { clockIsVisible } from '../../stores/globalState';
 
     let bigClock: HTMLElement;
-    $: setCurrentPosition($activeStyle)
+    $: setCurrentPosition($activeStyle);
 
     async function setCurrentPosition(activeStyle: number) {
         await windowReady;
-
         const toStyleId: number =  styles[activeStyle].id;
 
-        anime({
-            begin() { nextStyleId.set(toStyleId) },
-            targets: bigClock,
-            duration: 750,
-            easing: eaElasticDefault,
-            translateX: `${activeStyle * (-100 / styles.length)}%`,
-            complete() { activeStyleId.set(toStyleId) }
-        })
+        if (bigClock) {
+            anime({
+                begin() { nextStyleId.set(toStyleId) },
+                targets: bigClock,
+                duration: 750,
+                easing: eaElasticDefault,
+                translateX: `${activeStyle * (-100 / styles.length)}%`,
+                complete() { activeStyleId.set(toStyleId) }
+            })
+        }
     }
+
 
     onMount(() => {
         if (!$activeStyle) activeStyle.set(0);
@@ -34,8 +37,7 @@ import { onMount } from 'svelte';
 <div 
     bind:this={bigClock}
     id="big-clock" 
-    class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none" 
-    
+    class="flex flex-row items-center flex-nowrap font-clock text-primary text-giant-1 whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none"
 >
     {#each styles as style}
         <svelte:component this={style.component} />

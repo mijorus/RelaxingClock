@@ -16,7 +16,7 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
     </Title>
     <PrimaryBox 
         label={{text: 'Enable weather'}} 
-        description={{text:'Forecasts provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
+        description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
         <Booleans state={true} label={'weather'} />
