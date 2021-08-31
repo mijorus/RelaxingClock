@@ -7,14 +7,15 @@ import randomcolor from 'randomcolor';
 import { onMount, tick } from "svelte";
 
     $: setHours($time, $clockFormat);
+    export let interactive = true;
     let hours: HTMLElement;
 
     // change clock format
     let oldFormat: string;
     function setHours(time: Moment, clockFormat) {
-        if (oldFormat && oldFormat !== clockFormat) {
+        if (hours && oldFormat && oldFormat !== clockFormat) {
             anime({
-                targets: '#hours',
+                targets: hours,
                 duration: 500,
                 rotateX: [0, 360],
                 complete() {time.format(clockFormat === '24h' ? 'HH' : 'hh')}
@@ -92,15 +93,21 @@ import { onMount, tick } from "svelte";
 
     onMount(async() => {
         await tick();
-        if (localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
+        if (interactive && localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
         if (localStorage.getItem('hoursColor')) changeColor(localStorage.getItem('hoursColor'), false);
     })
 </script>
 
-<span bind:this={hours} id="hours" class="inline-block"
-    on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
-    on:mousedown={handleClockMousedown} 
-    on:mouseup={handleClockMouseUp} 
-    on:contextmenu={handleClockCM} style="transition: color .05s linear;">
-    { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
-</span>
+{#if interactive}
+    <span bind:this={hours} class="inline-block"
+        on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
+        on:mousedown={handleClockMousedown} 
+        on:mouseup={handleClockMouseUp} 
+        on:contextmenu={handleClockCM} style="transition: color .05s linear;">
+        { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
+    </span>
+    {:else}
+    <span bind:this={hours} class="inline-block" style="transition: color .05s linear;">
+        { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
+    </span>
+{/if}
