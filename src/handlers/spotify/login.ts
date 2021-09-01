@@ -39,9 +39,6 @@ export async function attemptSpotifyLogin() {
         window.onSpotifyWebPlaybackSDKReady = () => {
             spotifyPlayerStatus.set('connecting');
             createNewSpotifyPlayer()
-                .then(() => {
-                    autoRefeshToken();
-                })
                 .catch(err => {
                     spotifyPlayerStatus.set('error');
                     console.log(err);
@@ -53,7 +50,7 @@ export async function attemptSpotifyLogin() {
 
 export function logout() {
     ['userHasLogged', 'refreshToken', 'verifier', 'state'].forEach(el => localStorage.removeItem(el));
-    ['accessToken', 'expires_at'].forEach(el => sessionStorage.removeItem(el));
+    ['accessToken', 'expires_at', 'spotify_token_expires'].forEach(el => sessionStorage.removeItem(el));
 }
 
 function throwAuthError(reason = '') {
@@ -66,14 +63,14 @@ function throwAuthError(reason = '') {
     }
 }
 
-function autoRefeshToken(enable = true) {
-    let working = false;
-    time.subscribe((t) => {
-        if (!working && (t.unix() >= tokenTtl)) {
-            working = true;
-            console.log('Auto-refresh spotify token');
-            refershOrGetOAuthToken()
-                .finally(() => working = false)
-        }
-    })
+let refreshingToken = false; let refreshTimeout: NodeJS.Timeout;
+export function autoRefeshToken(seconds: number, enable = true) {
+    clearTimeout(refreshTimeout);
+    if (enable && !refreshingToken) {
+        console.log('Refreshing token in ' + seconds + ' seconds');
+        refreshTimeout = setTimeout(() => {
+            refreshingToken = true;
+            refershOrGetOAuthToken().finally(() => refreshingToken = false);
+        }, seconds * 1000);
+    }
 }

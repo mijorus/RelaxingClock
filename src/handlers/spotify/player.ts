@@ -1,7 +1,8 @@
 import moment from 'moment';
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
-import { setTokenTtl, SpotifyClient } from '../../lib/spotify/SpotifyClient';
+import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
+import { autoRefeshToken } from './login';
 import { createShortcuts } from './shortcuts';
 
 export let SpotifyPlayer: Spotify.Player;
@@ -29,7 +30,7 @@ export async function refershOrGetOAuthToken() {
     
     localStorage.removeItem('code');
     localStorage.setItem('refreshToken', response.refresh_token);
-    if (response.expires_in) setTokenTtl(~~(Date.now() / 1000) + response.expires_in);
+    if (response.expires_in) autoRefeshToken(response.expires_in);
     SpotifyClient.setAccessToken(response.access_token);
     spotifyAccessToken.set(response.access_token);
     return response.access_token;
