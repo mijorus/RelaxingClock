@@ -93,7 +93,7 @@ import { onMount, tick } from "svelte";
 
     onMount(async() => {
         await tick();
-        if (interactive && localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
+        if (localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
         if (localStorage.getItem('hoursColor')) changeColor(localStorage.getItem('hoursColor'), false);
     })
 </script>
