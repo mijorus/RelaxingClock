@@ -5,11 +5,13 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import NestedBox from '../../elements/settings/NestedBox.svelte';
-import { directGeocode } from '../../../lib/openweathermap/client';
+import { directGeocode, oneCallWeather } from '../../../lib/openweathermap/client';
 import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
 import { fade } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
+import { weather } from '../../../stores/storedSettings';
+import { onMount } from 'svelte';
 
     let locationSearchQuery: string;
     let owLocations: Location[];
@@ -35,10 +37,23 @@ import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
         }
     }
 
-    function saveCustomLocation(lat: number, long: number) {
-        currentLocation = `${lat},${long}`;
+    function saveCustomLocation(l: Location) {
+        currentLocation = `${l.lat},${l.lon}`;
         localStorage.setItem('customLocation', currentLocation);
     }
+
+    async function updateWeatherData() {
+        const latlong = currentLocation.split(',');
+        const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely');
+        console.log(result);
+    }
+
+    onMount(() => {
+        if ($weather && localStorage.getItem('customLocation')) {
+            currentLocation = localStorage.getItem('customLocation');
+            updateWeatherData();
+        }
+    })
 </script>
 
 <SettingsBox>
@@ -52,33 +67,36 @@ import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
         description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Booleans state={true} label={'weather'} />
+        <Booleans state={$weather} label={'weather'} on:change={(e) => weather.set(e.detail)}/>
     </PrimaryBox>
-    <NestedBox expandable label="Manually set location" >
+    <NestedBox expandable label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
         <div class="p-2">
             <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary mt-1 py-1 px-2 rounded-md">
-                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" class="bg-transparent" bind:value={locationSearchQuery}>
+                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" id="search-ow" class="bg-transparent" bind:value={locationSearchQuery}>
             </div>
             <div class="my-1">
                 { #if isFetchingLocations}
                     <div class="text-center transform scale-50"><Loader /></div>
-                    {:else if !isFetchingLocations && !searchError && owLocations}
-                        {#each owLocations as l}
-                            <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" in:fade on:click={() => saveCustomLocation(l.lat, l.lon)}>
-                                <p class="text-md">{l.name}</p>
-                                <p class="text-sm text-secondary">{convertCountryCode(l.country)} [{l.country}]{l.state ? `, ${l.state}` : ''}</p>
-                                {#if `${l.lat},${l.lon}` === currentLocation}
-                                    <div class="absolute right-0 top-1/2 p-2" style="transform: translateY(-50%);"><i class="icon-checkmark text-green-500"></i></div>
-                                {/if}
-                            </div>
-                        {/each}
-                    {:else if !isFetchingLocations && searchError}
-                        <div class="text-center text-red-600">
-                            <p><i class="fas fa-exclamation-circle text-xl"></i></p>
-                            <p class="text-sm">Ooops something went wrong, please try again later</p>
+                {:else if !isFetchingLocations && !searchError && owLocations}
+                    {#each owLocations as l}
+                        <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" in:fade on:click={() => saveCustomLocation(l)}>
+                            <p class="text-md">{l.name}</p>
+                            <p class="text-sm text-secondary">{convertCountryCode(l.country)} [{l.country}]{l.state ? `, ${l.state}` : ''}</p>
+                            {#if `${l.lat},${l.lon}` === currentLocation}
+                                <div class="absolute right-0 top-1/2 p-2" style="transform: translateY(-50%);"><i class="icon-checkmark text-green-500"></i></div>
+                            {/if}
                         </div>
+                    {/each}
+                {:else if !isFetchingLocations && searchError}
+                    <div class="text-center text-red-600">
+                        <p><i class="fas fa-exclamation-circle text-xl"></i></p>
+                        <p class="text-sm">Ooops something went wrong, please try again later</p>
+                    </div>
                 {/if}
             </div>
+            {#if !owLocations}
+                <p class="pt-2 text-center opacity-60 text-sm" out:fade><span class="lnr lnr-question-circle"></span> Search locations on openweathermap</p>
+            {/if}
         </div>
     </NestedBox>
 </SettingsBox>

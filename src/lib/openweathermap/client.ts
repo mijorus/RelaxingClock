@@ -23,6 +23,6 @@ export async function directGeocode(query: string, limit = 5): Promise<Location[
     return await (await axios.get(`${baseURL}/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=${limit}&appid=${appid}`)).data;
 }
 
-// export async function directGeocode(query: string, limit = 5) {
-//     return await axios.get(`${baseURL}/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=${limit}&appid=${appid}`);
-// }
+export async function oneCallWeather(lat: number, lon: number, exclude = '') {
+    return await (await (axios.get(`${baseURL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=${exclude}&appid=${appid}`))).data;
+}
