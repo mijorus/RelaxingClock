@@ -8,12 +8,12 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { directGeocode, oneCallWeather } from '../../../lib/openweathermap/client';
 import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
-import { fade } from 'svelte/transition';
+import { fade, fly, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
 import { weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 
-    let locationSearchQuery: string;
+    let locationSearchQuery = '';
     let owLocations: Location[];
     let searchError = false;
     $: searchLocation(locationSearchQuery);
@@ -38,7 +38,7 @@ import { onMount } from 'svelte';
     }
 
     function saveCustomLocation(l: Location) {
-        currentLocation = `${l.lat},${l.lon}`;
+        currentLocation = `${l.lat},${l.lon},${l.country},${l.name}`;
         localStorage.setItem('customLocation', currentLocation);
     }
 
@@ -71,18 +71,24 @@ import { onMount } from 'svelte';
     </PrimaryBox>
     <NestedBox expandable label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
         <div class="p-2">
+            {#if currentLocation && !locationSearchQuery.length}
+                <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 750}}>
+                    <p class="text-md">{currentLocation.split(',')[3]}, {convertCountryCode(currentLocation.split(',')[2])}</p>
+                    <p class="text-sm text-secondary">Selected location</p>
+                </div>
+            {/if}
             <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary mt-1 py-1 px-2 rounded-md">
                 <i class="lnr lnr-magnifier mx-2"></i> <input type="text" id="search-ow" class="bg-transparent" bind:value={locationSearchQuery}>
             </div>
             <div class="my-1">
                 { #if isFetchingLocations}
                     <div class="text-center transform scale-50"><Loader /></div>
-                {:else if !isFetchingLocations && !searchError && owLocations}
-                    {#each owLocations as l}
-                        <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" in:fade on:click={() => saveCustomLocation(l)}>
+                {:else if !isFetchingLocations && !searchError && owLocations && locationSearchQuery.length}
+                    {#each owLocations as l, i}
+                        <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" in:slide={{delay: i * 30}} on:click={() => saveCustomLocation(l)}>
                             <p class="text-md">{l.name}</p>
                             <p class="text-sm text-secondary">{convertCountryCode(l.country)} [{l.country}]{l.state ? `, ${l.state}` : ''}</p>
-                            {#if `${l.lat},${l.lon}` === currentLocation}
+                            {#if `${l.lat},${l.lon},${l.country},${l.name}` === currentLocation}
                                 <div class="absolute right-0 top-1/2 p-2" style="transform: translateY(-50%);"><i class="icon-checkmark text-green-500"></i></div>
                             {/if}
                         </div>

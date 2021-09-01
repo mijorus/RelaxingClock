@@ -22,7 +22,7 @@ import { fade } from 'svelte/transition';
         <Reminders />
     </div>
     {#if !$clockIsVisible}
-        <div class="sticky bottom-0 left-0 xl:text-7xl lg:text-5xl md:text-4xl sm:hidden md:block p-4 font-clock text-primary transition-all" transition:fade>
+        <div class="sticky bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl sm:hidden md:block p-4 font-clock text-primary transition-all" transition:fade>
             <div><Hours interactive={false}/><Divisor /><Minutes /></div>
         </div>
     {/if}
