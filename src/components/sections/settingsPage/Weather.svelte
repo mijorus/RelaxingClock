@@ -5,7 +5,40 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import NestedBox from '../../elements/settings/NestedBox.svelte';
+import { directGeocode } from '../../../lib/openweathermap/client';
+import type { Location } from '../../../lib/openweathermap/client';
+import Loader from '../../elements/Loader.svelte';
+import { fade } from 'svelte/transition';
+import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
 
+    let locationSearchQuery: string;
+    let owLocations: Location[];
+    let searchError = false;
+    $: searchLocation(locationSearchQuery);
+    let isFetchingLocations = false;
+    let currentLocation: string;
+
+    let slTimeout: NodeJS.Timeout;
+    function searchLocation(query: string) {
+        if (query) {
+            clearTimeout(slTimeout);
+            owLocations = []; isFetchingLocations = true; searchError = false;
+            try {
+                slTimeout = setTimeout(async () => {
+                    isFetchingLocations = false;
+                    owLocations = (await directGeocode(query));
+                    console.log(owLocations);
+                }, 2000)
+            } catch (e) {
+                console.error(e); searchError = true;
+            }
+        }
+    }
+
+    function saveCustomLocation(lat: number, long: number) {
+        currentLocation = `${lat},${long}`;
+        localStorage.setItem('customLocation', currentLocation);
+    }
 </script>
 
 <SettingsBox>
@@ -23,8 +56,28 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
     </PrimaryBox>
     <NestedBox expandable label="Manually set location" >
         <div class="p-2">
-            <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary py-1 px-2 rounded-md">
-                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" class="bg-transparent">
+            <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary mt-1 py-1 px-2 rounded-md">
+                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" class="bg-transparent" bind:value={locationSearchQuery}>
+            </div>
+            <div class="my-1">
+                { #if isFetchingLocations}
+                    <div class="text-center transform scale-50"><Loader /></div>
+                    {:else if !isFetchingLocations && !searchError && owLocations}
+                        {#each owLocations as l}
+                            <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" in:fade on:click={() => saveCustomLocation(l.lat, l.lon)}>
+                                <p class="text-md">{l.name}</p>
+                                <p class="text-sm text-secondary">{convertCountryCode(l.country)} [{l.country}]{l.state ? `, ${l.state}` : ''}</p>
+                                {#if `${l.lat},${l.lon}` === currentLocation}
+                                    <div class="absolute right-0 top-1/2 p-2" style="transform: translateY(-50%);"><i class="icon-checkmark text-green-500"></i></div>
+                                {/if}
+                            </div>
+                        {/each}
+                    {:else if !isFetchingLocations && searchError}
+                        <div class="text-center text-red-600">
+                            <p><i class="fas fa-exclamation-circle text-xl"></i></p>
+                            <p class="text-sm">Ooops something went wrong, please try again later</p>
+                        </div>
+                {/if}
             </div>
         </div>
     </NestedBox>

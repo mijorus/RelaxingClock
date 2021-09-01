@@ -93,6 +93,7 @@ export default {
                     BACKGROUND_DARK: 'rgb(29, 29, 29)',
                     TEXT_SECONDARY: 'rgb(100 100 100)',
                     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+                    OW_APIKEY: process.env.OW_APIKEY,
                     SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,
                     CITIES_LANDSCAPES_SOURCE: process.env.CITIES_LANDSCAPES_SOURCE,
                     production,
