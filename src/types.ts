@@ -19,7 +19,7 @@ export interface ClockElementBox {
 }
 
 export type mouseWatcherState = 'watch' | 'hide' | 'leave';
-export type userSettingType = 'string' | 'int' | 'float' | 'boolean';
+export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object';
 
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
 

@@ -10,8 +10,9 @@ import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
 import { fade, fly, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
-import { weather } from '../../../stores/storedSettings';
+import { lastWeatherUpdate, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
+import { shortcuts } from '../../../stores/rooster';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
@@ -40,12 +41,13 @@ import { onMount } from 'svelte';
     function saveCustomLocation(l: Location) {
         currentLocation = `${l.lat},${l.lon},${l.country},${l.name}`;
         localStorage.setItem('customLocation', currentLocation);
+        updateWeatherData();
     }
 
     async function updateWeatherData() {
         const latlong = currentLocation.split(',');
-        const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely');
-        console.log(result);
+        const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily');
+        lastWeatherUpdate.set(result);
     }
 
     onMount(() => {
@@ -53,6 +55,25 @@ import { onMount } from 'svelte';
             currentLocation = localStorage.getItem('customLocation');
             updateWeatherData();
         }
+
+        shortcuts.set('weather', {
+            'background': 'rgb(234,108,73)',
+            'color': '#000',
+            'arguments': {
+                'enable': {
+                    async callback() { weather.set(true); return true}
+                },
+                'disable': {
+                    async callback() { weather.set(false); return true}
+                }
+            },
+            async examples() {
+                return {
+                    'namespace': 'Examples',
+                    'group': [{'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''}]
+                }
+            }
+        })
     })
 </script>
 
@@ -72,7 +93,7 @@ import { onMount } from 'svelte';
     <NestedBox expandable label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
         <div class="p-2">
             {#if currentLocation && !locationSearchQuery.length}
-                <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 750}}>
+                <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
                     <p class="text-md">{currentLocation.split(',')[3]}, {convertCountryCode(currentLocation.split(',')[2])}</p>
                     <p class="text-sm text-secondary">Selected location</p>
                 </div>

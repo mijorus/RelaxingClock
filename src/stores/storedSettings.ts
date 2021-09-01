@@ -12,25 +12,28 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
     }
     
     // cast the stored key in the correct type
-    if (value === 'undefined' || value === 'null') {
+    if (locallyStoredKey === 'undefined' || locallyStoredKey === 'null') {
         value = undefined;
     } else if (typeof value !== type && typeof value === 'string') {
         switch (type) {
-        case 'int': 
-            value = parseInt(value);
-            break;
-        case 'float': 
-            value = parseFloat(value);
-            break;
-        case 'boolean': 
-            value = (value === 'true');
-            break;
+            case 'int': 
+                value = parseInt(value);
+                break;
+            case 'float': 
+                value = parseFloat(value);
+                break;
+            case 'boolean': 
+                value = (value === 'true');
+                break;
+            case 'object':
+                value = JSON.parse(value);
+                break;
         }
     }
 
     const stored: Writable<any> = writable(value);
 
-    function set(value: string | number) {
+    function set(value: any) {
         stored.set(value);
         if (value === undefined || value === null) {
             localStorage.removeItem(key);
@@ -59,3 +62,4 @@ export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
 export const remoteTime = userSetting('remoteTime', false, 'boolean');//
 export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');// 
 export const weather = userSetting('weather', true, 'boolean');// 
+export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');// 

@@ -2,8 +2,6 @@ import { urlParams } from '../../utils/utils';
 import { generateSpotifyUrl } from '../../lib/spotify/generateSpotifyUrl';
 import { spotifyPlayerStatus, spotifyUrl } from '../../stores/spotify';
 import { createNewSpotifyPlayer, refershOrGetOAuthToken } from './player';
-import time from '../../stores/time';
-import { setTokenTtl, tokenTtl } from '../../lib/spotify/SpotifyClient';
 
 let loginTimeout: NodeJS.Timeout;
 export async function attemptSpotifyLogin() {
@@ -17,6 +15,7 @@ export async function attemptSpotifyLogin() {
             //The user has never logged before to the app
             const url = await generateSpotifyUrl();
             spotifyUrl.set(url);
+            clearTimeout(loginTimeout);
         } else if (urlParams.get('state') && !urlParams.get('error')) {
             //The user comes from the Spotify's authentication page
             //without errors
