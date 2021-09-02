@@ -45,15 +45,23 @@ import { shortcuts } from '../../../stores/rooster';
     }
 
     async function updateWeatherData() {
-        const latlong = currentLocation.split(',');
-        const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily');
-        lastWeatherUpdate.set(result);
+        try { 
+            const latlong = currentLocation.split(',');
+            const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
+            lastWeatherUpdate.set(result); 
+        } catch (e) { 
+            lastWeatherUpdate.set(undefined); 
+        }
     }
 
     onMount(() => {
         if ($weather && localStorage.getItem('customLocation')) {
+            const maxOWUpdateAge = 30;
             currentLocation = localStorage.getItem('customLocation');
-            updateWeatherData();
+            if ($lastWeatherUpdate?.current?.dt < (~~(Date.now()/1000) - maxOWUpdateAge * 60)) {
+                console.log('updating weather data');
+                updateWeatherData();
+            }
         }
 
         shortcuts.set('weather', {
@@ -99,7 +107,7 @@ import { shortcuts } from '../../../stores/rooster';
                 </div>
             {/if}
             <div class="flex flex-row items-center w-2/3 m-auto bg-tertiary mt-1 py-1 px-2 rounded-md">
-                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" id="search-ow" class="bg-transparent" bind:value={locationSearchQuery}>
+                <i class="lnr lnr-magnifier mx-2"></i> <input type="text" id="search-ow" class="bg-transparent" bind:value={locationSearchQuery} autocomplete="false" name="hidden">
             </div>
             <div class="my-1">
                 { #if isFetchingLocations}
