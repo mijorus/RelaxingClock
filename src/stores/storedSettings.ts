@@ -1,6 +1,10 @@
 import { Writable, writable } from 'svelte/store';
 import type { userSettingType } from '../types';
 
+function castValue(value: any) {
+    return (typeof value !== 'string') ? JSON.stringify(value) : value;
+}
+
 function userSetting(key: string, defaultValue: any, type: userSettingType = 'string') {
     const locallyStoredKey = localStorage.getItem(key);
     
@@ -8,7 +12,8 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
     if (locallyStoredKey) {
         value = locallyStoredKey;
     } else if (defaultValue) {
-        localStorage.setItem(key, defaultValue.toString());
+        localStorage.setItem(key, castValue(defaultValue));
+        value = defaultValue;
     }
     
     // cast the stored key in the correct type
@@ -38,8 +43,7 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
         if (value === undefined || value === null) {
             localStorage.removeItem(key);
         } else {
-            if (typeof value !== 'string') value = JSON.stringify(value);
-            localStorage.setItem(key, value);
+            localStorage.setItem(key, castValue(value));
         }
     }
 
@@ -61,5 +65,5 @@ export const presentation = userSetting('presentation', false, 'boolean');
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
 export const remoteTime = userSetting('remoteTime', false, 'boolean');//
 export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');// 
-export const weather = userSetting('weather', true, 'boolean');// 
+export const weather = userSetting('weather', false, 'boolean');// 
 export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');// 

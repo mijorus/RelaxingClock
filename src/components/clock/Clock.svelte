@@ -14,17 +14,19 @@ import { clockIsVisible } from '../../stores/globalState';
 
     async function setCurrentPosition(activeStyle: number) {
         await windowReady;
-        const toStyleId: number =  styles[activeStyle].id;
+        if (activeStyle !== undefined) {
+            const toStyleId: number =  styles[activeStyle].id;
 
-        if (bigClock) {
-            anime({
-                begin() { nextStyleId.set(toStyleId) },
-                targets: bigClock,
-                duration: 750,
-                easing: eaElasticDefault,
-                translateX: `${activeStyle * (-100 / styles.length)}%`,
-                complete() { activeStyleId.set(toStyleId) }
-            })
+            if (bigClock) {
+                anime({
+                    begin() { nextStyleId.set(toStyleId) },
+                    targets: bigClock,
+                    duration: 750,
+                    easing: eaElasticDefault,
+                    translateX: `${activeStyle * (-100 / styles.length)}%`,
+                    complete() { activeStyleId.set(toStyleId) }
+                })
+            }
         }
     }
 

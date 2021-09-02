@@ -13,7 +13,7 @@ import { onMount, tick } from "svelte";
     // change clock format
     let oldFormat: string;
     function setHours(time: Moment, clockFormat) {
-        if (hours && oldFormat && oldFormat !== clockFormat) {
+        if (clockFormat && hours && oldFormat && oldFormat !== clockFormat) {
             anime({
                 targets: hours,
                 duration: 500,
