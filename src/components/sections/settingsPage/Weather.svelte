@@ -10,7 +10,7 @@ import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
 import { fade, fly, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
-import { lastWeatherUpdate, weather } from '../../../stores/storedSettings';
+import { clockFormat, lastWeatherUpdate, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import time from '../../../stores/time';
@@ -27,7 +27,7 @@ import moment from 'moment';
     $: periodicCheck($time);
 
     function periodicCheck(time: Moment) {
-        if ((time.minutes() %  30 === 0) && (time.seconds() === 0)) {
+        if ($weather && ((time.minutes() %  30 === 0) && (time.seconds() === 0))) {
             updateWeatherData();
         }
     }
@@ -65,6 +65,7 @@ import moment from 'moment';
         if (currentLocation) {
             try { 
                 const latlong = currentLocation.split(',');
+                console.log('updating weather data');
                 const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
                 lastWeatherUpdate.set(result); 
             } catch (e) { 
@@ -118,7 +119,7 @@ import moment from 'moment';
         <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
     </PrimaryBox>
     <NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
-            description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').fromNow()}` : ''}>
+            description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').format($clockFormat === '24' ? 'HH:mm' : 'hh:mm')}` : ''}>
         <div class="p-2">
             {#if currentLocation && !locationSearchQuery.length}
                 <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
