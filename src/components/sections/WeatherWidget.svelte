@@ -13,7 +13,7 @@ import { kTemperatureConverter } from "../../utils/utils";
     let oldWeatherUpdate;
 
     $:  {
-        if ( $weather && $lastWeatherUpdate?.hourly && ( ($time.minutes() === 0 && $time.seconds() === 0) || $lastWeatherUpdate !== oldWeatherUpdate ) ) {
+        if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {
             console.log('updating weather widget'); data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 

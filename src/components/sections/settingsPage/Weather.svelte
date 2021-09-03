@@ -8,13 +8,11 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { directGeocode, oneCallWeather } from '../../../lib/openweathermap/client';
 import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
-import { fade, fly, slide } from 'svelte/transition';
+import { fade, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
 import { clockFormat, lastWeatherUpdate, tempUnit, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
-import time from '../../../stores/time';
-import type { Moment } from 'moment';
 import moment from 'moment';
 
     let locationSearchQuery = '';
@@ -22,38 +20,41 @@ import moment from 'moment';
     let searchError = false;
     let isFetchingLocations = false;
     let currentLocation: string;
-    let mountedAt = 0;
+    const maxOWUpdateAge = 30;
+    let nextWeatherUpdate;
 
     $: searchLocation(locationSearchQuery);
-    $: periodicCheck($time);
 
-    function periodicCheck(time: Moment) {
-        if ($weather && ((time.minutes() === mountedAt) && (time.seconds() === 0))) {
-            updateWeatherData();
+    function autoUpdate(enable = true) {
+        clearInterval(nextWeatherUpdate);
+        if (enable) {
+            console.log('weather autoupdate enabled, in ' + maxOWUpdateAge + ' minutes');
+            nextWeatherUpdate = setInterval(() => updateWeatherData(), maxOWUpdateAge * 3600);
         }
     }
 
-    function handleWeatherSwitch(e) {
-        weather.set(e.detail); 
-        if (!e.detail) lastWeatherUpdate.set(null);
+    function handleWeatherSwitch(status: boolean) {
+        weather.set(status); 
+        autoUpdate(status);
+        if (!status) lastWeatherUpdate.set(null);
         else (updateWeatherData());
     }
 
     let slTimeout: NodeJS.Timeout;
     function searchLocation(query: string) {
-        if (query) {
-            clearTimeout(slTimeout);
-            owLocations = []; isFetchingLocations = true; searchError = false;
+        if (!query) return;
+        clearTimeout(slTimeout);
+        owLocations = []; isFetchingLocations = true; searchError = false;
+        slTimeout = setTimeout(async () => {
+            isFetchingLocations = false;
             try {
-                slTimeout = setTimeout(async () => {
-                    isFetchingLocations = false;
-                    owLocations = (await directGeocode(query));
-                    console.log(owLocations);
-                }, 2000)
+                owLocations = (await directGeocode(query));
+                console.log(owLocations);
             } catch (e) {
                 console.error(e); searchError = true;
             }
-        }
+        }, 2000)
+        
     }
 
     function saveCustomLocation(l: Location) {
@@ -77,12 +78,10 @@ import moment from 'moment';
     }
 
     onMount(() => {
-        mountedAt = $time.minutes();
         if ($weather && localStorage.getItem('currentLocation')) {
-            const maxOWUpdateAge = 30;
+            autoUpdate(true);
             currentLocation = localStorage.getItem('currentLocation');
             if ($lastWeatherUpdate?.current?.dt < (~~(Date.now()/1000) - maxOWUpdateAge * 60)) {
-                console.log('updating weather data');
                 updateWeatherData();
             }
         }
@@ -92,10 +91,10 @@ import moment from 'moment';
             'color': '#000',
             'arguments': {
                 'enable': {
-                    async callback() { weather.set(true); return true}
+                    async callback() { handleWeatherSwitch(true); return true}
                 },
                 'disable': {
-                    async callback() { weather.set(false); return true}
+                    async callback() { handleWeatherSwitch(false); return true}
                 }
             },
             async examples() {
@@ -119,7 +118,7 @@ import moment from 'moment';
         description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-    <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
+    <Booleans state={$weather} label={'weather'} on:change={(e) => handleWeatherSwitch(e.detail)} />
 </PrimaryBox>
 <NestedBox bordered label="Temperature unit" available={$weather}>
     <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
