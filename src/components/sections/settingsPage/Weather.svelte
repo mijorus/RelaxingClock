@@ -29,7 +29,7 @@ import moment from 'moment';
         clearInterval(nextWeatherUpdate);
         if (enable) {
             console.log('weather autoupdate enabled, in ' + maxOWUpdateAge + ' minutes');
-            nextWeatherUpdate = setInterval(() => updateWeatherData(), maxOWUpdateAge * 3600);
+            nextWeatherUpdate = setInterval(() => updateWeatherData(), maxOWUpdateAge * 60000);
         }
     }
 
