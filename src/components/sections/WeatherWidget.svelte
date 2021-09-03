@@ -4,14 +4,14 @@ import { fade } from "svelte/transition";
 import type { Hourly } from "../../lib/openweathermap/client";
 import { mainWeatherConditions } from "../../lib/openweathermap/mainConditions";
 import { lastWeatherUpdate, weather } from "../../stores/storedSettings";
-import time from "../../stores/time";
 
     let data: Hourly[] = [];
     let icon: string;
     let currentLocation: string[];
+    let oldWeatherUpdate;
 
     $:  {
-        if (( !data.length || ($time.minutes() === 0 && $time.seconds() === 0) ) && $weather && $lastWeatherUpdate?.hourly) {
+        if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {
             console.log('updating weather widget'); data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 
@@ -22,6 +22,7 @@ import time from "../../stores/time";
 
             icon = mainWeatherConditions[$lastWeatherUpdate.current.weather[0].main]?.icon;
             currentLocation = localStorage.getItem('currentLocation') ? localStorage.getItem('currentLocation').split(',') : null;
+            oldWeatherUpdate = $lastWeatherUpdate;
         }
     };
 </script>

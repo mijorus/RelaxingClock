@@ -22,12 +22,13 @@ import moment from 'moment';
     let searchError = false;
     let isFetchingLocations = false;
     let currentLocation: string;
+    let mountedAt = 0;
 
     $: searchLocation(locationSearchQuery);
     $: periodicCheck($time);
 
     function periodicCheck(time: Moment) {
-        if ($weather && ((time.minutes() %  30 === 0) && (time.seconds() === 0))) {
+        if ($weather && ((time.minutes() === mountedAt) && (time.seconds() === 0))) {
             updateWeatherData();
         }
     }
@@ -64,17 +65,19 @@ import moment from 'moment';
     async function updateWeatherData() {
         if (currentLocation) {
             try { 
-                const latlong = currentLocation.split(',');
                 console.log('updating weather data');
+                const latlong = currentLocation.split(',');
                 const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
                 lastWeatherUpdate.set(result); 
             } catch (e) { 
-                lastWeatherUpdate.set(undefined); 
+                console.error(e);
+                //lastWeatherUpdate.set(undefined); 
             }
         }
     }
 
     onMount(() => {
+        mountedAt = $time.minutes();
         if ($weather && localStorage.getItem('currentLocation')) {
             const maxOWUpdateAge = 30;
             currentLocation = localStorage.getItem('currentLocation');
