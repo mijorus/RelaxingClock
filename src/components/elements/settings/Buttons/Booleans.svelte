@@ -3,7 +3,8 @@
 
     export let state: boolean;
     export let label: string;
-    const states = ['ON', 'OFF'];
+    export let states = ['ON', 'OFF'];
+    export let dimentions = [10, 12];
     const dispatch = createEventDispatcher();
 
 
@@ -16,21 +17,21 @@
 </script>
 
 <div class="relative">
-    <button class="{btnsClass} {state ? 'text-secondary':'text-primary'} w-10"
+    <button class="{btnsClass} {state ? 'text-secondary':'text-primary'} w-{dimentions[0]}"
         data-option="on" 
         alt="{label} on"
         on:click|stopPropagation={handleBtnClick}
     >
         {states[0]}
     </button>
-    <button class="{btnsClass} {!state ? 'text-secondary':'text-primary'} w-12" 
+    <button class="{btnsClass} {!state ? 'text-secondary':'text-primary'} w-{dimentions[1]}" 
         data-option="off" 
         alt="{label} off"
         on:click|stopPropagation={handleBtnClick}
     >
         {states[1]}
     </button>
-    <div class="absolute h-full bg-highlighted top-0 rounded-xl settings-btr-pill {state ? 'push-left w-10' : 'push-right w-12'}"></div>
+    <div class="absolute h-full bg-highlighted top-0 rounded-xl settings-btr-pill {state ? `push-left w-${dimentions[0]}` : `push-right w-${dimentions[1]}`}"></div>
 </div>
 
 <style>

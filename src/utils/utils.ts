@@ -64,3 +64,7 @@ export function createCommaArray(array: Array<string>) {
   array.forEach((s, i) => (i < array.length - 1) ? string += `${s}, ` : string += s)
   return string;
 }
+
+export function kTemperatureConverter(valNum: number, output: 'C' | 'F'): number {
+  return output === 'C' ? (valNum-273.15) : (((valNum-273.15)*1.8)+32);
+}

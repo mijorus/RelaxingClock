@@ -10,7 +10,7 @@ import type { Location } from '../../../lib/openweathermap/client';
 import Loader from '../../elements/Loader.svelte';
 import { fade, fly, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
-import { clockFormat, lastWeatherUpdate, weather } from '../../../stores/storedSettings';
+import { clockFormat, lastWeatherUpdate, tempUnit, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import time from '../../../stores/time';
@@ -119,11 +119,14 @@ import moment from 'moment';
         description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
-    </PrimaryBox>
-    <NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
-            description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').format($clockFormat === '24' ? 'HH:mm' : 'hh:mm')}` : ''}>
-        <div class="p-2">
+    <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
+</PrimaryBox>
+<NestedBox bordered label="Temperature unit" available={$weather}>
+    <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
+</NestedBox>
+<NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
+            description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').format($clockFormat === '24h' ? 'HH:mm' : 'hh:mm')}` : ''}>
+            <div class="p-2">
             {#if currentLocation && !locationSearchQuery.length}
                 <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
                     <p class="text-md">{currentLocation.split(',')[3]}, {convertCountryCode(currentLocation.split(',')[2])}</p>
