@@ -61,6 +61,7 @@ import moment from 'moment';
         currentLocation = `${l.lat},${l.lon},${l.country},${l.name}`;
         localStorage.setItem('currentLocation', currentLocation);
         updateWeatherData();
+        autoUpdate(true);
     }
 
     async function updateWeatherData() {
