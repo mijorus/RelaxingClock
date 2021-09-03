@@ -11,7 +11,7 @@ import time from "../../stores/time";
     let customLocation: string[];
 
     $:  {
-        if ($weather && $lastWeatherUpdate?.hourly && ( !data.length || ($time.minutes() % 20 === 0) ) ) {
+        if (( !data.length || ($time.minutes() % 20 === 0 && $time.seconds() === 0) ) && $weather && $lastWeatherUpdate?.hourly) {
             console.log('updating weather widget'); data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 
@@ -20,7 +20,7 @@ import time from "../../stores/time";
                 if (date.isSame(moment(), 'day') && date.isSameOrAfter(moment())) data[date.hours()] = el;
             });
 
-            icon = mainWeatherConditions[data.find(e => e !== null).weather[0].main]?.icon;
+            icon = mainWeatherConditions[$lastWeatherUpdate.current.weather[0].main]?.icon;
             customLocation = localStorage.getItem('customLocation') ? localStorage.getItem('customLocation').split(',') : null;
         }
     };
@@ -34,7 +34,7 @@ import time from "../../stores/time";
         {/if}
     </div>
     {#if customLocation}
-        <p class="text-center text-secondary">{customLocation[3]}, {customLocation[2]}</p>
+        <p class="text-center text-secondary">{customLocation[3]}, {customLocation[2]} - {~~($lastWeatherUpdate.current.temp)}°C</p>
     {/if}
 {/if}
 
