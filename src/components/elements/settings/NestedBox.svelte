@@ -27,7 +27,7 @@ export let description: string = undefined;
     {/if}
 </div>
 {#if description}
-    <div class="w-full md:w-9/12 self-end">
+    <div class="w-full md:w-9/12 self-end" transition:slide>
         <Hint text={description}></Hint>
     </div>
 {/if}

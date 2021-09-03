@@ -15,6 +15,7 @@ import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import time from '../../../stores/time';
 import type { Moment } from 'moment';
+import moment from 'moment';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
@@ -116,7 +117,8 @@ import type { Moment } from 'moment';
     >
         <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
     </PrimaryBox>
-    <NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
+    <NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
+            description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').fromNow()}` : ''}>
         <div class="p-2">
             {#if currentLocation && !locationSearchQuery.length}
                 <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
