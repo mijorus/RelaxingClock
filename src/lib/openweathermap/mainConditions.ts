@@ -43,7 +43,7 @@ export const mainWeatherConditions: {[key: string]: {color: string, icon?: strin
         color: '#fe0000'
     },
     'Clear': {
-        color: '#ffe700',
+        color: '#ffd106',
         icon: '4102328_hot_sun_weather_icon.svg',
     },
     'Clouds': {
