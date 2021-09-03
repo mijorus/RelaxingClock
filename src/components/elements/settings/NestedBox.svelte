@@ -9,7 +9,7 @@ export let expanded = false;
 export let description: string = undefined;
 </script>
 
-<div class="w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 m-3 md:m-4 self-end
+<div class="w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 m-3 md:m-4 self-end transition-opacity
     {available ? 'opacity-100' : 'opacity-50 pointer-events-none'} 
     {bordered && !expandable ? 'border-l-4 border-primary' : 'border-none'}"
 >

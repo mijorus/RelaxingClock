@@ -8,10 +8,10 @@ import time from "../../stores/time";
 
     let data: Hourly[] = [];
     let icon: string;
-    let customLocation: string[];
+    let currentLocation: string[];
 
     $:  {
-        if (( !data.length || ($time.minutes() % 20 === 0 && $time.seconds() === 0) ) && $weather && $lastWeatherUpdate?.hourly) {
+        if (( !data.length || ($time.minutes() === 0 && $time.seconds() === 0) ) && $weather && $lastWeatherUpdate?.hourly) {
             console.log('updating weather widget'); data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 
@@ -21,7 +21,7 @@ import time from "../../stores/time";
             });
 
             icon = mainWeatherConditions[$lastWeatherUpdate.current.weather[0].main]?.icon;
-            customLocation = localStorage.getItem('customLocation') ? localStorage.getItem('customLocation').split(',') : null;
+            currentLocation = localStorage.getItem('currentLocation') ? localStorage.getItem('currentLocation').split(',') : null;
         }
     };
 </script>
@@ -33,8 +33,8 @@ import time from "../../stores/time";
             {/each}
         {/if}
     </div>
-    {#if customLocation}
-        <p class="text-center text-secondary">{customLocation[3]}, {customLocation[2]} - {~~($lastWeatherUpdate.current.temp)}°C</p>
+    {#if currentLocation && $lastWeatherUpdate}
+        <p class="text-center text-secondary">{currentLocation[3]}, {currentLocation[2]} - {~~($lastWeatherUpdate.current.temp)}°C</p>
     {/if}
 {/if}
 

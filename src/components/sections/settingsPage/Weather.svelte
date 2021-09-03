@@ -13,13 +13,29 @@ import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
 import { lastWeatherUpdate, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
+import time from '../../../stores/time';
+import type { Moment } from 'moment';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
     let searchError = false;
-    $: searchLocation(locationSearchQuery);
     let isFetchingLocations = false;
     let currentLocation: string;
+
+    $: searchLocation(locationSearchQuery);
+    $: periodicCheck($time);
+
+    function periodicCheck(time: Moment) {
+        if ((time.minutes() %  30 === 0) && (time.seconds() === 0)) {
+            updateWeatherData();
+        }
+    }
+
+    function handleWeatherSwitch(e) {
+        weather.set(e.detail); 
+        if (!e.detail) lastWeatherUpdate.set(null);
+        else (updateWeatherData());
+    }
 
     let slTimeout: NodeJS.Timeout;
     function searchLocation(query: string) {
@@ -40,24 +56,26 @@ import { shortcuts } from '../../../stores/rooster';
 
     function saveCustomLocation(l: Location) {
         currentLocation = `${l.lat},${l.lon},${l.country},${l.name}`;
-        localStorage.setItem('customLocation', currentLocation);
+        localStorage.setItem('currentLocation', currentLocation);
         updateWeatherData();
     }
 
     async function updateWeatherData() {
-        try { 
-            const latlong = currentLocation.split(',');
-            const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
-            lastWeatherUpdate.set(result); 
-        } catch (e) { 
-            lastWeatherUpdate.set(undefined); 
+        if (currentLocation) {
+            try { 
+                const latlong = currentLocation.split(',');
+                const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
+                lastWeatherUpdate.set(result); 
+            } catch (e) { 
+                lastWeatherUpdate.set(undefined); 
+            }
         }
     }
 
     onMount(() => {
-        if ($weather && localStorage.getItem('customLocation')) {
+        if ($weather && localStorage.getItem('currentLocation')) {
             const maxOWUpdateAge = 30;
-            currentLocation = localStorage.getItem('customLocation');
+            currentLocation = localStorage.getItem('currentLocation');
             if ($lastWeatherUpdate?.current?.dt < (~~(Date.now()/1000) - maxOWUpdateAge * 60)) {
                 console.log('updating weather data');
                 updateWeatherData();
@@ -96,9 +114,9 @@ import { shortcuts } from '../../../stores/rooster';
         description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Booleans state={$weather} label={'weather'} on:change={(e) => weather.set(e.detail)}/>
+        <Booleans state={$weather} label={'weather'} on:change={handleWeatherSwitch}/>
     </PrimaryBox>
-    <NestedBox expandable label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
+    <NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}>
         <div class="p-2">
             {#if currentLocation && !locationSearchQuery.length}
                 <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
