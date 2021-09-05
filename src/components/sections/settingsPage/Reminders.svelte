@@ -19,12 +19,17 @@
 
     type BoxAtType = 'minutes' | 'hour';
 
-    let minutesFromNow: number; let isPersistent: boolean; let reminderAtBox: string;
+    let minutesFromNow: number; 
+    let isPersistent: boolean; 
+    let title = '';
+    let creationBoxType: 'Create' | 'Edit' = 'Create';
+    let reminderToEdit: StoredReminder;
+
+    let reminderAtBox: string;
     let boxSelectedAt: BoxAtType = 'minutes';
     let creationBox: HTMLElement;
 
     let ready = false;
-    let title: HTMLInputElement;
     let creationBoxOpened = false;
     let reminders: Array<StoredReminder> = [];
     let futureReminders: Array<StoredReminder> = [];
@@ -66,13 +71,16 @@
         reminders.forEach(r => r.done ? doneReminders.unshift(r) : futureReminders.push(r));
     }
 
-    async function createReminder(title: string, at: Moment, type: ReminderType) {
-        await RemindersDB.create({ title, at: at.unix(), type, done: false });
+    async function createReminder(title: string, at: Moment, type: ReminderType, edit = false) {
+        edit  
+            ? await RemindersDB.updatePending(reminderToEdit.id, { title, type, 'at': at.unix(), done: false })
+            : await RemindersDB.create({ title, at: at.unix(), type, done: false });
+
         runListCheck();
     }
     
     async function saveInput() {
-        if (title.value === '' || !minutesFromNow || reminderAtBox === '') {
+        if (title === '' || !minutesFromNow || reminderAtBox === '') {
             shakeElement(creationBox);
             return;
         }
@@ -83,16 +91,18 @@
             return;
         }
 
-        await createReminder(title.value, timestamp, isPersistent ? 'repeated' : 'simple');
+        await createReminder(title, timestamp, isPersistent ? 'repeated' : 'simple', (creationBoxType === 'Edit' && reminderToEdit !== undefined))
         closeCreationBox();
     }
 
-    async function openCreationBox() {
-        minutesFromNow = 10; isPersistent = false; creationBoxOpened = true;
+    async function openCreationBox(mFromNow = undefined, persistent = false) {
+        minutesFromNow = mFromNow || 10; isPersistent = persistent || false; 
+        creationBoxOpened = true;
         reminderAtBox = moment().add(minutesFromNow, 'minutes').format('HH:mm');
-        await tick();
         canBeSummoned.set(false);
-        title.focus();
+        
+        await tick();
+        document.getElementById('reminder-title-input').focus();
         tips.set([
             {name: 'Create', shortcut: 'Ctrl+Enter'},
             {name: 'Dismiss', shortcut: 'Esc'},
@@ -100,9 +110,19 @@
     }
 
     function closeCreationBox() {
+        reminderToEdit = undefined;
+        creationBoxType = 'Create';
         creationBoxOpened = false;
+        title = '';
         canBeSummoned.set(true);
         tips.set(null);
+    }
+
+    async function openEditBox(id: number) {
+        reminderToEdit = await RemindersDB.get(id);
+        title = reminderToEdit.title;
+        creationBoxType = 'Edit';
+        openCreationBox(moment(reminderToEdit.at, 'X').diff(moment(), 'minutes'), reminderToEdit.type === 'repeated');
     }
 
     function handleShortcuts(event: KeyboardEvent) {
@@ -209,7 +229,7 @@
                 <div class="inline-block m-auto">
                     <div class="my-2">
                         <h3 class="text-xl font-bold">Title</h3>
-                        <input type="text" class="bg-white bg-opacity-20 text-primary w-72 rounded-md p-1" bind:this={title}>
+                        <input id="reminder-title-input" type="text" class="bg-white bg-opacity-20 text-primary w-72 rounded-md p-1" bind:value={title}>
                     </div>
                     <div class="{boxSelectedAt === 'minutes' ? '' : 'opacity-25'}" on:click={() => boxSelectedAt = 'minutes'}>
                         <span>in</span>
@@ -227,7 +247,7 @@
                 </div>
             </div>
             <div class="flex w-full justify-center mt-4">
-                <span class="mx-1"><Action label="Create" on:click={saveInput}/></span>
+                <span class="mx-1"><Action label={creationBoxType} on:click={saveInput}/></span>
                 <span class="mx-1"><Action label="Dismiss" custom customClass="border-2 border-red-400 text-red-400" on:click={closeCreationBox} /></span>
             </div>
         </div>
@@ -245,7 +265,7 @@
         description={{text:'Set and manage reminders', iconClass: 'lnr lnr-question-circle'}}
         available={true}
     >
-        <Action label="Create" on:click={openCreationBox}></Action>
+        <Action label="Create" on:click={() => openCreationBox()}></Action>
     </PrimaryBox>
     <NestedBox label="{futureReminders.length ? '• ' : ''}All your reminders" bordered={false} available={reminders.length > 0} expandable>
         {#if futureReminders.length}
@@ -257,14 +277,15 @@
                             {moment(r.at, 'X').fromNow()}
                             {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
                         </span>
-                        <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }} >
-                            <i class="lnr lnr-circle-minus text-red-600"></i>
+                        <span class="float-right">
+                            <i class="lnr lnr-pencil text-secondary cursor-pointer" on:click={() => openEditBox(r.id)}></i>
+                            <i class="lnr lnr-circle-minus text-red-600 cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }}></i>
                         </span>
                     </div>
                 {/each}
             </div>
-            {/if}
-            {#if doneReminders.length}
+        {/if}
+        {#if doneReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
                 {#each doneReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">

@@ -1,5 +1,5 @@
 import type { Moment } from "moment";
-import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema } from 'idb';
+import { openDB, IDBPDatabase, DBSchema } from 'idb';
 import type { Reminder, StoredReminder } from "../types";
 import moment from "moment";
 
@@ -30,6 +30,9 @@ export class RemindersDB {
         return RemindersDB.db.add('reminders', reminder);
     }
 
+    static async get(key: number) {
+        return await RemindersDB.db.get('reminders', key);
+    }
 
     static async getAllByExpirationDate() {
         return (await RemindersDB.db.getAllFromIndex('reminders', 'at')).filter(r => {
@@ -44,6 +47,11 @@ export class RemindersDB {
     static async setDone(key: number) {
         const reminder = await RemindersDB.db.get('reminders', key);
         RemindersDB.db.put('reminders', { ...reminder, done: true, doneAt: moment().unix() });
+    }
+
+    static async updatePending(key: number, data: Reminder) {
+        const { id } = await RemindersDB.db.get('reminders', key);
+        RemindersDB.db.put('reminders', { ...data, id, done: false });
     }
 
     static async setDueTime(key: number, at: Moment) {
