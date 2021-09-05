@@ -16,6 +16,7 @@
     import { notifications } from '../../../stores/notifications';
     import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
     import { shakeElement } from '../../../utils/utils';
+import AnimatedText from '../../elements/AnimatedText.svelte';
 
     type BoxAtType = 'minutes' | 'hour';
 
@@ -272,7 +273,7 @@
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
-                        <bold>{r.title}</bold> 
+                        <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
                         <span class="text-secondary">
                             {moment(r.at, 'X').fromNow()}
                             {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
@@ -289,7 +290,8 @@
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
                 {#each doneReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">
-                        <bold>{r.title}</bold> {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
+                        <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
+                        {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
                             <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
                             <i class="lnr lnr-trash r-icon text-red-600 delete-rem-i-cross hidden"></i>
