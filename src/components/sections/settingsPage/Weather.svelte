@@ -47,13 +47,9 @@ import moment from 'moment';
         owLocations = []; isFetchingLocations = true; searchError = false;
         slTimeout = setTimeout(async () => {
             isFetchingLocations = false;
-            try {
-                owLocations = (await directGeocode(query));
-                console.log(owLocations);
-            } catch (e) {
-                console.error(e); searchError = true;
-            }
-        }, 2000)
+            owLocations = (await directGeocode(query).catch(e => { console.error(e); searchError = true; return []; }));
+            console.log(owLocations);
+        }, 2000);
         
     }
 
@@ -66,15 +62,10 @@ import moment from 'moment';
 
     async function updateWeatherData() {
         if (currentLocation) {
-            try { 
-                console.log('updating weather data');
-                const latlong = currentLocation.split(',');
-                const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
-                lastWeatherUpdate.set(result); 
-            } catch (e) { 
-                console.error(e);
-                //lastWeatherUpdate.set(undefined); 
-            }
+            console.log('updating weather data');
+            const latlong = currentLocation.split(',');
+            const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily').catch(e => { console.error(e); return undefined; }); 
+            lastWeatherUpdate.set(result); 
         }
     }
 
