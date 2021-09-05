@@ -272,7 +272,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
         {#if futureReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
-                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md">
+                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md border border-secondary">
                         <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
                         <span class="text-secondary">
                             {moment(r.at, 'X').fromNow()}
@@ -287,9 +287,9 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             </div>
         {/if}
         {#if doneReminders.length}
-            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-56 overflow-y-scroll">
+            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-72 overflow-y-scroll">
                 {#each doneReminders as r }
-                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md done-reminder">
+                    <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder">
                         <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
                         {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
