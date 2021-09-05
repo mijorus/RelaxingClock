@@ -26,7 +26,7 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
     };
 });
 // tips
-export const tips: Writable<Array<Tip>> = writable(null);
+export const tips: Writable<Tip[]> = writable(null);
 export const alarmIsRinging: Writable<boolean> = writable(false);
 export const clockIsVisible: Readable<boolean> =  readable(true, (set: Subscriber<boolean>): Unsubscriber => {
     if (!('IntersectionObserver' in window)) {

@@ -14,6 +14,9 @@ import { clockFormat, lastWeatherUpdate, tempUnit, weather } from '../../../stor
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import moment from 'moment';
+import { tips } from '../../../stores/globalState';
+import { mainWeatherConditions } from '../../../lib/openweathermap/mainConditions';
+import type { Tip } from '../../../types';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
@@ -69,6 +72,15 @@ import moment from 'moment';
         }
     }
 
+    function showWeatherTips() {
+        let t: Tip[] = [];
+        for (const prop in mainWeatherConditions) {
+            t.push({'name': `<span class="w-3 h-3 inline-block rounded-full pr-1" style="background-color: ${mainWeatherConditions[prop].color ?? ''}"></span>`, 'shortcut': prop})
+        }
+
+        tips.set(t);
+    }
+
     onMount(() => {
         if ($weather && localStorage.getItem('currentLocation')) {
             autoUpdate(true);
@@ -95,7 +107,7 @@ import moment from 'moment';
                     'group': [{'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''}]
                 }
             }
-        })
+        });
     })
 </script>
 
@@ -105,13 +117,15 @@ import moment from 'moment';
             <svg class="w-16" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1550 1160"><g fill="rgb(234,108,73)" style="transform: none;"><g><path d="M330 1101 c-14 -27 -13 -37 6 -55 12 -13 39 -16 128 -16 97 0 115 -3 129 -18 22 -24 21 -38 -3 -62 -18 -18 -33 -20 -185 -20 -146 0 -165 -2 -173 -17 -15 -27 3 -62 35 -68 43 -9 58 -20 61 -44 7 -43 -13 -51 -122 -51 -117 0 -140 -9 -134 -55 3 -26 8 -30 36 -33 32 -3 32 -3 32 -89 0 -47 7 -113 16 -147 45 -177 186 -327 362 -388 97 -33 268 -32 362 3 231 87 380 309 368 549 -3 65 -3 65 82 70 85 5 85 5 88 35 6 53 -6 55 -284 55 -278 0 -288 2 -268 58 7 21 19 28 52 35 33 6 43 13 48 33 9 36 -12 54 -62 54 -69 0 -106 47 -66 83 16 14 44 17 188 17 178 0 194 4 194 45 0 45 -2 45 -452 45 -412 0 -428 -1 -438 -19z"></path><path d="M1052 918 c-37 -37 7 -78 84 -78 69 0 104 25 86 64 -11 25 -16 26 -85 26 -43 0 -78 -5 -85 -12z"></path><path d="M1322 918 c-18 -18 -14 -56 7 -68 28 -14 124 -13 145 3 12 9 17 23 14 42 -3 30 -3 30 -78 33 -50 2 -79 -1 -88 -10z"></path></g></g></svg>
         </TitleIcon>
     </Title>
-    <PrimaryBox 
-        label={{text: 'Enable weather'}} 
-        description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
-        available={true}
-    >
-    <Booleans state={$weather} label={'weather'} on:change={(e) => handleWeatherSwitch(e.detail)} />
-</PrimaryBox>
+    <div on:mouseenter={showWeatherTips} on:mouseleave={() => tips.set(null)}>
+        <PrimaryBox
+            label={{text: 'Enable weather'}}
+            description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
+            available={true}
+        >
+            <Booleans state={$weather} label={'weather'} on:change={(e) => handleWeatherSwitch(e.detail)} />
+        </PrimaryBox>
+    </div>
 <NestedBox bordered label="Temperature unit" available={$weather}>
     <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
 </NestedBox>
