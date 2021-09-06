@@ -81,7 +81,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     }
 </script>
 
-<div class="absolute bottom-5 left-5 font-primary}">
+<div class="absolute bottom-5 left-5 font-primary">
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-full h-auto rounded-xl" />

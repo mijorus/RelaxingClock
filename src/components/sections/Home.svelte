@@ -7,6 +7,7 @@ import FullScreenBtn from '../elements/FullScreenBtn.svelte';
 import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
 import SpotifyBox from '../spotifyPlayer/SpotifyBox.svelte';
 import WeatherWidget from './WeatherWidget.svelte';
+import Pinned from './pinned/Pinned.svelte';
 
     function disableScreenSaver() {
         screenSaverHandler.disable();
@@ -27,3 +28,7 @@ import WeatherWidget from './WeatherWidget.svelte';
 </div>
 <SpotifyBox />
 <Tips />
+
+<div class="absolute top-0 left-0">
+    <Pinned />
+</div>
