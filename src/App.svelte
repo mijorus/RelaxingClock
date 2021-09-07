@@ -52,6 +52,7 @@ import screenSaverHandler from "./handlers/screenSaver";
 
 <AlarmRing />
 
+<div class="w-12 hidden"></div>
 <style global>
     @import '@csstools/normalize.css';
     @import 'loaders.css/loaders.min.css';
