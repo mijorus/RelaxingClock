@@ -1,4 +1,5 @@
 <script lang="ts">
+import { afterUpdate, beforeUpdate } from "svelte";
 
     import { fly, fade } from "svelte/transition";
     import type { RoosterExamples } from "../../types"; 
@@ -6,6 +7,7 @@
     
     let selected = 0;
     export let examples: RoosterExamples = null;
+
     export let wait = false;
     export let command: string;
     export function move(d: boolean) {
@@ -29,10 +31,7 @@
                     {#if examples.group}
                         {#each examples.group as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}
-                                class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden" 
-                                in:fly={{ y: 5, duration: 200 }} 
-                                out:fade={{ duration: 100 }}
-                            >
+                                class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden flyup">
                                 {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
                                 {#if example.image}<img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block">{/if} 
@@ -58,6 +57,9 @@
 </div>
 
 <style>
+    .flyup {
+        animation: flyup .1s linear;
+    }
     .grow {
         animation: grow .2s linear;
         display: inline-block;
@@ -66,5 +68,10 @@
     @keyframes grow {
         0% { max-width: 0;}
         100% { max-width: 20px;}
+    }
+    
+    @keyframes flyup {
+        0% { transform: translateY(-5%); opacity: 0; }
+        100% { transform: translateY(0%); opacity: 1;}
     }
 </style>

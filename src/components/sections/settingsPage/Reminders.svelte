@@ -206,7 +206,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                             { argument: 'dismiss', example: '#', tip: 'Dismiss reminder #'}
                         ]
                     }
-
+                    console.log(tips);
+                    
                     return {'group': tips};
                 }
             });

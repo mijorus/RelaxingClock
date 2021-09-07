@@ -10,11 +10,10 @@ type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
 let oldRes;
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
-    let toQueue = false; let res;
-    
+    let toQueue: boolean | string = false; let res;
     if (!query || query.length < 2) return {};
-    else if (query.endsWith('>>') || query.endsWith('>')) {
-        toQueue = true; 
+    else if (query.endsWith('>')) {        
+        query.match(/>>$/) ? toQueue = '?' : toQueue = '';
         query = query.replace(/>+$/g, '');
         if (oldRes) res = oldRes;
     }
@@ -48,7 +47,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             
             const images =  item?.album?.images ? item.album.images : item.images;
             const image = images.length ? images[images.length - 1].url : '';
-            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue ? `>>${item.name}<<` : '') + item.uri, size};
+            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue !== false ? `${toQueue}>>${item.name}<<` : '') + item.uri, size};
         });
 
         exampleList.push(...list);
@@ -63,7 +62,6 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
 
 async function loadQueue(): Promise<RoosterExamples> {
     const playerState = get(spotifyPlayerState);
-
     if (playerState.track_window?.next_tracks.length) {
         return {
             'namespace': 'Queue',
@@ -88,11 +86,18 @@ export function createShortcuts() {
         args[el] = {
             async callback(p, id: string) {
                 try {
+                    console.log(id);
+                    
+                    const skipToQueue = id.startsWith('?');
+                    
+                    if (skipToQueue) id = id.replace(/^\?/, '');
                     const isQueue = />>(.*)<</.exec(id);
                     
+                    console.log(skipToQueue, isQueue);
                     if (isQueue) {
                         await SpotifyClient.queue(id.replace(isQueue[0], ''));
-                        notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});
+                        if (!skipToQueue) notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});
+                        else await SpotifyClient.skipToNext();
                     } else {
                         let params: SpotifyApi.PlayParameterObject = {device_id};
                         id.match("spotify:track:") ? params.uris = [id] : params.context_uri = id; 
@@ -134,7 +139,7 @@ export function createShortcuts() {
                 return loadSearch(params, arg);
             }
 
-            else if (arg === 'queue') {
+            else if (arg.startsWith('que')) {
                 return loadQueue();
             }
 
