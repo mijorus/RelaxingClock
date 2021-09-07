@@ -280,7 +280,7 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
                 bind:textContent={params}
                 bind:this={paramsBox}
                 contenteditable
-                class="bg-transparent text-primary text-xl font-primary contenteditable"
+                class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable"
             />
             {#if command.length > 1}
                 <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
