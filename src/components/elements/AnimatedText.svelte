@@ -13,7 +13,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     $: {
         if (el && (text !== displayedText)) {
             if (scrollTl) scrollTl.pause();
-            resetScrollPosition();
+            el.style.transform = 'translateX(0px)';
 
             anime({
                 targets: el,
@@ -35,20 +35,20 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 
     function scrollText(el: HTMLElement) {
-        if (el) {
-            scrollTl = anime.timeline({
-                targets: el,
-                easing: cbDefault,
-                loop: true,
-                direction: 'alternate',
-                autoplay: true,
-                delay: getRandomIntInclusive(5000, 7000),
-            })
-                .add({
-                    translateX: - (el.scrollWidth - el.clientWidth), 
-                    duration: getRandomIntInclusive(13000, 16000),
-                }, '+=50');
-        }
+        if (!el) return;
+        
+        scrollTl = anime.timeline({
+            targets: el,
+            easing: cbDefault,
+            loop: true,
+            direction: 'alternate',
+            autoplay: true,
+            delay: getRandomIntInclusive(5000, 7000),
+        })
+            .add({
+                translateX: - (el.scrollWidth - el.clientWidth), 
+                duration: getRandomIntInclusive(13000, 16000),
+            }, '+=50');
     }
 </script> 
 
