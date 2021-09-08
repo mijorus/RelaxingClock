@@ -86,14 +86,10 @@ export function createShortcuts() {
         args[el] = {
             async callback(p, id: string) {
                 try {
-                    console.log(id);
-                    
                     const skipToQueue = id.startsWith('?');
-                    
                     if (skipToQueue) id = id.replace(/^\?/, '');
                     const isQueue = />>(.*)<</.exec(id);
                     
-                    console.log(skipToQueue, isQueue);
                     if (isQueue) {
                         await SpotifyClient.queue(id.replace(isQueue[0], ''));
                         if (!skipToQueue) notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});

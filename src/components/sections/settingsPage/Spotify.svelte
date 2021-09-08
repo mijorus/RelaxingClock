@@ -19,6 +19,7 @@ import { device_id } from '../../../handlers/spotify/player';
     $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
     let featuredPlaylists: SpotifyApi.ListOfFeaturedPlaylistsResponse;
     let myPlaylists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
+    let firstTimeReady = false;
     
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
@@ -28,6 +29,16 @@ import { device_id } from '../../../handlers/spotify/player';
             
         } else {
             moreP = false;
+        }
+    }
+
+    async function checkLastPlayerTrack(lastPlayerTheshold = 4) {
+        if (localStorage.getItem('lastPlayedTrack') && device_id) {
+            const lastPlayedTrackSplit = localStorage.getItem('lastPlayedTrack').split('::', 2);
+            
+            if (Date.now() - parseInt(lastPlayedTrackSplit[0]) < (lastPlayerTheshold * 60 * 1000)) {
+                SpotifyClient.play({ device_id, 'uris': [lastPlayedTrackSplit[1]] });
+            }
         }
     }
 
@@ -54,6 +65,11 @@ import { device_id } from '../../../handlers/spotify/player';
             case 'error':
                 boxLabel = 'Unknown error!';
                 break;
+        }
+
+        if (spotifyPlayerStatus === 'ready' && !firstTimeReady) {
+            firstTimeReady = true;
+            checkLastPlayerTrack();
         }
     }
 

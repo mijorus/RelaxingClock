@@ -38,17 +38,17 @@ import Shuffle from "../icons/Shuffle.svelte";
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
             songPosition = ~~($spotifyPlayerState.position / 1000);
+
+            localStorage.setItem('lastPlayedTrack', Date.now() + '::' + $spotifyPlayerState.track_window.current_track.uri);
         } else {
             expandedBox = false;
         }
-    }
 
-    $: {
         if (!$spotifyPlayerState?.paused && $spotifyPlayerState?.duration && $time) {
             songPosition = $spotifyPlayerState.duration === songPosition ? songPosition : songPosition + 1;
         }
     }
-
+    
     $: setLabel($spotifyPlayerStatus);
 
     let interval: NodeJS.Timeout;

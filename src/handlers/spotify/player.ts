@@ -1,7 +1,6 @@
-import moment from 'moment';
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
-import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus, spotifyUserData } from '../../stores/spotify';
+import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus } from '../../stores/spotify';
 import { autoRefeshToken } from './login';
 import { createShortcuts } from './shortcuts';
 
