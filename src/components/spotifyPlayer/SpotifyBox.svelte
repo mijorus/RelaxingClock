@@ -21,6 +21,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     let loader = '';
 
     let trackName = '';
+    let lastUri: string;
     let artistsName = [];
     let albumCover: Spotify.Image[];
     let expandedBox = false;
@@ -39,7 +40,9 @@ import Shuffle from "../icons/Shuffle.svelte";
             albumCover = $spotifyPlayerState.track_window.current_track.album.images;
             songPosition = ~~($spotifyPlayerState.position / 1000);
 
-            localStorage.setItem('lastPlayedTrack', Date.now() + '::' + $spotifyPlayerState.track_window.current_track.uri);
+            const thisUri = $spotifyPlayerState.track_window.current_track.uri;
+            if (thisUri !== lastUri) localStorage.setItem('lastPlayedTrack', Date.now() + '::' + thisUri);
+            lastUri = thisUri;
         } else {
             expandedBox = false;
         }

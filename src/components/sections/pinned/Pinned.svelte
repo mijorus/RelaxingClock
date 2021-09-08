@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import { PinnedDB } from "../../../handlers/PinnedDB";
 import type { Pinned } from "../../../handlers/PinnedDB";
+import { shortcuts } from "../../../stores/rooster";
     
     let pinned: Pinned[] = [];
 
@@ -9,6 +10,19 @@ import type { Pinned } from "../../../handlers/PinnedDB";
     onMount(async () => {
         await PinnedDB.initDB();
         // pinned = PinnedDB.get()
+
+        shortcuts.set('pin', {
+            'color': '#fff',
+            'background': '#c80000',
+            'arguments': {
+                '': {
+                    'active': true,
+                    async callback() {
+                        return false;
+                    }
+                }
+            }
+        })
     });
 </script>
 

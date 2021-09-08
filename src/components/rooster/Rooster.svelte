@@ -169,7 +169,7 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
 
             if (document.activeElement === argumentBox) {
                 event.preventDefault();
-                if (argument !== '') {
+                if (argument !== '' || shortcuts.get(clearCommand())?.arguments[''] !== undefined) {
                     paramsBox.focus();
                     suggestion = ''
                 }
