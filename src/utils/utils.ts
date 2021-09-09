@@ -68,3 +68,19 @@ export function createCommaArray(array: Array<string>) {
 export function kTemperatureConverter(valNum: number, output: 'C' | 'F'): number {
   return output === 'C' ? (valNum-273.15) : (((valNum-273.15)*1.8)+32);
 }
+
+export function outerWidth(el: HTMLElement) {
+  var width = el.offsetWidth;
+  var style = getComputedStyle(el);
+
+  width += parseInt(style.marginLeft) + parseInt(style.marginRight);
+  return width;
+}
+
+export function outerHeight(el: HTMLElement) {
+  var height = el.offsetHeight;
+  var style = getComputedStyle(el);
+
+  height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+  return height;
+}

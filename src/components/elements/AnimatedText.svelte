@@ -30,10 +30,6 @@ import { getRandomIntInclusive } from "../../utils/utils";
         }
     }
 
-    function resetScrollPosition() {
-        el.style.transform = 'translateX(0px)';
-    }
-
     function scrollText(el: HTMLElement) {
         if (!el) return;
         
@@ -52,7 +48,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 </script> 
 
-<span bind:this={el} class="inline-block w-full">
+<span bind:this={el} class="inline-block w-full" style="will-change: transform, opacity;">
     <span>
         { displayedText }
         <slot></slot>

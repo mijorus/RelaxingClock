@@ -185,16 +185,21 @@ import { spotifyPlayerStatus } from "../../stores/spotify";
         if (currentCommand) {
             if(event.code === 'Enter' || event.code === 'NumpadEnter') {
                 if (currentCommand.arguments[argument]) {
-                    if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
-                        // commandHistory.push({command: clearCommand(), argument, params}); @todo
-                        const lastCommand = commandHistory.length > 0 ? commandHistory[commandHistory.length - 1] : undefined;
-                        if (!lastCommand || (command !== lastCommand.command && argument !== lastCommand.argument)) {
-                            commandHistory.push({command: clearCommand(), argument, params});
-                        }
+                    try {
+                        if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
+                            // commandHistory.push({command: clearCommand(), argument, params}); @todo
+                            const lastCommand = commandHistory.length > 0 ? commandHistory[commandHistory.length - 1] : undefined;
+                            if (!lastCommand || (command !== lastCommand.command && argument !== lastCommand.argument)) {
+                                commandHistory.push({command: clearCommand(), argument, params});
+                            }
 
-                        resetInputs();
-                        summoned.set(false);
-                    } else {
+                            resetInputs();
+                            summoned.set(false);
+                        } else {
+                            throw Error('something went wrong in ' + command + ' triyng to execute ' + argument +'; however it could be just a wrong user input');
+                        }
+                    } catch (e) {
+                        console.warn(e);
                         shakeElement(rooster);
                     }
                 }

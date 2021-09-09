@@ -2,6 +2,7 @@ import anime, { AnimeInstance, AnimeTimelineInstance } from 'animejs';
 import randomColor from 'randomcolor';
 import { tick } from 'svelte';
 import { alarmIsRinging } from '../stores/globalState';
+import { notifications } from '../stores/notifications';
 import { alarmTime } from '../stores/storedSettings';
 import { getRandomIntInclusive } from '../utils/utils';
 
@@ -38,7 +39,10 @@ export async function ring() {
         complete() { setTimeout(() => tl.restart(), 250); }
     }, 0);
 
-    ringTimeout = setTimeout(() => dismiss(), 60 * 1000);
+    ringTimeout = setTimeout(() => {
+        dismiss();
+        setTimeout(() => notifications.create({ 'content': `You missed an alarm a minute ago`, title: 'Alarm missed', icon: 'lnr lnr-clock' }), 60 * 1000);
+    }, 60 * 1000);
 }
 
 export function dismiss(snooze = false) {

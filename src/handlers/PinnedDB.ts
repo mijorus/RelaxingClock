@@ -1,14 +1,18 @@
 import { openDB, IDBPDatabase, DBSchema } from 'idb';
+import randomColor from "randomcolor";
 
 export interface Pinned {
     title: string;
-    createdAt: number;
     done: boolean;
-    doneAt: number;
+    doneAt?: number;
+    color?: string;
+    top?: number;
+    left?: number;
 }
 
-interface StoredPinned extends Pinned {
+export interface StoredPinned extends Pinned {
     id?: number;
+    createdAt: number;
 }
 
 export interface PinnedDB extends DBSchema {
@@ -43,8 +47,13 @@ export class PinnedDB {
         this.db = db;
     }
 
-    static async create(reminder: Pinned) {
-        return PinnedDB.db.add('pinned', { ...reminder, createdAt: (~~Date.now() / 1000)});
+    static async create(pinned: Pinned) {
+        return PinnedDB.db.add('pinned', { ...pinned, createdAt: ~~(Date.now() / 1000), color: randomColor({'luminosity': 'bright'})});
+    }
+
+    static async setCoord(key: number, top: number, left: number) {
+        const pinned = await PinnedDB.db.get('pinned', key);
+        PinnedDB.db.put('pinned', { ...pinned, top, left });
     }
 
     static async get(key: number) {
@@ -58,7 +67,7 @@ export class PinnedDB {
     }
 
     static async remove(key: number) {
-        await PinnedDB.db.delete('pinned', key)
+        return await PinnedDB.db.delete('pinned', key);
     }
 
     static async setDone(key: number) {
