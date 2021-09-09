@@ -108,7 +108,7 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
         </div>
     {/each}{/if}
 
-    <div class="transition-all -z-1 w-full absolute bottom-0 opacity-0 transform translate-y-1/2 text-center text-secondary whitespace-nowrap" class:pinned-hint={pinned && pinned.length}>
+    <div class="transition-all -z-1 w-full absolute bottom-0 opacity-0 transform translate-y-1/2 text-center text-secondary whitespace-nowrap pinned-hint">
         Keep your pins inside this box! {#if !pinned.length}Type <strong>pin: [space]</strong> in the Rooster{/if}
     </div>
 </div>
