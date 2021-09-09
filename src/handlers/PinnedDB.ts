@@ -63,7 +63,7 @@ export class PinnedDB {
     static async getAllActive() {
         return (await PinnedDB.db.getAll('pinned')).filter(p => {
             return !p.done;
-        });
+        }).sort((a, b) => { return a.id < b.id ? -1 : 1});
     }
 
     static async remove(key: number) {
@@ -71,7 +71,7 @@ export class PinnedDB {
     }
 
     static async setDone(key: number) {
-        const reminder = await PinnedDB.db.get('pinned', key);
-        PinnedDB.db.put('pinned', { ...reminder, done: true, doneAt: (~~Date.now() / 1000) });
+        const pinned = await PinnedDB.db.get('pinned', key);
+        PinnedDB.db.put('pinned', { ...pinned, done: true, doneAt: (~~Date.now() / 1000) });
     }
 }

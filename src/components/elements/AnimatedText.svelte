@@ -5,6 +5,7 @@ import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
 
     export let text: string;
+    export let fade = true;
 
     let el: HTMLElement;
     let displayedText = '';
@@ -17,9 +18,9 @@ import { getRandomIntInclusive } from "../../utils/utils";
 
             anime({
                 targets: el,
-                duration: 250,
+                duration: fade ? 250 : 0,
                 easing: cbDefault,
-                opacity: [1, 0],
+                opacity: fade ? [1, 0] : 1,
                 direction: 'alternate',
                 loopComplete() { displayedText = text },
                 async complete() {
