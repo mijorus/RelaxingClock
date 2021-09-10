@@ -14,7 +14,7 @@ import { shakeElement } from '../../../utils/utils';
 import { alarmTime, clockFormat } from '../../../stores/storedSettings';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
-import { shortcuts } from '../../../stores/rooster';
+import { canBeSummoned, shortcuts } from '../../../stores/rooster';
 import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 
     let hours: string;
@@ -67,6 +67,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     }
 
     async function openCreationBox() {
+        canBeSummoned.set(false);
         alarmIsTomorrow = false;
         alarm = moment().add(2, 'm');
         creationBoxOpened = true;
@@ -103,6 +104,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     }
 
     function closeCreationBox() {
+        canBeSummoned.set(true);
         creationBoxOpened = false;
         tips.set(null);
         alarm = null;

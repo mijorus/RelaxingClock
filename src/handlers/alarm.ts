@@ -3,8 +3,8 @@ import randomColor from 'randomcolor';
 import { tick } from 'svelte';
 import { alarmIsRinging } from '../stores/globalState';
 import { notifications } from '../stores/notifications';
+import { canBeSummoned } from '../stores/rooster';
 import { alarmTime } from '../stores/storedSettings';
-import { getRandomIntInclusive } from '../utils/utils';
 
 let tl: AnimeTimelineInstance;
 let target: HTMLElement;
@@ -13,6 +13,7 @@ let ringTimeout: NodeJS.Timeout;
 
 export async function ring() {
     alarmIsRinging.set(true);
+    canBeSummoned.set(false);
     await tick();
 
     target = document.querySelector('#alarm-ring');
@@ -50,6 +51,7 @@ export function dismiss(snooze = false) {
     if (shakeClock) shakeClock.pause();
     if (target) alarmIsRinging.set(false);
     if (ringTimeout) clearTimeout(ringTimeout);
+    canBeSummoned.set(true);
     //@ts-ignore
     if (document.getElementById('alarm-audio')) document.getElementById('alarm-audio').pause()
     clearAlarmMemory(!snooze);
