@@ -5,7 +5,6 @@ import { fade } from "svelte/transition";
 import { caretToEnd, shakeElement } from "../../utils/utils";
 import Examples from "./Examples.svelte";
 import type { RoosterExamples } from "../../types";
-import { spotifyPlayerStatus } from "../../stores/spotify";
 
     let rooster: HTMLElement;
 

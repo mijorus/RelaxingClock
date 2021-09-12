@@ -13,7 +13,12 @@ import { getRandomIntInclusive } from "../../utils/utils";
 
     $: {
         if (el && (text !== displayedText)) {
-            if (scrollTl) scrollTl.pause();
+            if (scrollTl) {
+                scrollTl.pause();
+                scrollTl.remove(el);
+                scrollTl = null;
+            }
+            
             el.style.transform = 'translateX(0px)';
 
             anime({

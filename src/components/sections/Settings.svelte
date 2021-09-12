@@ -10,6 +10,7 @@ import Divisor from '../clock/Divisor.svelte';
 import Minutes from '../clock/Minutes.svelte';
 import { clockIsVisible } from '../../stores/globalState';
 import { fade } from 'svelte/transition';
+import Pinned from './settingsPage/Pinned.svelte';
 </script>
 
 <div class="relative">
@@ -19,7 +20,11 @@ import { fade } from 'svelte/transition';
         <HighContrast />
         <BlinkingDots />
         <Alarm />
-        <Reminders />
+        <Pinned />
+        <div class="relative">
+            <div class="absolute w-1/2 h-1/2 pr-0 rounded-xl" style="transform: translate(-5%, -5%); background-color: rgb(14 14 14);"></div>
+            <Reminders />
+        </div>
     </div>
     {#if !$clockIsVisible}
         <div class="sticky bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl sm:hidden md:block p-4 font-clock text-primary transition-all" transition:fade>

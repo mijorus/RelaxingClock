@@ -8,6 +8,7 @@ export interface Pinned {
     color?: string;
     top?: number;
     left?: number;
+    lastEdit?: number;
 }
 
 export interface StoredPinned extends Pinned {
@@ -53,7 +54,7 @@ export class PinnedDB {
 
     static async setCoord(key: number, top: number, left: number) {
         const pinned = await PinnedDB.db.get('pinned', key);
-        PinnedDB.db.put('pinned', { ...pinned, top, left });
+        PinnedDB.db.put('pinned', { ...pinned, top, left, lastEdit: (~~(Date.now() / 1000)) });
     }
 
     static async get(key: number) {
