@@ -106,7 +106,7 @@ import colors  from "simple-color-functions";
                 <div class="absolute top-0 left-0 w-full h-full rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};"></div>
                 <div class="flex items-center" >
                     <span class="p-2"><Pin color={p.color ?? 'red'} size="32"/></span>
-                    <span class="text-{p.title.length > 15 ? '2' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title}/></span>
+                    <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title}/></span>
                 </div>
                 <div class="remove-pin absolute top-0 right-0 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
                     on:click={() => removePin(p.id)}>
