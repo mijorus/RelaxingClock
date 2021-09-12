@@ -63,17 +63,18 @@ import colors  from "simple-color-functions";
         selectedElement = document.getElementById('pinned-'+index);
         document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
         selectedElement.classList.add('z-10');
-        handleDragOnMouseMove(e);
+        // handleDragOnMouseMove(e);
     }
 
     function handleDragOnMouseMove(e: MouseEvent) {
         if (!selectedElement || !readyToMove) return;
-        selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - 30)}px)`;
+        selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - (selectedElement.clientWidth / 4))}px)`;
     }
 
     onMount(async () => {
         await PinnedDB.initDB();
         await refreshPinned();
+        await PinnedDB.dbCleanUp();
 
         shortcuts.set('pin', {
             'color': '#fff',
@@ -96,10 +97,11 @@ import colors  from "simple-color-functions";
 
 <svelte:window on:mouseup={() => releasePinBubble()} />
 
-<div bind:this={pinBox} class="z-10 h-60 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" style="width: 32rem;" on:mousemove={handleDragOnMouseMove}>
+<div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
+    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove}>
     {#each pinned as p, i}
         <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 cursor-move pinned"
-            on:mousedown={(e) => handleMouseDown(e, p.id)} transition:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
+            on:mousedown={(e) => handleMouseDown(e, p.id)} in:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
             <Bubble classes="bg-black relative">
                 <div class="absolute top-0 left-0 w-full h-full rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};"></div>
                 <div class="flex items-center" >

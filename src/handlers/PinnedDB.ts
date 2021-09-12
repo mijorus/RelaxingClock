@@ -73,6 +73,13 @@ export class PinnedDB {
 
     static async setDone(key: number) {
         const pinned = await PinnedDB.db.get('pinned', key);
-        PinnedDB.db.put('pinned', { ...pinned, done: true, doneAt: (~~Date.now() / 1000) });
+        PinnedDB.db.put('pinned', { ...pinned, done: true, doneAt: (~~(Date.now() / 1000)) });
+    }
+
+    static async dbCleanUp(maxDayAge = 3) {
+        const pinned = await PinnedDB.db.getAll('pinned');
+        pinned.forEach(p => {
+            if ( p.doneAt < ((~~(Date.now() / 1000)) - (maxDayAge * 86400)) ) PinnedDB.db.delete('pinned', p.id);
+        });
     }
 }
