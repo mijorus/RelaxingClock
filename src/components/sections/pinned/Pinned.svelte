@@ -7,10 +7,10 @@ import Bubble from "../../elements/Bubble.svelte";
 import Pin from "../../icons/Pin.svelte";
 import { windowReady } from "html-ready";
 import anime from "animejs";
-import { outerHeight, outerWidth, sleep } from "../../../utils/utils";
 import { fade, scale } from "svelte/transition";
 import AnimatedText from "../../elements/AnimatedText.svelte";
-    
+import { eaElasticDefault } from "../../../utils/animations";
+
     let pinned: StoredPinned[] = [];
     let selectedElement: HTMLElement;
     let pinBox: HTMLElement;
@@ -18,21 +18,36 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
 
     async function refreshPinned() {
         pinned = await PinnedDB.getAllActive();
-    } 
+    }
 
     function createPinned(title: string) {
-        if (pinned.length >= 4 || title.length > 50) return false;
-        
+        if (pinned.length >= 5 || title.length > 50) return false;
+
         const res = PinnedDB.create({ title, 'done': false});
         refreshPinned();
         return res;
     }
 
-    function releasePinBubble() {
-         if (selectedElement) {
-            PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(selectedElement.style.top), parseInt(selectedElement.style.left));
-            selectedElement = null;
-         }
+    async function releasePinBubble() {
+        if (!selectedElement) return;
+     
+        const selY = parseInt(anime.get(selectedElement, 'translateY'));
+        const selX = parseInt(anime.get(selectedElement, 'translateX'));
+        
+        let animation = null;
+        if (selY > pinBox.clientHeight || selX > pinBox.clientWidth) {
+            animation = anime({
+                targets: selectedElement,
+                translateX: selX > pinBox.clientWidth ? pinBox.clientWidth : selX,
+                translateY: selY > pinBox.clientHeight ? pinBox.clientHeight : selY,
+                duration: 200,
+                easing: eaElasticDefault
+            });
+        }
+        
+        if (animation) await animation.finished;
+        PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(anime.get(selectedElement, 'translateY')), parseInt(anime.get(selectedElement, 'translateX')));
+        selectedElement = null;
     }
 
     async function removePin(id: number) {
@@ -45,26 +60,14 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
         e.stopPropagation();
 
         selectedElement = document.getElementById('pinned-'+index);
+        document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
+        selectedElement.classList.add('z-10');
     }
 
     function handleDragOnMouseMove(e: MouseEvent) {
         if (!selectedElement || !readyToMove) return;
 
-        if (e.clientX <= outerWidth(pinBox) && e.clientY <= outerHeight(pinBox)) {
-            selectedElement.style.top = (e.clientY - (selectedElement.clientHeight / 2))+'px';
-            selectedElement.style.left = (e.clientX - 30) +'px';
-        } else {
-            const bounceParams = [10, -10, 0];
-            let params: any = {
-                targets: selectedElement,
-                duration: 200,
-                easing: 'linear',
-            };
-
-            releasePinBubble();
-            (e.clientX > pinBox.clientWidth) ? params.translateX = bounceParams : params.translateY = bounceParams;
-            anime(params);
-        }
+        selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - 30)}px)`;
     }
 
     onMount(async () => {
@@ -92,12 +95,12 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
 
 <svelte:window on:mouseup={() => releasePinBubble()} />
 
-<div bind:this={pinBox} class="h-60 pin-box transition-all border border-transparent hover:border-secondary rounded-xl m-3" style="width: 32rem;" on:mousemove={handleDragOnMouseMove}>
+<div bind:this={pinBox} class="z-10 h-60 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" style="width: 32rem;" on:mousemove={handleDragOnMouseMove}>
     {#each pinned as p, i}
-        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 cursor-move pinned" on:mousedown={(e) => handleMouseDown(e, p.id)}
-                transition:scale style="{p.top ? `top: ${p.top}px` : ''}; {p.left ? `left: ${p.left}px` : ''} ">
+        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 cursor-move pinned"
+            on:mousedown={(e) => handleMouseDown(e, p.id)} transition:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
             <Bubble classes="bg-tertiary">
-                <div class="flex items-center">
+                <div class="flex items-center" >
                     <span class="p-2"><Pin color={p.color ?? 'red'} size="32"/></span>
                     <span class="text-{p.title.length > 15 ? '2' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title}/></span>
                 </div>
@@ -116,8 +119,8 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
 
 <style>
     .pinned {
-        will-change: top, left, transform;
-        /* transition: all .005s linear; */
+        will-change: transform;
+        /* transition: transform .05s linear; */
     }
 
     .pinned:hover .remove-pin{
