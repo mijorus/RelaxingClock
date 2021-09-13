@@ -4,7 +4,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 import { fly } from "svelte/transition";
 import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { screenSaver } from "../../stores/globalState";
+import { screenSaver, tips } from "../../stores/globalState";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
 import time from "../../stores/time";
 import type { SpotifyPlayerStatus } from "../../types";
@@ -82,8 +82,23 @@ import Shuffle from "../icons/Shuffle.svelte";
         e.preventDefault(); e.stopPropagation();
         if (SpotifyPlayer) SpotifyPlayer.nextTrack();
     }
+
+    function handleWindowKeydown(e: KeyboardEvent) {
+        if ($spotifyPlayerState && e.code === 'Space' && !e.ctrlKey && document.activeElement === document.querySelector('body')) {
+            e.preventDefault();
+            e.stopPropagation();
+            $spotifyPlayerState.paused ? togglePlay() : togglePause();
+        }
+
+        else if ($spotifyPlayerState?.track_window && e.ctrlKey && e.key === 'E' && document.activeElement === document.querySelector('body')) {
+            console.log('qiu');
+            
+            expandedBox = !expandedBox;
+        };
+    }
 </script>
 
+<svelte:window on:keydown={handleWindowKeydown}/>
 <div class="absolute bottom-5 left-5 font-primary">
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
@@ -120,7 +135,8 @@ import Shuffle from "../icons/Shuffle.svelte";
                     <div class="bg-cover w-14 h-14 rounded-md bg-no-repeat flex items-center justify-center" 
                         style="background-image: url({expandedBox ? '' : albumCover[0].url})"
                     >
-                        <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" on:click={() => expandedBox = !expandedBox}/>
+                        <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" 
+                            on:click={() => expandedBox = !expandedBox} on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+E'}])} on:mouseleave={() => tips.set(null)}/>
                     </div>
                 {:else}
                     <!-- the spotify icon -->

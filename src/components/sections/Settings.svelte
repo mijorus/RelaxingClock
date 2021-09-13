@@ -11,19 +11,23 @@ import Minutes from '../clock/Minutes.svelte';
 import { clockIsVisible } from '../../stores/globalState';
 import { fade } from 'svelte/transition';
 import Pinned from './settingsPage/Pinned.svelte';
+import SettingsBox from '../elements/SettingsBox.svelte';
 </script>
 
 <div class="relative">
     <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative text-primary font-primary">
         <Spotify />
         <Weather />
-        <HighContrast />
-        <BlinkingDots />
         <Alarm />
         <Pinned />
-        <div class="relative">
-            <div class="absolute w-1/2 h-1/2 pr-0 rounded-xl" style="transform: translate(-5%, -5%); background-color: rgb(14 14 14);"></div>
-            <Reminders />
+        <Reminders />
+        
+        <div class="mt-16">
+            <SettingsBox ><span class="text-6xl text-primary font-primary font-bold">Settings</span></SettingsBox>
+            <div class="relative pt-1 rounded-xl border-2 border-secondary">
+                <HighContrast />
+                <BlinkingDots />
+            </div>
         </div>
     </div>
     {#if !$clockIsVisible}
