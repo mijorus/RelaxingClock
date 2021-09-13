@@ -68,18 +68,14 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 
     async function openCreationBox() {
         canBeSummoned.set(false);
-        alarmIsTomorrow = false;
         alarm = moment().add(2, 'm');
         creationBoxOpened = true;
         
         await tick();
+        
         handleAlarmKeyUp();
-        //@ts-ignore
-        document.querySelector('#alarm-h-input').focus();
-        tips.set([
-            {name: 'Create', shortcut: 'Ctrl+Enter'},
-            {name: 'Dismiss', shortcut: 'Esc'},
-        ]);
+        document.getElementById('alarm-h-input').focus();
+        tips.set([ {name: 'Create', shortcut: 'Ctrl+Enter'}, {name: 'Dismiss', shortcut: 'Esc'}, ]);
     }
 
     function saveInput() {
@@ -95,11 +91,13 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 
     function createAlarm(alarmTitle?: string) {
         clearAlarmMemory();
-
+        
         if (alarm && alarm.isBefore(moment())) alarm.add(1, 'day');
         alarmTime.set(alarm.seconds(0).unix());
         
         if (alarmTitle && alarmTitle.length > 0) localStorage.setItem('alarmTitle', alarmTitle);
+        
+        alarmIsTomorrow = !alarm.isSame(moment(), 'day');
         notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock' });
     }
 
@@ -115,6 +113,15 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         if (notify) notifications.create({ 'content': ``, title: 'Alarm dismissed', icon: 'lnr lnr-clock' });
     }
 
+    function createFromRooster(p: string) {
+        p = p.trim();
+        alarm = moment(p.split(' ')[0], format)
+        if (!alarm.isValid()) return false;
+        // @todo handle 12h format
+        createAlarm(p.match(/\s/) ? p.slice(p.match(/\s/).index + 1) : null);
+        return true;
+    }
+
     onMount(() => {
         periodicCheck(moment());
     
@@ -122,13 +129,14 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
             color: process.env.BACKGROUND_DARK, 
             background: 'red',
             arguments: {
+                '': {
+                    async callback(p) {
+                        return createFromRooster(p);
+                    }
+                },
                 set: {
                     async callback(p) {
-                        alarm = moment(p.split(' ')[0], format)
-                        if (!alarm.isValid()) return false;
-                        // @todo handle 12h format
-                        createAlarm(p.match(/\s/) ? p.slice(p.match(/\s/).index + 1) : null);
-                        return true;
+                        return createFromRooster(p);
                     }
                 },
                 dismiss: {
