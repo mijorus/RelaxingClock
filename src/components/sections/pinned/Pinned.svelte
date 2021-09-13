@@ -96,6 +96,11 @@ import colors  from "simple-color-functions";
                         return res !== false;
                     }
                 }
+            },
+            async examples(arg, p) {
+                return {
+                    'group': [{'argument': 'pin:', 'example': '[space]', 'tip': 'Create a new pinned message'}]
+                }
             }
         });
 
