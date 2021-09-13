@@ -169,6 +169,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     onMount(async () => {
         try {
             await RemindersDB.initDB();
+            await RemindersDB.dbCleanUp();
             reminders = await RemindersDB.getAllByExpirationDate();
             runListCheck();
             ready = true;
@@ -288,7 +289,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             </div>
         {/if}
         {#if doneReminders.length}
-            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-72 overflow-y-scroll">
+            <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-96 overflow-y-scroll">
                 {#each doneReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder">
                         <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>

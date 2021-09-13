@@ -58,6 +58,13 @@ export class RemindersDB {
         const reminder = await RemindersDB.db.get('reminders', key);
         RemindersDB.db.put('reminders', { ...reminder, at: at.unix(), done: false });
     }
+
+    static async dbCleanUp(maxDayAge = 15) {
+        const reminders = await RemindersDB.db.getAll('reminders');
+        reminders.forEach(p => {
+            if ( p.doneAt < ((~~(Date.now() / 1000)) - (maxDayAge * 86400)) ) RemindersDB.db.delete('reminders', p.id);
+        });
+    }
 }
 
 export interface RemindersDB extends DBSchema {
