@@ -16,6 +16,7 @@ import colors  from "simple-color-functions";
     let selectedElement: HTMLElement;
     let pinBox: HTMLElement;
     let readyToMove = false;
+    let scrollPaused = false;
 
     async function refreshPinned() {
         pinned = await PinnedDB.getAllActive();
@@ -49,6 +50,7 @@ import colors  from "simple-color-functions";
         if (animation) await animation.finished;
         PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(anime.get(selectedElement, 'translateY')), parseInt(anime.get(selectedElement, 'translateX')));
         selectedElement = null;
+        scrollPaused = false;
     }
 
     async function removePin(id: number) {
@@ -63,7 +65,13 @@ import colors  from "simple-color-functions";
         selectedElement = document.getElementById('pinned-'+index);
         document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
         selectedElement.classList.add('z-10');
-        // handleDragOnMouseMove(e);
+        scrollPaused = true;
+
+        anime({
+            targets: selectedElement,
+            duration: 25,
+            easing: 'linear', translateY: (e.clientY - (selectedElement.clientHeight / 2)), translateX: (e.clientX - (selectedElement.clientWidth / 4))
+        });
     }
 
     function handleDragOnMouseMove(e: MouseEvent) {
@@ -106,10 +114,10 @@ import colors  from "simple-color-functions";
                 <div class="absolute top-0 left-0 w-full h-full rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};"></div>
                 <div class="flex items-center" >
                     <span class="p-2"><Pin color={p.color ?? 'red'} size="32"/></span>
-                    <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title}/></span>
+                    <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title} paused={scrollPaused}/></span>
                 </div>
-                <div class="remove-pin absolute top-0 right-0 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
-                    on:click={() => removePin(p.id)}>
+                <div class="remove-pin absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
+                    on:mousedown={(e) => {e.stopImmediatePropagation(); removePin(p.id)}}>
                     <span class="lnr lnr-circle-minus text-xl text-white" ></span>
                 </div>
             </Bubble>
@@ -124,7 +132,6 @@ import colors  from "simple-color-functions";
 <style>
     .pinned {
         will-change: transform;
-        /* transition: transform .05s linear; */
     }
 
     .pinned:hover .remove-pin{

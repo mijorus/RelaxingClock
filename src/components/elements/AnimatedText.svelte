@@ -1,15 +1,18 @@
 <script lang="ts">
 import anime from "animejs";
-import { tick } from "svelte";
+import { onDestroy, tick } from "svelte";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
 
     export let text: string;
     export let fade = true;
+    export let paused = false;
 
     let el: HTMLElement;
     let displayedText = '';
     let scrollTl: anime.AnimeTimelineInstance;
+
+    $: pauseScroll(paused);
 
     $: {
         if (el && (text !== displayedText)) {
@@ -52,6 +55,18 @@ import { getRandomIntInclusive } from "../../utils/utils";
                 duration: getRandomIntInclusive(13000, 16000),
             }, '+=50');
     }
+
+    function pauseScroll(paused) {
+        if (!scrollTl) return;
+        paused ? scrollTl.pause() : scrollTl.play();
+    }
+
+    onDestroy(() => {
+        if (scrollTl && el) {
+            scrollTl.pause();
+            scrollTl.remove(el);
+        }
+    })
 </script> 
 
 <span bind:this={el} class="inline-block w-full" style="will-change: transform, opacity;">
