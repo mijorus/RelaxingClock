@@ -110,6 +110,7 @@ export function createShortcuts() {
     });
 
     args.search.quickLaunch = 'l';
+    args.playlist.quickLaunch = 'm';
     args.track.quickLaunch = 't';
 
     shortcuts.set('spotify', {
@@ -135,7 +136,7 @@ export function createShortcuts() {
                 return loadSearch(params, arg);
             }
 
-            else if (arg.startsWith('que')) {
+            else if (arg.startsWith('qu')) {
                 return loadQueue();
             }
 
