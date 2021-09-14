@@ -62,14 +62,21 @@ function throwAuthError(reason = '') {
     }
 }
 
-let refreshingToken = false; let refreshTimeout: NodeJS.Timeout;
+let refreshTimeout: NodeJS.Timeout;
 export function autoRefeshToken(seconds: number, enable = true) {
     clearTimeout(refreshTimeout);
-    if (enable && !refreshingToken) {
+    seconds = seconds + 15;
+    if (enable && !refreshingToken.running) {
         console.log('Refreshing token in ' + seconds + ' seconds');
         refreshTimeout = setTimeout(() => {
-            refreshingToken = true;
-            refershOrGetOAuthToken().finally(() => refreshingToken = false);
+            refershOrGetOAuthToken();
         }, seconds * 1000);
+    }
+}
+
+export const refreshingToken = {
+    running: false,
+    set(state: boolean) {
+        this.running = state;
     }
 }

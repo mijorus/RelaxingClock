@@ -1,7 +1,7 @@
 import { SpotifyAuthClient } from '../../lib/spotify/SpotifyAuthClient';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { spotifyAccessToken, spotifyPlayerState, spotifyPlayerStatus } from '../../stores/spotify';
-import { autoRefeshToken } from './login';
+import { autoRefeshToken, refreshingToken } from './login';
 import { createShortcuts } from './shortcuts';
 
 export let SpotifyPlayer: Spotify.Player;
@@ -10,6 +10,7 @@ const authClient = new SpotifyAuthClient(process.env.SPOTIFY_CLIENT_ID);
 
 export async function refershOrGetOAuthToken() {
     let response;
+    refreshingToken.set(true);
     //We request a token for the first time
     if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
         response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
@@ -32,6 +33,7 @@ export async function refershOrGetOAuthToken() {
     if (response.expires_in) autoRefeshToken(response.expires_in);
     SpotifyClient.setAccessToken(response.access_token);
     spotifyAccessToken.set(response.access_token);
+    refreshingToken.set(false);
     return response.access_token;
 }
 
