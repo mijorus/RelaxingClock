@@ -107,7 +107,13 @@ import type { RoosterExamples } from "../../types";
         if (event.code === 'ArrowRight' || event.code === 'Tab') {
             if (document.activeElement === argumentBox || document.activeElement === commandBox) {
                 event.preventDefault();
-                fill();
+                
+                await fill();
+                if (event.code === 'ArrowRight' && document.activeElement === argumentBox && shortcuts.get(clearCommand())?.arguments['']) {
+                    argument = '';
+                    paramsBox.focus();
+                }
+                
                 suggestion = '';
             }
         }
@@ -168,7 +174,7 @@ import type { RoosterExamples } from "../../types";
 
             if (document.activeElement === argumentBox) {
                 event.preventDefault();
-                if (argument !== '' || shortcuts.get(clearCommand())?.arguments[''] !== undefined) {
+                if (argument !== '') {
                     paramsBox.focus();
                     suggestion = ''
                 }
