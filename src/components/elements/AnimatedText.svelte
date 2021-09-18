@@ -10,21 +10,26 @@ import { getRandomIntInclusive } from "../../utils/utils";
 
     let el: HTMLElement;
     let displayedText = '';
-    let scrollTl: anime.AnimeTimelineInstance;
+    let scrollTl = undefined;
+    let fadeTextTl =  undefined;
 
     $: pauseScroll(paused);
 
     $: {
         if (el && (text !== displayedText)) {
+            el.style.transform = 'translateX(0px)';
+            
             if (scrollTl) {
                 scrollTl.pause();
-                scrollTl.remove(el);
-                scrollTl = null;
+                scrollTl = undefined;
             }
             
-            el.style.transform = 'translateX(0px)';
+            if (fadeTextTl) {
+                fadeTextTl.pause();
+                fadeTextTl = undefined;
+            }
 
-            anime({
+            fadeTextTl = anime({
                 targets: el,
                 duration: fade ? 250 : 0,
                 easing: cbDefault,
@@ -39,11 +44,9 @@ import { getRandomIntInclusive } from "../../utils/utils";
         }
     }
 
-    function scrollText(el: HTMLElement) {
-        if (!el) return;
-        
+    function scrollText(textEl: HTMLElement) {
         scrollTl = anime.timeline({
-            targets: el,
+            targets: textEl,
             easing: cbDefault,
             loop: true,
             direction: 'alternate',
@@ -51,7 +54,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
             delay: getRandomIntInclusive(5000, 7000),
         })
             .add({
-                translateX: - (el.scrollWidth - el.clientWidth), 
+                translateX: - (textEl.scrollWidth - textEl.clientWidth), 
                 duration: getRandomIntInclusive(13000, 16000),
             }, '+=50');
     }
