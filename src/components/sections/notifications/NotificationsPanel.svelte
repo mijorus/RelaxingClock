@@ -12,7 +12,7 @@
         clearTimeout(timeout);
         if (notificationToShow) notificationToShow = null; 
         
-        if (document.visibilityState === 'hidden' && Notification.permission === 'granted') {
+        if (!document.hasFocus() && Notification.permission === 'granted') {
             new Notification(n.title, {
                 'silent': !n.sound,
                 'body': n.content,
