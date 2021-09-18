@@ -4,7 +4,6 @@ import { fade } from "svelte/transition";
 import type { Hourly } from "../../lib/openweathermap/client";
 import { mainWeatherConditions } from "../../lib/openweathermap/mainConditions";
 import { lastWeatherUpdate, tempUnit, weather } from "../../stores/storedSettings";
-import time from "../../stores/time";
 import { kTemperatureConverter } from "../../utils/utils";
 
     let data: Hourly[] = [];
@@ -17,7 +16,7 @@ import { kTemperatureConverter } from "../../utils/utils";
             console.log('updating weather widget'); data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 
-            $lastWeatherUpdate.hourly.forEach((el: Hourly) => {
+            $lastWeatherUpdate.hourly.sort((a, b) => a.dt - b.dt).forEach((el: Hourly) => {
                 const date = moment(el.dt, 'X');
                 if (date.isSame(moment(), 'day') && date.isSameOrAfter(moment())) data[date.hours()] = el;
             });

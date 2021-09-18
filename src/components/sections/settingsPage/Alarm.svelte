@@ -115,7 +115,15 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 
     function createFromRooster(p: string) {
         p = p.trim();
-        alarm = moment(p.split(' ')[0], format)
+
+        const alarmParam = p.split(' ')[0];
+        if (alarmParam.endsWith('m') || alarmParam.endsWith('h')) {
+            //@ts-ignore
+            alarm = moment().add(parseInt(alarmParam), alarmParam.match(/\D$/)[0])
+        } else {
+            alarm = moment(p.split(' ')[0], format)
+        }
+
         if (!alarm.isValid()) return false;
         // @todo handle 12h format
         createAlarm(p.match(/\s/) ? p.slice(p.match(/\s/).index + 1) : null);
@@ -151,8 +159,9 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
                 return {
                     'namespace': 'Examples', 
                     'group': [
-                        {'argument': 'set', 'example': (a !== 'dismiss' && p.match(' ')) ? '[optional] Title of the alarm' : '[time]'},
+                        {'argument': 'set', 'example': (a !== 'dismiss' && p.match(' ')) ? '[optional] Title of the alarm' : '[time]', 'tip': 'or just press left arrow'},
                         {'argument': 'set', 'example': '16:20 My power nap'},
+                        {'argument': 'set', 'example': '21m Very important meeting', 'tip': 'Amount of minutes (m) or hours (h)'},
                         {'argument': 'dismiss', 'example': '', 'tip': 'Dimiss the alarm'},
                     ]
                 };

@@ -275,7 +275,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 rounded-md border border-secondary">
-                        <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
+                        <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
                         <span class="text-secondary">
                             {moment(r.at, 'X').fromNow()}
                             {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
@@ -292,7 +292,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-96 overflow-y-scroll">
                 {#each doneReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder">
-                        <span class="whitespace-nowrap"><AnimatedText text={r.title} /></span>
+                        <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
                         {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
                             <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>

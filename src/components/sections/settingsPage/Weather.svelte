@@ -131,12 +131,11 @@ import anime from "animejs";
     </Title>
     <div>
         <PrimaryBox
-            on:mouseenter={showWeatherTips} on:mouseleave={() => tips.set(null)}
             label={{text: 'Enable weather'}}
             description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
             available={true}
         >
-            <div class="flex items-center">
+            <div class="flex items-center" on:mouseenter={() => { if ($weather) showWeatherTips()}} on:mouseleave={() => tips.set(null)}>
                 <span id="refresh-weather-btn" class="fas fa-sync-alt opacity-50 mr-4 hover:opacity-100 cursor-pointer" on:click={() => updateWeatherData()} 
                     class:pointer-events-none={!$weather}></span>
                 <Booleans state={$weather} label={'weather'} on:change={(e) => handleWeatherSwitch(e.detail)} />

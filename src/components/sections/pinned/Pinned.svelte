@@ -3,7 +3,7 @@ import { onMount } from "svelte";
 import { PinnedDB } from "../../../handlers/PinnedDB";
 import type { StoredPinned } from "../../../handlers/PinnedDB";
 import { shortcuts } from "../../../stores/rooster";
-import Bubble from "../../elements/Bubble.svelte";
+// import Bubble from "../../elements/Bubble.svelte";
 import Pin from "../../icons/Pin.svelte";
 import { windowReady } from "html-ready";
 import anime from "animejs";
@@ -17,6 +17,7 @@ import colors  from "simple-color-functions";
     let pinBox: HTMLElement;
     let readyToMove = false;
     let scrollPaused = false;
+    const bubblePinPos = 70;
 
     async function refreshPinned() {
         pinned = await PinnedDB.getAllActive();
@@ -40,8 +41,8 @@ import colors  from "simple-color-functions";
         if (selY > pinBox.clientHeight || selX > pinBox.clientWidth) {
             animation = anime({
                 targets: selectedElement,
-                translateX: selX > pinBox.clientWidth ? pinBox.clientWidth : selX,
-                translateY: selY > pinBox.clientHeight ? pinBox.clientHeight : selY,
+                translateX: selX > pinBox.clientWidth ? pinBox.clientWidth - (bubblePinPos / 2) : selX,
+                translateY: selY > pinBox.clientHeight ? pinBox.clientHeight - (bubblePinPos / 2) : selY,
                 duration: 200,
                 easing: eaElasticDefault
             });
@@ -58,25 +59,35 @@ import colors  from "simple-color-functions";
         refreshPinned();
     }
 
+    function bringElementUp(el: HTMLElement) {
+        document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
+        el.classList.add('z-10');
+    }
+
     function handleMouseDown(e: MouseEvent, index: number) {
         e.preventDefault();
         e.stopPropagation();
+        console.log('down');
+        
 
         selectedElement = document.getElementById('pinned-'+index);
-        document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
-        selectedElement.classList.add('z-10');
+        bringElementUp(selectedElement);
         scrollPaused = true;
 
         anime({
             targets: selectedElement,
-            duration: 25,
-            easing: 'linear', translateY: (e.clientY - (selectedElement.clientHeight / 2)), translateX: (e.clientX - (selectedElement.clientWidth / 4))
+            duration: 40,
+            easing: 'linear', translateY: (e.clientY - (selectedElement.clientHeight / 2)), translateX: (e.clientX - bubblePinPos)
         });
     }
 
     function handleDragOnMouseMove(e: MouseEvent) {
         if (!selectedElement || !readyToMove) return;
-        selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - (selectedElement.clientWidth / 4))}px)`;
+        selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - bubblePinPos)}px)`;
+    }
+
+    function handlePinRelease(e: MouseEvent) {
+        releasePinBubble();
     }
 
     onMount(async () => {
@@ -111,21 +122,23 @@ import colors  from "simple-color-functions";
 <svelte:window on:mouseup={() => releasePinBubble()} />
 
 <div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
-    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove}>
+    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove} on:mouseleave={handlePinRelease}>
     {#each pinned as p, i}
-        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 cursor-move pinned"
-            on:mousedown={(e) => handleMouseDown(e, p.id)} in:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
-            <Bubble classes="bg-black relative">
-                <div class="absolute top-0 left-0 w-full h-full rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};"></div>
-                <div class="flex items-center" >
-                    <span class="p-2"><Pin color={p.color ?? 'red'} size="32"/></span>
-                    <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title} paused={scrollPaused}/></span>
+        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown={() => bringElementUp(document.getElementById('pinned-'+p.id))}
+            in:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
+            <div class="bg-black relative m-6 rounded-2xl p-0 text-primary w-80">
+                <div class="p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
+                    <div class="flex items-center z-10 bg-transparent">
+                        <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 
+                            on:mousedown={(e) => handleMouseDown(e, p.id)}><Pin color={p.color ?? 'red'} size="32"/></span>
+                        <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title} paused={scrollPaused}/></span>
+                    </div>
+                    <div class="remove-pin absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
+                        on:mousedown={(e) => {e.stopImmediatePropagation(); removePin(p.id)}}>
+                        <span class="lnr lnr-circle-minus text-xl text-white" ></span>
+                    </div>
                 </div>
-                <div class="remove-pin absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
-                    on:mousedown={(e) => {e.stopImmediatePropagation(); removePin(p.id)}}>
-                    <span class="lnr lnr-circle-minus text-xl text-white" ></span>
-                </div>
-            </Bubble>
+            </div>
         </div>
     {/each}
 
