@@ -1,12 +1,16 @@
 import type { Readable } from "stream";
 import { derived, writable, Writable } from "svelte/store";
-import type { Notification } from "../types";
+import type { CustomNotification } from "../types";
 
 function createNotification() {
-	const stored: Writable<Array<Notification>> = writable([]);
+	const stored: Writable<CustomNotification[]> = writable([]);
 
-    function create(n: Notification) {
+    function create(n: CustomNotification) {
         stored.update(list => [...list, n]);
+
+		if (Notification.permission === 'default') {
+			Notification.requestPermission();
+		}
     }
 
 	return {

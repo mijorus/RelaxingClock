@@ -2,10 +2,10 @@
     import { onMount } from "svelte";
 
     import { fade, fly } from "svelte/transition";
-    import type { Notification } from "../../../types";
+    import type { CustomNotification } from "../../../types";
     import Bubble from "../../elements/Bubble.svelte";
 
-    export let data: Notification;
+    export let data: CustomNotification;
     export let expire = false;
 </script>
 

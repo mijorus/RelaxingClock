@@ -1,21 +1,30 @@
 <script lang="ts">
-    import { notifications, latestNotification } from "../../../stores/notifications";
-    import type { Notification } from "../../../types";
-    import NotificationComponent from "./Notification.svelte";
+    import { latestNotification, notifications } from "../../../stores/notifications";
+    import type { CustomNotification } from "../../../types";
+    import NotificationComponent from "./CustomNotificationComponent.svelte";
 
-    let notificationToShow: Notification = null;
+    let notificationToShow: CustomNotification = null;
 
-    $: setToShow($latestNotification)
+    $: showNotification($latestNotification)
 
     let timeout;
-    function setToShow(n: Notification) {
+    function showNotification(n: CustomNotification) {
         clearTimeout(timeout);
         if (notificationToShow) notificationToShow = null; 
-        notificationToShow = n;
-        timeout = setTimeout(() => notificationToShow = null, 8000);
+        
+        if (document.visibilityState === 'hidden' && Notification.permission === 'granted') {
+            new Notification(n.title, {
+                'silent': !n.sound,
+                'body': n.content,
+            });
+        } else {
+            notificationToShow = n;
+            timeout = setTimeout(() => notificationToShow = null, 8000);
+        }
+
+        console.log('notifications', $notifications);
     }
-
-
+ 
 </script>
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">

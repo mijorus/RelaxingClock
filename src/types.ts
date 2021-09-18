@@ -60,7 +60,7 @@ export interface Tip {
     shortcut: string;
 }
 
-export interface Notification {
+export interface CustomNotification {
     title: string;
     content: string;
     icon: string;
