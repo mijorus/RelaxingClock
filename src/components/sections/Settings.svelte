@@ -16,6 +16,7 @@ import SettingsBox from '../elements/SettingsBox.svelte';
 
 <div class="relative">
     <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative text-primary font-primary">
+        <div>Relaxing Clock</div>
         <Spotify />
         <Weather />
         <Alarm />

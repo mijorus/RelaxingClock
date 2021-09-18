@@ -10,6 +10,8 @@
     let timeout;
     function showNotification(n: CustomNotification) {
         clearTimeout(timeout);
+        if (!n) return;
+
         if (notificationToShow) notificationToShow = null; 
         
         if (!document.hasFocus() && Notification.permission === 'granted') {
