@@ -13,6 +13,7 @@ import { attemptSpotifyLogin } from './handlers/spotify/login';
 import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 import AlarmRing from './components/elements/AlarmRing.svelte';
 import screenSaverHandler from "./handlers/screenSaver";
+import LoadingScreen from './components/sections/LoadingScreen.svelte';
 
     screenSaverHandler.set(20 * 1000);
 
@@ -39,6 +40,8 @@ import screenSaverHandler from "./handlers/screenSaver";
 <svelte:head>
     {#if $loggedWithSpotify}<script src="https://sdk.scdn.co/spotify-player.js" defer></script>{/if}
 </svelte:head>
+
+<LoadingScreen />
 
 <Rooster />
 
