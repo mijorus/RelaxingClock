@@ -1,5 +1,5 @@
 <script lang="ts">
-import { windowReady } from "html-ready";
+import { documentReady, windowReady } from "html-ready";
 import { onMount } from "svelte";
 import { slide } from "svelte/transition";
 import anime from "animejs";
@@ -9,8 +9,11 @@ import anime from "animejs";
     let paddingTime = 750;
 
     onMount(async () => {
+        await documentReady;
+        bar = 50;
         await windowReady;
         bar = 100;
+        
         setTimeout(() =>{
              isLoading = false
              anime({
