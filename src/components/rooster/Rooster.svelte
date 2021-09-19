@@ -17,6 +17,7 @@ import type { RoosterExamples } from "../../types";
 
     let argument = '';
     let argumentBox: HTMLElement;
+    const invalidArgumentTheshold = 2;
 
     let params = '';
     let paramsBox: HTMLElement;
@@ -56,7 +57,7 @@ import type { RoosterExamples } from "../../types";
             return;
         }
 
-        for (const [key, value] of Object.entries(shortcuts.getAll())) {
+        for (const key of Object.keys(shortcuts.getAll())) {
             if (key.startsWith(command)) {
                 suggestion = key.replace(command, '') + ':';
                 commandPill.background = shortcuts.get(key).background ?? null;
@@ -72,16 +73,26 @@ import type { RoosterExamples } from "../../types";
         suggestion = '';
     }
 
-    function handleArgument(argument: string) {
-        if (argument && argument.length) {
+    function handleArgument(arg: string) {
+        if (arg && arg.length) {
             const currentCommand = shortcuts.get(clearCommand());
             if (currentCommand && currentCommand.arguments) {
                 for (const [key, value] of Object.entries(currentCommand.arguments)) {
-                    if (key.startsWith(argument) && value.active !== false) {
-                        suggestion = key.replace(argument, '');
+                    if (key !== '' && key.startsWith(arg) && value.active !== false) {
+                        suggestion = key.replace(arg, '');
                         return;
                     }
                 }
+
+                if (suggestion === '') {
+                    const argKeys = Object.keys(currentCommand.arguments);
+                    if (arg.length > ((argKeys.length === 1 && argKeys[0] === '') ? 0 : invalidArgumentTheshold) && (argKeys).includes('')) {
+                        params = arg;
+                        argument = '';
+                        paramsBox.focus();
+                        tick().then(() => caretToEnd(paramsBox));
+                    }
+                }   
             }
         }
         
@@ -107,13 +118,7 @@ import type { RoosterExamples } from "../../types";
         if (event.code === 'ArrowRight' || event.code === 'Tab') {
             if (document.activeElement === argumentBox || document.activeElement === commandBox) {
                 event.preventDefault();
-                
                 await fill();
-                if (event.code === 'ArrowRight' && document.activeElement === argumentBox && shortcuts.get(clearCommand())?.arguments['']) {
-                    argument = '';
-                    paramsBox.focus();
-                }
-                
                 suggestion = '';
             }
         }
