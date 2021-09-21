@@ -22,6 +22,9 @@ import anime from "animejs";
                  translateY: [30, 0],
                  duration: 750,
                  easing: 'easeOutQuad',
+                 complete() {
+                     document.querySelector('main').style.transform = null;
+                 }
              });
         }, paddingTime);
     })

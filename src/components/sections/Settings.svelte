@@ -15,12 +15,12 @@ import SettingsBox from '../elements/SettingsBox.svelte';
 </script>
 
 <div class="relative">
-    <div class="w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 relative text-primary font-primary">
+    <div class="relative w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 text-primary font-primary">
         <Spotify />
         <Weather />
         <Alarm />
         <Pinned />
-        <Reminders />
+        <Reminders />  
         
         <div class="mt-16">
             <SettingsBox ><span class="text-6xl text-primary font-primary font-bold">Settings</span></SettingsBox>

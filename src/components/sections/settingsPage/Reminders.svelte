@@ -223,8 +223,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     <div class="w-full bottom-2 left-0 flex justify-center fixed z-30"
         bind:this={creationBox}
         on:keydown={handleShortcuts}
-        transition:fly={{y: 100, duration: 300}}
-    >
+        transition:fly={{y: 100, duration: 300}}>
         <div
             class="py-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
             <h2 class="text-4xl font-bold mr-20 text-center w-full">Create a reminder</h2>
