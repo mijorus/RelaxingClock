@@ -42,7 +42,7 @@ export async function ring() {
 
     ringTimeout = setTimeout(() => {
         dismiss();
-        setTimeout(() => notifications.create({ 'content': `You missed an alarm a minute ago`, title: 'Alarm missed', icon: 'lnr lnr-clock' }), 60 * 1000);
+        setTimeout(() => notifications.create({ 'content': `You missed an alarm a minute ago`, title: 'Alarm missed', icon: 'lnr lnr-clock', 'sound': true }), 60 * 1000);
     }, 60 * 1000);
 }
 
