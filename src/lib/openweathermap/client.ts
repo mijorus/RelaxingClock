@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = 'http://api.openweathermap.org';
+const baseURL = 'https://api.openweathermap.org';
 const appid = process.env.OW_APIKEY;
 
 export interface Location {
