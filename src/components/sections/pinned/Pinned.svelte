@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onMount } from "svelte";
+import { onMount, tick } from "svelte";
 import { PinnedDB } from "../../../handlers/PinnedDB";
 import type { StoredPinned } from "../../../handlers/PinnedDB";
 import { shortcuts } from "../../../stores/rooster";
@@ -23,11 +23,11 @@ import colors  from "simple-color-functions";
         pinned = await PinnedDB.getAllActive();
     }
 
-    function createPinned(title: string) {
+    async function createPinned(title: string) {
         if (pinned.length >= 5 || title.length > 50) return false;
 
         const res = PinnedDB.create({ title, 'done': false});
-        refreshPinned();
+        await refreshPinned();
         return res;
     }
 
@@ -60,6 +60,7 @@ import colors  from "simple-color-functions";
     }
 
     function bringElementUp(el: HTMLElement) {
+        if (!el) return;
         document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
         el.classList.add('z-10');
     }
@@ -104,6 +105,11 @@ import colors  from "simple-color-functions";
                     'quickLaunch': 'P',
                     async callback(p) {
                         const res = await createPinned(p);
+                        if (res)  {
+                            await tick();
+                            bringElementUp(document.querySelector('pinned-'+res));
+                        }
+
                         return res !== false;
                     }
                 }
