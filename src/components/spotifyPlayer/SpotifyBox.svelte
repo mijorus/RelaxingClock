@@ -139,7 +139,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                         style="background-image: url({expandedBox ? '' : albumCover[0].url})"
                     >
                         <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" 
-                            on:click={() => expandedBox = !expandedBox} on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+Shift+e'}])} on:mouseleave={() => tips.set(null)}/>
+                            on:click={() => expandedBox = !expandedBox} on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+Shift+E'}])} on:mouseleave={() => tips.set(null)}/>
                     </div>
                 {:else}
                     <!-- the spotify icon -->
