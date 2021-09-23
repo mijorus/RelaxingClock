@@ -66,10 +66,10 @@ let refreshTimeout: NodeJS.Timeout;
 export function autoRefeshToken(seconds: number, enable = true) {
     clearTimeout(refreshTimeout);
     seconds = seconds + 15;
-    if (enable && !refreshingToken.running) {
+    if (enable) {
         console.log('Refreshing token in ' + seconds + ' seconds');
         refreshTimeout = setTimeout(() => {
-            refershOrGetOAuthToken();
+            if (!refreshingToken.running) refershOrGetOAuthToken();
         }, seconds * 1000);
     }
 }

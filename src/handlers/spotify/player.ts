@@ -23,17 +23,19 @@ export async function refershOrGetOAuthToken() {
             response = await authClient.refreshToken(localStorage.getItem('refreshToken'));
         } catch(err) {
             console.error(err);
+            refreshingToken.set(false);
             if (err.status === 400 && err.data.error === 'invalid_grant') spotifyPlayerStatus.set('expired');
             throw err;
         }
     }
+    
+    refreshingToken.set(false);
     
     localStorage.removeItem('code');
     localStorage.setItem('refreshToken', response.refresh_token);
     if (response.expires_in) autoRefeshToken(response.expires_in);
     SpotifyClient.setAccessToken(response.access_token);
     spotifyAccessToken.set(response.access_token);
-    refreshingToken.set(false);
     return response.access_token;
 }
 

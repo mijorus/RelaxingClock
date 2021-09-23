@@ -68,8 +68,6 @@ import colors  from "simple-color-functions";
     function handleMouseDown(e: MouseEvent, index: number) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('down');
-        
 
         selectedElement = document.getElementById('pinned-'+index);
         bringElementUp(selectedElement);
