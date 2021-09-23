@@ -5,9 +5,9 @@ import styles from "./clockStyles/styles";
 import { activeStyle } from "../../stores/storedSettings";
 import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
 import anime from "animejs";
-import { eaElasticDefault } from "../../utils/animations";
+import { eaElasticDefault, lockApp } from "../../utils/animations";
 import { onMount, tick } from 'svelte';
-import { clockIsVisible } from '../../stores/globalState';
+import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
 
     let bigClock: HTMLElement;
     $: setCurrentPosition($activeStyle);
@@ -19,7 +19,7 @@ import { clockIsVisible } from '../../stores/globalState';
 
             if (bigClock) {
                 anime({
-                    begin() { nextStyleId.set(toStyleId) },
+                    begin() { nextStyleId.set(toStyleId); },
                     targets: bigClock,
                     duration: 750,
                     easing: eaElasticDefault,
@@ -29,7 +29,6 @@ import { clockIsVisible } from '../../stores/globalState';
             }
         }
     }
-
 
     onMount(() => {
         if (!$activeStyle) activeStyle.set(0);

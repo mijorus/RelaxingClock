@@ -143,8 +143,10 @@ import Shuffle from "../icons/Shuffle.svelte";
                     </div>
                 {:else}
                     <!-- the spotify icon -->
-                    <i class="fab fa-spotify text-5xl {($spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver) ? 'text-primary opacity-80' : 'text-spotify'}" 
-                        class:text-secondary={$spotifyPlayerStatus !== 'ready'} 
+                    <i class="fab fa-spotify text-5xl 
+                        {($spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver) ? 'text-primary opacity-80' : ''}" 
+                        class:text-spotify={$spotifyPlayerStatus === 'ready' && !$screenSaver}
+                        class:text-secondary={$spotifyPlayerStatus !== 'ready'}
                         class:cursor-pointer={$spotifyUrl} 
                         on:click={() => { if ($spotifyUrl) window.location.replace($spotifyUrl) }}/>
                 {/if}

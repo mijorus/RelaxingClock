@@ -8,7 +8,7 @@
     import { onMount, tick } from 'svelte';
     import { canBeSummoned, shortcuts } from '../../../stores/rooster';
     import moment, { Moment } from 'moment';
-    import { fade, fly } from 'svelte/transition';
+    import { fade, fly, slide } from 'svelte/transition';
     import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
     import time from '../../../stores/time';
     import { RemindersDB } from '../../../handlers/RemindersDB';
@@ -273,7 +273,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
         {#if futureReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">
                 {#each futureReminders as r }
-                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md border border-secondary">
+                    <div class="my-2 overflow-x-hidden reminder p-2 rounded-md border border-secondary" transition:fly={{y: -10}}>
                         <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
                         <span class="text-secondary">
                             {moment(r.at, 'X').fromNow()}
@@ -290,7 +290,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
         {#if doneReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3 max-h-96 overflow-y-scroll">
                 {#each doneReminders as r }
-                    <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder">
+                    <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder" transition:fly={{y: -10}}>
                         <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
                         {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>

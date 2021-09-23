@@ -3,6 +3,8 @@
     import { activeStyle, clockFormat } from "../../stores/storedSettings";
     import { screenSaver, styleChangeLock } from '../../stores/globalState';
     import styles from "../clock/clockStyles/styles";
+import { onMount } from 'svelte';
+import { windowReady } from 'html-ready';
 
     const viewFinderClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none c-format focus:outline-none cursor-pointer';
@@ -30,14 +32,41 @@
     }
 
     function moveLeft() {
-        if (!$styleChangeLock) changeStyle($activeStyle - 1);
+        if (!$styleChangeLock && !$screenSaver) changeStyle($activeStyle - 1);
     }
 
     function moveRight() {
-        if (!$styleChangeLock) changeStyle($activeStyle + 1);
+        if (!$styleChangeLock && !$screenSaver) changeStyle($activeStyle + 1);
     }
+
+    function handleWindowKeydown(e: KeyboardEvent) {
+        if (document.activeElement === document.querySelector('body')) {
+            if (e.code === 'ArrowLeft') moveLeft();
+            else if (e.code === 'ArrowRight') moveRight();
+        }
+    }
+
+    let wheelScrollTimeout;
+    function handleBigClockScroll(e: WheelEvent) {
+        console.log(e.deltaX);
+        if (e.deltaX !== 0) e.preventDefault();
+
+        const theshold = 25;
+        if (e.deltaX > theshold || e.deltaX < -(theshold)) {
+            clearTimeout(wheelScrollTimeout);
+            wheelScrollTimeout = setTimeout(() => {
+                 if (e.deltaX > 0) moveRight()
+                 else if (e.deltaX < -0) moveLeft()
+            }, 25);
+        }
+    }
+
+    onMount(() => {
+        windowReady.then(() => document.querySelector('#big-clock').addEventListener('wheel', handleBigClockScroll))
+    })
 </script>
 
+<svelte:window on:keydown={handleWindowKeydown} />
 <div class="z-20 absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}">
     <div class="font-primary text-xl text-primary">Select your clock style</div>
     <div class="relative flex overflow-hidden">
