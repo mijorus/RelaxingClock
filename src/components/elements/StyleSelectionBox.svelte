@@ -1,11 +1,14 @@
 <script lang="ts">
-    import { spring } from 'svelte/motion';
-    import { activeStyle, clockFormat } from "../../stores/storedSettings";
-    import { screenSaver, styleChangeLock } from '../../stores/globalState';
-    import styles from "../clock/clockStyles/styles";
+import { spring } from 'svelte/motion';
+import { activeStyle, clockFormat } from "../../stores/storedSettings";
+import { screenSaver, styleChangeLock } from '../../stores/globalState';
+import styles from "../clock/clockStyles/styles";
 import { onMount } from 'svelte';
 import { windowReady } from 'html-ready';
+import anime from "animejs";
+import { cbDefault, eaElasticDefault } from '../../utils/animations';
 
+    let bigClock: HTMLElement;
     const viewFinderClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none c-format focus:outline-none cursor-pointer';
     const l: number = styles.length; //the number of available styles
@@ -46,23 +49,39 @@ import { windowReady } from 'html-ready';
         }
     }
 
-    let wheelScrollTimeout;
+    let wheelScrollTimeout, tl, allow = true;
     function handleBigClockScroll(e: WheelEvent) {
-        console.log(e.deltaX);
         if (e.deltaX !== 0) e.preventDefault();
-
-        const theshold = 25;
+        if (!allow) return;
+        
+        const theshold = 100;
         if (e.deltaX > theshold || e.deltaX < -(theshold)) {
             clearTimeout(wheelScrollTimeout);
             wheelScrollTimeout = setTimeout(() => {
-                 if (e.deltaX > 0) moveRight()
-                 else if (e.deltaX < -0) moveLeft()
+                if (e.deltaX > 0) moveRight()
+                else if (e.deltaX < -0) moveLeft()
             }, 25);
+        } else {
+            const original = `${$activeStyle * (-100 / styles.length)}%`;
+            const slide = e.deltaX > 0 ? 0.5 : -0.5;
+            
+            anime({
+                begin() { allow = false },
+                targets: bigClock,
+                duration: 300,
+                easing: cbDefault,
+                autoplay: true,
+                translateX: [original, `${parseInt(original) - slide}%`,  original],
+                complete() { setTimeout(() => allow = true, 300) }
+            })
         }
     }
 
     onMount(() => {
-        windowReady.then(() => document.querySelector('#big-clock').addEventListener('wheel', handleBigClockScroll))
+        windowReady.then(() =>{
+            bigClock = document.getElementById('big-clock')
+            bigClock.addEventListener('wheel', handleBigClockScroll)
+        })
     })
 </script>
 
