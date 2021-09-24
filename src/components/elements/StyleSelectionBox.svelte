@@ -49,17 +49,18 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
         }
     }
 
-    let wheelScrollTimeout;
+    let wheelScrollTimeout, allowScroll = true;
     function handleBigClockScroll(e: WheelEvent) {
         if (e.deltaX !== 0) e.preventDefault();
 
-        const theshold = 50;
-        if (e.deltaX > theshold || e.deltaX < -(theshold)) {
+        const theshold = 170;
+        if (allowScroll && ( e.deltaX > theshold || e.deltaX < -(theshold))) {
             clearTimeout(wheelScrollTimeout);
-            wheelScrollTimeout = setTimeout(() => {
-                if (e.deltaX > 0) moveRight()
-                else if (e.deltaX < -0) moveLeft()
-            }, 25);
+            if (e.deltaX > 0) moveRight()
+            else if (e.deltaX < -0) moveLeft()
+            
+            allowScroll = false; 
+            wheelScrollTimeout = setTimeout(() => { allowScroll = true }, 100);
         } 
     }
 
