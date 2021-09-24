@@ -49,32 +49,18 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
         }
     }
 
-    let wheelScrollTimeout, tl, allow = true;
+    let wheelScrollTimeout;
     function handleBigClockScroll(e: WheelEvent) {
         if (e.deltaX !== 0) e.preventDefault();
-        if (!allow) return;
-        
-        const theshold = 100;
+
+        const theshold = 50;
         if (e.deltaX > theshold || e.deltaX < -(theshold)) {
             clearTimeout(wheelScrollTimeout);
             wheelScrollTimeout = setTimeout(() => {
                 if (e.deltaX > 0) moveRight()
                 else if (e.deltaX < -0) moveLeft()
             }, 25);
-        } else {
-            const original = `${$activeStyle * (-100 / styles.length)}%`;
-            const slide = e.deltaX > 0 ? 0.5 : -0.5;
-            
-            anime({
-                begin() { allow = false },
-                targets: bigClock,
-                duration: 300,
-                easing: cbDefault,
-                autoplay: true,
-                translateX: [original, `${parseInt(original) - slide}%`,  original],
-                complete() { setTimeout(() => allow = true, 300) }
-            })
-        }
+        } 
     }
 
     onMount(() => {
