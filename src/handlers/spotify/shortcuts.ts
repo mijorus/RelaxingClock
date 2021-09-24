@@ -4,7 +4,7 @@ import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
 import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
-import { device_id } from './player';
+import { device_id, refershOrGetOAuthToken } from './player';
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
@@ -18,9 +18,12 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
         if (oldRes) res = oldRes;
     }
     
-    const seachTy: searchType[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
+    const seachTy: any[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
-    if (!res) res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 });
+    if (!res) {
+        res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 })
+            .catch((e) => { if (e.status === 401) refershOrGetOAuthToken() });
+    }
 
     let examples: RoosterExamples = {};
     let exampleList = [];
