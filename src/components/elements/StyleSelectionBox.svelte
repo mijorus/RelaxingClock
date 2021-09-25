@@ -25,7 +25,7 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
             activeStyle.set(toStyle);
             selectionPosition.set( - (100 / l) * $activeStyle);
         } else {
-            const overScroll: number = 3; //the amount pixels of the overscroll effect
+            const overScroll = 3; //the amount pixels of the overscroll effect
             selectionPosition.set((toStyle > 0) ? ( - ((100 / l) * (l - 1)) - overScroll) : overScroll);
             
             setTimeout(() => {
@@ -53,14 +53,13 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
     function handleBigClockScroll(e: WheelEvent) {
         if (e.deltaX !== 0) e.preventDefault();
 
-        const theshold = 170;
+        const theshold = 20;
         if (allowScroll && ( e.deltaX > theshold || e.deltaX < -(theshold))) {
             clearTimeout(wheelScrollTimeout);
-            if (e.deltaX > 0) moveRight()
-            else if (e.deltaX < -0) moveLeft()
-            
-            allowScroll = false; 
-            wheelScrollTimeout = setTimeout(() => { allowScroll = true }, 100);
+            wheelScrollTimeout = setTimeout(() => {
+                if (e.deltaX > 0) moveRight();
+                else if (e.deltaX < -0) moveLeft();
+            }, 35);
         }
     }
 
