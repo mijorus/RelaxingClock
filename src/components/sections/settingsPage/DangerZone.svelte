@@ -7,8 +7,14 @@ import Action from '../../elements/settings/Buttons/Action.svelte';
 
     async function clearData() {
         if (confirm('Are you sure?')) {
-            const dbs = await window.indexedDB.databases();
-            dbs.forEach(db => { window.indexedDB.deleteDatabase(db.name) });
+            (await window.indexedDB.databases()).forEach(db => { 
+                window.indexedDB.deleteDatabase(db.name) 
+            });
+
+            for (var i = 0; i < localStorage.length; i++) {
+                localStorage.removeItem(localStorage.key(i));
+            }
+
             window.location.reload();
         }
     }
@@ -20,7 +26,7 @@ import Action from '../../elements/settings/Buttons/Action.svelte';
             <TitleIcon>
                 <i class="lnr lnr-trash text-red-600 settings-title-icon"></i>
             </TitleIcon>
-        </Title>
+        </Title>    
         <PrimaryBox 
             label={{text: 'Clear data'}} 
             description={{text:'Clear all you data including reminders, pins, your Spotify credentials and setting. This cannot be undone.', iconClass: 'lnr lnr-question-circle'}}
