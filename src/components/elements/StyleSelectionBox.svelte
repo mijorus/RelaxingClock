@@ -66,7 +66,7 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
     onMount(() => {
         windowReady.then(() =>{
             bigClock = document.getElementById('big-clock')
-            bigClock.addEventListener('wheel', handleBigClockScroll)
+            bigClock.addEventListener('wheel', handleBigClockScroll, { passive: true })
         })
     })
 </script>
