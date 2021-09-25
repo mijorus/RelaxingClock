@@ -12,6 +12,7 @@ import { clockIsVisible } from '../../stores/globalState';
 import { fade } from 'svelte/transition';
 import Pinned from './settingsPage/Pinned.svelte';
 import SettingsBox from '../elements/SettingsBox.svelte';
+import DangerZone from './settingsPage/DangerZone.svelte';
 </script>
 
 <div class="relative">
@@ -27,6 +28,7 @@ import SettingsBox from '../elements/SettingsBox.svelte';
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <HighContrast />
                 <BlinkingDots />
+                <div class="mt-20"><DangerZone /></div>
             </div>
         </div>
     </div>

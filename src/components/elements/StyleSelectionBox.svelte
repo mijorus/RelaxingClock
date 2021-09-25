@@ -61,7 +61,7 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
             
             allowScroll = false; 
             wheelScrollTimeout = setTimeout(() => { allowScroll = true }, 100);
-        } 
+        }
     }
 
     onMount(() => {
