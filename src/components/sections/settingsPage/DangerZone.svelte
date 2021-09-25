@@ -11,10 +11,8 @@ import Action from '../../elements/settings/Buttons/Action.svelte';
                 window.indexedDB.deleteDatabase(db.name) 
             });
 
-            for (var i = 0; i < localStorage.length; i++) {
-                localStorage.removeItem(localStorage.key(i));
-            }
-
+            localStorage.clear();
+            sessionStorage.clear();
             window.location.reload();
         }
     }

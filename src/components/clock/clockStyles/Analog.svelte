@@ -31,17 +31,17 @@
             {/each}
             <span id="hand-hours" 
                 style="transform: translate(0%, -50%) rotate({(((hours * 30) + (min / 2)) - 90)}deg)"
-                class="hand smooth-move {handClasses} border-2 border-primary w-20 h-3 z-10"
+                class="hand smooth-move {handClasses} border-2 border-primary w-24 h-3 z-10"
             >
             </span>
             <span id="hand-min" 
                 style="transform: translate(0%, -50%) rotate({(((min * 6) + (sec / 10)) - 90)}deg)"
-                class="hand smooth-move {handClasses} border-2 border-primary w-24 h-2 z-20"
+                class="hand smooth-move {handClasses} border-2 border-primary w-32 h-2 z-20"
             >
             </span>
             <span id="hand-seconds" 
-                style="transform: translate(0%, -50%) rotate({((sec * 6) - 90)}deg); border-color: {randomcolor({ luminosity: 'bright' })}"
-                class="hand {handClasses} border-2 w-40 h-1.5 z-30"
+                style="transform: translate(0%, -50%) rotate({((sec * 6) - 90)}deg); background-color: {randomcolor({ luminosity: 'bright' })}"
+                class="hand {handClasses}  w-40 h-1.5 z-30"
             >
             </span>
         </div>

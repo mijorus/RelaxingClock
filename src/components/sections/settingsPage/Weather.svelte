@@ -19,6 +19,7 @@ import { mainWeatherConditions } from '../../../lib/openweathermap/mainCondition
 import type { Tip } from '../../../types';
 import time from '../../../stores/time';
 import anime from "animejs";
+import { shakeElement } from '../../../utils/utils';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
@@ -51,7 +52,9 @@ import anime from "animejs";
         weather.set(status); 
         autoUpdate(status);
         if (!status) lastWeatherUpdate.set(null);
-        else (updateWeatherData());
+        else  {
+            updateWeatherData();
+        }
     }
 
     let slTimeout: NodeJS.Timeout;
@@ -63,7 +66,7 @@ import anime from "animejs";
             isFetchingLocations = false;
             owLocations = (await directGeocode(query).catch(e => { console.error(e); searchError = true; return []; }));
             console.log(owLocations);
-        }, 2000);
+        }, 1000);
         
     }
 
@@ -131,7 +134,7 @@ import anime from "animejs";
     </Title>
     <div>
         <PrimaryBox
-            label={{text: 'Enable weather'}}
+            label={{text: $weather && !currentLocation ? 'Please set a location below' : 'Enable weather'}}
             description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
             available={true}
         >
@@ -145,9 +148,9 @@ import anime from "animejs";
 <NestedBox bordered label="Temperature unit" available={$weather}>
     <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
 </NestedBox>
-<NestedBox expandable available={$weather} label="Manually set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
+<NestedBox expandable available={$weather} label="Set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
             description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').format($clockFormat === '24h' ? 'HH:mm' : 'hh:mm')}` : ''}>
-            <div class="p-2">
+            <div class="p-2" id="set-location">
             {#if currentLocation && !locationSearchQuery.length}
                 <div class="relative bg-tertiary rounded-lg my-2 p-3 cursor-pointer hover:opacity-80 transition-all" transition:slide={{duration: 200, delay: 450}}>
                     <p class="text-md">{currentLocation.split(',')[3]}, {convertCountryCode(currentLocation.split(',')[2])}</p>
