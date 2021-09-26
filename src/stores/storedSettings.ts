@@ -68,3 +68,4 @@ export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');
 export const weather = userSetting('weather', false, 'boolean');// 
 export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');// 
 export const tempUnit = userSetting('tempUnit', 'C');// 
+export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean');// 
