@@ -22,7 +22,8 @@ import Pinned from './pinned/Pinned.svelte';
 
 <div class="h-full flex flex-col justify-center items-center animated transition duration-1000 ease-cb-default transform {$screenSaver ? 'translate-y-0' : '-translate-y-10'}"
     on:click={disableScreenSaver}
-    on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}>
+    on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
+    on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
     <Clock />
     <StyleSelectionBox />
 </div>
