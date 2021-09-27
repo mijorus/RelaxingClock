@@ -14,6 +14,7 @@ import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 import AlarmRing from './components/elements/AlarmRing.svelte';
 import screenSaverHandler from "./handlers/screenSaver";
 import LoadingScreen from './components/sections/LoadingScreen.svelte';
+import animatedBg from "./handlers/animatedBg";
 
     screenSaverHandler.set(20 * 1000);
 
@@ -30,6 +31,7 @@ import LoadingScreen from './components/sections/LoadingScreen.svelte';
     }   
 
 	onMount(() => {
+        // animatedBg()
         if ($onlineStatus) {
             attemptSpotifyLogin()
                 .catch((e) => console.error(e))
