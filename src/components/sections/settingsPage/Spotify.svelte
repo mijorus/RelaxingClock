@@ -4,7 +4,7 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from "../../elements/settings/Buttons/Action.svelte";
-import { spotifyPlayerStatus, spotifyUrl, spotifyUserData } from '../../../stores/spotify';
+import { spotifyPlayerState, spotifyPlayerStatus, spotifyUrl, spotifyUserData } from '../../../stores/spotify';
 import { logout } from '../../../handlers/spotify/login';
 import type { SpotifyPlayerStatus } from '../../../types';
 import NestedBox from '../../elements/settings/NestedBox.svelte';
@@ -20,7 +20,7 @@ import { device_id } from '../../../handlers/spotify/player';
     let featuredPlaylists: SpotifyApi.ListOfFeaturedPlaylistsResponse;
     let myPlaylists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
     let firstTimeReady = false;
-    
+
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
             featuredPlaylists = await SpotifyClient.getFeaturedPlaylists({'country': $spotifyUserData.country, 'limit': 16});

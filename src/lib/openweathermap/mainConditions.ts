@@ -1,7 +1,7 @@
 export const mainWeatherConditions: {[key: string]: {color: string, icon?: string}} = {
     'Thunderstorm': {
         color: '#606060',
-        icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon'
+        icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon.svg'
     },
     'Drizzle': {
         color: '#c6f5ff',
