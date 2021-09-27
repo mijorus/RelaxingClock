@@ -43,3 +43,25 @@ export const clockIsVisible: Readable<boolean> =  readable(true, (set: Subscribe
         return () => obs.unobserve(el);
     });
 });
+
+// check Window focus
+export const windowFocus: Readable<boolean> = readable(true, (set: Subscriber<boolean>) => {
+    window.addEventListener('focus', setFocusStatus);
+    window.addEventListener('blur', setBlurStatus);
+
+    function setFocusStatus() {
+        set(true);
+        console.log('window has focus');
+        
+    }
+
+    function setBlurStatus() {
+        set(false);
+        console.log('window has LOST focus');
+    }
+
+    return () => {
+        window.removeEventListener('online', setFocusStatus);
+        window.removeEventListener('online', setBlurStatus);
+    };
+});
