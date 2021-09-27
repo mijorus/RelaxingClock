@@ -1,4 +1,4 @@
-export const mainWeatherConditions: {[key: string]: {color: string, icon?: string}} = {
+export const mainWeatherConditions: {[key: string]: {color: string, icon?: string, icon_night?: string}} = {
     'Thunderstorm': {
         color: '#606060',
         icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon.svg'
@@ -9,7 +9,8 @@ export const mainWeatherConditions: {[key: string]: {color: string, icon?: strin
     },
     'Rain': {
         color: '#1dcbe5',
-        icon: '5729383_cloud_raining_weather_forecast_rain_icon.svg'
+        icon: '5729383_cloud_raining_weather_forecast_rain_icon.svg',
+        icon_night: '5729384_forecast_moon_night_raining_weather_icon.svg',
     },
     'Snow': {
         color: '#fff',
@@ -45,6 +46,7 @@ export const mainWeatherConditions: {[key: string]: {color: string, icon?: strin
     'Clear': {
         color: '#ffd106',
         icon: '4102328_hot_sun_weather_icon.svg',
+        icon_night: '5729385_moon_night_weather_climate_crescent_icon.svg',
     },
     'Clouds': {
         color: '#b8b8b8',

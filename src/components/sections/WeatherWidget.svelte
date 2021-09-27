@@ -13,7 +13,9 @@ import { kTemperatureConverter } from "../../utils/utils";
 
     $:  {
         if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {
-            console.log('updating weather widget'); data = [];
+            console.log('updating weather widget'); 
+            
+            data = [];
             for (let index = 0; index < 24; index++) data.push(null);
                 
             $lastWeatherUpdate.hourly.sort((a, b) => a.dt - b.dt).forEach((el: Hourly) => {
@@ -21,7 +23,13 @@ import { kTemperatureConverter } from "../../utils/utils";
                 if (date.isSame(moment(), 'day') && date.isSameOrAfter(moment())) data[date.hours()] = el;
             });
 
-            icon = mainWeatherConditions[$lastWeatherUpdate.current.weather[0].main]?.icon;
+            const currentWeatherMain = $lastWeatherUpdate.current.weather[0].main;
+            if ($lastWeatherUpdate.current.dt > $lastWeatherUpdate.current.sunset && mainWeatherConditions[currentWeatherMain]?.icon_night) {
+                icon = mainWeatherConditions[currentWeatherMain].icon_night;
+            } else if (mainWeatherConditions[currentWeatherMain]?.icon) {
+                icon = mainWeatherConditions[currentWeatherMain].icon;
+            }
+
             currentLocation = localStorage.getItem('currentLocation') ? localStorage.getItem('currentLocation').split(',') : null;
             oldWeatherUpdate = $lastWeatherUpdate;
         }
