@@ -19,14 +19,13 @@ import { mainWeatherConditions } from '../../../lib/openweathermap/mainCondition
 import type { Tip } from '../../../types';
 import time from '../../../stores/time';
 import anime from "animejs";
-import { shakeElement } from '../../../utils/utils';
 
     let locationSearchQuery = '';
     let owLocations: Location[];
     let searchError = false;
     let isFetchingLocations = false;
     let currentLocation: string;
-    const maxOWUpdateAge = 30;
+    const maxOWUpdateAge = 60;
     let nextWeatherUpdate: Moment;
 
     $: searchLocation(locationSearchQuery);
@@ -51,7 +50,9 @@ import { shakeElement } from '../../../utils/utils';
     function handleWeatherSwitch(status: boolean) {
         weather.set(status); 
         autoUpdate(status);
-        if (!status) lastWeatherUpdate.set(null);
+        if (!status) {
+            lastWeatherUpdate.set(null);
+        }
         else  {
             updateWeatherData();
         }
@@ -82,8 +83,14 @@ import { shakeElement } from '../../../utils/utils';
             console.log('updating weather data');
             const latlong = currentLocation.split(',');
             anime({'targets': '#refresh-weather-btn', rotate: '+=720', duration: 3000, easing: 'linear'});
-            const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily').catch(e => { console.error(e); return undefined; }); 
-            lastWeatherUpdate.set(result); 
+            
+            try {
+                const result = await oneCallWeather(parseFloat(latlong[0]), parseFloat(latlong[1]), 'minutely,daily'); 
+                lastWeatherUpdate.set(result); 
+            } catch (e) {
+                console.error(e);
+                lastWeatherUpdate.set(undefined); 
+            }
         }
     }
 
