@@ -2,7 +2,8 @@
 import moment from "moment";
 import { fade } from "svelte/transition";
 import type { Hourly } from "../../lib/openweathermap/client";
-import { mainWeatherConditions } from "../../lib/openweathermap/mainConditions";
+import { getConditionIcon, mainWeatherConditions } from "../../lib/openweathermap/mainConditions";
+import type { WeatherCondition } from "../../lib/openweathermap/mainConditions";
 import { lastWeatherUpdate, tempUnit, weather } from "../../stores/storedSettings";
 import { kTemperatureConverter } from "../../utils/utils";
 
@@ -23,11 +24,11 @@ import { kTemperatureConverter } from "../../utils/utils";
                 if (date.isSame(moment(), 'day') && date.isSameOrAfter(moment())) data[date.hours()] = el;
             });
 
-            const currentWeatherMain = $lastWeatherUpdate.current.weather[0].main;
-            if ($lastWeatherUpdate.current.dt > $lastWeatherUpdate.current.sunset && mainWeatherConditions[currentWeatherMain]?.icon_night) {
-                icon = mainWeatherConditions[currentWeatherMain].icon_night;
-            } else if (mainWeatherConditions[currentWeatherMain]?.icon) {
-                icon = mainWeatherConditions[currentWeatherMain].icon;
+            const currentWeather: WeatherCondition = $lastWeatherUpdate.current.weather[0];
+            if ($lastWeatherUpdate.current.dt > $lastWeatherUpdate.current.sunset && getConditionIcon(currentWeather).icon_night) {
+                icon = getConditionIcon(currentWeather).icon_night;
+            } else {
+                icon = getConditionIcon(currentWeather).icon ?? undefined;
             }
 
             currentLocation = localStorage.getItem('currentLocation') ? localStorage.getItem('currentLocation').split(',') : null;

@@ -1,6 +1,6 @@
-export const mainWeatherConditions: {[key: string]: {color: string, icon?: string, icon_night?: string}} = {
+export const mainWeatherConditions: {[key: string]: {color: string, icon?: string, icon_night?: string, conditions?: { range: number[], icon: string, icon_night?: string}[] }} = {
     'Thunderstorm': {
-        color: '#606060',
+        color: '#464646',
         icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon.svg'
     },
     'Drizzle': {
@@ -29,7 +29,8 @@ export const mainWeatherConditions: {[key: string]: {color: string, icon?: strin
         color: ''
     },
     'Fog': {
-        color: ''
+        color: '#c5c5c5',
+        icon: '5729389_cloud_foggy_weather_cloudy_forecast_icon.svg'
     },
     'Sand': {
         color: '#d1a03f'
@@ -49,7 +50,37 @@ export const mainWeatherConditions: {[key: string]: {color: string, icon?: strin
         icon_night: '5729385_moon_night_weather_climate_crescent_icon.svg',
     },
     'Clouds': {
-        color: '#b8b8b8',
-        icon: '5729391_cloudy_weather_cloud_forecast_rain_icon.svg'
+        color: '#6d6d6d',
+        conditions: [
+            {
+                range: [800, 802],
+                icon: '5729392_cloudy_sunny_weather_cloud_forecast_icon.svg',
+                icon_night: '5729393_cloudy_moon_night_cloud_weather_icon.svg',
+            }
+            {
+                range: [802, 806],
+                icon: '5729391_cloudy_weather_cloud_forecast_rain_icon.svg',
+                icon_night: '5729391_cloudy_weather_cloud_forecast_rain_icon.svg',
+            }
+        ]
     },
+}
+
+export interface WeatherCondition {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+export function getConditionIcon(weatherCondition: WeatherCondition) {
+    if (mainWeatherConditions[weatherCondition.main].conditions) {
+        for (const c of mainWeatherConditions[weatherCondition.main].conditions) {
+            if (weatherCondition.id >= c.range[0] && weatherCondition.id <= c.range[1]) {
+                return c;
+            }
+        }
+    }
+
+    return mainWeatherConditions[weatherCondition.main];
 }
