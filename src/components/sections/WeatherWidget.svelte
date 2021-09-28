@@ -11,6 +11,7 @@ import { kTemperatureConverter } from "../../utils/utils";
     let icon: string;
     let currentLocation: string[];
     let oldWeatherUpdate;
+    let isNight = false;
 
     $:  {
         if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {
@@ -26,8 +27,10 @@ import { kTemperatureConverter } from "../../utils/utils";
 
             const currentWeather: WeatherCondition = $lastWeatherUpdate.current.weather[0];
             if ($lastWeatherUpdate.current.dt > $lastWeatherUpdate.current.sunset && getConditionIcon(currentWeather).icon_night) {
+                isNight = true;
                 icon = getConditionIcon(currentWeather).icon_night;
             } else {
+                isNight = false;
                 icon = getConditionIcon(currentWeather).icon ?? undefined;
             }
 
@@ -40,7 +43,7 @@ import { kTemperatureConverter } from "../../utils/utils";
 {#if $weather}
     <div class="relative flex flex-row items-center" transition:fade>
         {#if data.length}
-            {#each data as d, i}{#if !d}<span class="w-3 h-1 inline-block overlap" style="background-color: rgb(63, 63, 63);" class:rounded-l-xl={i === 0}></span>{/if}{/each}{#if icon}<img class="inline-block w-16" src="/media/{icon}" alt=""/>{/if}{#each data as d, i}{#if d}<span class="w-3 h-1 inline-block p-0 overlap" style="background-color: {mainWeatherConditions[d.weather[0].main].color};" class:rounded-r-xl={i === (data.length - 1)}></span>{/if}
+            {#each data as d, i}{#if !d}<span class="w-3 h-1 inline-block overlap" style="background-color: rgb(63, 63, 63);" class:rounded-l-xl={i === 0}></span>{/if}{/each}{#if icon}<img class="inline-block w-16" src="/media/{icon}" alt=""/>{/if}{#each data as d, i}{#if d}<span class="w-3 h-1 inline-block p-0 overlap" style="background-color: {isNight && mainWeatherConditions[d.weather[0].main].color_night ? mainWeatherConditions[d.weather[0].main].color_night : mainWeatherConditions[d.weather[0].main].color};" class:rounded-r-xl={i === (data.length - 1)}></span>{/if}
             {/each}
         {/if}
     </div>
