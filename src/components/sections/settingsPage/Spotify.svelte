@@ -63,7 +63,7 @@ import { device_id } from '../../../handlers/spotify/player';
                 boxLabel = 'Access denied!';
                 break;
             case 'error':
-                boxLabel = 'Unknown error!';
+                boxLabel = ':( Unknown error, please try to logout and login again';
                 break;
         }
 

@@ -186,7 +186,7 @@ import Shuffle from "../icons/Shuffle.svelte";
                         </div>
                     </div>
                 {:else if $spotifyPlayerStatus !== 'disconnected'}
-                    <i class="fas fa-exclamation-triangle"></i>
+                    <i class="fas fa-exclamation-triangle" class:opacity-50={$screenSaver}></i>
                 {/if}
             </span>
        </div>
