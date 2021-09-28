@@ -6,6 +6,7 @@ function createNotification() {
 	const stored: Writable<CustomNotification[]> = writable([]);
 
     function create(n: CustomNotification) {
+		n.timestamp = (~~(Date.now() / 1000));
         stored.update(list => [...list, n]);
 
 		if (Notification.permission === 'default') {
