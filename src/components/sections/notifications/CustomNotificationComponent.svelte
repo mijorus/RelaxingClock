@@ -1,4 +1,6 @@
 <script lang="ts">
+import moment from "moment";
+
     import { onMount } from "svelte";
 
     import { fade, fly } from "svelte/transition";
@@ -7,6 +9,7 @@
 
     export let data: CustomNotification;
     export let expire = false;
+    export let showTimestamp = false;
 </script>
 
 <div in:fly="{ expire ? { x: 200, duration: 750 } : {}}" out:fade="{{ duration: 300 }}">
@@ -20,6 +23,9 @@
             <div class="overflow-x-hidden">
                 <h4 class="text-3xl font-bold">{data.title}</h4>
                 <p class="whitespace-nowrap">{data.content}</p>
+                {#if showTimestamp}
+                    <p class="whitespace-nowrap text-primary opacity-50 text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
+                {/if}
             </div>
         </div>
         <!-- svelte-ignore a11y-media-has-caption -->

@@ -8,10 +8,24 @@ import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
 import SpotifyBox from '../spotifyPlayer/SpotifyBox.svelte';
 import WeatherWidget from './WeatherWidget.svelte';
 import Pinned from './pinned/Pinned.svelte';
+import anime from "animejs";
+import { bigClockSSoffset, cbDefault } from '../../utils/animations';
+
+
+    $: screenSaverApply($screenSaver)
 
     function disableScreenSaver() {
         screenSaverHandler.disable();
         screenSaverHandler.set(15 * 1000);
+    }
+
+    function screenSaverApply(status: boolean) {
+         anime({
+            targets: document.getElementById('big-clock-container'),
+            duration: 1000,
+            translateY: status ? 0 : bigClockSSoffset,
+            easing: cbDefault,
+        });
     }
 </script>
 
@@ -20,7 +34,7 @@ import Pinned from './pinned/Pinned.svelte';
     <WeatherWidget />
 </div>
 
-<div class="h-full flex flex-col justify-center items-center animated transition duration-1000 ease-cb-default transform {$screenSaver ? 'translate-y-0' : '-translate-y-10'}"
+<div id="big-clock-container" class="h-full flex flex-col justify-center items-center animated transform -translate-y-10"
     on:click={disableScreenSaver}
     on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
     on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
