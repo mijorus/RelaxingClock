@@ -41,25 +41,18 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
             nPanel.scrollTop = nPanel.scrollHeight;
         }
 
+        const targets = document.getElementById('big-clock-container');
         anime({
-            targets: document.getElementById('big-clock-container'),
+            begin() { targets.classList.add('pointer-events-none') },
+            targets,
             duration: 500,
             scale: showPanel ? 0.98 : 1,
             translateY: showPanel ? '+=2.5rem' : ($screenSaver ? 0 : bigClockSSoffset),
             opacity: showPanel ? 0.5 : 1,
             easing: 'easeOutQuad',
+            complete() { targets.classList.remove('pointer-events-none') },
         });
     }
-
-    for (let index = 0; index < 10; index++) {
-        notifications.create({
-            title: 'test'+index,
-            content: 'test',
-            icon: '',
-        })
-        
-    }
- 
 </script>
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
