@@ -39,10 +39,10 @@ import tinycolor from "tinycolor2";
                 complete() {
                     if (!up) {
                         localStorage.removeItem('hours');
-                        hours.classList.remove('font-extrabold');
+                        hours.classList.remove('font-bold');
                     } else {
                         localStorage.setItem('hours', 'scaled');
-                        hours.classList.add('font-extrabold');
+                        hours.classList.add('font-bold');
                     }
                 }
             })
@@ -105,7 +105,7 @@ import tinycolor from "tinycolor2";
 </script>
 
 {#if interactive}
-    <span bind:this={hours} class="inline-block hours-bg"
+    <span bind:this={hours} class="inline-block hours-bg font-semibold"
         on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
@@ -113,7 +113,7 @@ import tinycolor from "tinycolor2";
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}
-    <span bind:this={hours} class="inline-block hours-bg" style="transition: color .05s linear;">
+    <span bind:this={hours} class="inline-block hours-bg font-semibold" style="transition: color .05s linear;">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
 {/if}

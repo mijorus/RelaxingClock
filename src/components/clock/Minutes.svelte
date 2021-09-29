@@ -2,4 +2,4 @@
     import time from "../../stores/time";
 </script>
 
-<span >{ $time.format('mm') }</span>
+<span class="font-semibold">{ $time.format('mm') }</span>
