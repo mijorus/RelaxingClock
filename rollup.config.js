@@ -92,6 +92,7 @@ export default {
                     SPOTIFY_COLOR: 'rgb(29, 185, 84)',
                     BACKGROUND_DARK: 'rgb(29, 29, 29)',
                     TEXT_SECONDARY: 'rgb(100 100 100)',
+                    TEXT_PRIMARY: 'rgba(245, 245, 245, 1)',
                     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
                     OW_APIKEY: process.env.OW_APIKEY,
                     SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,

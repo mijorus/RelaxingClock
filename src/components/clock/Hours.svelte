@@ -5,6 +5,7 @@ import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
 import { onMount, tick } from "svelte";
+import tinycolor from "tinycolor2";
 
     $: setHours($time, $clockFormat);
     export let interactive = true;
@@ -47,6 +48,7 @@ import { onMount, tick } from "svelte";
             })
     }
 
+    // set the color of the hours number
     function changeColor(color = null, animation = true) {
         tl = anime({
             targets: hours,
@@ -54,7 +56,11 @@ import { onMount, tick } from "svelte";
             rotate: [5, -5, 5, -5, 0],
             easing: 'linear',
             complete() { 
-                hours.style.color = color; 
+                hours.style.color = color;
+                hours.style.background = color 
+                    ? `linear-gradient(150deg, ${tinycolor(color).brighten(5).toString()}, ${tinycolor(color).darken(10).toString()}` 
+                    : process.env.TEXT_PRIMARY;
+
                 if (color) localStorage.setItem('hoursColor', color) 
                 else localStorage.removeItem('hoursColor') 
             }
@@ -87,7 +93,7 @@ import { onMount, tick } from "svelte";
     let c = 0;
     function handleClockCM(e) {
         e.preventDefault();
-        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random' }));
+        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random', format: 'hex' }));
         c > 10 ? c = 0 : c++;
     }
 
@@ -99,7 +105,7 @@ import { onMount, tick } from "svelte";
 </script>
 
 {#if interactive}
-    <span bind:this={hours} class="inline-block"
+    <span bind:this={hours} class="inline-block hours-bg"
         on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
@@ -107,7 +113,15 @@ import { onMount, tick } from "svelte";
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}
-    <span bind:this={hours} class="inline-block" style="transition: color .05s linear;">
+    <span bind:this={hours} class="inline-block hours-bg" style="transition: color .05s linear;">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
 {/if}
+
+<style>
+    .hours-bg {
+        background-clip: text;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+</style>
