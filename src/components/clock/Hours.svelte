@@ -58,7 +58,7 @@ import tinycolor from "tinycolor2";
             complete() { 
                 hours.style.color = color;
                 hours.style.background = color 
-                    ? `linear-gradient(150deg, ${tinycolor(color).brighten(5).toString()}, ${tinycolor(color).darken(10).toString()}` 
+                    ? `linear-gradient(150deg, ${tinycolor(color).brighten(20).toString()}, ${tinycolor(color).darken(20).toString()}` 
                     : process.env.TEXT_PRIMARY;
 
                 if (color) localStorage.setItem('hoursColor', color) 
