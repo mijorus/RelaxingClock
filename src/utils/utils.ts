@@ -84,3 +84,8 @@ export function outerHeight(el: HTMLElement) {
   height += parseInt(style.marginTop) + parseInt(style.marginBottom);
   return height;
 }
+
+export const customColors: string[] = ["#f94144","#f3722c","#f8961e","#f9844a","#f9c74f","#90be6d","#43aa8b","#4d908e","#577590","#277da1", "#9b5de5","#f15bb5","#fee440","#00bbf9","#00f5d4"]; 
+export function randomCustomColor() {
+  return customColors[getRandomIntInclusive(0, (customColors.length - 1))];
+}

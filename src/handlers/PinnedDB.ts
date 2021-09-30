@@ -1,5 +1,6 @@
 import { openDB, IDBPDatabase, DBSchema } from 'idb';
 import randomColor from "randomcolor";
+import { getRandomIntInclusive, randomCustomColor } from '../utils/utils';
 
 export interface Pinned {
     title: string;
@@ -49,7 +50,13 @@ export class PinnedDB {
     }
 
     static async create(pinned: Pinned) {
-        return PinnedDB.db.add('pinned', { ...pinned, createdAt: ~~(Date.now() / 1000), color: randomColor({'luminosity': 'bright'})});
+        return PinnedDB.db.add('pinned', { 
+            ...pinned, 
+            createdAt: ~~(Date.now() / 1000), 
+            color: randomCustomColor(), 
+            top: getRandomIntInclusive(0, 15),
+            left: getRandomIntInclusive(0, 15),
+        });
     }
 
     static async setCoord(key: number, top: number, left: number) {

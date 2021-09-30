@@ -3,7 +3,6 @@ import { onMount, tick } from "svelte";
 import { PinnedDB } from "../../../handlers/PinnedDB";
 import type { StoredPinned } from "../../../handlers/PinnedDB";
 import { shortcuts } from "../../../stores/rooster";
-// import Bubble from "../../elements/Bubble.svelte";
 import Pin from "../../icons/Pin.svelte";
 import { windowReady } from "html-ready";
 import anime from "animejs";
@@ -18,13 +17,14 @@ import colors  from "simple-color-functions";
     let readyToMove = false;
     let scrollPaused = false;
     const bubblePinPos = 70;
+    const maxPinsN = 10;
 
     async function refreshPinned() {
         pinned = await PinnedDB.getAllActive();
     }
 
     async function createPinned(title: string) {
-        if (pinned.length >= 5 || title.length > 50) return false;
+        if (pinned.length >= maxPinsN || title.length > 50) return false;
 
         const res = PinnedDB.create({ title, 'done': false});
         await refreshPinned();
@@ -114,7 +114,7 @@ import colors  from "simple-color-functions";
             },
             async examples(arg, p) {
                 return {
-                    'group': [{'argument': 'pin:', 'example': '[space]', 'tip': 'Create a new pinned message'}]
+                    'group': [{'argument': 'pin:', 'example': '', 'tip': 'Create a new pinned message, up to '+maxPinsN}]
                 }
             }
         });
