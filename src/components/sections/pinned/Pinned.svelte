@@ -10,6 +10,7 @@ import { fade, scale } from "svelte/transition";
 import AnimatedText from "../../elements/AnimatedText.svelte";
 import { eaElasticDefault } from "../../../utils/animations";
 import colors  from "simple-color-functions";
+import { notifications } from "../../../stores/notifications";
 
     let pinned: StoredPinned[] = [];
     let selectedElement: HTMLElement;
@@ -55,6 +56,15 @@ import colors  from "simple-color-functions";
     }
 
     async function removePin(id: number) {
+        
+        notifications.create({
+            title: 'Pin removed',
+            content: (await PinnedDB.get(id)).title + ' was dismissed',
+            sound: false,
+            onlyOnSidePanel: true,
+            icon: 'lnr lnr-pushpin',
+        });
+        
         await PinnedDB.setDone(id);
         refreshPinned();
     }

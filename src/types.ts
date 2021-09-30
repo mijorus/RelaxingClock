@@ -67,6 +67,7 @@ export interface CustomNotification {
     color?: string;
     timestamp?: number;
     sound?: boolean;
+    onlyOnSidePanel?: boolean;
 }
 
 export type ReminderType = 'simple' | 'repeated';

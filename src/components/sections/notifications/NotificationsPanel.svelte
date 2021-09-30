@@ -18,8 +18,8 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
 
     let timeout;
     function showNotification(n: CustomNotification) {
+        if (!n || n.onlyOnSidePanel) return;
         clearTimeout(timeout);
-        if (!n) return;
 
         if (notificationToShow) notificationToShow = null; 
         
@@ -62,13 +62,13 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
                 <div class="bottom-10 pt-5" transition:fly={{x: 20}}>
                     {#each [...$notifications].reverse() as n}
                         <div class="my-3">
-                            <NotificationComponent data={n} expire={false} showTimestamp={true} />
+                            <NotificationComponent forceSilent data={n} expire={false} showTimestamp={true} />
                         </div>
                     {/each}
                 </div>
             {/if}
             <Bubble classes="text-right text-primary relative cursor-pointer">
-                <div class="relative"  class:opacity-50={$screenSaver}>
+                <div class="relative"  class:opacity-50={$screenSaver || !showPanel}>
                     <i class="lnr lnr-alarm text-2xl" on:click={() => togglePanel()}></i>
                 </div>
             </Bubble>
