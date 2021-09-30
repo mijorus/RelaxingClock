@@ -1,6 +1,6 @@
 export const mainWeatherConditions: {[key: string]: {color: string, color_night?: string, icon?: string, icon_night?: string, conditions?: { range: number[], icon: string, icon_night?: string}[] }} = {
     'Thunderstorm': {
-        color: '#464646',
+        color: '#476772',
         icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon.svg'
     },
     'Drizzle': {
@@ -29,7 +29,7 @@ export const mainWeatherConditions: {[key: string]: {color: string, color_night?
         color: ''
     },
     'Fog': {
-        color: '#c5c5c5',
+        color: '#d6d6d6',
         icon: '5729389_cloud_foggy_weather_cloudy_forecast_icon.svg'
     },
     'Sand': {
@@ -51,7 +51,7 @@ export const mainWeatherConditions: {[key: string]: {color: string, color_night?
         icon_night: '5729385_moon_night_weather_climate_crescent_icon.svg',
     },
     'Clouds': {
-        color: '#6d6d6d',
+        color: '#8f8f8f',
         conditions: [
             {
                 range: [800, 802],
