@@ -34,7 +34,8 @@ import { bigClockSSoffset, cbDefault } from '../../utils/animations';
     <WeatherWidget />
 </div>
 
-<div id="big-clock-container" class="h-full flex flex-col justify-center items-center animated transform -translate-y-10"
+<div id="big-clock-container" class="h-full flex flex-col justify-center items-center"
+    style="transform: translateY({bigClockSSoffset});"
     on:click={disableScreenSaver}
     on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
     on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
