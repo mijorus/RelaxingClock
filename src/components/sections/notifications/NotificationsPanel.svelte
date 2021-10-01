@@ -67,9 +67,9 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
                     {/each}
                 </div>
             {/if}
-            <Bubble classes="text-right text-primary relative cursor-pointer">
-                <div class="relative"  class:opacity-50={$screenSaver || !showPanel}>
-                    <i class="lnr lnr-alarm text-2xl" on:click={() => togglePanel()}></i>
+            <Bubble classes="text-right text-primary relative ">
+                <div class="relative transition-opacity n-panel-toggle" class:opacity-50={$screenSaver || !showPanel}>
+                    <i class="lnr lnr-alarm text-2xl cursor-pointer" on:click={() => togglePanel()}></i>
                 </div>
             </Bubble>
         </div>
@@ -78,3 +78,9 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
         <NotificationComponent data={notificationToShow} expire={true} />
     {/if}
 </aside>
+
+<style>
+    .n-panel-toggle:hover {
+        opacity: 1 !important;
+    }
+</style>
