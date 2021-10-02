@@ -23,9 +23,11 @@ export let forceSilent = false;
                 <h4 class="text-3xl font-bold">
                     <AnimatedText text={data.title} fade={false}/>
                 </h4>
-                <p class="whitespace-nowrap">
-                    <AnimatedText text={data.content} fade={false}/>
-                </p>
+                {#if data.content}
+                    <p class="whitespace-nowrap">
+                        <AnimatedText text={data.content} fade={false}/>
+                    </p>
+                {/if}
                 {#if showTimestamp}
                     <p class="whitespace-nowrap text-primary opacity-50 text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
                 {/if}
