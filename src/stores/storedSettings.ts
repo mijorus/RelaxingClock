@@ -60,12 +60,16 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
 export const activeStyle = userSetting('defaultPosition', 0, 'int');
 export const clockFormat = userSetting('defaultClockFormat', '24h');
 export const alarmTime = userSetting('alarmTime', undefined, 'int');
+
 export const blink = userSetting('blink', true, 'boolean');
 export const presentation = userSetting('presentation', false, 'boolean');
-export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
-export const remoteTime = userSetting('remoteTime', false, 'boolean');//
-export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');// 
+// export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
+// export const remoteTime = userSetting('remoteTime', false, 'boolean');
+export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');
+export const saveTracksInCustomPlaylist = userSetting('saveTracksInCustomPlaylist', false, 'boolean');
+
 export const weather = userSetting('weather', false, 'boolean');// 
 export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');// 
-export const tempUnit = userSetting('tempUnit', 'C');// 
+export const tempUnit = userSetting('tempUnit', 'C');
+
 export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean');// 

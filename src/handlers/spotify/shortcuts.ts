@@ -10,9 +10,12 @@ type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
 let oldRes;
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
-    let toQueue: boolean | string = false; let res;
+    let toQueue: boolean | string = false; 
+    let res: SpotifyApi.SearchResponse | void;
+
     if (!query || query.length < 2) return {};
     else if (query.endsWith('>')) {        
+        // handle queue
         query.match(/>>$/) ? toQueue = '?' : toQueue = '';
         query = query.replace(/>+$/g, '');
         if (oldRes) res = oldRes;
@@ -26,9 +29,16 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     }
 
     let examples: RoosterExamples = {};
-    let exampleList = [];
+    if (!res) return examples; //return immediately if no result was found
     
+    let exampleList = [];
     for (const key of (Object.keys(res))) {
+        let mostPopularArtist: string;
+        if (key === 'artists') {
+            res.artists.items.sort((a, b) => b.popularity - a.popularity);
+            mostPopularArtist = res.artists.items[0].uri;
+        }
+
         const list: RoosterExample[] = res[key].items.map((item) => {
             let tip = ''; let size: RoosterExampleImageSize = 'sm';
             if (key === 'tracks') {
@@ -36,8 +46,8 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             }
             
             else if (key === 'artists') {
-                tip = '[Artist]';
-                size = 'md';
+                tip = '[Artist' + (mostPopularArtist === item.uri ? ', most popular' : '')+ ']';
+                size = mostPopularArtist === item.uri ? 'md' : 'sm';
             }
             
             else if (key === 'albums') {
