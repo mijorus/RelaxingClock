@@ -12,8 +12,10 @@ import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
 import SmoothImage from "../elements/SmoothImage.svelte";
+import Heart from "../icons/Heart.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
+import Spotify from "../sections/settingsPage/Spotify.svelte";
 
     momentDurationFormatSetup(moment);
 
@@ -23,6 +25,7 @@ import Shuffle from "../icons/Shuffle.svelte";
     let trackName = '';
     let lastUri: string;
     let artistsName = [];
+    let currentTrackIsLiked = false;
     let albumCover: Spotify.Image[];
     let expandedBox = false;
     let playbackStarted = false;
@@ -41,7 +44,11 @@ import Shuffle from "../icons/Shuffle.svelte";
             songPosition = ~~($spotifyPlayerState.position / 1000);
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
-            if (thisUri !== lastUri) localStorage.setItem('lastPlayedTrack', Date.now() + '::' + thisUri);
+            if (thisUri !== lastUri) {
+                localStorage.setItem('lastPlayedTrack', Date.now() + '::' + thisUri);
+                checkTrackIsSaved($spotifyPlayerState.track_window.current_track.id);
+            }
+            
             lastUri = thisUri;
         } else {
             expandedBox = false;
@@ -52,6 +59,10 @@ import Shuffle from "../icons/Shuffle.svelte";
         if (!$spotifyPlayerState?.paused && $spotifyPlayerState?.duration && $time) {
             songPosition = $spotifyPlayerState.duration === songPosition ? songPosition : songPosition + 1;
         }
+    }
+
+    $: {
+        
     }
     
     $: setLabel($spotifyPlayerStatus);
@@ -70,6 +81,18 @@ import Shuffle from "../icons/Shuffle.svelte";
             if (spotifyStatus === 'ready') preloadLabel = 'Ready to play!';
             else if (spotifyStatus !==  'disconnected') preloadLabel = 'Ooops!';
         }
+    }
+
+    async function checkTrackIsSaved(trackId: string) {
+        currentTrackIsLiked = (await SpotifyClient.containsMySavedTracks([trackId]))[0];
+    }
+
+    async function toggleSavedTrack() {
+        currentTrackIsLiked
+            ? await SpotifyClient.removeFromMySavedTracks([$spotifyPlayerState.track_window.current_track.id])
+            : await SpotifyClient.addToMySavedTracks([$spotifyPlayerState.track_window.current_track.id]);
+        
+        currentTrackIsLiked = !currentTrackIsLiked;
     }
 
     function togglePlay() {
@@ -114,6 +137,9 @@ import Shuffle from "../icons/Shuffle.svelte";
                     on:click={() => SpotifyPlayer.previousTrack()}></i>
                 <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
+                </i>
+                <i class="mx-1 cursor-pointer" on:click={() => toggleSavedTrack()}>
+                    <Heart filled={currentTrackIsLiked} color={process.env[currentTrackIsLiked ? 'SPOTIFY_COLOR' : 'TEXT_SECONDARY']}/>
                 </i>
                 <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />

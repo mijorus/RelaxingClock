@@ -13,6 +13,7 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
 import { device_id } from '../../../handlers/spotify/player';
+import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
 
     let boxLabel: string;
     let moreP = false;
@@ -23,9 +24,8 @@ import { device_id } from '../../../handlers/spotify/player';
 
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
-            featuredPlaylists = await SpotifyClient.getFeaturedPlaylists({'country': $spotifyUserData.country, 'limit': 16});
+            featuredPlaylists = await SpotifyClient.getFeaturedPlaylists({'country': $spotifyUserData.country, 'limit': 20});
             myPlaylists = await SpotifyClient.getUserPlaylists($spotifyUserData.id, {'limit': 10});
-            console.log(myPlaylists);
             
         } else {
             moreP = false;
@@ -98,6 +98,12 @@ import { device_id } from '../../../handlers/spotify/player';
     >
         <Action label={$spotifyUrl ? 'Login' : 'Logout'} on:click={handleBtnClick}/>
     </PrimaryBox>
+    <NestedBox label="Search tracks, albums and more!" 
+        available={$spotifyPlayerStatus === 'ready'}
+        description="Search was moved to the Roosted"
+    >
+        <Action label="Open" on:click={() => window.dispatchEvent( new KeyboardEvent('keydown', {key: 'l', altKey: true}))}/>
+    </NestedBox>
     {#if $spotifyPlayerStatus === 'ready'}
         <div class="flex justify-end" transition:slide>
             <NestedBox expandable label="Playlists for you" bordered={false} on:click={handlePlaylistBox}>
@@ -105,8 +111,8 @@ import { device_id } from '../../../handlers/spotify/player';
                   <div class="loader text-center transform scale-75">
                       <div class="line-scale"><div></div><div></div><div></div><div></div><div></div></div></div>
                 {:else}  
-                    <div class="max-h-96 mt-2 overflow-y-scroll w-full relative" transition:fade>
-                        <div class="w-full text-center font-bold w pt-3">From your library</div>
+                    <div class="mt-2 overflow-y-scroll w-full relative" style="max-height: 32rem;" transition:fade>
+                        <div class="w-full text-center font-bold w py-1 sticky top-0 z-0 bg-secondary">From your library</div>
                         {#each myPlaylists.items as m}
                             <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex cursor-pointer"
                                 on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': m.uri, device_id })}}>
@@ -117,17 +123,19 @@ import { device_id } from '../../../handlers/spotify/player';
                                 </div>
                             </div>
                         {/each}
-                        <div class="w-full text-center font-bold w pt-3">Featured</div>
-                        {#each featuredPlaylists.playlists.items as p, index}
-                            <div class="bg-tertiary rounded-lg my-1 p-2 max-w-full overflow-x-hidden whitespace-nowrap flex cursor-pointer" class:hidden={(index > 8 && !moreP)}
-                                    on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': p.uri, device_id })}}>
-                                <img src={p.images[0].url} alt={p.name} class="inline-block w-14 rounded-md z-10">
-                                <div class="flex flex-col justify-center ml-2 max-w-full">
-                                    <div><AnimatedText text={p.name}/></div>
-                                    <div class="text-secondary"><AnimatedText text={p.description}/></div>
+                        <div class="w-full text-center font-bold w py-1 sticky top-0 z-10 bg-secondary">Featured</div>
+                        <div class="relative z-0">
+                            {#each featuredPlaylists.playlists.items as p, index}
+                                <div class="bg-tertiary rounded-lg my-1 p-2 max-w-full overflow-x-hidden whitespace-nowrap flex cursor-pointer" class:hidden={(index > 8 && !moreP)}
+                                        on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': p.uri, device_id })}}>
+                                    <img src={p.images[0].url} alt={p.name} class="inline-block w-14 rounded-md z-10">
+                                    <div class="flex flex-col justify-center ml-2 max-w-full">
+                                        <div><AnimatedText text={p.name}/></div>
+                                        <div class="text-secondary text-xs"><AnimatedText text={p.description}/></div>
+                                    </div>
                                 </div>
-                            </div>
-                        {/each}
+                            {/each}
+                        </div>
                         {#if !moreP}
                             <div class="text-center cursor-pointer text-sm underline" on:click={() => {moreP = true}}>Load more</div>
                         {/if}
@@ -136,11 +144,11 @@ import { device_id } from '../../../handlers/spotify/player';
             </NestedBox>
         </div>
     {/if}
-    <NestedBox label="Save in a separate playlist" 
+    <!-- <NestedBox label="Save in a separate playlist" 
         bordered={true} 
         available={$spotifyPlayerStatus === 'ready'}
         description="Whether to save songs that you like in your library on in Relaxing Clock's playlist"
     >
-        <Booleans state={false} label={'save in user library'}/>
-    </NestedBox>
+        <Booleans state={$saveTracksInCustomPlaylist} on:change={(e) => saveTracksInCustomPlaylist.set(e.detail)} label={'save in custom playlist'}/>
+    </NestedBox> -->
 </SettingsBox>
