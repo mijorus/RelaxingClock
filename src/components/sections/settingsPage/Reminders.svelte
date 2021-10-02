@@ -1,21 +1,21 @@
 <script lang="ts">
-    import SettingsBox from '../../elements/SettingsBox.svelte';
-    import Title from "../../elements/settings/Title.svelte";
-    import TitleIcon from "../../elements/settings/TitleIcon.svelte";
-    import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
-    import Action from '../../elements/settings/Buttons/Action.svelte';
-    import NestedBox from '../../elements/settings/NestedBox.svelte';
-    import { onMount, tick } from 'svelte';
-    import { canBeSummoned, shortcuts } from '../../../stores/rooster';
-    import moment, { Moment } from 'moment';
-    import { fade, fly, slide } from 'svelte/transition';
-    import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
-    import time from '../../../stores/time';
-    import { RemindersDB } from '../../../handlers/RemindersDB';
-    import { tips } from '../../../stores/globalState';
-    import { notifications } from '../../../stores/notifications';
-    import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
-    import { shakeElement } from '../../../utils/utils';
+import SettingsBox from '../../elements/SettingsBox.svelte';
+import Title from "../../elements/settings/Title.svelte";
+import TitleIcon from "../../elements/settings/TitleIcon.svelte";
+import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
+import Action from '../../elements/settings/Buttons/Action.svelte';
+import NestedBox from '../../elements/settings/NestedBox.svelte';
+import { onMount, tick } from 'svelte';
+import { canBeSummoned, shortcuts } from '../../../stores/rooster';
+import moment, { Moment } from 'moment';
+import { fade, fly, slide } from 'svelte/transition';
+import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
+import time from '../../../stores/time';
+import { RemindersDB } from '../../../handlers/RemindersDB';
+import { tips } from '../../../stores/globalState';
+import { notifications } from '../../../stores/notifications';
+import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
+import { shakeElement } from '../../../utils/utils';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 
     type BoxAtType = 'minutes' | 'hour';
@@ -184,14 +184,15 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                     },
                     dismiss: {
                         active: true,
-                        callback: async p => {
-                            const r = futureReminders.find(f => f.id.toString() == p.match(/\d+/)[0]);
-                            if (r) {
-                                await RemindersDB.setDone(r.id);
-                                runListCheck();
+                        callback: async (p, id: number) => {
+                            try {
+                                await RemindersDB.setDone(id);
+                                await runListCheck();
+                                return true;
+                            } catch (e) {
+                                console.log(e);
+                                return false;
                             }
-
-                            return r ? true : false;
                         },
                     }
                 },
@@ -199,7 +200,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                     let tips: RoosterExample[] = [];
                     if (arg.startsWith('d') ) {
                         if (!futureReminders.length) tips.push({ argument: 'dismiss', example: 'No pending reminders' })
-                        else futureReminders.forEach(r => tips.push({ argument: 'dismiss', example: r.id.toString(), tip: r.title }));
+                        else futureReminders.forEach(r => tips.push({ argument: '', example: r.title, tip: moment(r.at, 'X').fromNow(), selectable: true, id: r.id }));
                     } else {
                         tips = [ 
                             { argument: 'create', example: '10m Do some yoga', tip: 'Set a reminder in 10 minutes' },
@@ -207,9 +208,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                             { argument: 'dismiss', example: '#', tip: 'Dismiss reminder #'}
                         ]
                     }
-                    console.log(tips);
                     
-                    return {'group': tips};
+                    return {'group': tips, 'namespace': 'Dismiss'};
                 }
             });
         } catch(err) {
