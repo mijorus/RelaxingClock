@@ -2,7 +2,6 @@
 import randomcolor from "randomcolor";
 import { onMount } from "svelte";
 import { fade } from "svelte/transition";
-import { visibleStylesId } from "../../../stores/clockStyle";
 import { screenSaver } from "../../../stores/globalState";
 import { analogTimeLocked } from "../../../stores/storedSettings";
 import time from "../../../stores/time";
@@ -11,7 +10,6 @@ import Hours from "../Hours.svelte";
 import Minutes from "../Minutes.svelte";
 import StyleBase from "./StyleBase.svelte";
 
-    const styleId = 2;
     let analogClock: HTMLElement;
     const handClasses = 'absolute rounded-full top-2/4 left-2/4 origin-right-2/4 ';
     let handSecColor: string;
@@ -33,8 +31,7 @@ import StyleBase from "./StyleBase.svelte";
     })
 </script>
 
-<StyleBase>
-    {#if $visibleStylesId.includes(styleId)}
+<StyleBase styleId={2}>
         <div
             on:mouseenter={() => showTime = true}
             on:mouseleave={() => showTime = false}
@@ -73,7 +70,6 @@ import StyleBase from "./StyleBase.svelte";
             >
             </span>
         </div>
-    {/if}
 </StyleBase>
 
 <style>

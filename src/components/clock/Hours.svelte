@@ -57,10 +57,6 @@ import tinycolor from "tinycolor2";
             easing: 'linear',
             complete() { 
                 hours.style.color = color;
-                hours.style.background = color 
-                    ? `linear-gradient(150deg, ${tinycolor(color).brighten(20).toString()}, ${tinycolor(color).darken(20).toString()}` 
-                    : process.env.TEXT_PRIMARY;
-
                 if (color) localStorage.setItem('hoursColor', color) 
                 else localStorage.removeItem('hoursColor') 
             }
@@ -117,11 +113,3 @@ import tinycolor from "tinycolor2";
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
 {/if}
-
-<style>
-    .hours-bg {
-        background-clip: text;
-        -webkit-background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
-    }
-</style>

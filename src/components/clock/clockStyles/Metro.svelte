@@ -11,7 +11,6 @@ import Minutes from '../Minutes.svelte';
 import StyleBase from './StyleBase.svelte';
 import { blink } from '../../../stores/storedSettings';
     
-const styleId = 3;
     let container: HTMLElement;
     const zoomedOut = 0.8;
     const shiftedUp = '-25%';
@@ -29,8 +28,7 @@ const styleId = 3;
     }
 </script>
 
-<StyleBase>
-    {#if $visibleStylesId.includes(styleId)}
+<StyleBase styleId={3}>
         <div bind:this={container} class="flex flex-col" style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});">
             <Hours />
             <div class="font-clock text-primary text-giant-1 absolute top-1/2 left-1/2 transform -translate-x-2/4 -translate-y-2/4">
@@ -38,5 +36,4 @@ const styleId = 3;
             </div>
             <Minutes />
         </div>
-    {/if}
 </StyleBase>
