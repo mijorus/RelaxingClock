@@ -25,11 +25,11 @@ const styles: Array<{id: number, label: string, component?: any }> = [
         label: 'Metropolis',
         component: Metro,
     },
-    {
-        id: 4,
-        label: 'Galaxy',
-        component: Galaxy,
-    },
+    // {
+    //     id: 4,
+    //     label: 'Galaxy',
+    //     component: Galaxy,
+    // },
     // {
     //     label: 'Globetrotter',
     // },
