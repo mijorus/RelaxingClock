@@ -5,6 +5,7 @@ import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
 import { onMount, tick } from "svelte";
+import { customColors, randomCustomColor } from "../../utils/utils";
 
     $: setHours($time, $clockFormat);
     export let interactive = true;
@@ -84,11 +85,17 @@ import { onMount, tick } from "svelte";
         tl = anime(animation)
     }
 
-    let c = 0;
+    let c = 0; let d = 0;
     function handleClockCM(e) {
         e.preventDefault();
-        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random' }));
-        c > 10 ? c = 0 : c++;
+        if (c % 10 === 0)  {
+            changeColor(null);
+        } else {
+            changeColor(customColors[d]);
+            d = (d === (customColors.length - 1)) ? 0 : d + 1;
+        }
+
+        c = c + 1;
     }
 
     onMount(async() => {

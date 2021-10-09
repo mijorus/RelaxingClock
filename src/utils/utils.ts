@@ -85,9 +85,13 @@ export function outerHeight(el: HTMLElement) {
   return height;
 }
 
-export const customColors: string[] = ["#f94144","#f3722c","#f8961e","#f9844a","#f9c74f","#90be6d","#43aa8b","#4d908e","#577590","#277da1", "#9b5de5","#f15bb5","#fee440","#00bbf9","#00f5d4"]; 
+let lastCustomColor: string;
+export const customColors: string[] = ["#f94144","#f3722c","#577590", "#f8961e","#f9844a","#f9c74f","#90be6d","#43aa8b","#4d908e","#277da1", "#9b5de5","#f15bb5","#fee440","#00bbf9","#00f5d4"]; 
 export function randomCustomColor() {
-  return customColors[getRandomIntInclusive(0, (customColors.length - 1))];
+  let availableColors = [];
+  customColors.forEach(el => { if (el !== lastCustomColor) availableColors.push(el)});
+  lastCustomColor = availableColors[getRandomIntInclusive(0, (availableColors.length - 1))];
+  return lastCustomColor;
 }
 
 export function polarToCartesian(radius, angleInDegrees, centerX = radius, centerY = radius) {
