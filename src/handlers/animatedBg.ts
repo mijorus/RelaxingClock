@@ -29,5 +29,5 @@ function startBgAnimation(color: string) {
 export default function() {
     //subscribe and stuff...
 
-    startBgAnimation(localStorage.getItem('hoursColor'));
+    //startBgAnimation(localStorage.getItem('hoursColor'));
 }
