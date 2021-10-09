@@ -19,7 +19,7 @@ export interface ClockElementBox {
 }
 
 export type mouseWatcherState = 'watch' | 'hide' | 'leave';
-export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object';
+export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object'| 'array';
 
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
 
@@ -81,4 +81,10 @@ export interface Reminder {
 
 export interface StoredReminder extends Reminder {
     id?: number;
+}
+
+export interface LastPlayedContexts {
+    uri: string;
+    name: string;
+    date: number;
 }

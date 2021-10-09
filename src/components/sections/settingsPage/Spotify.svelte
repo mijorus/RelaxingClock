@@ -13,7 +13,8 @@ import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
 import { device_id } from '../../../handlers/spotify/player';
-import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
+import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
+import moment from 'moment';
 
     let boxLabel: string;
     let moreP = false;
@@ -21,6 +22,7 @@ import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
     let featuredPlaylists: SpotifyApi.ListOfFeaturedPlaylistsResponse;
     let myPlaylists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
     let firstTimeReady = false;
+    let showLastPlayedBox = false;
 
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
@@ -32,11 +34,11 @@ import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
         }
     }
 
-    async function checkLastPlayerTrack(lastPlayerTheshold = 4) {
+    async function checkLastPlayerTrack(lastPlayerTheshold = 15) {
         if (localStorage.getItem('lastPlayedTrack') && device_id) {
             const lastPlayedTrackSplit = localStorage.getItem('lastPlayedTrack').split('::', 2);
             
-            if (Date.now() - parseInt(lastPlayedTrackSplit[0]) < (lastPlayerTheshold * 60 * 1000)) {
+            if (Date.now() - parseInt(lastPlayedTrackSplit[0]) < (lastPlayerTheshold * 1000)) {
                 SpotifyClient.play({ device_id, 'uris': [lastPlayedTrackSplit[1]] });
             }
         }
@@ -82,7 +84,6 @@ import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
         }
     }
 
-
 </script>
 
 <SettingsBox>
@@ -108,7 +109,7 @@ import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
         <div class="flex justify-end" transition:slide>
             <NestedBox expandable label="Playlists for you" bordered={false} on:click={handlePlaylistBox}>
                 {#if !featuredPlaylists || !myPlaylists}
-                  <div class="loader text-center transform scale-75">
+                  <div class="loader text-center transform scale-50">
                       <div class="line-scale"><div></div><div></div><div></div><div></div><div></div></div></div>
                 {:else}  
                     <div class="mt-2 overflow-y-scroll w-full relative" style="max-height: 32rem;" transition:fade>
@@ -141,6 +142,22 @@ import { saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
                         {/if}
                     </div>
                 {/if }
+            </NestedBox>
+        </div>
+        <div class="flex justify-end" transition:slide>
+             <NestedBox expandable label="Last played in Relaxing Clock" bordered={false} 
+                on:click={() => showLastPlayedBox = !showLastPlayedBox} available={$contextHistory.length > 0}>
+                <div class="mt-2 overflow-y-scroll w-full relative" style="max-height: 32rem;" transition:fade>
+                    {#each $contextHistory as h}
+                        <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex cursor-pointer"
+                            on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': h.uri, device_id })}}>
+                            <div class="flex flex-col justify-center ml-2">
+                                <div>{h.name}</div>
+                                <div class="text-secondary">{moment(h.date, 'x').fromNow()}</div>
+                            </div>
+                        </div>
+                    {/each}
+                </div>
             </NestedBox>
         </div>
     {/if}

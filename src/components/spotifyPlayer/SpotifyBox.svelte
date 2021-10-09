@@ -6,8 +6,9 @@ import { SpotifyPlayer } from "../../handlers/spotify/player";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { screenSaver, tips } from "../../stores/globalState";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
+import { contextHistory } from "../../stores/storedSettings";
 import time from "../../stores/time";
-import type { SpotifyPlayerStatus } from "../../types";
+import type { LastPlayedContexts, SpotifyPlayerStatus } from "../../types";
 import { createCommaArray } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
@@ -45,6 +46,16 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
             if (thisUri !== lastUri) {
+                const ctx = $spotifyPlayerState.context.uri;
+                if (ctx.length) {
+                    let history: LastPlayedContexts[] = $contextHistory;
+                    
+                    if (history.length > 5) history.pop()
+                    if (!history.find(el => el.uri === ctx)) history.unshift({uri: ctx, name: $spotifyPlayerState.context.metadata.context_description, date: Date.now()})
+                    contextHistory.set(history);
+                }
+                
+
                 localStorage.setItem('lastPlayedTrack', Date.now() + '::' + thisUri);
                 checkTrackIsSaved($spotifyPlayerState.track_window.current_track.id);
             }
@@ -59,10 +70,6 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
         if (!$spotifyPlayerState?.paused && $spotifyPlayerState?.duration && $time) {
             songPosition = $spotifyPlayerState.duration === songPosition ? songPosition : songPosition + 1;
         }
-    }
-
-    $: {
-        
     }
     
     $: setLabel($spotifyPlayerStatus);

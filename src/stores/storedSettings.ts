@@ -33,6 +33,9 @@ function userSetting(key: string, defaultValue: any, type: userSettingType = 'st
             case 'object':
                 value = JSON.parse(value);
                 break;
+            case 'array':
+                value = JSON.parse(value);
+                break;
         }
     }
 
@@ -67,6 +70,7 @@ export const presentation = userSetting('presentation', false, 'boolean');
 // export const remoteTime = userSetting('remoteTime', false, 'boolean');
 export const loggedWithSpotify = userSetting('userHasLogged', false, 'boolean');
 export const saveTracksInCustomPlaylist = userSetting('saveTracksInCustomPlaylist', false, 'boolean');
+export const contextHistory = userSetting('contextHistory', [], 'array');
 
 export const weather = userSetting('weather', false, 'boolean');// 
 export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');// 
