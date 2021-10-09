@@ -5,7 +5,6 @@ import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
 import { onMount, tick } from "svelte";
-import tinycolor from "tinycolor2";
 
     $: setHours($time, $clockFormat);
     export let interactive = true;
@@ -39,16 +38,15 @@ import tinycolor from "tinycolor2";
                 complete() {
                     if (!up) {
                         localStorage.removeItem('hours');
-                        hours.classList.remove('font-bold');
+                        hours.classList.remove('font-extrabold');
                     } else {
                         localStorage.setItem('hours', 'scaled');
-                        hours.classList.add('font-bold');
+                        hours.classList.add('font-extrabold');
                     }
                 }
             })
     }
 
-    // set the color of the hours number
     function changeColor(color = null, animation = true) {
         tl = anime({
             targets: hours,
@@ -56,7 +54,7 @@ import tinycolor from "tinycolor2";
             rotate: [5, -5, 5, -5, 0],
             easing: 'linear',
             complete() { 
-                hours.style.color = color;
+                hours.style.color = color; 
                 if (color) localStorage.setItem('hoursColor', color) 
                 else localStorage.removeItem('hoursColor') 
             }
@@ -89,7 +87,7 @@ import tinycolor from "tinycolor2";
     let c = 0;
     function handleClockCM(e) {
         e.preventDefault();
-        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random', format: 'hex' }));
+        changeColor(c > 10 ? null : randomcolor({ luminosity: (c % 2 === 0) ? 'light' : 'bright', hue: 'random' }));
         c > 10 ? c = 0 : c++;
     }
 
@@ -101,7 +99,7 @@ import tinycolor from "tinycolor2";
 </script>
 
 {#if interactive}
-    <span bind:this={hours} class="inline-block hours-bg font-semibold"
+    <span bind:this={hours} class="inline-block"
         on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
@@ -109,7 +107,7 @@ import tinycolor from "tinycolor2";
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}
-    <span bind:this={hours} class="inline-block hours-bg font-semibold" style="transition: color .05s linear;">
+    <span bind:this={hours} class="inline-block" style="transition: color .05s linear;">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
 {/if}
