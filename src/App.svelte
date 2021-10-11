@@ -46,15 +46,12 @@ import animatedBg from "./handlers/animatedBg";
 <LoadingScreen />
 
 <Rooster />
-
 <main class="w-screen h-screen">
 	<Home />
 	<Settings />
     <NotificationsPanel />
-    
 	<MainBg />
 </main>
-
 <AlarmRing />
 
 <div class="w-12 hidden"></div>

@@ -51,7 +51,11 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
                     let history: LastPlayedContexts[] = $contextHistory;
                     
                     if (history.length > 5) history.pop()
-                    if (!history.find(el => el.uri === ctx)) history.unshift({uri: ctx, name: $spotifyPlayerState.context.metadata.context_description, date: Date.now()})
+                    if (!history.find(el => el.uri === ctx)) history.unshift({
+                        uri: ctx, name: $spotifyPlayerState.context.metadata.context_description, 
+                        date: Date.now()
+                    });
+                    
                     contextHistory.set(history);
                 }
                 
