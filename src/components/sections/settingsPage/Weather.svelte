@@ -94,14 +94,7 @@ import anime from "animejs";
         }
     }
 
-    function showWeatherTips() {
-        let t: Tip[] = [];
-        for (const prop in mainWeatherConditions) {
-            t.push({'name': `<span class="w-3 h-3 inline-block rounded-full pr-1" style="background-color: ${mainWeatherConditions[prop].color ?? ''}"></span>`, 'shortcut': prop})
-        }
-
-        tips.set(t);
-    }
+    
 
     onMount(() => {
         if ($weather && localStorage.getItem('currentLocation')) {
@@ -121,12 +114,19 @@ import anime from "animejs";
                 },
                 'disable': {
                     async callback() { handleWeatherSwitch(false); return true}
+                },
+                'update': {
+                    async callback() { updateWeatherData(); return true}
                 }
             },
             async examples() {
                 return {
                     'namespace': 'Examples',
-                    'group': [{'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''}]
+                    'group': [
+                        {'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, 
+                        {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''},
+                        {'argument': 'update', 'tip': 'Refresh the forecasts', 'example': ''}
+                    ]
                 }
             }
         });
@@ -145,7 +145,7 @@ import anime from "animejs";
             description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
             available={true}
         >
-            <div class="flex items-center" on:mouseenter={() => { if ($weather) showWeatherTips()}} on:mouseleave={() => tips.set(null)}>
+            <div class="flex items-center">
                 <span id="refresh-weather-btn" class="fas fa-sync-alt opacity-50 mr-4 hover:opacity-100 cursor-pointer" on:click={() => updateWeatherData()} 
                     class:pointer-events-none={!$weather}></span>
                 <Booleans state={$weather} label={'weather'} on:change={(e) => handleWeatherSwitch(e.detail)} />

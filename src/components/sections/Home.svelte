@@ -30,7 +30,7 @@ import { bigClockSSoffset, cbDefault } from '../../utils/animations';
 </script>
 
 <FullScreenBtn />
-<div class="absolute left-2/4" style="transform: translateX(-50%);">
+<div class="absolute left-2/4" style="transform: translateX(-50%); z-index: 1;">
     <WeatherWidget />
 </div>
 

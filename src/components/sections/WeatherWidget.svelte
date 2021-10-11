@@ -6,6 +6,8 @@ import { getConditionIcon, mainWeatherConditions } from "../../lib/openweatherma
 import type { WeatherCondition } from "../../lib/openweathermap/mainConditions";
 import { lastWeatherUpdate, tempUnit, weather } from "../../stores/storedSettings";
 import { kTemperatureConverter } from "../../utils/utils";
+import type { Tip } from "../../types";
+import { tips } from "../../stores/globalState";
 
     let data: Hourly[] = [];
     let icon: string;
@@ -37,18 +39,27 @@ import { kTemperatureConverter } from "../../utils/utils";
             currentLocation = localStorage.getItem('currentLocation') ? localStorage.getItem('currentLocation').split(',') : null;
             oldWeatherUpdate = $lastWeatherUpdate;
         }
-    };
+    }
+
+    function showWeatherTips() {
+        let t: Tip[] = [];
+        for (const prop in mainWeatherConditions) {
+            t.push({'name': `<span class="w-3 h-3 inline-block rounded-full pr-1" style="background-color: ${mainWeatherConditions[prop].color ?? ''}"></span>`, 'shortcut': prop})
+        }
+
+        tips.set(t);
+    }
 </script>
 
 {#if $weather}
-    <div class="relative flex flex-row items-center" transition:fade>
+    <div class="relative flex flex-row items-center" transition:fade on:mouseenter={() => { showWeatherTips()}} on:mouseleave={() => tips.set(null)}>
         {#if data.length}
             {#each data as d, i}{#if !d}<span class="w-3 h-1 inline-block overlap" style="background-color: rgb(63, 63, 63);" class:rounded-l-xl={i === 0}></span>{/if}{/each}{#if icon}<img class="inline-block w-16" src="/media/{icon}" alt=""/>{/if}{#each data as d, i}{#if d}<span class="w-3 h-1 inline-block p-0 overlap" style="background-color: {isNight && mainWeatherConditions[d.weather[0].main].color_night ? mainWeatherConditions[d.weather[0].main].color_night : mainWeatherConditions[d.weather[0].main].color};" class:rounded-r-xl={i === (data.length - 1)}></span>{/if}
             {/each}
         {/if}
     </div>
     {#if currentLocation && $lastWeatherUpdate}
-        <p class="text-center text-secondary">{currentLocation[3]}, {currentLocation[2]} - {~~(kTemperatureConverter($lastWeatherUpdate.current.temp, $tempUnit))}°{$tempUnit}</p>
+        <p class="text-center text-secondary">{currentLocation[3]}, {currentLocation[2]} &middot; {~~(kTemperatureConverter($lastWeatherUpdate.current.temp, $tempUnit))}°{$tempUnit}</p>
     {/if}
 {/if}
 
