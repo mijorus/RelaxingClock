@@ -1,8 +1,7 @@
 <script lang="ts">
 import { tick } from "svelte";
-
 import { fade, fly } from "svelte/transition";
-import { screenSaver } from "../../../stores/globalState";
+import { screenSaver, tips } from "../../../stores/globalState";
 import { latestNotification, notifications } from "../../../stores/notifications";
 import type { CustomNotification } from "../../../types";
 import Bubble from "../../elements/Bubble.svelte";
@@ -56,7 +55,7 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
 </script>
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
-    {#if $notifications.length}
+    {#if $notifications.length && !$tips}
         <div bind:this={nPanel} class="absolute bottom-0 right-0 -z-1 overflow-y-scroll max-h-screen" transition:fade>
             {#if showPanel}
                 <div class="bottom-10 pt-5" transition:fly={{x: 20}}>
