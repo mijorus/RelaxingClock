@@ -30,7 +30,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
     let albumCover: Spotify.Image[];
     let expandedBox = false;
     let playbackStarted = false;
-    let songPosition = 0;
+    let songPosition = 0; //seconds since the track started
 
     $: boxClasses = $screenSaver && !playbackStarted 
         ? 'bg-transparent border-transparent' 
@@ -133,6 +133,11 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             expandedBox = !expandedBox;
         };
     }
+
+    function goToPreviousTrack() {
+        if (songPosition < 5) SpotifyPlayer.previousTrack();
+        else SpotifyPlayer.seek(0);
+    } 
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown}/>
@@ -145,7 +150,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             </p>
             <p class="mt-1 flex items-center">
                 <i class="mx-2 cursor-pointer inline-block fas fa-backward text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
-                    on:click={() => SpotifyPlayer.previousTrack()}></i>
+                    on:click={() => goToPreviousTrack()}></i>
                 <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
                 </i>
