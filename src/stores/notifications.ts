@@ -1,5 +1,5 @@
 import type { Readable } from "stream";
-import { derived, writable, Writable } from "svelte/store";
+import { derived, get, writable, Writable } from "svelte/store";
 import type { CustomNotification } from "../types";
 
 function createNotification() {
@@ -14,9 +14,19 @@ function createNotification() {
 		}
     }
 
+	function dismiss(index: number) {
+		if ((get(stored))[index]) {
+			let spliced = (get(stored))
+			spliced.splice(index, 1);
+			stored.update(() => [...spliced]);
+			return spliced.length;
+		}
+	}
+
 	return {
 		subscribe: stored.subscribe,
 		create,
+		dismiss,
 	};
 }
 
