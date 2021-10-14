@@ -61,7 +61,7 @@ import { notifications } from "../../../stores/notifications";
             title: 'Pin removed',
             content: (await PinnedDB.get(id)).title + ' was dismissed',
             sound: false,
-            onlyOnSidePanel: true,
+            limitDisplay: 'sidePanelOnly',
             icon: 'lnr lnr-pushpin',
         });
         
