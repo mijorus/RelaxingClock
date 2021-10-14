@@ -51,8 +51,6 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
 
     let wheelScrollTimeout, allowScroll = true;
     function handleBigClockScroll(e: WheelEvent) {
-        if (e.deltaX !== 0) e.preventDefault();
-
         const theshold = 20;
         if (allowScroll && ( e.deltaX > theshold || e.deltaX < -(theshold))) {
             clearTimeout(wheelScrollTimeout);
