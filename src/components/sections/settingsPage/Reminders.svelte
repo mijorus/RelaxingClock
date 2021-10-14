@@ -51,6 +51,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                         title: reminder.title, 
                         content: reminder.type === 'repeated' ? 'Interact to dismiss' : '',
                         icon: 'lnr lnr-calendar-full',
+                        limitDisplay: reminder.type ? 'notificationOnly' : null,
                         color
                     });
 
@@ -160,7 +161,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
             title: 'Reminder set!', 
             content: `${at.fromNow()} "${title}"`,
             icon: `lnr ${type === 'repeated' ? 'lnr-history' :'lnr-calendar-full'}`,
-            color
+            limitDisplay: 'notificationOnly',
+            color,
         });
         
         return true;
