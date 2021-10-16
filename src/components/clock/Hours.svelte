@@ -5,7 +5,7 @@ import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
 import { onMount, tick } from "svelte";
-import { customColors, randomCustomColor } from "../../utils/utils";
+import { customColors, locSto, randomCustomColor } from "../../utils/utils";
 
     $: setHours($time, $clockFormat);
     export let interactive = true;
@@ -30,22 +30,22 @@ import { customColors, randomCustomColor } from "../../utils/utils";
     let tl: anime.AnimeInstance;
     function scaleUp(up: boolean, animation = true) {
         tl = anime({
-                begin() { hours.classList.add('scaling') },
-                targets: hours,
-                duration: animation ? 500 : 0,
-                scale: !up ? 1 : [1, 1.3, 1.2],
-                rotate: [5, -5, 5, -5, 5, -5, 5, -5, 0],
-                easing: 'easeOutElastic',
-                complete() {
-                    if (!up) {
-                        localStorage.removeItem('hours');
-                        hours.classList.remove('font-extrabold');
-                    } else {
-                        localStorage.setItem('hours', 'scaled');
-                        hours.classList.add('font-extrabold');
-                    }
+            begin() { hours.classList.add('scaling') },
+            targets: hours,
+            duration: animation ? 500 : 0,
+            scale: !up ? 1 : [1, 1.3, 1.2],
+            rotate: [5, -5, 5, -5, 5, -5, 5, -5, 0],
+            easing: 'easeOutElastic',
+            complete() {
+                if (!up) {
+                    localStorage.removeItem('hours');
+                    hours.classList.remove('font-extrabold');
+                } else {
+                    localStorage.setItem('hours', 'scaled');
+                    hours.classList.add('font-extrabold');
                 }
-            })
+            }
+        })
     }
 
     function changeColor(color = null, animation = true) {
@@ -56,8 +56,8 @@ import { customColors, randomCustomColor } from "../../utils/utils";
             easing: 'linear',
             complete() { 
                 hours.style.color = color; 
-                if (color) localStorage.setItem('hoursColor', color) 
-                else localStorage.removeItem('hoursColor') 
+                hours.style.textShadow = color ? '2px 2px #fff' :  null;
+                locSto('hoursColor', color || undefined);
             }
         })
     }
@@ -87,10 +87,8 @@ import { customColors, randomCustomColor } from "../../utils/utils";
 
     let c = 0; let d = 0;
     function handleClockCM(e) {
-        e.preventDefault();
-        if (c % 10 === 0)  {
-            changeColor(null);
-        } else {
+        if (c % 10 === 0)  changeColor(null);
+        else {
             changeColor(customColors[d]);
             d = (d === (customColors.length - 1)) ? 0 : d + 1;
         }
@@ -100,8 +98,8 @@ import { customColors, randomCustomColor } from "../../utils/utils";
 
     onMount(async() => {
         await tick();
-        if (localStorage.getItem('hours') === 'scaled') scaleUp(true, false);
-        if (localStorage.getItem('hoursColor')) changeColor(localStorage.getItem('hoursColor'), false);
+        if (locSto('hours') === 'scaled') scaleUp(true, false);
+        if (locSto('hoursColor')) changeColor(locSto('hoursColor'), false);
     })
 </script>
 
@@ -110,7 +108,7 @@ import { customColors, randomCustomColor } from "../../utils/utils";
         on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
-        on:contextmenu={handleClockCM} style="transition: color .05s linear;">
+        on:contextmenu|preventDefault={handleClockCM} style="transition: color .05s linear;">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}
