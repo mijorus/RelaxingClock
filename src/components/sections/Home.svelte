@@ -10,6 +10,7 @@ import WeatherWidget from './WeatherWidget.svelte';
 import Pinned from './pinned/Pinned.svelte';
 import anime from "animejs";
 import { bigClockSSoffset, cbDefault } from '../../utils/animations';
+import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 
 
     $: screenSaverApply($screenSaver)
@@ -32,6 +33,10 @@ import { bigClockSSoffset, cbDefault } from '../../utils/animations';
 <FullScreenBtn />
 <div class="absolute left-2/4" style="transform: translateX(-50%); z-index: 1;">
     <WeatherWidget />
+</div>
+
+<div class="absolute top-0">
+    <FloatingBlobs />
 </div>
 
 <div id="big-clock-container" class="h-full flex flex-col justify-center items-center"
