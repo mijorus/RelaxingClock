@@ -127,3 +127,7 @@ export function locSto(key: string, valueToSet: string = undefined) {
         return valueToSet;
     }
 }
+
+export function randomBool() {
+  return (Math.random() > 0.5);
+}

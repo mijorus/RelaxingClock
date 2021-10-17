@@ -1,3 +1,5 @@
+import { getRandomIntInclusive } from "../../../utils/utils";
+
 export const flobs: string[] = [
 `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <path fill="#FF0066" d="M43.5,-66.2C58,-58.3,72.5,-49,72.2,-36.8C71.9,-24.5,56.7,-9.3,51.6,5.5C46.6,20.3,51.6,34.7,46,38.1C40.3,41.4,24,33.8,12.9,31.3C1.8,28.9,-4.1,31.6,-17,37.3C-29.9,43,-49.8,51.7,-59,47.5C-68.2,43.4,-66.8,26.4,-64.5,12.1C-62.2,-2.2,-59.1,-13.9,-51.9,-21.3C-44.7,-28.7,-33.6,-31.8,-24.3,-42C-15,-52.2,-7.5,-69.4,3.5,-74.8C14.5,-80.3,29,-74,43.5,-66.2Z" transform="translate(100 100)" />
@@ -19,12 +21,18 @@ export const flobs: string[] = [
 </svg>`
 ];
 
-export function getFlob(index: number): SVGPathElement {
+export function getFlob(index: number | 'random'): SVGElement {
+    if (index === 'random') index = getRandomIntInclusive(0, (flobs.length - 1));
     if (index < flobs.length) {
         var parser = new DOMParser();
-		var doc = parser.parseFromString(flobs[index], 'text/html');
-        const element = (doc.body.getElementsByTagName('svg')[0]).getElementsByTagName('path')[0];
-		return element;
+        var doc = parser.parseFromString(flobs[index], 'text/html');
+        const element = (doc.body.getElementsByTagName('svg')[0]);
+        const path = element.querySelector('path');
+
+        path.setAttribute('fill', 'transparent');
+        path.setAttribute('stroke-width', '.3');
+        path.setAttribute('stroke', 'white');
+        return element;
     }
 
     return null;
