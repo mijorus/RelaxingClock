@@ -1,19 +1,19 @@
 <script lang="ts">
-import anime from 'animejs';
-import { visibleStylesId } from '../../../stores/clockStyle';
 import time from '../../../stores/time';
-import { screenSaver } from '../../../stores/globalState'
-import { cbDefault, eaElasticDefault } from '../../../utils/animations';
-import { cities } from '../../../handlers/citiesBg';
 import { documentReady, windowReady } from 'html-ready';
-import Hours from '../Hours.svelte';
-import Minutes from '../Minutes.svelte';
 import StyleBase from './StyleBase.svelte';
 import { blink } from '../../../stores/storedSettings';
 import { describeArc } from '../../../utils/utils';
 import type { Moment } from 'moment';
-import { onMount } from 'svelte';
-    
+import { onMount, tick } from 'svelte';
+    anime({
+                targets: element.el.getElementsByTagName('path')[0],
+                duration: 600,
+                easing:
+                d: [
+                    { value : element.arc.d}
+                ]
+            })
     let isReady = false;
     let container: HTMLElement;
     let galaxyHours:HTMLElement, galaxyMin:HTMLElement, galaxySec:HTMLElement; 
@@ -37,44 +37,43 @@ import { onMount } from 'svelte';
                 arc: describeArc(galaxySec.clientWidth / 2, 0, (parseInt(time.format('s')) * 6)),
             }
         ].forEach((element) => {
-            element.el.getElementsByTagName('path')[0].setAttribute('d', element.arc.d)
-        })
+            element.el.getElementsByTagName('path')[0].setAttribute('d', element.arc.d);
+        });
     }
 
     onMount(async () => {
         await windowReady;
+        await tick();
         isReady = true;
     })
 </script>
 
 <StyleBase styleId={4}>
-    <div id="galaxy-container" class="galaxy-margin toscreensave">
-        <div id="galaxy-space">
-            <div id="galaxy-dot"></div>
-            <div bind:this={galaxyHours} class="orbit-container w-72 h-72">
-                <div id="galaxy-h-n" class="galaxy-time">
-                    <span class="galaxy-time-n"></span>
-                </div>
-                <svg id="galaxy-h-path" class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+    <div id="galaxy-container" class="galaxy-margin toscreensave" style="transform: translateY(-1.5rem);">
+        <div id="galaxy-dot" class="absolute top-1/2 w-1 h-1 bg-highlighted rounded-full" style="transform: translate(-50%, -50%)"></div>
+        <div bind:this={galaxyHours} class="absolute top-1/2 w-72 h-72" style="transform: translate(-50%, -50%)">
+            <div id="galaxy-h-n" class="galaxy-time">
+                <span class="galaxy-time-n"></span>
             </div>
-            <div bind:this={galaxyMin} class="orbit-container w-56 h-56">
-                <div id="galaxy-m-n" class="galaxy-time">
-                    <span class="galaxy-time-n"></span>
-                </div>
-                <svg id="galaxy-m-path" class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+            <svg id="galaxy-h-path" class="galaxy-orbit">
+                <path d="" />
+            </svg>
+        </div>
+        <div bind:this={galaxyMin} class="absolute top-1/2 w-48 h-48" style="transform: translate(-50%, -50%)">
+            <div id="galaxy-m-n" class="galaxy-time">
+                <span class="galaxy-time-n"></span>
             </div>
-            <div bind:this={galaxySec} class="orbit-container w-24 h-24">
-                <div id="galaxy-s-n" class="galaxy-time">
-                    <span class="galaxy-time-n"></span>
-                </div>
-                <svg id="galaxy-s-path" class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+            <svg id="galaxy-m-path" class="galaxy-orbit">
+                <path d="" />
+            </svg>
+        </div>
+        <div bind:this={galaxySec} class="absolute top-1/2 w-24 h-24" style="transform: translate(-50%, -50%)">
+            <div id="galaxy-s-n" class="galaxy-time">
+                <span class="galaxy-time-n"></span>
             </div>
+            <svg id="galaxy-s-path" class="galaxy-orbit">
+                <path d="" />
+            </svg>
         </div>
     </div>
 </StyleBase>
@@ -86,8 +85,9 @@ import { onMount } from 'svelte';
     }
 
     .galaxy-orbit path {
-         stroke: white;
-        stroke-width: 2px;
+        stroke: white;
+        stroke-width: 3px;
+        stroke-linecap: round;
         fill: none;
     }
 </style>
