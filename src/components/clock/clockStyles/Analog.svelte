@@ -40,14 +40,14 @@ import StyleBase from "./StyleBase.svelte";
         >
             {#if showTime || $analogTimeLocked}
                 <div class="text-center text-2xl transform translate-y-full opacity-70 -z-1" style="filter:grayscale(1);" transition:fade>
-                    <div class="text-base transition-opacity {showTime ? 'opacity-50' : 'opacity-0'} cursor-pointer" on:click={() => analogTimeLocked.set(!$analogTimeLocked)}>
+                    <div class="text-base transition-opacity {showTime ? 'opacity-50' : 'opacity-0'} cursor-pointer" on:click|stopPropagation={() => analogTimeLocked.set(!$analogTimeLocked)}>
                         <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
                     </div>
                     <div><Hours interactive={false}/><Divisor /><Minutes /></div>
                 </div>
             {/if}
             <span id="little-dot" class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4 bg-highlighted 
-                rounded-full hover:scale-125" on:click|stopPropagation={(e) => {e.preventDefault(); setHandSecColor();}}></span>
+                rounded-full hover:scale-125" on:click|stopPropagation|preventDefault={(e) => {setHandSecColor();}}></span>
             {#each Array(12) as _, i}
                 <span class="hand smooth-move {handClasses} w-48" style="transform: rotate({i * 30}deg);">
                     <span class="bg-highlighted {i % 3 ? 'h-1.5 w-1.5 opacity-75' : 'h-3 w-3'} absolute top-0 right-0 transform -translate-x-2/4 -translate-y-2/4 inline-block rounded-full"></span>

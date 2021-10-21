@@ -10,6 +10,8 @@ import { customColors, locSto, randomCustomColor } from "../../utils/utils";
     $: setHours($time, $clockFormat);
     export let interactive = true;
     let hours: HTMLElement;
+    let color: string;
+    let textShadow: string;
 
     // change clock format
     let oldFormat: string;
@@ -48,15 +50,15 @@ import { customColors, locSto, randomCustomColor } from "../../utils/utils";
         })
     }
 
-    function changeColor(color = null, animation = true) {
+    function changeColor(c = null, animation = true) {
         tl = anime({
             targets: hours,
             duration: animation ? 250 : 0,
             rotate: [5, -5, 5, -5, 0],
             easing: 'linear',
             complete() { 
-                hours.style.color = color; 
-                hours.style.textShadow = color ? '2px 2px #fff' :  null;
+                color = c;
+                textShadow = color ? '2px 2px #fff' :  null;
                 locSto('hoursColor', color || undefined);
             }
         })
@@ -108,11 +110,12 @@ import { customColors, locSto, randomCustomColor } from "../../utils/utils";
         on:mouseenter={() => anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
-        on:contextmenu|preventDefault={handleClockCM} style="transition: color .05s linear;">
+        on:contextmenu|preventDefault={handleClockCM} 
+        style="transition: color .05s linear; color: {color}; text-shadow: {textShadow}">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}
-    <span bind:this={hours} class="inline-block" style="transition: color .05s linear;">
+    <span bind:this={hours} class="inline-block" style="transition: color .05s linear; ">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
 {/if}
