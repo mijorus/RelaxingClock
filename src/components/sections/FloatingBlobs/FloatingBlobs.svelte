@@ -34,24 +34,32 @@ import { getFlob } from "./flobs";
             duration: 800,
         })
 
-        anime({
-            'targets': flob.querySelectorAll('svg'),
-            easing: 'easeInOutQuad',
-            direction: 'alternate',
-            endDelay: 5000,
-            rotate: `+=${anime.random(5, 5.5)}`,
-            translateY: '+='+anime.random(5, 5.5),
-            translateX: '+='+anime.random(5, 5.5),
-            scaleY: '+='+anime.random(0, 0.5),
+        anime.timeline({
+            autoplay: true,
             loop: true,
-            duration: 2000,
-            delay: anime.stagger(100, {start: anime.random(1000, 5000)}),
+            endDelay: 5000,
+            'targets': flob.querySelectorAll('svg'),
+            direction: 'alternate',
         })
+            .add({ 
+                duration: 2000,
+                easing: 'easeInOutQuad',
+                rotate: `+=${anime.random(-10, 10)}`,
+                scaleY: '+='+anime.random(0, 0.2),
+                delay: anime.stagger(200, {start: anime.random(2000, 5000)}),
+            })
+            .add({
+                 duration: 2000,
+                easing: 'easeInOutQuad',
+                rotate: `+=${anime.random(-10, 10)}`,
+                scaleY: '+='+anime.random(0, 0.2),
+                delay: anime.stagger(200, {start: anime.random(1000, 5000)}),
+            })
     }
 
     function decorateWindow() {
         flobOne.append(...generateFlobDecoration((getFlob('random'))));
-        flobOne.style.transform = `translate(${randomBool() ? '' : '-'}${getRandomIntInclusive(40, 60)}%, -${getRandomIntInclusive(40, 60)}%)`;
+        flobOne.style.transform = `translateX(${randomBool() ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60)}%)`;
         animateFlob(flobOne);
     }
 
