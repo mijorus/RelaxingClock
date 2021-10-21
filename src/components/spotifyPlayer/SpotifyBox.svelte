@@ -9,7 +9,7 @@ import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../store
 import { contextHistory } from "../../stores/storedSettings";
 import time from "../../stores/time";
 import type { LastPlayedContexts, SpotifyPlayerStatus } from "../../types";
-import { createCommaArray } from "../../utils/utils";
+import { createCommaArray, deepClone } from "../../utils/utils";
 import AnimatedText from "../elements/AnimatedText.svelte";
 import Bubble from "../elements/Bubble.svelte";
 import SmoothImage from "../elements/SmoothImage.svelte";
@@ -48,9 +48,9 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             if (thisUri !== lastUri) {
                 const ctx = $spotifyPlayerState.context.uri;
                 if (ctx.length) {
-                    let history: LastPlayedContexts[] = $contextHistory;
+                    let history: LastPlayedContexts[] = deepClone($contextHistory);
                     
-                    if (history.length > 5) history.pop()
+                    if (history.length > 5) history.pop();
                     if (!history.find(el => el.uri === ctx)) history.unshift({
                         uri: ctx, name: $spotifyPlayerState.context.metadata.context_description, 
                         date: Date.now()

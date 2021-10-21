@@ -137,10 +137,10 @@ import { notifications } from "../../../stores/notifications";
 
 <div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
     style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove} on:mouseleave={handlePinRelease}>
-    {#each pinned as p, i}
+    {#each pinned as p, i (p.id)}
         <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown={() => bringElementUp(document.getElementById('pinned-'+p.id))}
-            in:scale style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
-            <div class="bg-black relative m-6 rounded-2xl p-0 text-primary w-80">
+            style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
+            <div class="bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
                 <div class="p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
                     <div class="flex items-center z-10 bg-transparent">
                         <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 

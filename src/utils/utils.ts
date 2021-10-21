@@ -131,3 +131,7 @@ export function locSto(key: string, valueToSet: string = undefined) {
 export function randomBool() {
   return (Math.random() > 0.5);
 }
+
+export function deepClone(obj: any) {
+    return JSON.parse(JSON.stringify(obj));
+}
