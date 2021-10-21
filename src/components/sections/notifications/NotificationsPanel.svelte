@@ -24,16 +24,15 @@ import { shortcuts } from "../../../stores/rooster";
             clearTimeout(timeout);
 
             if (notificationToShow) notificationToShow = null; 
-            
             if (!document.hasFocus() && Notification.permission === 'granted') {
                 new Notification(n.title, {
                     'silent': !n.sound,
                     'body': n.content,
                 });
-            } else {
-                notificationToShow = n;
-                timeout = setTimeout(() => notificationToShow = null, 8000);
             }
+
+            notificationToShow = n;
+            timeout = setTimeout(() => notificationToShow = null, 8000);
         }
 
         lastNArraySize = $notifications.length;
