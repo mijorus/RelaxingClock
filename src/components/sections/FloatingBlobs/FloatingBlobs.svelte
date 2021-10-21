@@ -2,6 +2,7 @@
 import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
+import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
 import { getFlob } from "./flobs";
 
@@ -42,18 +43,24 @@ import { getFlob } from "./flobs";
             direction: 'alternate',
         })
             .add({ 
-                duration: 2000,
-                easing: 'easeInOutQuad',
+                duration: 4000,
+                easing: eaElasticDefault,
                 rotate: `+=${anime.random(-10, 10)}`,
-                scaleY: '+='+anime.random(0, 0.2),
+                scale: 1.1,
                 delay: anime.stagger(200, {start: anime.random(2000, 5000)}),
             })
             .add({
-                 duration: 2000,
+                duration: 4000,
                 easing: 'easeInOutQuad',
                 rotate: `+=${anime.random(-10, 10)}`,
-                scaleY: '+='+anime.random(0, 0.2),
+                scale: 1,
                 delay: anime.stagger(200, {start: anime.random(1000, 5000)}),
+            })
+            .add({
+                duration: 10000,
+                easing: eaElasticDefault,
+                rotate: `+=${anime.random(-30, 30)}`,
+                delay: anime.stagger(300, {start: anime.random(1000, 5000)}),
             })
     }
 
@@ -71,6 +78,6 @@ import { getFlob } from "./flobs";
 </script>
 
 
-<div id="flobOne" bind:this={flobOne} class="w-screen">
+<div id="flobOne" bind:this={flobOne} class="w-screen overflow-hidden">
     <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
 </div>
