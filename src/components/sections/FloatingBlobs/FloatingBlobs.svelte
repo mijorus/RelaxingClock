@@ -36,24 +36,25 @@ import { getFlob } from "./flobs";
         })
 
         anime.timeline({
+            'targets': flob.querySelectorAll('svg'),
             autoplay: true,
             loop: true,
+            delay: 10000,
             endDelay: 5000,
-            'targets': flob.querySelectorAll('svg'),
             direction: 'alternate',
         })
             .add({ 
                 duration: 4000,
                 easing: eaElasticDefault,
                 rotate: `+=${anime.random(-10, 10)}`,
-                scale: 1.1,
+                scale: '+='+ (anime.random(5, 30) / 100),
                 delay: anime.stagger(200, {start: anime.random(2000, 5000)}),
             })
             .add({
                 duration: 4000,
                 easing: 'easeInOutQuad',
                 rotate: `+=${anime.random(-10, 10)}`,
-                scale: 1,
+                scale: '1',
                 delay: anime.stagger(200, {start: anime.random(1000, 5000)}),
             })
             .add({
