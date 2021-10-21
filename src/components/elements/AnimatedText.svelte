@@ -1,7 +1,7 @@
 <script lang="ts">
 import anime from "animejs";
 import { onDestroy, tick } from "svelte";
-import { windowFocus } from "../../stores/globalState";
+import { reduceAnimations, windowFocus } from "../../stores/globalState";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
 
@@ -59,7 +59,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
             delay: getRandomIntInclusive(5000, 7000),
             loopComplete: function(anim) {
                 loopCompleted++;
-                if (!$windowFocus && loopCompleted % 2 === 0) pauseScroll(true);
+                if ($reduceAnimations && loopCompleted % 2 === 0) pauseScroll(true);
             }
         })
             .add({

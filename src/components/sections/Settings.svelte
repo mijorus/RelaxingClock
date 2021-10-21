@@ -13,6 +13,7 @@ import { fade } from 'svelte/transition';
 import Pinned from './settingsPage/Pinned.svelte';
 import SettingsBox from '../elements/SettingsBox.svelte';
 import DangerZone from './settingsPage/DangerZone.svelte';
+import SaveBattery from './settingsPage/SaveBattery.svelte';
 </script>
 
 <div class="relative">
@@ -28,6 +29,7 @@ import DangerZone from './settingsPage/DangerZone.svelte';
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <HighContrast />
                 <BlinkingDots />
+                <SaveBattery />
                 <div class="mt-20"><DangerZone /></div>
             </div>
         </div>

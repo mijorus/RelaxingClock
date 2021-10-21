@@ -1,6 +1,7 @@
 import { windowReady } from 'html-ready';
-import { readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
+import { derived, readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import type { Tip } from '../types';
+import { saveEnergy } from './storedSettings';
 
 export const screenSaver: Writable<boolean> = writable(false);
 // prevent style change until the lock is released
@@ -65,3 +66,7 @@ export const windowFocus: Readable<boolean> = readable(true, (set: Subscriber<bo
         window.removeEventListener('online', setBlurStatus);
     };
 });
+
+export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) => {
+    return !$w && $s;
+})
