@@ -128,16 +128,21 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
         }
 
         else if ($spotifyPlayerState?.track_window && e.ctrlKey && e.key === 'E' && document.activeElement === document.querySelector('body')) {
-            console.log('qiu');
-            
             expandedBox = !expandedBox;
-        };
+        }
     }
 
-    // let goToPreviousTrackTimeout: NodeJS.Timeout;
-    // function goToPreviousTrack() {
-    //     SpotifyPlayer.seek(0);
-    // } 
+    let goToPreviousTrackTimeout: NodeJS.Timeout;
+    let gtptn = 0;
+    function goToPreviousTrack() {
+        gtptn++;
+        clearTimeout(goToPreviousTrackTimeout);
+
+        goToPreviousTrackTimeout = setTimeout(() => {
+            (gtptn > 1) ? SpotifyPlayer.previousTrack() : SpotifyPlayer.seek(0);
+            gtptn = 0;
+        }, 200);
+    } 
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown}/>
@@ -150,7 +155,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             </p>
             <p class="mt-1 flex items-center">
                 <i class="mx-2 cursor-pointer inline-block fas fa-backward text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
-                    on:click={() => SpotifyPlayer.seek(0)} on:dblclick={() => SpotifyPlayer.previousTrack()}></i>
+                    on:click={() => goToPreviousTrack()}></i>
                 <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setShuffle(!$spotifyPlayerState.shuffle)}>
                     <Shuffle color={$spotifyPlayerState?.shuffle ? process.env.SPOTIFY_COLOR : process.env.TEXT_SECONDARY} />
                 </i>

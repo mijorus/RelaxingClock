@@ -103,6 +103,7 @@ import moment from 'moment';
         available={$spotifyPlayerStatus === 'ready'}
         description="Search was moved to the Roosted"
     >
+        <!-- svelte-ignore missing-declaration -->
         <Action label="Open" on:click={() => window.dispatchEvent( new KeyboardEvent('keydown', {key: 'l', altKey: true}))}/>
     </NestedBox>
     {#if $spotifyPlayerStatus === 'ready'}
