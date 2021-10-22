@@ -2,8 +2,7 @@
 import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
-import { windowFocus } from "../../../stores/globalState";
-import { saveEnergy } from "../../../stores/storedSettings";
+import { reduceAnimations, windowFocus } from "../../../stores/globalState";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
 import { getFlob } from "./flobs";
@@ -45,7 +44,7 @@ import { getFlob } from "./flobs";
             autoplay: true,
             loop: true,
             loopComplete() {
-                if ($saveEnergy) tl.pause();
+                if ($reduceAnimations) tl.pause();
             },
             delay: 10000,
             endDelay: 5000,
