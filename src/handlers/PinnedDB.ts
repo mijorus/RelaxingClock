@@ -54,8 +54,8 @@ export class PinnedDB {
             ...pinned, 
             createdAt: ~~(Date.now() / 1000), 
             color: randomCustomColor(), 
-            top: getRandomIntInclusive(0, 15),
-            left: getRandomIntInclusive(0, 15),
+            top: getRandomIntInclusive(0, 25),
+            left: getRandomIntInclusive(0, 25),
         });
     }
 
