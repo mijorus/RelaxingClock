@@ -6,6 +6,7 @@ function createNotification() {
 	const stored: Writable<CustomNotification[]> = writable([]);
 
     function create(n: CustomNotification) {
+        n.id = Date.now();
 		n.timestamp = (~~(Date.now() / 1000));
         stored.update(list => [...list, n]);
 
@@ -14,9 +15,19 @@ function createNotification() {
 		}
     }
 
-	function dismiss(index: number) {
-		if ((get(stored))[index]) {
-			let spliced = (get(stored))
+	function dismiss(id: number) {
+        let index = undefined; 
+        (get(stored)).find((n, i) => {
+            if (n.id === id) {
+                index = i;
+                return true;
+            } 
+
+            return false; 
+        });
+
+		if (index !== undefined) {
+			let spliced = (get(stored));
 			spliced.splice(index, 1);
 			stored.update(() => [...spliced]);
 			return spliced.length;

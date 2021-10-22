@@ -11,10 +11,19 @@ import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/an
 import { shortcuts } from "../../../stores/rooster";
 
     let notificationToShow: CustomNotification = null;
+    let notificationsInPanel: CustomNotification[] = [];
     let showPanel = false;
     let nPanel: HTMLElement;
 
     $: showNotification($latestNotification);
+    $: {
+        if ($notifications) {
+            notificationsInPanel = []; 
+            $notifications.forEach(n => {
+                if (n.limitDisplay !== 'notificationOnly') notificationsInPanel = [n, ...notificationsInPanel]
+            })
+        }
+    }
 
     let timeout;
     let lastNArraySize = 0;
@@ -78,16 +87,16 @@ import { shortcuts } from "../../../stores/rooster";
 </script>
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
-    {#if $notifications.length && !$tips}
+    {#if notificationsInPanel.length && !$tips}
         <div bind:this={nPanel} class="absolute  bottom-0 right-0 -z-1 overflow-y-scroll max-h-screen" transition:fade>
             {#if showPanel}
                 <div class="bottom-10 pt-5" in:fly={{x: 20}}>
-                    {#each $notifications as n, i}
+                    {#each notificationsInPanel as n, i (n.id)}
                         {#if n.limitDisplay !== 'notificationOnly'}
                             <div class="my-3" out:fly|local={{x: 20}}>
                                 <div class="relative old-notification">
                                     <div class="remove absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform:translate(0%, -30%)"
-                                        on:click={(e) => { const size = notifications.dismiss(i); if (size === 0) togglePanel(false); }} >
+                                        on:click={(e) => { const size = notifications.dismiss(n.id); if (size === 0) togglePanel(false); }} >
                                         <span class="lnr lnr-circle-minus text-xl text-white" ></span>
                                     </div>
                                     <NotificationComponent forceSilent data={n} expire={false} showTimestamp={true} />
