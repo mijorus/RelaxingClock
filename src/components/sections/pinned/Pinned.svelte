@@ -17,7 +17,7 @@ import { notifications } from "../../../stores/notifications";
     let pinBox: HTMLElement;
     let readyToMove = false;
     let scrollPaused = false;
-    const bubblePinPos = 70;
+    const bubblePinPos = 50;
     const maxPinsN = 10;
 
     async function refreshPinned() {
@@ -34,7 +34,7 @@ import { notifications } from "../../../stores/notifications";
 
     async function releasePinBubble() {
         if (!selectedElement) return;
-     
+        selectedElement.classList.remove('is-moving');
         const selY = parseInt(anime.get(selectedElement, 'translateY'));
         const selX = parseInt(anime.get(selectedElement, 'translateX'));
         
@@ -72,7 +72,7 @@ import { notifications } from "../../../stores/notifications";
     function bringElementUp(el: HTMLElement) {
         if (!el) return;
         document.querySelectorAll('.pinned').forEach(el => el.classList.remove('z-10'));
-        el.classList.add('z-10');
+        el.classList.add('z-10', 'is-moving');
     }
 
     function handleMouseDown(e: MouseEvent, index: number) {
@@ -86,7 +86,9 @@ import { notifications } from "../../../stores/notifications";
         anime({
             targets: selectedElement,
             duration: 40,
-            easing: 'linear', translateY: (e.clientY - (selectedElement.clientHeight / 2)), translateX: (e.clientX - bubblePinPos)
+            easing: 'linear', 
+            translateY: (e.clientY - (selectedElement.clientHeight / 2)), 
+            translateX: (e.clientX - bubblePinPos)
         });
     }
 
@@ -115,7 +117,7 @@ import { notifications } from "../../../stores/notifications";
                         const res = await createPinned(p);
                         if (res)  {
                             await tick();
-                            bringElementUp(document.querySelector('pinned-'+res));
+                            bringElementUp(document.getElementById('pinned-'+res));
                         }
 
                         return res !== false;
@@ -139,9 +141,9 @@ import { notifications } from "../../../stores/notifications";
     style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove} on:mouseleave={handlePinRelease}>
     {#each pinned as p, i (p.id)}
         <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown={() => bringElementUp(document.getElementById('pinned-'+p.id))}
-            style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'})">
-            <div class="bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
-                <div class="p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
+            style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'});">
+            <div class="pinned-inner bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
+                <div class="pinned-bg p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
                     <div class="flex items-center z-10 bg-transparent">
                         <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 
                             on:mousedown={(e) => handleMouseDown(e, p.id)}><Pin color={p.color ?? 'red'} size="32"/></span>
@@ -164,6 +166,25 @@ import { notifications } from "../../../stores/notifications";
 <style>
     .pinned {
         will-change: transform;
+    }
+
+    .pinned-bg {
+        transition: .05s border linear;
+        border: 2px solid transparent;
+    }
+
+    .pinned-bg:hover {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+   :global(.pinned .pinned-inner){
+        transform: scale(1);
+        border: transparent !important;
+        transition: transform .1s ease-in-out;
+    }
+
+    :global(.pinned.is-moving .pinned-inner)  {
+        transform: scale(1.1);
     }
 
     .pinned:hover .remove-pin{
