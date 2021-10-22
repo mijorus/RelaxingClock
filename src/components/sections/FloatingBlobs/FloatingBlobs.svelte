@@ -2,16 +2,12 @@
 import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
-import { reduceAnimations, windowFocus } from "../../../stores/globalState";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
 import { getFlob } from "./flobs";
 
     const flobStokeColor = process.env.TEXT_SECONDARY;
     let flobOne: HTMLElement;
-    let tl: anime.AnimeTimelineInstance;
-
-    $: $windowFocus && tl ? tl.play() : null;
 
     function generateFlobDecoration(flob: SVGElement) {
         flob.setAttribute('stroke', flobStokeColor);
@@ -39,13 +35,10 @@ import { getFlob } from "./flobs";
             duration: 800,
         })
 
-        tl = anime.timeline({
+        anime.timeline({
             'targets': flob.querySelectorAll('svg'),
             autoplay: true,
             loop: true,
-            loopComplete() {
-                if ($reduceAnimations) tl.pause();
-            },
             delay: 10000,
             endDelay: 5000,
             direction: 'alternate',
