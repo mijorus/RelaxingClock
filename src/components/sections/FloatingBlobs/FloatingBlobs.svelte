@@ -2,12 +2,22 @@
 import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
+import { windowFocus } from "../../../stores/globalState";
+import { saveEnergy } from "../../../stores/storedSettings";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
 import { getFlob } from "./flobs";
 
     const flobStokeColor = process.env.TEXT_SECONDARY;
     let flobOne: HTMLElement;
+    let tl: anime.AnimeTimelineInstance;
+
+    $: {
+        if ($windowFocus && tl) {
+            tl.play();
+            console.log('background animation resumed');
+        }
+    }
 
     function generateFlobDecoration(flob: SVGElement) {
         flob.setAttribute('stroke', flobStokeColor);
@@ -22,7 +32,6 @@ import { getFlob } from "./flobs";
             flobs.push(newFlob);
         }
 
-        console.log(flobs);
         return flobs;
     }
 
@@ -35,10 +44,16 @@ import { getFlob } from "./flobs";
             duration: 800,
         })
 
-        anime.timeline({
+        tl = anime.timeline({
             'targets': flob.querySelectorAll('svg'),
             autoplay: true,
             loop: true,
+            loopComplete() {
+                if ($saveEnergy && !$windowFocus) {
+                    tl.pause();
+                    console.log('background animation was paused');
+                }
+            },
             delay: 10000,
             endDelay: 5000,
             direction: 'alternate',
