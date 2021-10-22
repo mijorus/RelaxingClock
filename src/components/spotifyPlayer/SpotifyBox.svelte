@@ -139,9 +139,9 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
         clearTimeout(goToPreviousTrackTimeout);
 
         goToPreviousTrackTimeout = setTimeout(() => {
-            (gtptn > 1) ? SpotifyPlayer.previousTrack() : SpotifyPlayer.seek(0);
+            (songPosition < 2 || gtptn > 1) ? SpotifyPlayer.previousTrack() : SpotifyPlayer.seek(0);
             gtptn = 0;
-        }, 200);
+        }, 350);
     } 
 </script>
 
