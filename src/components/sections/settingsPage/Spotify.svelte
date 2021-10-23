@@ -150,7 +150,7 @@ import moment from 'moment';
                 on:click={() => showLastPlayedBox = !showLastPlayedBox} available={$contextHistory.length > 0}>
                 <div class="mt-2 overflow-y-scroll w-full relative" style="max-height: 32rem;" transition:fade>
                     {#each $contextHistory as h (h.uri)}
-                        <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex cursor-pointer" transition:slide
+                        <div class="bg-tertiary rounded-lg my-1 p-2 overflow-x-hidden whitespace-nowrap flex cursor-pointer" 
                             on:click={() => { if (SpotifyClient) SpotifyClient.play({ 'context_uri': h.uri, device_id })}}>
                             <div class="flex flex-col justify-center ml-2">
                                 <div>{h.name}</div>
