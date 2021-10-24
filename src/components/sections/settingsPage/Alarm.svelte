@@ -98,7 +98,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         if (alarmTitle && alarmTitle.length > 0) localStorage.setItem('alarmTitle', alarmTitle);
         
         alarmIsTomorrow = !alarm.isSame(moment(), 'day');
-        notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock' });
+        notifications.create({ 'content': `Set ${!alarmIsTomorrow ? '' : ' tomorrow'} at ${alarm.format(format)}`, title: 'Alarm created', icon: 'lnr lnr-clock', 'limitDisplay': 'notificationOnly' });
     }
 
     function closeCreationBox() {
@@ -208,7 +208,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     </div>
 {/if}
 
-<SettingsBox>
+<SettingsBox id="alarm">
     <Title title="Alarm">
         <TitleIcon>
             <i class="icon-clock-white bg-center settings-icon"><span class="path1"></span><span class="path2"></span></i>

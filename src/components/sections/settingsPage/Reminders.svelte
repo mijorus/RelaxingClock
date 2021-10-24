@@ -41,7 +41,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     $: periodicCheck(ready, $time);
 
     async function periodicCheck(readyState: boolean, time: Moment) {
-        if (readyState && (time.unix() % 20 === 0)) {
+        if (readyState && (time.unix() % 10 === 0)) {
             await runListCheck();
         
             for (const reminder of futureReminders) {
@@ -258,7 +258,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     </div>
 {/if}
 
-<SettingsBox unsupported={!ready}>
+<SettingsBox unsupported={!ready} id="reminders">
     <Title title="Reminders">
         <TitleIcon>
             <i class="lnr lnr-calendar-full text-primary settings-title-icon" style="color: {color};"></i>
