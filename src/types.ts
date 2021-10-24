@@ -61,7 +61,7 @@ export interface Tip {
 }
 
 export interface CustomNotification {
-    id: number;
+    id?: number;
     title: string;
     content: string;
     icon: string;

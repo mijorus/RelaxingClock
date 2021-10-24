@@ -16,7 +16,8 @@ import screenSaverHandler from "./handlers/screenSaver";
 import LoadingScreen from './components/sections/LoadingScreen.svelte';
 import animatedBg from "./handlers/animatedBg";
 
-    screenSaverHandler.set(20 * 1000);
+    // screenSaverHandler.set(20 * 1000);
+    screenSaverHandler.set(1 * 1000);
 
     $: getUserData($spotifyAccessToken);
 
