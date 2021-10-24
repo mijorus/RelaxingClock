@@ -7,16 +7,18 @@ import { alarmTime } from '../../stores/storedSettings';
 
 $: periodicCheck($time);
 let isHovered = false;
-let incoming: {[key: string]: {isIncoming: boolean, color: string, icon: string}} = {
+let incoming: {[key: string]: {isIncoming: boolean, color: string, icon: string, link: boolean}} = {
     alarm: {
         isIncoming: false,
         color: '#ff6b6b',
-        icon: 'lnr lnr-clock'
+        icon: 'lnr lnr-clock',
+        link: true
     },
     reminders: {
         isIncoming: false,
         color: '#57ceff',
-        icon: 'lnr lnr-calendar-full'
+        icon: 'lnr lnr-calendar-full',
+        link: true
     },
 };
 
@@ -48,8 +50,10 @@ async function periodicCheck(time: Moment) {
             <div class="flex justify-center w-min">
                 {#each Object.keys(incoming) as k (k)}
                     {#if incoming[k].isIncoming}
-                        {#if isHovered}
+                        {#if isHovered && !incoming[k].link}
                             <i class="inline-block mx-1 {incoming[k].icon}" style="color: {incoming[k].color};"in:fade></i>
+                        {:else if isHovered && incoming[k].link}
+                            <a on:click|stopPropagation href="#{k}"><i class="inline-block mx-1 {incoming[k].icon}" style="color: {incoming[k].color};"in:fade></i></a>
                         {:else}
                             <span class="mx-1 inline-block" style="color: {incoming[k].color};" in:fade>&middot;</span>
                         {/if}
