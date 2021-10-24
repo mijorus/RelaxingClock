@@ -8,6 +8,7 @@ import time from "../../../stores/time";
 import Divisor from "../Divisor.svelte";
 import Hours from "../Hours.svelte";
 import Minutes from "../Minutes.svelte";
+import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
 
     let analogClock: HTMLElement;
@@ -43,7 +44,7 @@ import StyleBase from "./StyleBase.svelte";
                     <div class="text-base transition-opacity {showTime ? 'opacity-50' : 'opacity-0'} cursor-pointer" on:click|stopPropagation={() => analogTimeLocked.set(!$analogTimeLocked)}>
                         <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
                     </div>
-                    <div><Hours interactive={false}/><Divisor /><Minutes /></div>
+                    <div><Hours interactive={false}/><Divisor /><Minutes /><AmPmBadge size="xs"/></div>
                 </div>
             {/if}
             <span id="little-dot" class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4 bg-highlighted 

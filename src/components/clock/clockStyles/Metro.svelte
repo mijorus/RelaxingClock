@@ -10,6 +10,7 @@ import Hours from '../Hours.svelte';
 import Minutes from '../Minutes.svelte';
 import StyleBase from './StyleBase.svelte';
 import { blink } from '../../../stores/storedSettings';
+import AmPmBadge from '../AmPmBadge.svelte';
     
     let container: HTMLElement;
     const zoomedOut = 0.8;
