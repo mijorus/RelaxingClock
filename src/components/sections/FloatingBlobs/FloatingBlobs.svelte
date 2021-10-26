@@ -67,7 +67,7 @@ import { getFlob } from "./flobs";
             })
             .add({
                 duration: 4000,
-                easing: 'easeInOutQuad',
+                easing: eaElasticDefault,
                 rotate: `+=${anime.random(-10, 10)}`,
                 scale: '1',
                 delay: anime.stagger(200, {start: anime.random(1000, 5000)}),
