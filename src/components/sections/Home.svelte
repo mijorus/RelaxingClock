@@ -1,5 +1,5 @@
 <script lang="ts">
-import { screenSaver } from '../../stores/globalState';
+import { darkenClock, screenSaver } from '../../stores/globalState';
 import screenSaverHandler from "../../handlers/screenSaver";
 import Tips from '../tips/Tips.svelte';
 import Clock from '../clock/Clock.svelte';
@@ -12,8 +12,22 @@ import anime from "animejs";
 import { bigClockSSoffset, cbDefault } from '../../utils/animations';
 import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 
+    let bigClockContainer: HTMLElement;
 
-    $: screenSaverApply($screenSaver)
+    $: screenSaverApply($screenSaver);
+    $: darken($darkenClock);
+
+    function darken(obscure: boolean) {
+       if (!bigClockContainer) return;
+       anime({
+            begin() { bigClockContainer.classList.add('pointer-events-none') },
+            targets: bigClockContainer,
+            duration: 500,
+            opacity: obscure ? 0.5 : 1,
+            easing: 'easeOutQuad',
+            complete() { bigClockContainer.classList.remove('pointer-events-none') },
+        });
+    }
 
     function disableScreenSaver() {
         screenSaverHandler.disable();
@@ -39,7 +53,7 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
     <FloatingBlobs />
 </div>
 
-<div id="big-clock-container" class="h-full flex flex-col justify-center items-center"
+<div id="big-clock-container" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
     style="transform: translateY({bigClockSSoffset});"
     on:click={disableScreenSaver}
     on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}

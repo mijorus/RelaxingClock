@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount, tick } from "svelte";
 import { fade, fly } from "svelte/transition";
-import { screenSaver, tips } from "../../../stores/globalState";
+import { darkenClock, screenSaver, tips } from "../../../stores/globalState";
 import { latestNotification, notifications } from "../../../stores/notifications";
 import type { CustomNotification } from "../../../types";
 import Bubble from "../../elements/Bubble.svelte";
@@ -48,24 +48,24 @@ import { shortcuts } from "../../../stores/rooster";
     }
 
     async function togglePanel(show: boolean = undefined) {
-        if (show === undefined) showPanel = !showPanel;
-        else showPanel = show;
+        showPanel = (show === undefined) ? !showPanel : show;
         if (showPanel) {
             await tick();
             nPanel.scrollTop = nPanel.scrollHeight;
         }
 
-        const targets = document.getElementById('big-clock-container');
-        anime({
-            begin() { targets.classList.add('pointer-events-none') },
-            targets,
-            duration: 500,
-            scale: showPanel ? 0.98 : 1,
-            translateY: showPanel ? '+=2.5rem' : ($screenSaver ? 0 : bigClockSSoffset),
-            opacity: showPanel ? 0.5 : 1,
-            easing: 'easeOutQuad',
-            complete() { targets.classList.remove('pointer-events-none') },
-        });
+        // const targets = document.getElementById('big-clock-container');
+        // anime({
+        //     begin() { targets.classList.add('pointer-events-none') },
+        //     targets,
+        //     duration: 500,
+        //     scale: showPanel ? 0.98 : 1,
+        //     translateY: showPanel ? '+=2.5rem' : ($screenSaver ? 0 : bigClockSSoffset),
+        //     opacity: showPanel ? 0.5 : 1,
+        //     easing: 'easeOutQuad',
+        //     complete() { targets.classList.remove('pointer-events-none') },
+        // });
+        darkenClock.set(showPanel);
     }
 
     onMount(() => {
