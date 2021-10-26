@@ -15,6 +15,7 @@ import AlarmRing from './components/elements/AlarmRing.svelte';
 import screenSaverHandler from "./handlers/screenSaver";
 import LoadingScreen from './components/sections/LoadingScreen.svelte';
 import animatedBg from "./handlers/animatedBg";
+import ColorSelector from './components/elements/ColorSelector.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -45,15 +46,17 @@ import animatedBg from "./handlers/animatedBg";
 </svelte:head>
 
 <LoadingScreen />
-
 <Rooster />
+
 <main class="w-screen h-screen">
 	<Home />
 	<Settings />
     <NotificationsPanel />
 	<MainBg />
 </main>
+
 <AlarmRing />
+<ColorSelector />
 
 <div class="w-12 hidden"></div>
 <style global>

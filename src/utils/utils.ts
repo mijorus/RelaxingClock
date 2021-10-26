@@ -86,7 +86,21 @@ export function outerHeight(el: HTMLElement) {
 }
 
 let lastCustomColor: string;
-export const customColors: string[] = ["#f94144","#f3722c","#577590", "#f8961e","#f9844a","#f9c74f","#90be6d","#43aa8b","#4d908e","#277da1", "#9b5de5","#f15bb5","#fee440","#00bbf9","#00f5d4"]; 
+export const customColors: string[] = [
+    "#9b5de5",
+    "#f15bb5",
+    "#f94144",
+    "#f3722c",
+    "#f9c74f",
+    "#fee440",
+    "#a1ff0a",
+    "#90be6d",
+    "#43aa8b",
+    "#4d908e",
+    "#277da1", 
+    "#00bbf9",
+    "#00f5d4",
+]; 
 export function randomCustomColor() {
   let availableColors = [];
   customColors.forEach(el => { if (el !== lastCustomColor) availableColors.push(el)});

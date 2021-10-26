@@ -5,6 +5,7 @@ import { saveEnergy } from './storedSettings';
 
 export const screenSaver: Writable<boolean> = writable(false);
 export const darkenClock: Writable<boolean> = writable(false);
+export const colorSelector: Writable<{show: boolean, x: number, y: number, colors: string[], size?: number, callback: (color: string) => void}> = writable(undefined);
 // prevent style change until the lock is released
 export const styleChangeLock: Writable<boolean> = writable(false);
 // the source of the background image of the clock

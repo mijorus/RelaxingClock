@@ -2,4 +2,4 @@
     import time from "../../stores/time";
 </script>
 
-<span class="font-semibold">{ $time.format('mm') }</span>
+<span id="minutes" class="clock-component font-semibold">{ $time.format('mm') }</span>

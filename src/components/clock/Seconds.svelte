@@ -2,4 +2,4 @@
     import time from "../../stores/time";
 </script>
 
-<span class="font-semibold">{ $time.format('ss') }</span>
+<span id="seconds" class="font-semibold clock-component">{ $time.format('ss') }</span>

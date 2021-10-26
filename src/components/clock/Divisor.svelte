@@ -3,4 +3,4 @@
     import time from '../../stores/time';
 </script>
 
-<span class="relative">{#if ($time.second() % 2) || !$blink}:{:else}&nbsp;{/if}</span>
+<span id="divisor" class="relative clock-component">{#if ($time.second() % 2) || !$blink}:{:else}&nbsp;{/if}</span>

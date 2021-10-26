@@ -25,6 +25,9 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
             duration: 500,
             opacity: obscure ? 0.5 : 1,
             easing: 'easeOutQuad',
+            update(a) {
+                bigClockContainer.style.filter = `blur(${(obscure ? 0 : -3) + a.progress / 33.33333}px)`
+            },
             complete() { bigClockContainer.classList.remove('pointer-events-none') },
         });
     }
