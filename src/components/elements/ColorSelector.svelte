@@ -5,7 +5,7 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
     $: size = $colorSelector && $colorSelector.size ? $colorSelector.size : 48;
     $: if ($colorSelector !== undefined) darkenClock.set($colorSelector && $colorSelector.show);
 
-    function closeSelector(color: string | null = null) {
+    function closeSelector(color?: string) {
         $colorSelector.callback(color);
         colorSelector.set({...$colorSelector, show: false})
     }
@@ -13,7 +13,7 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
 
 
 {#if $colorSelector && $colorSelector.show}
-    <div class="w-screen h-screen absolute top-0 left-0" on:click|stopPropagation={() => closeSelector()}></div>
+    <div class="w-screen h-screen absolute top-0 left-0" on:contextmenu|preventDefault on:click|stopPropagation={() => closeSelector()}></div>
     <div class="absolute w-{size} h-{size} z-10 transform -translate-y-1/4" style="top: {$colorSelector.y}px; left: {$colorSelector.x}px">
         {#each $colorSelector.colors as c, i}
             <div class="absolute w-6 h-{size / 2} flex items-end" style="transform: rotate({(i * (360 / $colorSelector.colors.length))}deg); transform-origin: top center;" transition:fade={{delay: i * 50}}>

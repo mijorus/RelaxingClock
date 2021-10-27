@@ -85,11 +85,11 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
     function handleClockCM(e: MouseEvent) {
         colorSelector.set({
             show: true,
-            x: e.screenX,
-            y: e.screenY,
-            colors: customColors,
+            x: e.pageX,
+            y: e.pageY,
+            colors: [...customColors, 'white'],
             callback(c) {
-                changeColor(c);
+                if (c) changeColor(c === 'white' ? null : c);
             }
         });
     }
