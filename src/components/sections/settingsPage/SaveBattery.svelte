@@ -8,7 +8,7 @@ import { blink, saveEnergy } from '../../../stores/storedSettings';
 
 </script>
 
-<SettingsBox>
+<SettingsBox bordered={false}>
     <Title title="Efficiency mode">
         <TitleIcon>
             <i class="lnr lnr-leaf text-green-500 settings-title-icon"></i>

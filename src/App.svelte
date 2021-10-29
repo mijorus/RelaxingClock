@@ -34,6 +34,7 @@ import ColorSelector from './components/elements/ColorSelector.svelte';
 
 	onMount(() => {
         // animatedBg()
+        localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}))
         if ($onlineStatus) {
             attemptSpotifyLogin()
                 .catch((e) => console.error(e))

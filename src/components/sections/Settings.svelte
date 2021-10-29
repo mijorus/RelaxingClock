@@ -25,7 +25,7 @@ import SaveBattery from './settingsPage/SaveBattery.svelte';
         <Reminders />  
         
         <div class="mt-16">
-            <SettingsBox ><span class="text-6xl text-primary font-primary font-bold">Settings</span></SettingsBox>
+            <SettingsBox collapsable={false} bordered={false}><span class="text-6xl text-primary font-primary font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <HighContrast />
                 <BlinkingDots />

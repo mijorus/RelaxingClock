@@ -17,7 +17,7 @@ import Hint from "./Hint.svelte";
     export let description: SettingsDesc;
 </script>
 
-<div>
+<div class="settings-box-element settings-box-primary max-h-96">
     <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 md:p-4 m-3 md:m-4">
         <span class="text-primary text-xl font-primary"><AnimatedText text={label.text}/></span>
         <div class="{available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">

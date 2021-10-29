@@ -23,7 +23,7 @@ $: {
 
 </script>
 
-<SettingsBox>
+<SettingsBox bordered={false}>
     <Title title="Blinking dots">
         <TitleIcon>
             <i class="lnr blick-icon lnr-eye text-primary settings-title-icon" class:opacityy-30={!$blink}></i>
