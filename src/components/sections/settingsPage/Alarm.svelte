@@ -35,8 +35,8 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     
     $: periodicCheck($time);
 
-    function periodicCheck(time: Moment) {
-        if (time.seconds() === 0 && $alarmTime) {
+    function periodicCheck(time: Moment, force = false) {
+        if (force || time.seconds() === 0 && $alarmTime) {
             if (!$alarmIsRinging && (time.unix() >= $alarmTime) && ((time.unix() - $alarmTime) < (minutesPassedCheck * 60))) {
                 ring();
             } else if (((moment($alarmTime, 'X').isSameOrBefore(moment().subtract(minutesPassedCheck, 'm'))))) {
@@ -131,7 +131,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     }
 
     onMount(() => {
-        periodicCheck(moment());
+        periodicCheck(moment(), true);
     
         shortcuts.set('alarm', {
             color: process.env.BACKGROUND_DARK, 
