@@ -1,7 +1,7 @@
 <script lang="ts">
 import { windowReady } from "html-ready";
 
-import { afterUpdate, onMount } from "svelte";
+import { afterUpdate, onMount, tick } from "svelte";
 
     export let unsupported = false;
     export let id: string = null;
@@ -48,11 +48,11 @@ import { afterUpdate, onMount } from "svelte";
     // })
 
     onMount(async () => {
-        await windowReady;
+        await tick();
         const title: HTMLElement = slotContainer.querySelector('.settings-box-element-title');
         if (collapsable && title) {
             title.addEventListener('click', collapse)
-        } else if (!collapsable) {
+        } else if (title && !collapsable) {
             title.querySelector('.settings-box-element-title-arrow').classList.add('hidden');
         }
     })
