@@ -12,7 +12,7 @@ import { fade, slide } from 'svelte/transition';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
-import { device_id } from '../../../handlers/spotify/player';
+import { device_id } from '../../../handlers/spotify/login';
 import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
 import moment from 'moment';
 

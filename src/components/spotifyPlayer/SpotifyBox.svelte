@@ -2,7 +2,7 @@
 import moment from "moment";
 import momentDurationFormatSetup from 'moment-duration-format';
 import { fade, fly, slide } from "svelte/transition";
-import { SpotifyPlayer } from "../../handlers/spotify/player";
+import { SpotifyPlayer } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { screenSaver, tips } from "../../stores/globalState";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
