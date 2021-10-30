@@ -4,7 +4,7 @@ import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
 import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
-import { device_id, refershOrGetOAuthToken } from './player';
+import { refershOrGetOAuthToken, device_id } from './login';
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
