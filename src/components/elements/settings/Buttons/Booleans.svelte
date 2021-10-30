@@ -16,7 +16,7 @@
     }
 </script>
 
-<div class="relative">
+<div class="relative whitespace-nowrap">
     <button class="{btnsClass} {state ? 'text-secondary':'text-primary'} w-{dimentions[0]}"
         data-option="on" 
         alt="{label} on"

@@ -1,6 +1,6 @@
 <script lang="ts">
 import anime from "animejs";
-import { onDestroy, tick } from "svelte";
+import { onDestroy, onMount, tick } from "svelte";
 import { reduceAnimations, windowFocus } from "../../stores/globalState";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
@@ -20,7 +20,9 @@ import { getRandomIntInclusive } from "../../utils/utils";
     $: pauseScroll(paused);
     $: $windowFocus ? pauseScroll(false) : null;
 
-    $: {
+    $: { restartAnimation() }
+
+    function restartAnimation() {
         if (el && (text !== displayedText)) {
             el.style.transform = 'translateX(0px)';
             
@@ -72,6 +74,8 @@ import { getRandomIntInclusive } from "../../utils/utils";
         if (!scrollTl) return;
         paused ? scrollTl.pause() : scrollTl.play();
     }
+
+    onMount(() => restartAnimation());
 
     onDestroy(() => {
         if (scrollTl && el) {

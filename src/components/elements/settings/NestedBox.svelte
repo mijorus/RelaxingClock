@@ -9,8 +9,8 @@ export let expanded = false;
 export let description: string = undefined;
 </script>
 
-<div class="settings-box-element settings-box-nested w-full flex flex-col max-h-999" >
-    <div class="w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 m-3 md:m-4 self-end transition-opacity
+<div class="relative settings-box-element settings-box-nested p-2 md:p-0 w-full flex flex-col max-h-999" >
+    <div class="w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 md:m-2 md:self-end transition-opacity
         {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}
         {bordered && !expandable ? 'border-l-4 border-primary' : 'border-none'}"
     >
@@ -28,7 +28,7 @@ export let description: string = undefined;
         {/if}
     </div>
     {#if description}
-        <div class="w-full md:w-9/12 self-end" transition:slide>
+        <div class="text-center md:text-left w-full md:w-9/12 md:self-end" transition:slide>
             <Hint text={description}></Hint>
         </div>
     {/if}

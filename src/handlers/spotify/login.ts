@@ -26,7 +26,14 @@ export async function attemptSpotifyLogin() {
     if (!localStorage.getItem('userHasLogged')) {
         if (!urlParams.get('state')) {
             //The user has never logged before to the app
-            const url = await generateSpotifyUrl().catch(() => throwAuthError('Cannot generate Spotify\'s login URL. Your browser might be unsupported'));
+            let url;
+            try {
+                url = await generateSpotifyUrl();
+            } catch (e) {
+                throwAuthError('Cannot generate Spotify\'s login URL. Your browser might be unsupported');
+            }
+            
+            if (!url) return;
             spotifyUrl.set(url);
             clearTimeout(loginTimeout);
         } else if (urlParams.get('state') && !urlParams.get('error')) {

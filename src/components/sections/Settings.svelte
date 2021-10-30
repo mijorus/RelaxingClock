@@ -17,7 +17,7 @@ import SaveBattery from './settingsPage/SaveBattery.svelte';
 </script>
 
 <div class="relative">
-    <div class="relative w-10/12 flex flex-col md:w-8/12 max-w-2xl m-auto mt-20 text-primary font-primary">
+    <div class="relative flex flex-col w-full md:w-8/12 max-w-2xl p-2 md:p-0 m-auto mt-20 text-primary font-primary">
         <Spotify />
         <Weather />
         <Alarm />
@@ -35,7 +35,7 @@ import SaveBattery from './settingsPage/SaveBattery.svelte';
         </div>
     </div>
     {#if !$clockIsVisible}
-        <div class="sticky bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl sm:hidden md:block p-4 font-clock text-primary transition-all" transition:fade>
+        <div class="sticky bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block p-4 font-clock text-primary transition-all" transition:fade>
             <div><Hours interactive={false}/><Divisor /><Minutes /></div>
         </div>
     {/if}

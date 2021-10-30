@@ -282,8 +282,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                             {#if r.type === 'repeated'}<span class="lnr lnr-sync text-sm"></span>{/if}
                         </span>
                         <span class="float-right">
-                            <i class="lnr lnr-pencil text-secondary cursor-pointer" on:click={() => openEditBox(r.id)}></i>
-                            <i class="lnr lnr-circle-minus text-red-600 cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }}></i>
+                            <i class="px-2 md:p-0 lnr lnr-pencil text-secondary cursor-pointer" on:click={() => openEditBox(r.id)}></i>
+                            <i class="px-2 md:p-0 lnr lnr-circle-minus text-red-600 cursor-pointer" on:click={async () => { await RemindersDB.setDone(r.id); runListCheck() }}></i>
                         </span>
                     </div>
                 {/each}
@@ -296,8 +296,8 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                         <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
                         {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
                         <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
-                            <i class="icon-checkmark r-icon text-green-400 delete-rem-i-check" ></i>
-                            <i class="lnr lnr-trash r-icon text-red-600 delete-rem-i-cross hidden"></i>
+                            <i class="icon-checkmark text-md r-icon text-green-400 delete-rem-i-check" ></i>
+                            <i class="lnr lnr-trash text-md r-icon text-red-600 delete-rem-i-cross hidden"></i>
                         </span>
                     </div>
                 {/each}

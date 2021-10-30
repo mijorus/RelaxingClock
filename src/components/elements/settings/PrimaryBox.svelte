@@ -18,8 +18,8 @@ import Hint from "./Hint.svelte";
 </script>
 
 <div class="settings-box-element settings-box-primary max-h-96">
-    <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 md:p-4 m-3 md:m-4">
-        <span class="text-primary text-xl font-primary"><AnimatedText text={label.text}/></span>
+    <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 m-2 md:p-4 md:m-2">
+        <span class="text-primary md:text-xl font-primary whitespace-nowrap not-overflow overflow-x-hidden"><AnimatedText text={label.text}/></span>
         <div class="{available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
             <slot></slot>
         </div>
@@ -30,3 +30,11 @@ import Hint from "./Hint.svelte";
         </div>
     {/if}
 </div>
+
+<style>
+    @media (max-width: 640px) { 
+        .not-overflow {
+            max-width: 70%;
+        }
+    }
+</style>

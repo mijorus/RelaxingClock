@@ -2,9 +2,9 @@
     export let text;
     export let iconClass = undefined;
 </script>
-<div class="text-secondary settings-hint" style="line-height: 1;">
+<div class="mb-2 md:mb-0 text-secondary settings-hint" style="line-height: 1;">
     {#if iconClass}<i class="{iconClass} text-xs"></i>{/if}
-    <span class="text-sm font-primary leading-none settings-hint">{@html text}</span>
+    <span class="text-xs md:text-sm font-primary leading-none settings-hint">{@html text}</span>
 </div>
 
 <style>
