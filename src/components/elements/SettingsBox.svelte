@@ -63,7 +63,7 @@ import { afterUpdate, onMount } from "svelte";
 </div>
 
 <style>
-    :global(.settings-box-primary) {
+    :global(.settings-box-element) {
         transition: max-height .35s ease-out, opacity .35s ease-out;
     }
 </style>

@@ -51,20 +51,21 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
 
     let wheelScrollTimeout, allowScroll = true;
     function handleBigClockScroll(e: WheelEvent) {
+        if (e.deltaX) e.preventDefault();
         const theshold = 20;
-        if (allowScroll && ( e.deltaX > theshold || e.deltaX < -(theshold))) {
+        if (allowScroll && (Math.abs(e.deltaX) > theshold)) {
             clearTimeout(wheelScrollTimeout);
             wheelScrollTimeout = setTimeout(() => {
                 if (e.deltaX > 0) moveRight();
                 else if (e.deltaX < -0) moveLeft();
             }, 35);
-        }
+        } 
     }
 
     onMount(() => {
         windowReady.then(() =>{
             bigClock = document.getElementById('big-clock')
-            bigClock.addEventListener('wheel', handleBigClockScroll, { passive: true })
+            bigClock.addEventListener('wheel', handleBigClockScroll)
         })
     })
 </script>

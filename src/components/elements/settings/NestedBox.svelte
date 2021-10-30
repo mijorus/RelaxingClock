@@ -9,25 +9,33 @@ export let expanded = false;
 export let description: string = undefined;
 </script>
 
-<div class="settings-box-element settings-box-nested w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 m-3 md:m-4 self-end transition-opacity
-    {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}
-    {bordered && !expandable ? 'border-l-4 border-primary' : 'border-none'}"
->
-    <div class="text-primary font-primary text-md w-full flex items-center overscroll-x-hidden" style="justify-content: space-between;">
-        <span>{label}</span>
-        {#if expandable}
-            <i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click on:click={() => expanded = !expanded}></i>
-        {:else}
-            <slot></slot>
+<div class="settings-box-element settings-box-nested w-full flex flex-col max-h-999" >
+    <div class="w-full md:w-9/12 bg-secondary rounded-xl p-3 md:p-4 m-3 md:m-4 self-end transition-opacity
+        {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}
+        {bordered && !expandable ? 'border-l-4 border-primary' : 'border-none'}"
+    >
+        <div class="text-primary font-primary text-md w-full flex items-center overscroll-x-hidden" style="justify-content: space-between;">
+            <span>{label}</span>
+            {#if expandable}
+                <i class="fas fa-chevron-{expanded ? 'up' : 'down'} cursor-pointer" on:click on:click={() => expanded = !expanded}></i>
+            {:else}
+                <slot></slot>
+            {/if}
+        </div>
+    
+        {#if expandable && expanded }
+            <div in:slide out:slide><slot></slot></div>
         {/if}
     </div>
-
-    {#if expandable && expanded }
-        <div in:slide out:slide><slot></slot></div>
+    {#if description}
+        <div class="w-full md:w-9/12 self-end" transition:slide>
+            <Hint text={description}></Hint>
+        </div>
     {/if}
 </div>
-{#if description}
-    <div class="w-full md:w-9/12 self-end" transition:slide>
-        <Hint text={description}></Hint>
-    </div>
-{/if}
+
+<style>
+    .max-h-999 {
+        max-height: 999px;
+    }
+</style>

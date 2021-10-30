@@ -49,7 +49,7 @@ import ColorSelector from './components/elements/ColorSelector.svelte';
 <LoadingScreen />
 <Rooster />
 
-<main class="w-screen h-screen">
+<main class="w-screen h-screen overflow-x-hidden">
 	<Home />
 	<Settings />
     <NotificationsPanel />
