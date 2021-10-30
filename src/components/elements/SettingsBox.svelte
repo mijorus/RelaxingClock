@@ -52,6 +52,8 @@ import { afterUpdate, onMount } from "svelte";
         const title: HTMLElement = slotContainer.querySelector('.settings-box-element-title');
         if (collapsable && title) {
             title.addEventListener('click', collapse)
+        } else if (!collapsable) {
+            title.querySelector('.settings-box-element-title-arrow').classList.add('hidden');
         }
     })
 </script>

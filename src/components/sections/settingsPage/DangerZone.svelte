@@ -19,7 +19,7 @@ import Action from '../../elements/settings/Buttons/Action.svelte';
 </script>
 
 <div class="border rounded-xl m-2 border-red-400 pt-1">
-    <SettingsBox>
+    <SettingsBox bordered={false} collapsable={false}>
         <Title title="Danger zone">
             <TitleIcon>
                 <i class="lnr lnr-trash text-red-600 settings-title-icon"></i>
