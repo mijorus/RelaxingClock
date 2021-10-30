@@ -26,7 +26,7 @@ export async function attemptSpotifyLogin() {
     if (!localStorage.getItem('userHasLogged')) {
         if (!urlParams.get('state')) {
             //The user has never logged before to the app
-            const url = await generateSpotifyUrl();
+            const url = await generateSpotifyUrl().catch(() => throwAuthError('Cannot generate Spotify\'s login URL. Your browser might be unsupported'));
             spotifyUrl.set(url);
             clearTimeout(loginTimeout);
         } else if (urlParams.get('state') && !urlParams.get('error')) {
@@ -147,7 +147,7 @@ function throwAuthError(reason = '') {
     spotifyUrl.set(undefined);
     spotifyPlayerStatus.set(reason === 'access_denied' ? 'access_denied' : 'error');
     console.error('Authentication Error!: ' + reason);
-
+    
     if (reason === 'access_denied') {
         window.location.replace('/');
     }
