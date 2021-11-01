@@ -24,12 +24,7 @@ let incoming: {[key: string]: {isIncoming: boolean, color: string, icon: string,
 
 async function periodicCheck(time: Moment) {
     if (time && !(time.unix() % 2)) {
-        if ((await RemindersDB.getAllByExpirationDate()).find(r => !r.done)) {
-            incoming.reminders.isIncoming = true;
-        } else {
-            incoming.reminders.isIncoming = false;
-        }
-
+        incoming.reminders.isIncoming = (RemindersDB.db && (await RemindersDB.getAllByExpirationDate()).find(r => !r.done)) !== undefined;
         incoming.alarm.isIncoming = ($alarmTime !== undefined);
         incoming = incoming;
     }

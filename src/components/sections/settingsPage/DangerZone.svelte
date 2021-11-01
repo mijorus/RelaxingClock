@@ -4,11 +4,13 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from '../../elements/settings/Buttons/Action.svelte';
+import { RemindersDB } from '../../../handlers/RemindersDB';
+import { PinnedDB } from '../../../handlers/PinnedDB';
 
     async function clearData() {
         if (confirm('Are you sure?')) {
-            (await window.indexedDB.databases()).forEach(db => { 
-                window.indexedDB.deleteDatabase(db.name) 
+            [RemindersDB, PinnedDB].forEach(async idb => { 
+                if (idb.db) await idb.removeAll();
             });
 
             localStorage.clear();

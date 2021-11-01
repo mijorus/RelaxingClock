@@ -78,6 +78,10 @@ export class PinnedDB {
         return await PinnedDB.db.delete('pinned', key);
     }
 
+    static async removeAll() {
+        await PinnedDB.db.clear('pinned');
+    }
+
     static async setDone(key: number) {
         const pinned = await PinnedDB.db.get('pinned', key);
         PinnedDB.db.put('pinned', { ...pinned, done: true, doneAt: (~~(Date.now() / 1000)) });

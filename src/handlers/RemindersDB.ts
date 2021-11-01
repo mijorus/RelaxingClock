@@ -44,6 +44,10 @@ export class RemindersDB {
         await RemindersDB.db.delete('reminders', key)
     }
 
+    static async removeAll() {
+        await RemindersDB.db.clear('reminders');
+    }
+
     static async setDone(key: number) {
         const reminder = await RemindersDB.db.get('reminders', key);
         RemindersDB.db.put('reminders', { ...reminder, done: true, doneAt: moment().unix() });
