@@ -68,6 +68,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     }
 
     async function runListCheck() {
+        if (!ready) return;
         reminders = await RemindersDB.getAllByExpirationDate();
         futureReminders = []; doneReminders = [];
         reminders.forEach(r => r.done ? doneReminders.unshift(r) : futureReminders.push(r));
@@ -170,10 +171,11 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
 
     onMount(async () => {
         try {
+            await tick();
+            
             await RemindersDB.initDB();
             await RemindersDB.dbCleanUp();
             reminders = await RemindersDB.getAllByExpirationDate();
-            runListCheck();
             ready = true;
 
             shortcuts.set('reminder', {

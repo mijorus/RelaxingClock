@@ -14,7 +14,6 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
     let hours: HTMLElement;
     let color: string;
     let textShadow: string;
-    let showColorRing = false;
 
     // change clock format
     let oldFormat: string;
@@ -43,10 +42,10 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
             easing: 'easeOutElastic',
             complete() {
                 if (!up) {
-                    localStorage.removeItem('hours');
+                    locSto('hours', 'default');
                     hours.classList.remove('font-extrabold');
                 } else {
-                    localStorage.setItem('hours', 'scaled');
+                    locSto('hours', 'scaled');
                     hours.classList.add('font-extrabold');
                 }
             }
@@ -96,8 +95,9 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
 
     onMount(async() => {
         await tick();
-        if (locSto('hours') === 'scaled') scaleUp(true, false);
-        if (locSto('hoursColor')) changeColor(locSto('hoursColor'), false);
+        
+        if (!locSto('hours') || locSto('hours') === 'scaled') scaleUp(true, false);
+        locSto('hoursColor') ? changeColor(locSto('hoursColor'), false) : changeColor(randomCustomColor(), true);
     })
 </script>
 
@@ -108,15 +108,6 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
         on:mouseup={handleClockMouseUp} 
         on:contextmenu|preventDefault={handleClockCM} 
         style="transition: color .05s linear; color: {color}; text-shadow: {textShadow}">
-        <!-- {#if showColorRing}
-            <div class="absolute w-96 top-1/2 left-1/2 transform -translate-x-4 z-10" >
-                {#each customColors as c, i}
-                    <div class="absolute w-6 h-48 flex items-end" style="transform: rotate({(i * (360 / customColors.length))}deg); transform-origin: top center;" transition:fade={{delay: i * 50}}>
-                        <div class="w-6 h-6 rounded-full transform hover:scale-150 transition-transform" style="background-color: {c};"></div>
-                    </div>
-                {/each}
-            </div>
-        {/if} -->
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }
     </span>
     {:else}

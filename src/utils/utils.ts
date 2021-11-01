@@ -133,8 +133,9 @@ export function describeArc(radius, startAngle, endAngle, x = radius, y = radius
 
 // A wrapper for localStorage
 export function locSto(key: string, valueToSet: string = undefined) {
-    if (valueToSet === undefined) return localStorage.getItem(key);
-    else {
+    if (valueToSet === undefined) {
+        return localStorage.getItem(key);
+    } else {
         if (valueToSet === null) localStorage.removeItem(key);
         else localStorage.setItem(key, valueToSet);
 

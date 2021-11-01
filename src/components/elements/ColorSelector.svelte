@@ -2,8 +2,8 @@
 import { fade } from "svelte/transition";
 import { colorSelector, darkenClock } from "../../stores/globalState";
 
-    $: size = $colorSelector && $colorSelector.size ? $colorSelector.size : 48;
     $: if ($colorSelector !== undefined) darkenClock.set($colorSelector && $colorSelector.show);
+    $: size = $colorSelector && $colorSelector.size ? $colorSelector.size : 48;
 
     function closeSelector(color?: string) {
         $colorSelector.callback(color);
