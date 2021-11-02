@@ -16,6 +16,7 @@ import screenSaverHandler from "./handlers/screenSaver";
 import LoadingScreen from './components/sections/LoadingScreen.svelte';
 import animatedBg from "./handlers/animatedBg";
 import ColorSelector from './components/elements/ColorSelector.svelte';
+import Modal from './components/elements/Modal.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -58,6 +59,7 @@ import ColorSelector from './components/elements/ColorSelector.svelte';
 
 <AlarmRing />
 <ColorSelector />
+<Modal />
 
 <div class="w-12 hidden"></div>
 <style global>

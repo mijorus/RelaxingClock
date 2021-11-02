@@ -1,4 +1,5 @@
 import { windowReady } from 'html-ready';
+import type { SvelteComponent } from 'svelte';
 import { derived, readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import type { Tip } from '../types';
 import { saveEnergy } from './storedSettings';
@@ -72,3 +73,5 @@ export const windowFocus: Readable<boolean> = readable(true, (set: Subscriber<bo
 export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) => {
     return !$w && $s;
 })
+
+export const modalContent: Writable<SvelteComponent> = writable(null);

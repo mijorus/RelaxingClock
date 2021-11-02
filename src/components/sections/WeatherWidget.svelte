@@ -7,13 +7,16 @@ import type { WeatherCondition } from "../../lib/openweathermap/mainConditions";
 import { lastWeatherUpdate, tempUnit, weather } from "../../stores/storedSettings";
 import { kTemperatureConverter } from "../../utils/utils";
 import type { Tip } from "../../types";
-import { tips } from "../../stores/globalState";
+import { modalContent, tips } from "../../stores/globalState";
+import Modal from "../elements/Modal.svelte";
+import WeatherModal from "../Modals/WeatherModal.svelte";
 
     let data: Hourly[] = [];
     let icon: string;
     let currentLocation: string[];
     let oldWeatherUpdate;
     let isNight = false;
+    modalContent.set(WeatherModal);
 
     $:  {
         if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {
