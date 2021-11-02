@@ -1,6 +1,6 @@
 <script lang="ts">
 import anime from "animejs";
-import { onDestroy, onMount, tick } from "svelte";
+import { afterUpdate, onDestroy, onMount, tick } from "svelte";
 import { reduceAnimations, windowFocus } from "../../stores/globalState";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
@@ -76,6 +76,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 
     onMount(() => restartAnimation());
+    afterUpdate(() => restartAnimation());
 
     onDestroy(() => {
         if (scrollTl && el) {

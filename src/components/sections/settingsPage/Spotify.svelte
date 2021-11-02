@@ -16,9 +16,10 @@ import { device_id } from '../../../handlers/spotify/login';
 import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
 import moment from 'moment';
 
+    $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
+
     let boxLabel: string;
     let moreP = false;
-    $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
     let featuredPlaylists: SpotifyApi.ListOfFeaturedPlaylistsResponse;
     let myPlaylists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
     let firstTimeReady = false;
@@ -45,6 +46,8 @@ import moment from 'moment';
     }
 
     function changeStatus(spotifyPlayerStatus: SpotifyPlayerStatus, spotifyUserData: SpotifyApi.CurrentUsersProfileResponse) {
+        
+        
         switch(spotifyPlayerStatus) {
             case 'disconnected':
                 boxLabel = 'Login with Spotify';
@@ -53,6 +56,7 @@ import moment from 'moment';
                 boxLabel = 'Connecting...';
                 break;
             case 'ready':
+                console.log(spotifyPlayerStatus, spotifyUserData?.display_name);
                 if (spotifyUserData) boxLabel = 'Logged in as ' + spotifyUserData.display_name;
                 break;
             case 'expired':
