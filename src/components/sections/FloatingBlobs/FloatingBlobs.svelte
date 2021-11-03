@@ -10,12 +10,16 @@ import { getFlob } from "./flobs";
 
     const flobStokeColor = process.env.TEXT_SECONDARY;
     let flobOne: HTMLElement;
-    let tl: anime.AnimeTimelineInstance;
+    let flobTwo: HTMLElement;
+    let flobThree: HTMLElement;
+    let tls: anime.AnimeTimelineInstance[] = [];
 
     $: {
-        if ($windowFocus && tl) {
-            tl.play();
-            console.log('background animation resumed');
+        if ($windowFocus && tls) {
+            tls.forEach(t => {
+                t.play();
+                console.log('background animation resumed');
+            });
         }
     }
 
@@ -27,11 +31,11 @@ import { getFlob } from "./flobs";
             //@ts-ignore
             const newFlob: SVGElement = flob.cloneNode(true);
             newFlob.querySelector('path').setAttribute('transform', `translate(100, 100) scale(${(0.9 - (i / 10))}) rotate(${getRandomIntInclusive(0, 3)})`);
-            newFlob.querySelector('path').setAttribute('stroke', `grey`);
             newFlob.classList.add('absolute', 'top-0', 'w-100');
             flobs.push(newFlob);
         }
 
+        flobs.forEach(f => f.querySelector('path').setAttribute('stroke', `#3d3d3d`));
         return flobs;
     }
 
@@ -44,17 +48,17 @@ import { getFlob } from "./flobs";
             duration: 800,
         })
 
-        tl = anime.timeline({
+        const tl = anime.timeline({
             'targets': flob.querySelectorAll('svg'),
             autoplay: true,
             loop: true,
-            loopComplete() {
+            loopComplete(a) {
                 if ($saveEnergy && !$windowFocus) {
-                    tl.pause();
+                    a.pause();
                     console.log('background animation was paused');
                 }
             },
-            delay: 10000,
+            delay: anime.random(5000, 25000),
             endDelay: 5000,
             direction: 'alternate',
         })
@@ -78,12 +82,22 @@ import { getFlob } from "./flobs";
                 rotate: `+=${anime.random(-30, 30)}`,
                 delay: anime.stagger(300, {start: anime.random(1000, 5000)}),
             })
+        
+        tls.push(tl);
     }
 
     function decorateWindow() {
+        const randomPos = randomBool();
         flobOne.append(...generateFlobDecoration((getFlob('random'))));
-        flobOne.style.transform = `translateX(${randomBool() ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60)}%)`;
+        flobOne.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60)}%)`;
         animateFlob(flobOne);
+
+        flobTwo.append(...generateFlobDecoration((getFlob('random'))));
+        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60) + 100}%)`;
+        animateFlob(flobTwo);
+
+        flobThree.append(...generateFlobDecoration((getFlob('random'))));
+        flobThree.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(0%)`;
     }
 
 
@@ -94,6 +108,12 @@ import { getFlob } from "./flobs";
 </script>
 
 
-<div id="flobOne" bind:this={flobOne} class="w-screen overflow-hidden">
+<div id="flobOne" bind:this={flobOne} class="w-screen">
+    <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
+</div>
+<div id="flobTwo" bind:this={flobTwo} class="h-screen">
+    <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
+</div>
+<div id="flobThree" bind:this={flobThree} class="h-screen">
     <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
 </div>
