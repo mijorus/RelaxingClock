@@ -16,7 +16,7 @@ import WeatherModal from "../Modals/WeatherModal.svelte";
     let currentLocation: string[];
     let oldWeatherUpdate;
     let isNight = false;
-    modalContent.set(WeatherModal);
+    // modalContent.set(WeatherModal);
 
     $:  {
         if ( $weather && $lastWeatherUpdate?.hourly && ( $lastWeatherUpdate !== oldWeatherUpdate ) ) {

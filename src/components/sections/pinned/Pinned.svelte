@@ -33,10 +33,11 @@ import { notifications } from "../../../stores/notifications";
     }
 
     async function releasePinBubble() {
-        if (!selectedElement) return;
+        if (!selectedElement === null) return;
+        
         selectedElement.classList.remove('is-moving');
-        const selY = parseInt(anime.get(selectedElement, 'translateY'));
-        const selX = parseInt(anime.get(selectedElement, 'translateX'));
+        const selY = parseInt(anime.get(selectedElement, 'translateY').toString());
+        const selX = parseInt(anime.get(selectedElement, 'translateX').toString());
         
         let animation = null;
         if (selY > pinBox.clientHeight || selX > pinBox.clientWidth) {
@@ -50,13 +51,12 @@ import { notifications } from "../../../stores/notifications";
         }
         
         if (animation) await animation.finished;
-        PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(anime.get(selectedElement, 'translateY')), parseInt(anime.get(selectedElement, 'translateX')));
+        PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(anime.get(selectedElement, 'translateY').toString()), parseInt(anime.get(selectedElement, 'translateX').toString()));
         selectedElement = null;
         scrollPaused = false;
     }
 
-    async function removePin(id: number) {
-        
+    async function removePin(id: number) { 
         notifications.create({
             title: 'Pin removed',
             content: (await PinnedDB.get(id)).title + ' was dismissed',
@@ -97,10 +97,6 @@ import { notifications } from "../../../stores/notifications";
         selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - bubblePinPos)}px)`;
     }
 
-    function handlePinRelease(e: MouseEvent) {
-        releasePinBubble();
-    }
-
     onMount(async () => {
         await PinnedDB.initDB();
         await refreshPinned();
@@ -135,12 +131,12 @@ import { notifications } from "../../../stores/notifications";
     });
 </script>
 
-<svelte:window on:mouseup={() => releasePinBubble()} />
+<svelte:window on:mouseup={() => {if (selectedElement) releasePinBubble()} } />
 
 <div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
-    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove} on:mouseleave={handlePinRelease}>
+    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove}>
     {#each pinned as p, i (p.id)}
-        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown={() => bringElementUp(document.getElementById('pinned-'+p.id))}
+        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown|stopPropagation={() => bringElementUp(document.getElementById('pinned-'+p.id))}
             style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'});">
             <div class="pinned-inner bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
                 <div class="pinned-bg p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
