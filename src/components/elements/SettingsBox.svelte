@@ -1,6 +1,4 @@
 <script lang="ts">
-import { windowReady } from "html-ready";
-
 import { afterUpdate, onMount, tick } from "svelte";
 
     export let unsupported = false;

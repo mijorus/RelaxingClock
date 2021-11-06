@@ -17,10 +17,10 @@ import Hint from "./Hint.svelte";
     export let description: SettingsDesc;
 </script>
 
-<div class="settings-box-element settings-box-primary max-h-96">
+<div class="settings-box-element settings-box-primary max-h-96 {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
     <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 m-2 md:p-4 md:m-2">
         <span class="text-primary md:text-xl font-primary whitespace-nowrap not-overflow overflow-x-hidden"><AnimatedText text={label.text}/></span>
-        <div class="{available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
+        <div class="">
             <slot></slot>
         </div>
     </div>
