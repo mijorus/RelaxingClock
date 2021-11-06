@@ -217,7 +217,14 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
                 }
             });
         } catch(err) {
+            // Indexed Db error, valid fore the whole app
             console.error(err);
+            notifications.create({
+                'sound': true,
+                'content': 'Ooops! I could\'t load the application properly. Are you running Firefox with an anonymous tab?',
+                'title': 'An error occured',
+                'icon': 'fas fa-exclamation-circle'
+            })
         }
     });
 
