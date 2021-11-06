@@ -105,31 +105,31 @@ import anime from "animejs";
             }
         }
 
-        shortcuts.set('weather', {
-            'background': 'rgb(234,108,73)',
-            'color': '#000',
-            'arguments': {
-                'enable': {
-                    async callback() { handleWeatherSwitch(true); return true}
-                },
-                'disable': {
-                    async callback() { handleWeatherSwitch(false); return true}
-                },
-                'update': {
-                    async callback() { updateWeatherData(); return true}
-                }
-            },
-            async examples() {
-                return {
-                    'namespace': 'Examples',
-                    'group': [
-                        {'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, 
-                        {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''},
-                        {'argument': 'update', 'tip': 'Refresh the forecasts', 'example': ''}
-                    ]
-                }
-            }
-        });
+        // shortcuts.set('weather', {
+        //     'background': 'rgb(234,108,73)',
+        //     'color': '#000',
+        //     'arguments': {
+        //         'enable': {
+        //             async callback() { handleWeatherSwitch(true); return true}
+        //         },
+        //         'disable': {
+        //             async callback() { handleWeatherSwitch(false); return true}
+        //         },
+        //         'update': {
+        //             async callback() { updateWeatherData(); return true}
+        //         }
+        //     },
+        //     async examples() {
+        //         return {
+        //             'namespace': 'Examples',
+        //             'group': [
+        //                 {'argument': 'disable', 'tip': 'Disable the weather widget', 'example': ''}, 
+        //                 {'argument': 'enable', 'tip': 'The opposite XD', 'example': ''},
+        //                 {'argument': 'update', 'tip': 'Refresh the forecasts', 'example': ''}
+        //             ]
+        //         }
+        //     }
+        // });
     })
 </script>
 
@@ -152,10 +152,10 @@ import anime from "animejs";
             </div>
         </PrimaryBox>
     </div>
-<NestedBox bordered label="Temperature unit" available={$weather}>
-    <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
-</NestedBox>
-<NestedBox expandable available={$weather} label="Set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
+    <NestedBox bordered label="Temperature unit" available={$weather === true}>
+        <Booleans state={$tempUnit === 'C'} label={'weather'} states={['°C', '°F']} dimentions={[10, 10]} on:change={(e) => tempUnit.set(e.detail ? 'C' : 'F') }/>
+    </NestedBox>
+    <NestedBox expandable available={$weather === true} label="Set location" on:click={() => setTimeout(() => {const el = document.getElementById('search-ow'); if (el) el.focus()}, 500)}
             description={$lastWeatherUpdate?.current?.dt ? `last update: ${moment($lastWeatherUpdate.current.dt, 'X').format($clockFormat === '24h' ? 'HH:mm' : 'hh:mm')}` : ''}>
             <div class="p-2" id="set-location">
             {#if currentLocation && !locationSearchQuery.length}
