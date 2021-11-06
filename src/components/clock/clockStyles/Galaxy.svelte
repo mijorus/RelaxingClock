@@ -42,7 +42,7 @@ import { onMount } from 'svelte';
     }
 
     onMount(async () => {
-        await windowReady;
+        // await windowReady;
         isReady = true;
     })
 </script>

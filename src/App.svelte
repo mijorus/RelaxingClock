@@ -17,6 +17,8 @@ import LoadingScreen from './components/sections/LoadingScreen.svelte';
 import animatedBg from "./handlers/animatedBg";
 import ColorSelector from './components/elements/ColorSelector.svelte';
 import Modal from './components/elements/Modal.svelte';
+import { notifications } from './stores/notifications';
+import { windowReady } from 'html-ready';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -33,9 +35,11 @@ import Modal from './components/elements/Modal.svelte';
         }
     }   
 
-	onMount(() => {
-        // animatedBg()
-        localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}))
+	onMount(async () => {
+        // Var init
+        localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
+        
+        // Spotify Login
         if ($onlineStatus) {
             attemptSpotifyLogin()
                 .catch((e) => console.error(e))
@@ -50,12 +54,14 @@ import Modal from './components/elements/Modal.svelte';
 <LoadingScreen />
 <Rooster />
 
-<main class="w-screen h-screen overflow-x-hidden relative">
-	<Home />
-	<Settings />
-    <NotificationsPanel />
-	<MainBg />
-</main>
+{#await windowReady then _}
+    <main class="w-screen h-screen overflow-x-hidden relative">
+        <Home />
+        <Settings />
+        <NotificationsPanel />
+        <MainBg />
+    </main>
+{/await}
 
 <AlarmRing />
 <ColorSelector />

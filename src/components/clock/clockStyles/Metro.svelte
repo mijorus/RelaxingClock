@@ -18,7 +18,7 @@ import AmPmBadge from '../AmPmBadge.svelte';
     $: toggleScreenSaver($screenSaver);
 
     async function toggleScreenSaver(enabled: boolean) {
-        await windowReady;
+        // await windowReady;
         anime({
             targets: container,
             easing: eaElasticDefault,
