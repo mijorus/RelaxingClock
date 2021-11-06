@@ -11,6 +11,7 @@ import AnimatedText from "../../elements/AnimatedText.svelte";
 import { eaElasticDefault } from "../../../utils/animations";
 import colors  from "simple-color-functions";
 import { notifications } from "../../../stores/notifications";
+import { pinnedDBisReady } from "../../../stores/globalState";
 
     let pinned: StoredPinned[] = [];
     let selectedElement: HTMLElement;
@@ -98,41 +99,51 @@ import { notifications } from "../../../stores/notifications";
     }
 
     onMount(async () => {
-        await PinnedDB.initDB();
-        await refreshPinned();
-        await PinnedDB.dbCleanUp();
+        try {
+            await PinnedDB.initDB();
+            await refreshPinned();
+            await PinnedDB.dbCleanUp();
+            pinnedDBisReady.set(true);
+        } catch (e) {
+            console.error(e);
+        }
 
-        shortcuts.set('pin', {
-            'color': '#fff',
-            'background': '#c80000',
-            'arguments': {
-                '': {
-                    'active': true,
-                    'quickLaunch': 'P',
-                    async callback(p) {
-                        const res = await createPinned(p);
-                        if (res)  {
-                            await tick();
-                            bringElementUp(document.getElementById('pinned-'+res));
+        if (pinnedDBisReady) {
+            window.addEventListener('mouseup', () => {if (pinnedDBisReady && selectedElement) releasePinBubble()} );
+            
+            shortcuts.set('pin', {
+                'color': '#fff',
+                'background': '#c80000',
+                'arguments': {
+                    '': {
+                        'active': true,
+                        'quickLaunch': 'P',
+                        async callback(p) {
+                            const res = await createPinned(p);
+                            if (res)  {
+                                await tick();
+                                bringElementUp(document.getElementById('pinned-'+res));
+                            }
+
+                            return res !== false;
                         }
-
-                        return res !== false;
+                    }
+                },
+                async examples(arg, p) {
+                    return {
+                        'group': [{'argument': 'pin:', 'example': '', 'tip': 'Create a new pinned message, up to '+maxPinsN}]
                     }
                 }
-            },
-            async examples(arg, p) {
-                return {
-                    'group': [{'argument': 'pin:', 'example': '', 'tip': 'Create a new pinned message, up to '+maxPinsN}]
-                }
-            }
-        });
+            });
 
-        windowReady.then(() => readyToMove = true);
+            // await windowReady
+            readyToMove = true;
+        }
     });
 </script>
 
-<svelte:window on:mouseup={() => {if (selectedElement) releasePinBubble()} } />
 
+{#if pinnedDBisReady}
 <div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
     style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove}>
     {#each pinned as p, i (p.id)}
@@ -158,6 +169,7 @@ import { notifications } from "../../../stores/notifications";
         Keep your pins inside this box! {#if !pinned.length}Type <strong>pin: [space]</strong> in the Rooster{/if}
     </div>
 </div>
+{/if}
 
 <style>
     .pinned {

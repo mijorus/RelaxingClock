@@ -5,13 +5,15 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Pin from '../../icons/Pin.svelte';
 import Action from '../../elements/settings/Buttons/Action.svelte';
+import { pinnedDBisReady } from '../../../stores/globalState';
 
     function triggerRooster(e) {
         window.dispatchEvent( new KeyboardEvent('keydown', {key: 'P', altKey: true}));
     }
+
 </script>
 
-<SettingsBox>
+<SettingsBox unsupported={!$pinnedDBisReady}>
     <Title title="Pins">
         <TitleIcon>
             <Pin color="red" size="36"/>
