@@ -15,7 +15,7 @@ import { getFlob } from "./flobs";
     let tls: anime.AnimeTimelineInstance[] = [];
 
     $: {
-        if ($windowFocus && tls) {
+        if ($saveEnergy && tls.length) {
             tls.forEach(t => {
                 t.play();
                 console.log('background animation resumed');
@@ -49,13 +49,16 @@ import { getFlob } from "./flobs";
         })
 
         const tl = anime.timeline({
+            begin(a) {
+                if ($saveEnergy) a.pause();
+            },
             'targets': flob.querySelectorAll('svg'),
             autoplay: true,
             loop: true,
             loopComplete(a) {
-                if ($saveEnergy && !$windowFocus) {
+                if ($saveEnergy) {
                     a.pause();
-                    console.log('background animation was paused');
+                    console.log('animation was paused');
                 }
             },
             delay: anime.random(5000, 25000),
