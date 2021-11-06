@@ -8,7 +8,7 @@ import Bubble from "../../elements/Bubble.svelte";
 import NotificationComponent from "./CustomNotificationComponent.svelte";
 import anime from "animejs";
 import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/animations";
-import { shortcuts } from "../../../stores/rooster";
+import { canBeSummoned, shortcuts } from "../../../stores/rooster";
 
     let notificationToShow: CustomNotification = null;
     let notificationsInPanel: CustomNotification[] = [];
@@ -54,17 +54,7 @@ import { shortcuts } from "../../../stores/rooster";
             nPanel.scrollTop = nPanel.scrollHeight;
         }
 
-        // const targets = document.getElementById('big-clock-container');
-        // anime({
-        //     begin() { targets.classList.add('pointer-events-none') },
-        //     targets,
-        //     duration: 500,
-        //     scale: showPanel ? 0.98 : 1,
-        //     translateY: showPanel ? '+=2.5rem' : ($screenSaver ? 0 : bigClockSSoffset),
-        //     opacity: showPanel ? 0.5 : 1,
-        //     easing: 'easeOutQuad',
-        //     complete() { targets.classList.remove('pointer-events-none') },
-        // });
+        canBeSummoned.set(!showPanel);
         darkenClock.set(showPanel);
     }
 
@@ -99,7 +89,7 @@ import { shortcuts } from "../../../stores/rooster";
                                         on:click={(e) => { const size = notifications.dismiss(n.id); if (size === 0) togglePanel(false); }} >
                                         <span class="lnr lnr-circle-minus text-xl text-white" ></span>
                                     </div>
-                                    <NotificationComponent forceSilent data={n} expire={false} showTimestamp={true} />
+                                    <NotificationComponent forceSilent data={n} expire={false} showTimestamp={true} inPanel={true} />
                                 </div>
                             </div>
                         {/if}
