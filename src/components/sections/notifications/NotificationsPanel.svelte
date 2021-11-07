@@ -22,6 +22,8 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
             $notifications.forEach(n => {
                 if (n.limitDisplay !== 'notificationOnly') notificationsInPanel = [n, ...notificationsInPanel]
             })
+        } else if (showPanel && $notifications && !$notifications.length) {
+            togglePanel(false);
         }
     }
 
