@@ -128,6 +128,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
         }
 
         else if ($spotifyPlayerState?.track_window && e.ctrlKey && e.key === 'E' && document.activeElement === document.querySelector('body')) {
+            e.preventDefault();
             expandedBox = !expandedBox;
         }
     }
