@@ -46,6 +46,8 @@ import { getFlob } from "./flobs";
             'stroke': ['#8e8e8e','#3d3d3d'],
             delay: anime.stagger(300),
             duration: 800,
+            loop: 3,
+            direction: 'alternate'
         })
 
         const tl = anime.timeline({
