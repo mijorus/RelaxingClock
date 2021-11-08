@@ -5,6 +5,7 @@ import { fade, fly, slide } from "svelte/transition";
 import { SpotifyPlayer } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { screenSaver, tips } from "../../stores/globalState";
+import { notifications } from "../../stores/notifications";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
 import { contextHistory } from "../../stores/storedSettings";
 import time from "../../stores/time";
@@ -148,6 +149,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
     function copyCurrentTrackLink() {
         if (!$spotifyPlayerState?.track_window) return;
         navigator.clipboard.writeText('https://open.spotify.com/track/'+ $spotifyPlayerState?.track_window.current_track.id);
+        notifications.create({'limitDisplay': 'notificationOnly', 'title': 'Track link copied', 'content': 'The track link was copied in the clipboard', 'icon': 'fas fa-link'});
     }
 </script>
 
