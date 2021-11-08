@@ -10,6 +10,7 @@ import Hours from "../Hours.svelte";
 import Minutes from "../Minutes.svelte";
 import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
+import IncomingEventsBox from "../IncomingEventsBox.svelte";
 
     let analogClock: HTMLElement;
     const handClasses = 'absolute rounded-full top-2/4 left-2/4 origin-right-2/4 ';
@@ -39,14 +40,16 @@ import StyleBase from "./StyleBase.svelte";
             bind:this={analogClock}
             class="rounded-full border-none w-96 h-96 to-screensaver transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
         >
-            {#if showTime || $analogTimeLocked}
-                <div class="text-center text-2xl transform translate-y-full opacity-70 -z-1" style="filter:grayscale(1);" transition:fade>
-                    <div class="text-base transition-opacity {showTime ? 'opacity-50' : 'opacity-0'} cursor-pointer" on:click|stopPropagation={() => analogTimeLocked.set(!$analogTimeLocked)}>
-                        <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
-                    </div>
-                    <div><Hours interactive={false}/><Divisor /><Minutes /><AmPmBadge size="xs"/></div>
+            <div class="text-center text-2xl mt-16 -z-1 smooth-fade {showTime || $analogTimeLocked ? 'opacity-70' : 'opacity-0'}" style="filter:grayscale(1);" transition:fade>
+                <div class="{showTime ? 'opacity-70' : 'opacity-20'} text-base transition-opacity  cursor-pointer" on:click|stopPropagation={() => analogTimeLocked.set(!$analogTimeLocked)}>
+                    <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
                 </div>
-            {/if}
+                <div><Hours interactive={false}/><Divisor /><Minutes /><AmPmBadge size="xs"/></div>
+            </div>
+            <div class="text-center text-xl mt-0 -z-1">
+                 <IncomingEventsBox isHovered={showTime} />
+            </div>
+            
             <span id="little-dot" class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4 bg-highlighted 
                 rounded-full hover:scale-125" on:click|stopPropagation|preventDefault={(e) => {setHandSecColor();}}></span>
             {#each Array(12) as _, i}
@@ -74,6 +77,10 @@ import StyleBase from "./StyleBase.svelte";
 </StyleBase>
 
 <style>
+    .smooth-fade {
+        transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
     .to-screensaver {
         transition: transform .75s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
