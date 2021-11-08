@@ -4,7 +4,12 @@ import { notifications } from '../../stores/notifications';
 import { shortcuts } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
 import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
+import { createCommaArray } from '../../utils/utils';
 import { refershOrGetOAuthToken, device_id } from './login';
+import moment from 'moment'
+import momentDurationFormatSetup from 'moment-duration-format'
+
+momentDurationFormatSetup(moment);
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
@@ -39,10 +44,13 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             mostPopularArtist = res.artists.items[0].uri;
         }
 
+        if (res[key]?.items[0]?.popularity) res[key].items = res[key].items.sort((a, b) =>  b.popularity > a.popularity )
         const list: RoosterExample[] = res[key].items.map((item) => {
             let tip = ''; let size: RoosterExampleImageSize = 'sm';
             if (key === 'tracks') {
-                item.artists.forEach(a => tip += ` ${a.name}`);
+                tip += item.explicit ? '[E] ' : ' ';
+                tip += createCommaArray(item.artists.map(a => a.name));
+                tip += ' · '+ moment.duration(item.duration_ms, 'milliseconds').format('mm:ss', { trim: false })
             }
             
             else if (key === 'artists') {
@@ -66,7 +74,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
         exampleList.push(...list);
     }
     
-    examples.group = exampleList.reverse().sort((a, b) => b.size === 'md' ? 1 : -1);
+    examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
     examples.namespace = type;
     oldRes = res;
 

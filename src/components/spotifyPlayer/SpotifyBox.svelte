@@ -144,6 +144,11 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             gtptn = 0;
         }, 350);
     } 
+
+    function copyCurrentTrackLink() {
+        if (!$spotifyPlayerState?.track_window) return;
+        navigator.clipboard.writeText('https://open.spotify.com/track/'+ $spotifyPlayerState?.track_window.current_track.id);
+    }
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown}/>
@@ -162,6 +167,8 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
                 </i>
                 <i class="mx-1 cursor-pointer" on:click={() => toggleSavedTrack()}>
                     <Heart filled={currentTrackIsLiked} color={process.env[currentTrackIsLiked ? 'SPOTIFY_COLOR' : 'TEXT_SECONDARY']}/>
+                </i>
+                <i class="mx-1 fas fa-link cursor-pointer hover:text-spotify transition-colors" on:click={() => copyCurrentTrackLink()}>
                 </i>
                 <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
