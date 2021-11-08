@@ -30,7 +30,7 @@ import { getFlob } from "./flobs";
         for (let i = 0; i < 4; i++) {
             //@ts-ignore
             const newFlob: SVGElement = flob.cloneNode(true);
-            newFlob.querySelector('path').setAttribute('transform', `translate(100, 100) scale(${(0.9 - (i / 10))}) rotate(${getRandomIntInclusive(0, 3)})`);
+            newFlob.querySelector('path').setAttribute('transform', `translate(100, 100) scale(${(0.9 - (i / 10))}) rotate(${getRandomIntInclusive(1, 4)})`);
             newFlob.classList.add('absolute', 'top-0', 'w-100');
             flobs.push(newFlob);
         }
@@ -43,11 +43,11 @@ import { getFlob } from "./flobs";
         anime({
             'targets': flob.getElementsByTagName('path'),
             easing: 'linear',
-            'stroke': ['#8e8e8e','#3d3d3d'],
-            delay: anime.stagger(300),
+            'stroke': ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
+            delay: anime.stagger(100, {start: 1500}),
+            direction: 'reverse',
             duration: 800,
-            loop: 3,
-            direction: 'alternate'
+            loop: 4,
         })
 
         const tl = anime.timeline({
@@ -98,7 +98,7 @@ import { getFlob } from "./flobs";
         animateFlob(flobOne);
 
         flobTwo.append(...generateFlobDecoration((getFlob('random'))));
-        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60) + 100}%)`;
+        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(50, 70) + 100}%)`;
         animateFlob(flobTwo);
 
         flobThree.append(...generateFlobDecoration((getFlob('random'))));
@@ -108,7 +108,7 @@ import { getFlob } from "./flobs";
 
     onMount(async() => {
         await windowReady;
-        decorateWindow()
+        decorateWindow();
     })
 </script>
 
