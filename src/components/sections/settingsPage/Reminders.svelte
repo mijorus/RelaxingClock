@@ -237,7 +237,7 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
         transition:fly={{y: 100, duration: 300}}>
         <div
             class="py-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
-            <h2 class="text-4xl font-bold mr-20 text-center w-full">Create a reminder</h2>
+            <h2 class="text-4xl font-bold mr-20 text-center font-title w-full">Create a reminder</h2>
             <div class="my-2 flex flex-col justify-center">
                 <div class="inline-block m-auto">
                     <div class="my-2">

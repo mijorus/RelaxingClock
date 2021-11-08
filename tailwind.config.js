@@ -34,6 +34,7 @@ module.exports = {
             fontFamily: {
                 'clock': ['Source Code Pro', 'monospace'],
                 'primary': ['DM Mono', 'monospace'],
+                'title': ['Comfortaa', 'monospace'],
             },
             colors: {
                 'primary': 'rgb(245, 245, 245)',
