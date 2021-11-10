@@ -64,7 +64,7 @@ export interface CustomNotification {
     id?: number;
     title: string;
     content: string;
-    icon: string;
+    icon?: string;
     color?: string;
     timestamp?: number;
     sound?: boolean;

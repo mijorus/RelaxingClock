@@ -17,7 +17,7 @@ export let inPanel = false;
         <div class="flex items-center">
             <div class="mr-2">
                 <span class="pr-2">
-                    <i class="{data.icon} text-5xl" style="color: {data.color};"/>
+                    <i class="{data.icon ?? 'fas fa-bell'} text-5xl" style="color: {data.color};"/>
                 </span>
             </div>
             <div class="overflow-x-hidden whitespace-nowrap">

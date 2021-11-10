@@ -57,19 +57,19 @@ import moment from 'moment';
                 break;
             case 'ready':
                 console.log(spotifyPlayerStatus, spotifyUserData?.display_name);
-                if (spotifyUserData) boxLabel = 'Logged in as ' + spotifyUserData.display_name;
+                if (spotifyUserData) boxLabel = 'Logged in as ' + spotifyUserData.display_name + ' 😊';
                 break;
             case 'expired':
-                boxLabel = 'Sorry, but you need to login again :(';
+                boxLabel = 'Sorry, but your session might have expired ☹️. Please try to login again.';
                 break;
             case 'non-premium':
-                boxLabel = 'Sorry, but you need a premium subscription in order to user third-party players :(';
+                boxLabel = 'Sorry, but you need a premium subscription in order to use third-party players ☹';
                 break;
             case 'access_denied':
-                boxLabel = 'Access denied!';
+                boxLabel = '✋🏿 Access denied!';
                 break;
             case 'error':
-                boxLabel = ':( Unknown error, please try to logout and login again';
+                boxLabel = '☹ Unknown error, please try to logout and login again';
                 break;
         }
 

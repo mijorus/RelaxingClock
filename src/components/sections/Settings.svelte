@@ -14,6 +14,7 @@ import Pinned from './settingsPage/Pinned.svelte';
 import SettingsBox from '../elements/SettingsBox.svelte';
 import DangerZone from './settingsPage/DangerZone.svelte';
 import SaveBattery from './settingsPage/SaveBattery.svelte';
+import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
 </script>
 
 <div class="relative">
@@ -21,6 +22,7 @@ import SaveBattery from './settingsPage/SaveBattery.svelte';
         <Spotify />
         <Weather />
         <Alarm />
+        <PomodoroTimer />
         <Pinned />
         <Reminders />  
         

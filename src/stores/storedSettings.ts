@@ -78,3 +78,6 @@ export const lastWeatherUpdate = userSetting('lastWeatherUpdate', {}, 'object');
 export const tempUnit = userSetting('tempUnit', 'C');
 
 export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean');// 
+
+// Pomodoro timer
+export const longPomodoro = userSetting('longPomodoro', false, 'boolean');// 

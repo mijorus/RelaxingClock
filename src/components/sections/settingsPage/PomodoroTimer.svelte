@@ -1,0 +1,93 @@
+<script lang="ts">
+import SettingsBox from '../../elements/SettingsBox.svelte';
+import Title from "../../elements/settings/Title.svelte";
+import TitleIcon from "../../elements/settings/TitleIcon.svelte";
+import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
+import Pin from '../../icons/Pin.svelte';
+import Action from '../../elements/settings/Buttons/Action.svelte';
+import { pinnedDBisReady } from '../../../stores/globalState';
+import NestedBox from '../../elements/settings/NestedBox.svelte';
+import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
+import { longPomodoro } from '../../../stores/storedSettings';
+import Hint from '../../elements/settings/Hint.svelte';
+import moment from 'moment';
+import { notifications } from '../../../stores/notifications';
+import { locSto } from '../../../utils/utils';
+
+    const defaultTitle = 'Start the timer';
+    let label = defaultTitle;
+    let backupLabel: string;
+    let pomodoroIsRunning: 'focus' | 'relax' | false = false;
+    let cycleEndsIn: number;
+    let pomodoroTimer: NodeJS.Timeout;
+
+    function showTimeLeft() {
+        if (pomodoroIsRunning) {
+            backupLabel = label; 
+            label = 'Ends ' + moment().add((cycleEndsIn - 60000), 'milliseconds').fromNow();
+        }
+    }
+
+    function startRelaxSession() {
+        pomodoroIsRunning = 'relax';
+        label = 'It\'s time for a break 😊';
+        locSto('pomodoroState', pomodoroIsRunning);
+
+        cycleEndsIn = ($longPomodoro ? 15 : 5) * 60000;
+        pomodoroTimer = setTimeout(() => startFocusSession(), cycleEndsIn);
+        notifications.create({
+            'title': label,
+            'icon': 'icon-tomato-bw',
+            'limitDisplay': 'notificationOnly',
+            'content': '😊 Take a break',
+            'sound': true,
+        });
+    }
+
+    function startFocusSession() {
+        label = 'Focus on your work! 🤓';
+        pomodoroIsRunning = 'focus';
+        locSto('pomodoroState', pomodoroIsRunning);
+
+        cycleEndsIn = ($longPomodoro ? 45 : 25) * 60000;
+        pomodoroTimer = setTimeout(() => startRelaxSession(), cycleEndsIn);
+        notifications.create({
+            'title': label,
+            'icon': 'icon-tomato-bw',
+            'limitDisplay': 'notificationOnly',
+            'content': '🤓 Stay concentrated',
+            'sound': true,
+        });
+    }
+
+    function toggleTimer(e) {
+        clearTimeout(pomodoroTimer);
+        pomodoroIsRunning = pomodoroIsRunning ? false : 'focus';
+        locSto('pomodoroState', pomodoroIsRunning ? pomodoroIsRunning : null);
+        
+        if (pomodoroIsRunning) startFocusSession();
+        else label = defaultTitle;
+    }
+
+</script>
+
+<SettingsBox id="pomodoro">
+    <Title title="Pomodoro timer">
+        <TitleIcon>
+            <i id="pomodoro-icon" class="settings-icon"><span class="icon-tomato-22"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></i>
+        </TitleIcon>
+    </Title>
+    <div on:mouseenter={() => showTimeLeft() } on:mouseleave={() => {if (pomodoroIsRunning && backupLabel) label = backupLabel }}>
+        <PrimaryBox 
+            label={{text: label, bgClass: pomodoroIsRunning === 'focus' ? 'bg-red-900' : (pomodoroIsRunning === 'relax' ? 'bg-green-900' : null)}} 
+            description={{text:''}}
+            available={true}
+        >
+            <Action label="{pomodoroIsRunning ? 'Stop' : 'Start'}" on:click={toggleTimer} />
+        </PrimaryBox>
+    </div>
+    <NestedBox bordered label="Longer sessions" available={pomodoroIsRunning === false}>
+        <Booleans state={$longPomodoro} label={'longer pomodoro sessions'} on:change={(e) => longPomodoro.set(e.detail)}/>
+    </NestedBox>
+    <Hint text={'The Pomodoro Timer efficiently splits your workflow into a 25-minutes working session and a 5-minutes break. You can also set a longer 45/15-minutes session if you really are an hard-worker'} iconClass={'lnr lnr-question-circle'}/>
+</SettingsBox>
