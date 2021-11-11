@@ -135,7 +135,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     
         shortcuts.set('alarm', {
             color: process.env.BACKGROUND_DARK, 
-            background: 'red',
+            background: 'rgb(255, 102, 0)',
             arguments: {
                 '': {
                     async callback(p) {

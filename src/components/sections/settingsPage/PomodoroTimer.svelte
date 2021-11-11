@@ -13,6 +13,8 @@ import Hint from '../../elements/settings/Hint.svelte';
 import moment from 'moment';
 import { notifications } from '../../../stores/notifications';
 import { locSto } from '../../../utils/utils';
+import { onMount } from 'svelte';
+import { shortcuts } from '../../../stores/rooster';
 
     const defaultTitle = 'Start the timer';
     let label = defaultTitle;
@@ -39,7 +41,7 @@ import { locSto } from '../../../utils/utils';
             'title': label,
             'icon': 'icon-tomato-bw',
             'limitDisplay': 'notificationOnly',
-            'content': '😊 Take a break',
+            'content': 'Take a break',
             'sound': true,
         });
     }
@@ -55,12 +57,12 @@ import { locSto } from '../../../utils/utils';
             'title': label,
             'icon': 'icon-tomato-bw',
             'limitDisplay': 'notificationOnly',
-            'content': '🤓 Stay concentrated',
+            'content': 'Stay concentrated',
             'sound': true,
         });
     }
 
-    function toggleTimer(e) {
+    function toggleTimer() {
         clearTimeout(pomodoroTimer);
         pomodoroIsRunning = pomodoroIsRunning ? false : 'focus';
         locSto('pomodoroState', pomodoroIsRunning ? pomodoroIsRunning : null);
@@ -69,6 +71,42 @@ import { locSto } from '../../../utils/utils';
         else label = defaultTitle;
     }
 
+    onMount(() => {
+        shortcuts.set('pomodoro', {
+            'color': 'black',
+            'background': 'red',
+            'arguments': {
+                'start': {
+                    async callback(p) {
+                        if (!pomodoroIsRunning) {
+                            if (p === '+') longPomodoro.set(true);
+                            else if (p === '-') longPomodoro.set(false);
+                            toggleTimer();
+                        }
+                        else return false;
+                        return true;
+                    }
+                },
+                'stop': {
+                    async callback() {
+                        if (pomodoroIsRunning) toggleTimer();
+                        else return false;
+                        return true;
+                    }
+                }
+            },
+            async examples(a, p) {
+                return {
+                    'namespace': 'Examples',
+                    'group': [
+                        {'argument': 'start', 'example': '', tip: 'starts the pomodoro timer with the default settings'}, 
+                        {'argument': 'start', 'example': '[ + or - ]', tip: 'passing + stars a long session, - the short session'}, 
+                        {'example': '', 'argument': 'stop', tip: 'stops the timer, if is running'}
+                    ]
+                }
+            }
+        })
+    })
 </script>
 
 <SettingsBox id="pomodoro">
