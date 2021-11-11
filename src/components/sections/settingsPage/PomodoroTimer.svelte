@@ -99,9 +99,9 @@ import { shortcuts } from '../../../stores/rooster';
                 return {
                     'namespace': 'Examples',
                     'group': [
-                        {'argument': 'start', 'example': '', tip: 'starts the pomodoro timer with the default settings'}, 
-                        {'argument': 'start', 'example': '[ + or - ]', tip: 'passing + stars a long session, - the short session'}, 
-                        {'example': '', 'argument': 'stop', tip: 'stops the timer, if is running'}
+                        {'argument': 'start', 'example': '', tip: 'start the pomodoro timer with the default settings'}, 
+                        {'argument': 'start', 'example': '[ + or - ]', tip: 'passing "+" stars a long session, "-" a short session'}, 
+                        {'example': '', 'argument': 'stop', tip: 'stop the timer, if it\'s running'}
                     ]
                 }
             }
