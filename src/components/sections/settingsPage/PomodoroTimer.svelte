@@ -72,6 +72,7 @@ import { shortcuts } from '../../../stores/rooster';
     }
 
     onMount(() => {
+        locSto('pomodoroState', null);
         shortcuts.set('pomodoro', {
             'color': 'black',
             'background': 'red',
