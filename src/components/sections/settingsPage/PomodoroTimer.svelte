@@ -15,19 +15,18 @@ import { notifications } from '../../../stores/notifications';
 import { locSto } from '../../../utils/utils';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
+import time from '../../../stores/time';
 
     const defaultTitle = 'Start the timer';
     let label = defaultTitle;
-    let backupLabel: string;
     let pomodoroIsRunning: 'focus' | 'relax' | false = false;
     let cycleEndsIn: number;
     let pomodoroTimer: NodeJS.Timeout;
+    let timeLeft = '';
 
-    function showTimeLeft() {
-        if (pomodoroIsRunning) {
-            backupLabel = label; 
-            label = 'Ends ' + moment().add((cycleEndsIn - 60000), 'milliseconds').fromNow();
-        }
+    $: {
+        if (pomodoroIsRunning && $time) timeLeft = `[${moment().add((cycleEndsIn - 60000), 'milliseconds').fromNow(true)}]`;
+        else if (!pomodoroIsRunning) timeLeft = '';
     }
 
     function startRelaxSession() {
@@ -116,12 +115,13 @@ import { shortcuts } from '../../../stores/rooster';
             <i id="pomodoro-icon" class="settings-icon"><span class="icon-tomato-22"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></span></i>
         </TitleIcon>
     </Title>
-    <div on:mouseenter={() => showTimeLeft() } on:mouseleave={() => {if (pomodoroIsRunning && backupLabel) label = backupLabel }}>
+    <div>
         <PrimaryBox 
             label={{text: label, bgClass: pomodoroIsRunning === 'focus' ? 'bg-red-900' : (pomodoroIsRunning === 'relax' ? 'bg-green-900' : null)}} 
             description={{text:''}}
             available={true}
         >
+            <Action custom customClass="bg-transparent text-primary text-sm" label={timeLeft} />
             <Action label="{pomodoroIsRunning ? 'Stop' : 'Start'}" on:click={toggleTimer} />
         </PrimaryBox>
     </div>
