@@ -1,31 +1,29 @@
 <script lang="ts">
 import anime from 'animejs';
-import { visibleStylesId } from '../../../stores/clockStyle';
 import time from '../../../stores/time';
 import { screenSaver } from '../../../stores/globalState'
 import { cbDefault, eaElasticDefault } from '../../../utils/animations';
-import { cities } from '../../../handlers/citiesBg';
-import { documentReady, windowReady } from 'html-ready';
-import Hours from '../Hours.svelte';
-import Minutes from '../Minutes.svelte';
 import StyleBase from './StyleBase.svelte';
-import { blink } from '../../../stores/storedSettings';
 import { describeArc } from '../../../utils/utils';
 import type { Moment } from 'moment';
-import { onMount } from 'svelte';
 import moment from 'moment';
-    
-    let galaxyHours:HTMLElement, galaxyMin:HTMLElement, galaxySec:HTMLElement; 
-    $: handleGalaxyClock($time);
+import { clockFormat } from '../../../stores/storedSettings';
+import { onMount } from 'svelte';
+import IncomingEventsBox from '../IncomingEventsBox.svelte';
 
-    var oldMin, oldHour;
+    let animationReady = false;
+    let galaxyContainer: HTMLElement, galaxyHours:HTMLElement, galaxyMin:HTMLElement, galaxySec:HTMLElement; 
+    $: handleGalaxyClock($time);
+    $: screenSaverMode($screenSaver);
+
     function handleGalaxyClock(time: Moment) {
         if (!galaxyHours) return;
+        const hours = moment(time).hours();
 
         [
             {
                 el: galaxyHours,
-                value: moment(time).hours(),
+                value: hours - (($clockFormat === '12h' && hours > 12) ? 12 : 0),
                 arc: describeArc(galaxyHours.clientWidth / 2, 0, (parseInt(time.format('h') ) * 30)),
             },
             {
@@ -45,41 +43,51 @@ import moment from 'moment';
         })
     }
 
+    function screenSaverMode(screenSaver: boolean) {
+        anime({
+            targets: galaxyContainer,
+            duration: 1500, 
+            easing: eaElasticDefault,
+            scale: screenSaver ? 1.2 : 1
+        })
+    }
+
+    onMount(() => {
+        handleGalaxyClock(moment());
+        setTimeout(() => animationReady = true, 750)
+    });
 </script>
 
 <StyleBase styleId={4}>
-    <div id="galaxy-container" class="{!$screenSaver ? 'mb-10' : 'mb-0'}">
+    <div bind:this={galaxyContainer} id="galaxy-container" class="{!$screenSaver ? 'mb-36' : 'mb-0'}">
+        <div class="w-80 h-80 rounded-full  absolute transform -translate-x-1/2 -translate-y-1/2 " style="background-color: rgb(35,35,35);"></div>
+        <div class="w-1 h-1 rounded-full bg-white absolute transform -translate-x-1/2 -translate-y-1/2 "></div>
+        <div class="absolute transform -translate-x-1/2 -translate-y-1/2 text-xl mt-6"><IncomingEventsBox /></div>
         <div id="galaxy-space" class="relative">
             <div id="galaxy-dot"></div>
-            <div bind:this={galaxyHours} class="orbit-container w-72 h-72">
-                <div class="galaxy-time z-10">
-                    <span class="w-7 h-7 font-title galaxy-time-n bg-primary rounded-full text-xl">
+            <div bind:this={galaxyHours} class="orbit-container w-96 h-96">
+                <div class="galaxy-time z-10" class:gt-animated={animationReady}>
+                    <span class="w-14 h-14 font-title galaxy-time-n bg-primary rounded-full text-3xl">
                         <span class="galaxy-time-text"></span>
                     </span>
                 </div>
-                <svg class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+                <svg class="galaxy-orbit"><path d="" /></svg>
             </div>
-            <div bind:this={galaxyMin} class="orbit-container w-48 h-48">
-                <div class="galaxy-time z-10">
-                    <span class="w-6 h-6 font-title galaxy-time-n bg-primary rounded-full text-base">
+            <div bind:this={galaxyMin} class="orbit-container w-64 h-64">
+                <div class="galaxy-time z-10" class:gt-animated={animationReady}>
+                    <span class="w-8 h-8 font-title galaxy-time-n bg-primary rounded-full text-xl">
                         <span class="galaxy-time-text"></span>
                     </span>
                 </div>
-                <svg class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+                <svg class="galaxy-orbit"><path d="" /></svg>
             </div>
-            <div bind:this={galaxySec} class="orbit-container w-24 h-24">
-                <div class="galaxy-time z-10">
-                    <span class="w-5 h-5 font-title galaxy-time-n bg-primary rounded-full text-sm">
+            <div bind:this={galaxySec} class="orbit-container w-32 h-32">
+                <div class="galaxy-time z-10" class:gt-animated={animationReady}>
+                    <span class="w-7 h-7 font-title galaxy-time-n bg-primary rounded-full text-sm">
                         <span class="galaxy-time-text"></span>
                     </span>
                 </div>
-                <svg class="galaxy-orbit">
-                    <path d="" />
-                </svg>
+                <svg class="galaxy-orbit"><path d="" /></svg>
             </div>
         </div>
     </div>
@@ -87,6 +95,7 @@ import moment from 'moment';
 
 <style>
     #galaxy-container {
+        will-change: margin, transform;
         transition: margin .2s ease-out;
     }
 
@@ -103,10 +112,15 @@ import moment from 'moment';
     }
 
     .galaxy-orbit path {
-        stroke: rgb(197, 197, 197);
+        stroke: rgb(100, 100, 100);
         stroke-width: 2px;
         stroke-linejoin: round;
         fill: none;
+        transition: stroke .2s linear;
+    }
+
+    .galaxy-orbit path:hover{
+        stroke: rgb(255, 255, 255);
     }
 
     .galaxy-time-n {
@@ -120,6 +134,10 @@ import moment from 'moment';
     .galaxy-time {
         display: inline-block;
         position: absolute;
+        will-change: transform;
+    }
+
+    .galaxy-time.gt-animated {
         transition: transform .1s ease-out;
     }
 </style>
