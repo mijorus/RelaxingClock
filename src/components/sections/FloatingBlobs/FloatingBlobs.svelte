@@ -40,15 +40,17 @@ import { getFlob } from "./flobs";
     }
 
     function animateFlob(flob: HTMLElement) {
-        anime({
-            'targets': flob.getElementsByTagName('path'),
-            easing: 'linear',
-            'stroke': ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
-            delay: anime.stagger(100, {start: 1500}),
-            direction: 'reverse',
-            duration: 800,
-            loop: 4,
-        })
+        if (!$saveEnergy) {
+            anime({
+                'targets': flob.getElementsByTagName('path'),
+                easing: 'linear',
+                'stroke': ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
+                delay: anime.stagger(100, {start: 1500}),
+                direction: 'reverse',
+                duration: 800,
+                loop: 4,
+            })
+        }
 
         const tl = anime.timeline({
             begin(a) {
