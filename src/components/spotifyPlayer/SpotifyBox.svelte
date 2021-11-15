@@ -42,7 +42,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             playbackStarted = true;
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
-            albumCover = $spotifyPlayerState.track_window.current_track.album.images;
+            albumCover = [...$spotifyPlayerState.track_window.current_track.album.images].sort((a, b) => b.height - a.height);
             songPosition = ~~($spotifyPlayerState.position / 1000);
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
@@ -157,7 +157,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
 <div class="absolute bottom-5 left-5 font-primary">
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
-            <SmoothImage src="{albumCover[albumCover.length - 1].url}" classes="w-full h-auto rounded-xl" />
+            <SmoothImage src="{albumCover[0].url}" classes="w-full h-auto rounded-xl" />
             <p class="mt-1 relative text-center whitespace-nowrap w-full overflow-hidden">
                 <AnimatedText text={$spotifyPlayerState?.track_window.current_track.album.name + ($spotifyPlayerState?.context?.uri.match('playlist') ? ` - ${$spotifyPlayerState.context.metadata.context_description}` : '')}/>
             </p>
