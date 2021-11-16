@@ -17,6 +17,8 @@ import { notifications } from '../../../stores/notifications';
 import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
 import { shakeElement } from '../../../utils/utils';
 import AnimatedText from '../../elements/AnimatedText.svelte';
+import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
+import { remindersDefault } from '../../../stores/storedSettings';
 
     type BoxAtType = 'minutes' | 'hour';
 
@@ -144,6 +146,11 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
         else if (tokens[0].match(/^\d{1,2}m/) || tokens[0].match(/^\d{1,2}h/)) {
             const unit = tokens[0].match(/^\d{1,2}m/) ? 'm' : 'h';
             at = moment().add(parseInt(tokens[0].match(/^\d{1,2}/)[0]), unit);
+        }
+
+        else if (tokens[0].match(/:/) && moment(tokens[0], 'HH:mm').isValid()) {
+            const when = moment(tokens[0], 'HH:mm');
+            at = when.isSameOrBefore(moment()) ? when.add(1, 'day') : when;
         }
         
         else { 
@@ -280,6 +287,9 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
     >
         <Action label="Create" on:click={() => openCreationBox()}></Action>
     </PrimaryBox>
+    <NestedBox label="Create as repeated by default">
+        <Booleans label="default persistent" state={$remindersDefault} on:change={({detail}) => remindersDefault.set(detail)}/>
+    </NestedBox>
     <NestedBox label="{futureReminders.length ? '• ' : ''}All your reminders" bordered={false} available={reminders.length > 0} expandable>
         {#if futureReminders.length}
             <div class="text-primary font-primary bg-primary bg-opacity-50 p-2 rounded-xl mt-3">

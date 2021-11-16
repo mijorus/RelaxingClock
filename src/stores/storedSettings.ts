@@ -80,4 +80,6 @@ export const tempUnit = userSetting('tempUnit', 'C');
 export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean');// 
 
 // Pomodoro timer
-export const longPomodoro = userSetting('longPomodoro', false, 'boolean');// 
+export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
+// Reminders
+export const remindersDefault = userSetting('remindersDefault', 'once', 'string');
