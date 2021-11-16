@@ -82,4 +82,4 @@ export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean'
 // Pomodoro timer
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
 // Reminders
-export const remindersDefault = userSetting('remindersDefault', 'once', 'string');
+export const remindersRepeatedDefault = userSetting('remindersRepeatedDefault', false, 'boolean');

@@ -18,7 +18,7 @@ import type { ReminderType, RoosterExample, StoredReminder } from '../../../type
 import { shakeElement } from '../../../utils/utils';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
-import { remindersDefault } from '../../../stores/storedSettings';
+import { remindersRepeatedDefault } from '../../../stores/storedSettings';
 
     type BoxAtType = 'minutes' | 'hour';
 
@@ -101,7 +101,8 @@ import { remindersDefault } from '../../../stores/storedSettings';
     }
 
     async function openCreationBox(mFromNow = undefined, persistent = false) {
-        minutesFromNow = mFromNow || 10; isPersistent = persistent || false; 
+        minutesFromNow = mFromNow || 10; 
+        isPersistent = persistent || $remindersRepeatedDefault; 
         creationBoxOpened = true;
         reminderAtBox = moment().add(minutesFromNow, 'minutes').format('HH:mm');
         canBeSummoned.set(false);
@@ -158,9 +159,9 @@ import { remindersDefault } from '../../../stores/storedSettings';
             at = moment().add(10, 'm');
         }
         
-        let type: ReminderType = 'simple';
+        let type: ReminderType = $remindersRepeatedDefault ? 'repeated' : 'simple';
         if (params.match(/!$/)) {
-           type = 'repeated';
+           type = $remindersRepeatedDefault ? 'simple' : 'repeated';
            title = title.replace(/!$/, '');
         }
         
@@ -288,7 +289,7 @@ import { remindersDefault } from '../../../stores/storedSettings';
         <Action label="Create" on:click={() => openCreationBox()}></Action>
     </PrimaryBox>
     <NestedBox label="Create as repeated by default">
-        <Booleans label="default persistent" state={$remindersDefault} on:change={({detail}) => remindersDefault.set(detail)}/>
+        <Booleans label="default persistent" state={$remindersRepeatedDefault} on:change={({detail}) => remindersRepeatedDefault.set(detail)}/>
     </NestedBox>
     <NestedBox label="{futureReminders.length ? '• ' : ''}All your reminders" bordered={false} available={reminders.length > 0} expandable>
         {#if futureReminders.length}
