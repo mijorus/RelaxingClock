@@ -31,7 +31,10 @@ import WeatherModal from "../Modals/WeatherModal.svelte";
             });
 
             const currentWeather: WeatherCondition = $lastWeatherUpdate.current.weather[0];
-            if ($lastWeatherUpdate.current.dt > $lastWeatherUpdate.current.sunset && getConditionIcon(currentWeather).icon_night) {
+            const momentSunset = moment($lastWeatherUpdate.current.sunset, 'x');
+            const momentSunrise = moment($lastWeatherUpdate.current.sunrise, 'x');
+            
+            if ((moment().isSameOrAfter(momentSunset) || moment().isBefore(momentSunrise)) && getConditionIcon(currentWeather).icon_night) {
                 isNight = true;
                 icon = getConditionIcon(currentWeather).icon_night;
             } else {
