@@ -8,7 +8,7 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
 import { onMount, tick } from 'svelte';
 import { canBeSummoned, shortcuts } from '../../../stores/rooster';
 import moment, { Moment } from 'moment';
-import { fade, fly, slide } from 'svelte/transition';
+import {  fly, } from 'svelte/transition';
 import Checkbox from '../../elements/settings/Buttons/Checkbox.svelte';
 import time from '../../../stores/time';
 import { RemindersDB } from '../../../handlers/RemindersDB';
