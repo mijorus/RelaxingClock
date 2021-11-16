@@ -5,15 +5,23 @@ import { afterUpdate, beforeUpdate } from "svelte";
     import type { RoosterExamples } from "../../types"; 
     import { capitalize } from "../../utils/utils";
     
+    let examplesContainer: HTMLElement;
     let selected = 0;
     export let examples: RoosterExamples = null;
+    $: onUpdatedExamples(examples)
 
     export let wait = false;
     export let command: string;
+    
     export function move(d: boolean) {
         if (!examples || !examples.group) return;
         const l = (examples.group.filter(e => e.selectable)).length
         d ? (selected > 0 ? selected-- : selected) : (selected < l - 1 ? selected ++ : selected);
+        
+        if (examplesContainer && (examplesContainer.clientHeight < examplesContainer.scrollHeight)) {
+            const amount = examplesContainer.scrollHeight / examples.group.length;
+            examplesContainer.scrollBy({top: d ? -(amount) : (amount), behavior: 'smooth'});
+        }
     }
 
     export function trigger() {
@@ -21,13 +29,16 @@ import { afterUpdate, beforeUpdate } from "svelte";
         return examples.group[selected].id || selected; 
     }
 
+    function onUpdatedExamples() {
+        if (examplesContainer) examplesContainer.scroll(0, 0);
+    }
 </script>
 
 <div class="text-primary md:w-2/5 font-secondary -mb-8" >
     {#if !wait && examples?.group?.length && command.length && command.endsWith(':')}
         <div out:fly={{ y: 5, duration: 200 }} >
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
-                <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1">
+                <div bind:this={examplesContainer} class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 max-h-80 overflow-y-scroll">
                     {#if examples.group}
                         {#each examples.group as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}

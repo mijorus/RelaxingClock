@@ -72,6 +72,22 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
                             return true;
                         }
                     }
+                },
+                async examples() {
+                    return {
+                        'group': [
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                            {'argument': 'Test', 'example': 'test', 'selectable': true},
+                        ],
+                        'namespace': 'Test'
+                    }
                 }
             })
         }

@@ -29,7 +29,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     const seachTy: any[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
     if (!res) {
-        res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 2 : 5 })
+        res = await SpotifyClient.search(query, seachTy, { limit: type === 'search' ? 4 : 8 })
             .catch((e) => { if (e.status === 401) refershOrGetOAuthToken() });
     }
 
@@ -44,7 +44,8 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             mostPopularArtist = res.artists.items[0].uri;
         }
 
-        if (res[key]?.items[0]?.popularity) res[key].items = res[key].items.sort((a, b) =>  b.popularity > a.popularity )
+        if (res[key]?.items[0]?.popularity) res[key].items = res[key].items.sort((a, b) =>  b.popularity > a.popularity);
+
         const list: RoosterExample[] = res[key].items.map((item) => {
             let tip = ''; let size: RoosterExampleImageSize = 'sm';
             if (key === 'tracks') {
