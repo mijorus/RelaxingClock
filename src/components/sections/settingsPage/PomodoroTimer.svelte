@@ -49,14 +49,14 @@ import time from '../../../stores/time';
         label = 'Focus on your work! 🤓';
         pomodoroIsRunning = 'focus';
         locSto('pomodoroState', pomodoroIsRunning);
-
-        cycleEndsIn = ($longPomodoro ? 45 : 25) * 60000;
+        const length = $longPomodoro ? 45 : 25;
+        cycleEndsIn = length * 60000;
         pomodoroTimer = setTimeout(() => startRelaxSession(), cycleEndsIn);
         notifications.create({
             'title': label,
             'icon': 'icon-tomato-bw',
             'limitDisplay': 'notificationOnly',
-            'content': 'Stay concentrated',
+            'content': 'Stay concentrated for ' + length + ' minutes',
             'sound': true,
         });
     }
@@ -79,6 +79,7 @@ import time from '../../../stores/time';
                 'start': {
                     async callback(p) {
                         if (!pomodoroIsRunning) {
+                            p = p.replaceAll(/\s/, '');
                             if (p === '+') longPomodoro.set(true);
                             else if (p === '-') longPomodoro.set(false);
                             toggleTimer();
