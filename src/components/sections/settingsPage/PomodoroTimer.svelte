@@ -10,7 +10,7 @@ import NestedBox from '../../elements/settings/NestedBox.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import { longPomodoro } from '../../../stores/storedSettings';
 import Hint from '../../elements/settings/Hint.svelte';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { notifications } from '../../../stores/notifications';
 import { locSto } from '../../../utils/utils';
 import { onMount } from 'svelte';
@@ -21,11 +21,12 @@ import time from '../../../stores/time';
     let label = defaultTitle;
     let pomodoroIsRunning: 'focus' | 'relax' | false = false;
     let cycleEndsIn: number;
+    let cycleEndsAt: Moment;
     let pomodoroTimer: NodeJS.Timeout;
     let timeLeft = '';
 
     $: {
-        if (pomodoroIsRunning && $time) timeLeft = `[${moment().add((cycleEndsIn - 60000), 'milliseconds').fromNow(true)}]`;
+        if (pomodoroIsRunning && $time) timeLeft = `[${cycleEndsAt.fromNow(true)}]`;
         else if (!pomodoroIsRunning) timeLeft = '';
     }
 
@@ -33,8 +34,8 @@ import time from '../../../stores/time';
         pomodoroIsRunning = 'relax';
         label = 'It\'s time for a break 😊';
         locSto('pomodoroState', pomodoroIsRunning);
-
         cycleEndsIn = ($longPomodoro ? 15 : 5) * 60000;
+        cycleEndsAt = moment().add(cycleEndsIn, 'milliseconds');
         pomodoroTimer = setTimeout(() => startFocusSession(), cycleEndsIn);
         notifications.create({
             'title': label,
@@ -51,6 +52,7 @@ import time from '../../../stores/time';
         locSto('pomodoroState', pomodoroIsRunning);
         const length = $longPomodoro ? 45 : 25;
         cycleEndsIn = length * 60000;
+        cycleEndsAt = moment().add(cycleEndsIn, 'milliseconds');
         pomodoroTimer = setTimeout(() => startRelaxSession(), cycleEndsIn);
         notifications.create({
             'title': label,
