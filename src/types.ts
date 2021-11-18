@@ -33,6 +33,7 @@ export interface RoosterExample {
     size?: RoosterExampleImageSize;
     id?: string | number;
     selectable?: boolean;
+    sortingKey?: number;
 }
 
 export interface RoosterShortcut {

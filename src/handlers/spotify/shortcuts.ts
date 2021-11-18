@@ -69,13 +69,22 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             
             const images =  item?.album?.images ? item.album.images : item.images;
             const image = images.length ? images[images.length - 1].url : '';
-            return {'example': item.name, tip, image, 'selectable': true, 'id': (toQueue !== false ? `${toQueue}>>${item.name}<<` : '') + item.uri, size};
+            return {
+                'example': item.name, 
+                tip, 
+                image, 
+                'selectable': true, 
+                'id': (toQueue !== false ? `${toQueue}>>${item.name}<<` : '') + item.uri, 
+                size, 
+                sortingKey: item.popularity
+            };
         });
 
         exampleList.push(...list);
     }
     
-    examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
+    // examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
+    examples.group = exampleList;
     examples.namespace = type;
     oldRes = res;
 

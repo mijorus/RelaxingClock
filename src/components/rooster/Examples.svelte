@@ -1,8 +1,10 @@
 <script lang="ts">
+import { group } from "console";
+
 import { afterUpdate, beforeUpdate } from "svelte";
 
     import { fly, fade } from "svelte/transition";
-    import type { RoosterExamples } from "../../types"; 
+    import type { RoosterExample, RoosterExamples } from "../../types"; 
     import { capitalize } from "../../utils/utils";
     
     let examplesContainer: HTMLElement;
@@ -18,7 +20,7 @@ import { afterUpdate, beforeUpdate } from "svelte";
         const l = (examples.group.filter(e => e.selectable)).length
         d ? (selected > 0 ? selected-- : selected) : (selected < l - 1 ? selected ++ : selected);
         
-        if (examplesContainer && (examplesContainer.clientHeight < examplesContainer.scrollHeight)) {
+        if (examplesContainer && (examplesContainer.clientHeight < examplesContainer.scrollHeight) && (selected < examples.group.length)) {
             const amount = examplesContainer.scrollHeight / examples.group.length;
             examplesContainer.scrollBy({top: d ? -(amount) : (amount), behavior: 'smooth'});
         }
@@ -29,8 +31,21 @@ import { afterUpdate, beforeUpdate } from "svelte";
         return examples.group[selected].id || selected; 
     }
 
-    function onUpdatedExamples() {
+    function onUpdatedExamples(examples: RoosterExamples) {
         if (examplesContainer) examplesContainer.scroll(0, 0);
+        if (examples?.group) selected = 0;
+    }
+
+    function getSortedList(list: RoosterExample[]) {
+        const hasSortingKey = list[0].sortingKey !== undefined;
+        let newList = list.slice().sort((a, b) => {
+            return hasSortingKey 
+                ? ((b.sortingKey - a.sortingKey > 0) || b.size === 'md') ? 1 : -1
+                :  b.size === 'md' ? 1 : -1
+        });
+
+        console.log(newList);
+        return newList;
     }
 </script>
 
@@ -40,7 +55,7 @@ import { afterUpdate, beforeUpdate } from "svelte";
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
                 <div bind:this={examplesContainer} class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 max-h-80 overflow-y-scroll">
                     {#if examples.group}
-                        {#each examples.group as example, i}
+                        {#each getSortedList(examples.group) as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}
                                 class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden flyup">
                                 {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
