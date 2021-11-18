@@ -36,6 +36,8 @@ import { windowReady } from 'html-ready';
     }   
 
 	onMount(async () => {
+        if (process.env.production) console.log = function() {};
+
         // Var init
         localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
         
