@@ -149,7 +149,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
     function copyCurrentTrackLink() {
         if (!$spotifyPlayerState?.track_window) return;
         navigator.clipboard.writeText('https://open.spotify.com/track/'+ $spotifyPlayerState?.track_window.current_track.id);
-        notifications.create({'limitDisplay': 'notificationOnly', 'title': 'Track link copied', 'content': 'The track link was copied in the clipboard', 'icon': 'fas fa-link'});
+        notifications.create({'limitDisplay': 'notificationOnly', 'title': 'Track link copied', 'content': 'The track link was copied to the clipboard', 'icon': 'fas fa-link'});
     }
 </script>
 
