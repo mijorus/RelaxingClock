@@ -14,6 +14,7 @@ import type { RoosterExamples } from "../../types";
     let command = '';
     let commandPill = {color: null, background: null};
     let commandBox: HTMLInputElement;
+    let commandBoxHasFocus = false;
 
     let argument = '';
     let argumentBox: HTMLElement;
@@ -269,7 +270,7 @@ import type { RoosterExamples } from "../../types";
         <Examples bind:this={exampleComponent} command={command} examples={examples} wait={exampleWait}/>
         <div
             bind:this={rooster}
-            class="flex md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
+            class="flex w-11/12 md:w-3/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
             in:fade={{ duration: 100 }}
             out:fade={{ duration: 100 }}
             on:click={handleFocus}
@@ -279,10 +280,18 @@ import type { RoosterExamples } from "../../types";
                 on:keydown={handleInputKeydown}
                 bind:this={commandBox}
                 bind:textContent={command}
+                on:focus={() => commandBoxHasFocus = true}
+                on:blur={() => commandBoxHasFocus = false}
                 contenteditable
                 style="color: {commandPill.color}; background-color: {commandPill.background}"
-                class="bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2 contenteditable"
+                class="bg-highlighted text-dark text-xl font-primary rounded-lg {commandBoxHasFocus ? 'p-0.5 mr-2' : ''} 
+                    md:p-0.5 md:mr-2 opacity-80 focus:opacity-100  contenteditable command"
             />
+            <span
+                on:focus={() => commandBox.focus()}
+                style="color: {commandPill.color}; background-color: {commandPill.background}"
+                class="{commandBoxHasFocus ? 'hidden' : 'inline'} md:hidden bg-highlighted text-dark text-xl font-primary rounded-lg p-0.5 opacity-80 focus:opacity-100 mr-2 command-sm"
+            >{command.length ? command[0] : ''}:</span>   
             <span
                 on:keydown={handleInputKeydown}
                 bind:textContent={argument}
@@ -312,5 +321,17 @@ import type { RoosterExamples } from "../../types";
 
     .contenteditable {
         white-space: nowrap;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .contenteditable.command {
+            max-width: 0;
+            opacity: 0;
+        }
+
+        .contenteditable.command:focus-visible{
+            max-width: unset;
+            opacity: unset;
+        }
     }
 </style>
