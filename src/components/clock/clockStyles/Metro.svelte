@@ -13,8 +13,8 @@ import { blink } from '../../../stores/storedSettings';
 import AmPmBadge from '../AmPmBadge.svelte';
     
     let container: HTMLElement;
-    const zoomedOut = 0.8;
-    const shiftedUp = '-25%';
+    const zoomedOut = 0.7;
+    const shiftedUp = '-20%';
     $: toggleScreenSaver($screenSaver);
 
     async function toggleScreenSaver(enabled: boolean) {
