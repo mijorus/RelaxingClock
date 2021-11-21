@@ -270,7 +270,7 @@ import type { RoosterExamples } from "../../types";
         <Examples bind:this={exampleComponent} command={command} examples={examples} wait={exampleWait}/>
         <div
             bind:this={rooster}
-            class="flex w-11/12 md:w-3/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
+            class="flex w-11/12 md:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
             in:fade={{ duration: 100 }}
             out:fade={{ duration: 100 }}
             on:click={handleFocus}
@@ -304,7 +304,7 @@ import type { RoosterExamples } from "../../types";
                 bind:textContent={params}
                 bind:this={paramsBox}
                 contenteditable
-                class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable"
+                class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable overflow-x-scroll"
             />
             {#if command.length > 1}
                 <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>
