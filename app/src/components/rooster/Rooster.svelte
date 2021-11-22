@@ -304,7 +304,8 @@ import type { RoosterExamples } from "../../types";
                 bind:textContent={params}
                 bind:this={paramsBox}
                 contenteditable
-                class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable overflow-x-scroll"
+                class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable"
+                style="overflow-x: hidden"
             />
             {#if command.length > 1}
                 <span class="text-secondary text-xl font-primary select-none {command.endsWith(':') ? '-ml-1': '-ml-4'}">{suggestion}</span>

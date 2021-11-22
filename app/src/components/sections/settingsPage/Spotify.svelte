@@ -69,7 +69,7 @@ import moment from 'moment';
                 boxLabel = '✋🏿 Access denied!';
                 break;
             case 'error':
-                boxLabel = '☹ Unknown error, please try to logout and login again';
+                boxLabel = '😔 Unknown error, please try to logout and login again';
                 break;
         }
 
