@@ -1,15 +1,15 @@
-baseURL: http://example.org/
+baseURL: http://example.org/blog
 languageCode: en-us
 title: Relaxing Clock
 paginate: 10
 theme: PaperMod
-publishDir: 'public'
+publishDir: '../public/blog'
 
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
 buildExpired: false
-disableKinds: ["home"]
+# disableKinds: ["home"]
 
 minify:
     disableXML: true
