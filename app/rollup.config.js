@@ -10,7 +10,7 @@ import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 
-dotenv.config({path: '../'});
+dotenv.config({path: '../.env'});
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
