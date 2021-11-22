@@ -1,4 +1,3 @@
-baseURL: http://example.org/blog
 languageCode: en-us
 title: Relaxing Clock
 paginate: 10
