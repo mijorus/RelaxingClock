@@ -5,6 +5,37 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import { blink, saveEnergy } from '../../../stores/storedSettings';
+import { onMount } from 'svelte';
+import { shortcuts } from '../../../stores/rooster';
+
+    onMount(() => {
+        shortcuts.set('efficiency', {
+            'color': 'white',
+            'background': 'green',
+            'arguments': {
+                'enable': {
+                    async callback() {
+                        saveEnergy.set(true)
+                        return true;
+                    }
+                },
+                'disable': {
+                    async callback() {
+                        saveEnergy.set(false)
+                        return true;
+                    }
+                }
+            },
+            async examples(a, p) {
+                return {
+                    'namespace': 'Examples',
+                    'group': [
+                        {'argument': $saveEnergy ? 'disable' : 'enable', 'example': '', tip: 'Toggle efficiency mode'}, 
+                    ]
+                }
+            }
+        })
+    })
 
 </script>
 
