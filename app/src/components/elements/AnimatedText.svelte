@@ -86,7 +86,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     })
 </script> 
 
-<span bind:this={el} class="inline-block w-full" style="will-change: transform, opacity;">
+<span bind:this={el} class="inline-block w-full transform-gpu" style="will-change: transform, opacity;">
     <span>
         { displayedText }
         <slot></slot>

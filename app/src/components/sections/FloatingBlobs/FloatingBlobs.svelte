@@ -31,7 +31,7 @@ import { getFlob } from "./flobs";
             //@ts-ignore
             const newFlob: SVGElement = flob.cloneNode(true);
             newFlob.querySelector('path').setAttribute('transform', `translate(100, 100) scale(${(0.9 - (i / 10))}) rotate(${getRandomIntInclusive(1, 4)})`);
-            newFlob.classList.add('absolute', 'top-0', 'w-100');
+            newFlob.classList.add('absolute', 'top-0', 'w-100', 'transform-gpu');
             flobs.push(newFlob);
         }
 
