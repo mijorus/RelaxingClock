@@ -6,3 +6,7 @@
 .vscode/settings.json
 relaxing-clock-svelte.code-workspace
 .env
+
+app/node_modules
+blog
+themes/PaperMod
