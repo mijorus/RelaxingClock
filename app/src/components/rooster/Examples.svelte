@@ -6,6 +6,8 @@ import { capitalize } from "../../utils/utils";
     
     let examplesContainer: HTMLElement;
     let selected = 0;
+    let sortedList: RoosterExample[] = [];
+
     export let examples: RoosterExamples = null;
     $: onUpdatedExamples(examples)
 
@@ -25,12 +27,15 @@ import { capitalize } from "../../utils/utils";
 
     export function trigger() {
         if (!examples || !(examples.group.filter(e => e.selectable).length)) return null;
-        return getSortedList()[selected].id || selected; 
+        return sortedList[selected].id || selected; 
     }
 
     function onUpdatedExamples(examples: RoosterExamples) {
         if (examplesContainer) examplesContainer.scroll(0, 0);
-        if (examples?.group) selected = 0;
+        if (examples?.group) {
+            selected = 0;
+            sortedList = getSortedList();
+        }
     }
 
     function getSortedList(list: RoosterExample[] = examples.group) {
@@ -52,7 +57,7 @@ import { capitalize } from "../../utils/utils";
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
                 <div bind:this={examplesContainer} class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 max-h-80 overflow-y-scroll">
                     {#if examples.group}
-                        {#each getSortedList(examples.group) as example, i}
+                        {#each sortedList as example, i}
                             <div class:bg-primary={(i === selected && example.selectable)}
                                 class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden flyup">
                                 {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
