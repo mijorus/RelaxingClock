@@ -10,3 +10,5 @@ relaxing-clock-svelte.code-workspace
 blog/public
 rc-svelte.code-workspace
 rc.code-workspace
+# Local Netlify folder
+.netlify
