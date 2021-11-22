@@ -23,7 +23,7 @@ import IncomingEventsBox from "../IncomingEventsBox.svelte";
     $: sec = parseInt($time.format('s'));
 
     function setHandSecColor() {
-        handSecColor = randomcolor({ luminosity: 'light' });
+        handSecColor = randomcolor({ luminosity: 'bright' });
         localStorage.setItem('handSecCustomColor', handSecColor);
     }
 
