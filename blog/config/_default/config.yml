@@ -1,5 +1,5 @@
 languageCode: en-us
-title: Relaxing Clock
+title: Blog · Relaxing Clock  
 paginate: 10
 theme: PaperMod
 publishDir: '../public/blog'
@@ -16,7 +16,7 @@ minify:
 
 params:
     env: production # to enable google analytics, opengraph, twitter-cards and schema.
-    title: Relaxing Clock - Blog
+    title: Blog · Relaxing Clock
     description: "Find out the latest news in Relaxing Clock"
     keywords: [Blog, Webapp, Spotify, Spotify Web SDK, Relax, Music, Guide, Tutorial, PaperMod]
     author: mijorus
@@ -92,7 +92,7 @@ menu:
     main:
         - identifier: go_to_the_app
           name: Go to the APP
-          url: /
+          url: https://www.relaxingclock.com
           weight: 1
         - identifier: all_posts
           name: all posts
