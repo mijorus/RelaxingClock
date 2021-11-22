@@ -3,6 +3,7 @@ languageCode: en-us
 title: Relaxing Clock
 paginate: 10
 theme: PaperMod
+publishDir: 'public'
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -90,6 +91,10 @@ params:
     #     keys: ["title", "permalink", "summary", "content"]
 menu:
     main:
+        - identifier: all_posts
+          name: all posts
+          url: /posts
+          weight: 1
         - identifier: categories
           name: categories
           url: /categories/

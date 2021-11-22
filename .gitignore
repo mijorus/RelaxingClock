@@ -8,3 +8,4 @@ relaxing-clock-svelte.code-workspace
 .env
 
 blog/public
+rc-svelte.code-workspace
