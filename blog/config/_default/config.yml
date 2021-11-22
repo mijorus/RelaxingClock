@@ -1,5 +1,5 @@
 languageCode: en-us
-title: Relaxing Clock
+title: Relaxing Clock Blog
 paginate: 10
 theme: PaperMod
 publishDir: '../public/blog'
@@ -16,9 +16,9 @@ minify:
 
 params:
     env: production # to enable google analytics, opengraph, twitter-cards and schema.
-    title: ExampleSite
-    description: "ExampleSite description"
-    keywords: [Blog, Portfolio, PaperMod]
+    title: Relaxing Clock (blog)
+    description: "Find out the latest news in Relaxing Clock"
+    keywords: [Blog, Webapp, Spotify, Spotify Web SDK, Relax, Music, Guide, Tutorial, PaperMod]
     author: mijorus
     # author: ["Me", "You"] # multiple authors
     # images: ["<link or path of image for opengraph, twitter-cards>"]
@@ -36,27 +36,27 @@ params:
     comments: false
     hidemeta: false
     hideSummary: false
-    showtoc: false
+    showtoc: true
     tocopen: false
 
     assets:
         # disableHLJS: true # to disable highlight.js
         # disableFingerprinting: true
-        # favicon: "<link / abs url>"
+        favicon: "https://www.relaxingclock.com/favicon.ico"
         # favicon16x16: "<link / abs url>"
         # favicon32x32: "<link / abs url>"
         # apple_touch_icon: "<link / abs url>"
         # safari_pinned_tab: "<link / abs url>"
 
-    label:
-        text: "Home"
-        icon: /apple-touch-icon.png
-        iconHeight: 35
+    # label:
+    #     text: "Home"
+    #     icon: /apple-touch-icon.png
+    #     iconHeight: 35
 
     # home-info mode
     homeInfoParams:
         Title: "Hi there \U0001F44B"
-        Content: Welcome to the Relaxing Clock Blog
+        Content: "Welcome to the Relaxing Clock Blog 😌"
 
     socialIcons:
         - name: twitter
@@ -64,9 +64,9 @@ params:
         - name: github
           url: "https://github.com/"
 
-    analytics:
-        google:
-            SiteVerificationTag: "XYZabc"
+    # analytics:
+    #     google:
+    #         SiteVerificationTag: "XYZabc"
 
     cover:
         hidden: true # hide everywhere but not in structured data
