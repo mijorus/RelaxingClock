@@ -154,7 +154,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown}/>
-<div class="absolute bottom-5 left-5 font-primary">
+<div class="absolute bottom-5 left-2 md:left-5 font-primary">
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[0].url}" classes="w-full h-auto rounded-xl" />
@@ -210,9 +210,9 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             </span>
             <!-- the center textarea -->
             {#if playbackStarted || !$screenSaver}
-                <div class="text-xl flex-grow whitespace-nowrap overflow-hidden">
+                <div class="flex-grow whitespace-nowrap overflow-hidden">
                     <!-- Track title -->
-                    <div class="whitespace-nowrap tracking-normal font-bold">
+                    <div class="{$spotifyPlayerState?.track_window ? 'text-md' : 'text-xl'} md:text-xl whitespace-nowrap tracking-normal font-bold">
                         <AnimatedText text={$spotifyPlayerState?.track_window ? trackName : preloadLabel}>
                             {#if $spotifyPlayerStatus !== 'ready'}<span>{loader}</span>{/if}
                         </AnimatedText>

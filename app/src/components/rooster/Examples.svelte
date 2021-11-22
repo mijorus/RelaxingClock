@@ -51,7 +51,7 @@ import { capitalize } from "../../utils/utils";
     }
 </script>
 
-<div class="text-primary md:w-2/5 font-secondary -mb-8" >
+<div class="text-primary  w-11/12 sm:w-4/5 lg:w-2/5 font-secondary -mb-8" >
     {#if !wait && examples?.group?.length && command.length && command.endsWith(':')}
         <div out:fly={{ y: 5, duration: 200 }} >
             <h4 class="px-8 text-xl font-bold">{capitalize(examples.namespace || 'examples')}</h4>
@@ -66,8 +66,8 @@ import { capitalize } from "../../utils/utils";
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
                                 <div class="inline-block ml-2">
                                     <div class="{example.image ? 'flex flex-col' : 'inline'}">
-                                        <span class="font-bold">{example.example}</span>
-                                        <span class="text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
+                                        <span class="example font-bold" >{example.example}</span>
+                                        <span class="example text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
                                     </div>
                                 </div>
                             </div>
@@ -101,5 +101,11 @@ import { capitalize } from "../../utils/utils";
     @keyframes flyup {
         0% { transform: translateY(-5%); opacity: 0; }
         100% { transform: translateY(0%); opacity: 1;}
+    }
+
+    .example {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 </style>
