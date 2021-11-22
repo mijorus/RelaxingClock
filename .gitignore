@@ -1,4 +1,4 @@
-/node_modules/
+node_modules
 /public/build/
 
 .DS_Store
@@ -6,3 +6,6 @@
 .vscode/settings.json
 relaxing-clock-svelte.code-workspace
 .env
+
+blog/public
+rc-svelte.code-workspace

@@ -10,7 +10,7 @@ import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({path: '../'});
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -40,7 +40,7 @@ export default {
         sourcemap: true,
         format: 'iife',
         name: 'app',
-        file: 'public/build/bundle.js'
+        file: '../public/build/bundle.js'
     },
     plugins: [
         json(),
@@ -79,7 +79,7 @@ export default {
 
         // Watch the `public` directory and refresh the
         // browser on changes when not in production
-        !production && livereload('public'),
+        !production && livereload('../public'),
 
         // If we're building for production (npm run build
         // instead of npm run dev), minify
