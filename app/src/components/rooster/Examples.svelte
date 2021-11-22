@@ -1,11 +1,8 @@
 <script lang="ts">
-import { group } from "console";
-
 import { afterUpdate, beforeUpdate } from "svelte";
-
-    import { fly, fade } from "svelte/transition";
-    import type { RoosterExample, RoosterExamples } from "../../types"; 
-    import { capitalize } from "../../utils/utils";
+import { fly, fade } from "svelte/transition";
+import type { RoosterExample, RoosterExamples } from "../../types"; 
+import { capitalize } from "../../utils/utils";
     
     let examplesContainer: HTMLElement;
     let selected = 0;
@@ -28,7 +25,7 @@ import { afterUpdate, beforeUpdate } from "svelte";
 
     export function trigger() {
         if (!examples || !(examples.group.filter(e => e.selectable).length)) return null;
-        return examples.group[selected].id || selected; 
+        return getSortedList()[selected].id || selected; 
     }
 
     function onUpdatedExamples(examples: RoosterExamples) {
@@ -36,7 +33,7 @@ import { afterUpdate, beforeUpdate } from "svelte";
         if (examples?.group) selected = 0;
     }
 
-    function getSortedList(list: RoosterExample[]) {
+    function getSortedList(list: RoosterExample[] = examples.group) {
         const hasSortingKey = list[0].sortingKey !== undefined;
         let newList = list.slice().sort((a, b) => {
             return hasSortingKey 
