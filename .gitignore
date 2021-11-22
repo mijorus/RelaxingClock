@@ -12,3 +12,5 @@ rc-svelte.code-workspace
 rc.code-workspace
 # Local Netlify folder
 .netlify
+
+public/blog
