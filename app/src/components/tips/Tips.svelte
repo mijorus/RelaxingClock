@@ -5,10 +5,10 @@ import { tips } from "../../stores/globalState";
 
 <div class="fixed bottom-0 right-0 m-4 text-primary font-primary">
     {#if $tips}
-        <span transition:fade>
+        <div class="text-right" transition:fade>
             {#each $tips as tip}
-            <span>{@html tip.name}</span>:&nbsp;<strong>{@html tip.shortcut}</strong><br>
+            <span><strong>{@html tip.shortcut}</strong>:&nbsp;{@html tip.name}</span><br>
             {/each}
-        </span>
+        </div>
     {/if}
 </div>
