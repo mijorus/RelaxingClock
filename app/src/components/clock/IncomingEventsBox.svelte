@@ -7,6 +7,7 @@ import { alarmTime } from '../../stores/storedSettings';
 import { locSto } from '../../utils/utils';
 
 export let isHovered = false;
+export let withIncomingTrack = true;
 
 $: periodicCheck($time);
 let incoming: {[key: string]: {isIncoming: boolean, color: string, icon: string, link: boolean, iconColor?: string}} = {
@@ -40,6 +41,14 @@ async function periodicCheck(time: Moment) {
             ? locSto('pomodoroState') === 'focus' ? 'red' : 'green' 
             : 'white';
         incoming = incoming;
+
+        if (withIncomingTrack && sessionStorage.getItem('nextSpotifySongEnd')) {
+            const incomingSeconds = 20;
+            const timeLeftToNext = (parseInt(sessionStorage.getItem('nextSpotifySongEnd')) - Date.now());
+            if (timeLeftToNext > 0 && (timeLeftToNext  < (incomingSeconds * 1000))) {
+                console.log('next Song incoming');
+            } 
+        }
     }
 }
 
