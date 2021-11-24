@@ -96,7 +96,7 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
 
 <aside class="fixed right-0 bottom-0 z-40 mr-3 mb-5">
     {#if notificationsInPanel.length && !$tips}
-        <div bind:this={nPanel} class="absolute  bottom-0 right-0 -z-1 overflow-y-scroll max-h-screen" transition:fade>
+        <div bind:this={nPanel} class="absolute  bottom-0 right-0 -z-1 overflow-y-scroll overflow-x-hidden max-h-screen" transition:fade>
             {#if showPanel}
                 <div class="bottom-10 pt-5" in:fly={{x: 20}}>
                     {#each notificationsInPanel as n, i (n.id)}
