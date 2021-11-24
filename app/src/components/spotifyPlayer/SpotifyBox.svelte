@@ -45,6 +45,8 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             albumCover = [...$spotifyPlayerState.track_window.current_track.album.images].sort((a, b) => b.height - a.height);
             songPosition = ~~($spotifyPlayerState.position / 1000);
 
+            sessionStorage.setItem('nextSpotifySongEnd', (($spotifyPlayerState.duration - $spotifyPlayerState.position) + Date.now()).toString());
+
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
             if (thisUri !== lastUri) {
                 const ctx = $spotifyPlayerState.context.uri;
@@ -68,6 +70,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             lastUri = thisUri;
         } else {
             expandedBox = false;
+            sessionStorage.removeItem('nextSpotifySongEnd');
         }
     }
 
