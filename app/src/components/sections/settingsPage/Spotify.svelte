@@ -46,8 +46,6 @@ import moment from 'moment';
     }
 
     function changeStatus(spotifyPlayerStatus: SpotifyPlayerStatus, spotifyUserData: SpotifyApi.CurrentUsersProfileResponse) {
-        
-        
         switch(spotifyPlayerStatus) {
             case 'disconnected':
                 boxLabel = 'Login with Spotify';
