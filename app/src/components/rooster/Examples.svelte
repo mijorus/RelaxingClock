@@ -7,6 +7,7 @@ import { capitalize } from "../../utils/utils";
     let examplesContainer: HTMLElement;
     let selected = 0;
     let sortedList: RoosterExample[] = [];
+    let oldExamplesList: RoosterExample[] = [];
 
     export let examples: RoosterExamples = null;
     $: onUpdatedExamples(examples)
@@ -31,9 +32,13 @@ import { capitalize } from "../../utils/utils";
     }
 
     function onUpdatedExamples(examples: RoosterExamples) {
-        if (examplesContainer) examplesContainer.scroll(0, 0);
+        const shoudReload = (!examples?.group 
+            || examples.reloadPosition === undefined 
+            || (examples.reloadPosition === false && examples.group.length === sortedList.length)
+        );
+
         if (examples?.group) {
-            selected = 0;
+            if (shoudReload) selected = 0;
             sortedList = getSortedList();
         }
     }
@@ -58,7 +63,7 @@ import { capitalize } from "../../utils/utils";
                 <div bind:this={examplesContainer} class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 max-h-80 overflow-y-scroll">
                     {#if examples.group}
                         {#each sortedList as example, i}
-                            <div class:bg-primary={(i === selected && example.selectable)}
+                            <div data-id="example-{example.id ?? null}" class:bg-primary={(i === selected && example.selectable)} 
                                 class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden flyup">
                                 {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
@@ -66,8 +71,8 @@ import { capitalize } from "../../utils/utils";
                                 {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
                                 <div class="inline-block ml-2">
                                     <div class="{example.image ? 'flex flex-col' : 'inline'}">
-                                        <span class="example font-bold" >{example.example}</span>
-                                        <span class="example text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
+                                        <span class="example example-title font-bold">{example.example}</span>
+                                        <span class="example example-image text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
                                     </div>
                                 </div>
                             </div>

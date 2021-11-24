@@ -13,19 +13,12 @@ momentDurationFormatSetup(moment);
 
 type searchType = 'album'| 'playlist' | 'track' | 'search' | 'artist';
 
-let oldRes;
 async function loadSearch(query: string, type: searchType): Promise<RoosterExamples> {
     let toQueue: boolean | string = false; 
     let res: SpotifyApi.SearchResponse | void;
 
     if (!query || query.length < 2) return {};
-    else if (query.endsWith('>')) {        
-        // handle queue
-        query.match(/>>$/) ? toQueue = '?' : toQueue = '';
-        query = query.replace(/>+$/g, '');
-        if (oldRes) res = oldRes;
-    }
-    
+
     const seachTy: any[] = type === 'search' ? ['album', 'track', 'artist'] : [type];
     // @ts-ignore
     if (!res) {
@@ -86,8 +79,8 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
     // examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
     examples.group = exampleList;
     examples.namespace = type;
-    oldRes = res;
 
+    examples.reloadPosition = toQueue ? false : true;
     return examples;
 }
 
@@ -115,15 +108,19 @@ export function createShortcuts() {
     let args: {[key: string]: RoosterArgument} = {};
     ['search','album','playlist', 'track'].forEach(el => {
         args[el] = {
-            async callback(p, id: string) {
+            async callback(p, id: string, action) {
                 try {
-                    const skipToQueue = id.startsWith('?');
-                    if (skipToQueue) id = id.replace(/^\?/, '');
-                    const isQueue = />>(.*)<</.exec(id);
+                    const skipToQueue = (action === 2);
+                    const isQueue = action;
                     
                     if (isQueue) {
-                        await SpotifyClient.queue(id.replace(isQueue[0], ''));
-                        if (!skipToQueue) notifications.create({'title': 'Added to queue', 'content': isQueue[1], 'icon': 'fab fa-spotify'});
+                        await SpotifyClient.queue(id);
+                        let exampleEl = undefined;
+
+                        try { exampleEl = document.querySelector(`[data-id='example-${id}']`) } 
+                        catch (e) { console.error(e) }
+
+                        if (!skipToQueue) notifications.create({'title': 'Added to queue', 'content': exampleEl ? exampleEl.textContent : '', 'icon': 'fab fa-spotify'});
                         else await SpotifyClient.skipToNext();
                     } else {
                         let params: SpotifyApi.PlayParameterObject = {device_id};

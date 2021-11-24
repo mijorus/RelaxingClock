@@ -197,7 +197,11 @@ import type { RoosterExamples } from "../../types";
             if(event.code === 'Enter' || event.code === 'NumpadEnter') {
                 if (currentCommand.arguments[argument]) {
                     try {
-                        if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger())) {
+                        let action = null;
+                        if (event.ctrlKey && !event.shiftKey) action = 1;
+                        else if (event.ctrlKey && event.shiftKey) action = 2;
+                        
+                        if (await currentCommand.arguments[argument].callback(params, exampleComponent.trigger(), action)) {
                             // commandHistory.push({command: clearCommand(), argument, params}); @todo
                             const lastCommand = commandHistory.length > 0 ? commandHistory[commandHistory.length - 1] : undefined;
                             if (!lastCommand || (command !== lastCommand.command && argument !== lastCommand.argument)) {
