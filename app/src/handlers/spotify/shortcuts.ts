@@ -1,13 +1,14 @@
-import { get } from 'svelte/store';
+import { get, Unsubscriber } from 'svelte/store';
 import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
-import { shortcuts } from '../../stores/rooster';
+import { shortcuts, summoned } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
 import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
 import { createCommaArray } from '../../utils/utils';
 import { refershOrGetOAuthToken, device_id } from './login';
 import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
+import { tips } from '../../stores/globalState';
 
 momentDurationFormatSetup(moment);
 
@@ -104,6 +105,20 @@ async function loadQueue(): Promise<RoosterExamples> {
     }
 }
 
+let unWatchRooster: Unsubscriber | undefined;
+function watchRooster() {
+    if (unWatchRooster) return;
+
+    unWatchRooster = summoned.subscribe(function(summoned) {
+        if (!summoned) {
+            tips.set(null);
+            
+            unWatchRooster();
+            unWatchRooster = undefined;
+        }
+    });
+}
+
 export function createShortcuts() {
     let args: {[key: string]: RoosterArgument} = {};
     ['search','album','playlist', 'track'].forEach(el => {
@@ -160,6 +175,8 @@ export function createShortcuts() {
         }, 
         async examples(arg, params) {
             if (['search','album','playlist', 'track'].find(a => a === arg)) {
+                tips.set([{'shortcut': 'Ctrl+Enter', 'name': 'Add to queue'}, {'shortcut': 'Ctrl+Shift+Enter', 'name': 'Play but keeps the queue'}]);
+                watchRooster();
                 //@ts-ignore
                 return loadSearch(params, arg);
             }
@@ -172,3 +189,4 @@ export function createShortcuts() {
         }
     })
 }
+
