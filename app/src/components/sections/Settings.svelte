@@ -19,6 +19,7 @@ import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
 
 <div class="relative">
     <div class="relative flex flex-col w-full md:w-8/12 max-w-2xl p-2 md:p-0 m-auto mt-20 text-primary font-primary">
+        <SettingsBox collapsable={false} bordered={false}><h1 class="pl-5 md:p-0 text-7xl md:text-8xl text-primary font-title font-bold">Relaxing<br>Clock</h1></SettingsBox>
         <Spotify />
         <Weather />
         <Alarm />
@@ -27,7 +28,7 @@ import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
         <Reminders />  
         
         <div class="mt-16">
-            <SettingsBox collapsable={false} bordered={false}><span class="text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
+            <SettingsBox collapsable={false} bordered={false}><span class="pl-5 md:p-0 text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <HighContrast />
                 <BlinkingDots />

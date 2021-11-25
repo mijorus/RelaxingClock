@@ -91,7 +91,7 @@ import moment from 'moment';
 <SettingsBox>
     <Title title="Spotify">
         <TitleIcon>
-            <i class="fab fa-spotify settings-title-icon text-spotify text-7xl transform -translate-y-2"></i>
+            <i class="fab fa-spotify settings-title-icon text-spotify text-5xl md:text-7xl transform -translate-y-2"></i>
         </TitleIcon>
     </Title>
     <PrimaryBox 
