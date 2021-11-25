@@ -23,7 +23,7 @@ export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object'| 
 
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
 
-export type RoosterExamples = {group?: RoosterExample[], namespace?: string, reloadPosition?: boolean};
+export type RoosterExamples = {group?: RoosterExample[], namespace?: string, tips?: {'0'?: string, '1'?: string, '2'?: string}};
 export type RoosterExampleImageSize = 'md' | 'sm';
 export interface RoosterExample {
     argument?: string; 
@@ -43,8 +43,10 @@ export interface RoosterShortcut {
     examples?: (arg: string, params?: string) => Promise<RoosterExamples>;
 }
 
+export type RoosterActionType = 1 | 2;
+
 export interface RoosterArgument {
-    callback: (params?: string, selectedItem?: string | number, action?: 1 | 2) => Promise<boolean>;
+    callback: (params?: string, selectedItem?: string | number, action?: RoosterActionType) => Promise<boolean>;
     active?: boolean;
     quickLaunch?: string; // a key that will autofill the rooster with command and argument
 }

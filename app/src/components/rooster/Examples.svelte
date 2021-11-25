@@ -1,13 +1,16 @@
 <script lang="ts">
-import { afterUpdate, beforeUpdate } from "svelte";
 import { fly, fade } from "svelte/transition";
+import { tips } from "../../stores/globalState";
+import { summoned } from "../../stores/rooster";
 import type { RoosterExample, RoosterExamples } from "../../types"; 
 import { capitalize } from "../../utils/utils";
     
     let examplesContainer: HTMLElement;
     let selected = 0;
     let sortedList: RoosterExample[] = [];
-    let oldExamplesList: RoosterExample[] = [];
+    
+    let tipsAreSet = false;
+    $: clearTips($summoned);
 
     export let examples: RoosterExamples = null;
     $: onUpdatedExamples(examples)
@@ -32,14 +35,19 @@ import { capitalize } from "../../utils/utils";
     }
 
     function onUpdatedExamples(examples: RoosterExamples) {
-        const shoudReload = (!examples?.group 
-            || examples.reloadPosition === undefined 
-            || (examples.reloadPosition === false && examples.group.length === sortedList.length)
-        );
-
         if (examples?.group) {
-            if (shoudReload) selected = 0;
+            selected = 0;
             sortedList = getSortedList();
+        }
+
+        if (examples?.tips) {
+            tips.set([
+                {'shortcut': 'Enter', 'name': examples.tips?.[0]}, 
+                {'shortcut': 'Ctrl+Enter', 'name': examples.tips?.[1]}, 
+                {'shortcut': 'Ctrl+Shift+Enter', 'name': examples.tips?.[2]}
+            ]);
+
+            tipsAreSet = true;
         }
     }
 
@@ -53,6 +61,13 @@ import { capitalize } from "../../utils/utils";
 
         console.log(newList);
         return newList;
+    }
+
+    function clearTips(summoned: boolean) {
+        if (!summoned && tipsAreSet) {
+            tips.set(null);
+            tipsAreSet = false;
+        }
     }
 </script>
 

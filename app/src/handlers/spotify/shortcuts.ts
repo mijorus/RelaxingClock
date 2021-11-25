@@ -77,11 +77,10 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
         exampleList.push(...list);
     }
     
-    // examples.group = exampleList.sort((a, b) => b.size === 'md' ? 1 : -1);
     examples.group = exampleList;
     examples.namespace = type;
+    examples.tips = {'0': 'Play', '1': 'Add to queue', '2': 'Play but keeps the queue'};
 
-    examples.reloadPosition = toQueue ? false : true;
     return examples;
 }
 
@@ -103,20 +102,6 @@ async function loadQueue(): Promise<RoosterExamples> {
     } else {
         return {'group': [], 'namespace': 'Queue'};
     }
-}
-
-let unWatchRooster: Unsubscriber | undefined;
-function watchRooster() {
-    if (unWatchRooster) return;
-
-    unWatchRooster = summoned.subscribe(function(summoned) {
-        if (!summoned) {
-            tips.set(null);
-            
-            unWatchRooster();
-            unWatchRooster = undefined;
-        }
-    });
 }
 
 export function createShortcuts() {
@@ -175,8 +160,6 @@ export function createShortcuts() {
         }, 
         async examples(arg, params) {
             if (['search','album','playlist', 'track'].find(a => a === arg)) {
-                tips.set([{'shortcut': 'Ctrl+Enter', 'name': 'Add to queue'}, {'shortcut': 'Ctrl+Shift+Enter', 'name': 'Play but keeps the queue'}]);
-                watchRooster();
                 //@ts-ignore
                 return loadSearch(params, arg);
             }
