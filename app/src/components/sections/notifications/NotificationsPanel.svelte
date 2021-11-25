@@ -68,7 +68,7 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
                 'arguments': {
                     'create': {
                         async callback() {
-                            notifications.create({'title': 'test' + Date.now(), 'content': 'lorem ipsum', 'icon': ''});
+                            notifications.create({'title': 'test' + Date.now(), 'content': 'lorem ipsum', 'icon': '', 'elementId': 'reminders'});
                             return true;
                         }
                     }
@@ -76,7 +76,6 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
                 async examples() {
                     return {
                         'group': [
-                            {'argument': 'Test', 'example': 'test', 'selectable': true},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},
@@ -104,7 +103,7 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
                             <div class="my-3" out:fly|local={{x: 20}}>
                                 <div class="relative old-notification">
                                     <div class="remove absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform:translate(0%, -30%)"
-                                        on:click={(e) => { const size = notifications.dismiss(n.id); if (size === 0) togglePanel(false); }} >
+                                        on:click|stopPropagation={(e) => { const size = notifications.dismiss(n.id); if (size === 0) togglePanel(false); }} >
                                         <span class="lnr lnr-circle-minus text-xl text-white" ></span>
                                     </div>
                                     <NotificationComponent forceSilent data={n} expire={false} showTimestamp={true} inPanel={true} />

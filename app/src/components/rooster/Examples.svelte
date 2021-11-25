@@ -52,7 +52,7 @@ import { capitalize } from "../../utils/utils";
     }
 
     function getSortedList(list: RoosterExample[] = examples.group) {
-        const hasSortingKey = list[0].sortingKey !== undefined;
+        const hasSortingKey = list[0]?.sortingKey !== undefined;
         let newList = list.slice().sort((a, b) => {
             return hasSortingKey 
                 ? ((b.sortingKey - a.sortingKey > 0) || b.size === 'md') ? 1 : -1
