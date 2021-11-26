@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onMount } from 'svelte';
+import { onMount, tick } from 'svelte';
 
 import MainBg from './components/elements/MainBg.svelte';
 import Rooster from './components/rooster/Rooster.svelte';
@@ -7,7 +7,7 @@ import Home from './components/sections/Home.svelte';
 import Settings from './components/sections/Settings.svelte';
 import { loggedWithSpotify } from './stores/storedSettings';
 import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
-import { onlineStatus } from './stores/globalState';
+import { modalContent, onlineStatus } from './stores/globalState';
 import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
 import { attemptSpotifyLogin } from './handlers/spotify/login';
 import { SpotifyClient } from "./lib/spotify/SpotifyClient";
@@ -19,6 +19,7 @@ import ColorSelector from './components/elements/ColorSelector.svelte';
 import Modal from './components/elements/Modal.svelte';
 import { notifications } from './stores/notifications';
 import { windowReady } from 'html-ready';
+import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -45,6 +46,11 @@ import { windowReady } from 'html-ready';
         if ($onlineStatus) {
             attemptSpotifyLogin()
                 .catch((e) => console.error(e))
+        }
+
+        if (!localStorage.getItem('hasSeenTutorial')) {
+            await tick();
+            modalContent.set(IntroTutorialModal);
         }
     });
 </script>
