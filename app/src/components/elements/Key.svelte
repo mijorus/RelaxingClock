@@ -19,6 +19,8 @@ import { onMount } from "svelte";
     })
 </script>
 
+<div class="hidden absolute top-0 pr-8 pr-36"></div>
+
 <div class="inline-block border-2 rounded-xl p-2 pr-{size} m-2 capitalize">
     {key}
 </div>
