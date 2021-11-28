@@ -59,6 +59,11 @@ module.exports = {
             },
             transformOrigin: {
                 'right-2/4': '0% 50%',
+            },
+            spacing: {
+                '104': '26rem',
+                '120': '30rem',
+                '132': '33rem',
             }
         },
     },

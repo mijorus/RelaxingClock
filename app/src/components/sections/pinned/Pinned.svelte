@@ -14,8 +14,10 @@ import { notifications } from "../../../stores/notifications";
 import { pinnedDBisReady } from "../../../stores/globalState";
 
     let pinned: StoredPinned[] = [];
+    let adjustedPinned: StoredPinned[] = [];
     let selectedElement: HTMLElement;
     let pinBox: HTMLElement;
+    let pinBoxSize: {x: number, y: number};
     let readyToMove = false;
     let scrollPaused = false;
     const bubblePinPos = 50;
@@ -55,6 +57,7 @@ import { pinnedDBisReady } from "../../../stores/globalState";
         PinnedDB.setCoord(parseInt(selectedElement.dataset.id), parseInt(anime.get(selectedElement, 'translateY').toString()), parseInt(anime.get(selectedElement, 'translateX').toString()));
         selectedElement = null;
         scrollPaused = false;
+        return true;
     }
 
     async function removePin(id: number) { 
@@ -98,8 +101,22 @@ import { pinnedDBisReady } from "../../../stores/globalState";
         selectedElement.style.transform = `translateY(${(e.clientY - (selectedElement.clientHeight / 2))}px) translateX(${(e.clientX - bubblePinPos)}px)`;
     }
 
+    let resizeTimeout;
+    function getPinBoxSize() {
+        if (pinned.length) {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(async () => {
+                for (let p of pinned) {
+                    selectedElement = document.getElementById('pinned-'+p.id);
+                    await releasePinBubble();
+                }
+            }, 1000);
+        }
+    }
+
     onMount(async () => {
         try {
+            await windowReady;
             await PinnedDB.initDB();
             await refreshPinned();
             await PinnedDB.dbCleanUp();
@@ -142,33 +159,33 @@ import { pinnedDBisReady } from "../../../stores/globalState";
     });
 </script>
 
-
+<svelte:window on:resize={getPinBoxSize}/>
 {#if pinnedDBisReady}
-<div bind:this={pinBox} class="z-10 pin-box transition-all border {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" 
-    style="width: 33rem; height: 15rem" on:mousemove={handleDragOnMouseMove}>
-    {#each pinned as p, i (p.id)}
-        <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown|stopPropagation={() => bringElementUp(document.getElementById('pinned-'+p.id))}
-            style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'});">
-            <div class="pinned-inner bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
-                <div class="pinned-bg p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
-                    <div class="flex items-center z-10 bg-transparent">
-                        <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 
-                            on:mousedown={(e) => handleMouseDown(e, p.id)}><Pin color={p.color ?? 'red'} size="32"/></span>
-                        <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title} paused={scrollPaused}/></span>
-                    </div>
-                    <div class="remove-pin absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
-                        on:mousedown={(e) => {e.stopImmediatePropagation(); removePin(p.id)}}>
-                        <span class="lnr lnr-circle-minus text-xl text-white" ></span>
+    <div bind:this={pinBox} class="hidden md:block md:w-104 xl:w-132 h-60 z-10 pin-box transition-all border 
+        {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" on:mousemove={handleDragOnMouseMove}>
+        {#each pinned as p, i (p.id)}
+            <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown|stopPropagation={() => bringElementUp(document.getElementById('pinned-'+p.id))}
+                style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'});">
+                <div class="pinned-inner bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
+                    <div class="pinned-bg p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
+                        <div class="flex items-center z-10 bg-transparent">
+                            <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 
+                                on:mousedown={(e) => handleMouseDown(e, p.id)}><Pin color={p.color ?? 'red'} size="32"/></span>
+                            <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full"><AnimatedText fade={false} text={p.title} paused={scrollPaused}/></span>
+                        </div>
+                        <div class="remove-pin absolute top-0 right-0 z-10 opacity-0 cursor-pointer transition-all inline-block" style="transform: translate(30%, -30%);"
+                            on:mousedown={(e) => {e.stopImmediatePropagation(); removePin(p.id)}}>
+                            <span class="lnr lnr-circle-minus text-xl text-white" ></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {/each}
+        {/each}
 
-    <div class="transition-all -z-1 w-full absolute bottom-0 opacity-0 transform translate-y-1/2 text-center text-secondary whitespace-nowrap pinned-hint">
-        Keep your pins inside this box! {#if !pinned.length}Type <strong>pin: [space]</strong> in the Rooster{/if}
+        <div class="transition-all -z-1 w-full absolute bottom-0 opacity-0 transform translate-y-1/2 text-center text-secondary whitespace-nowrap pinned-hint">
+            Keep your pins inside this box! {#if !pinned.length}Type <strong>pin: [space]</strong> in the Rooster{/if}
+        </div>
     </div>
-</div>
 {/if}
 
 <style>
