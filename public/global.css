@@ -40,6 +40,27 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/webfonts/Ubuntu-Regular.ttf');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/webfonts/Ubuntu-Bold.ttf');
+    font-weight: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('/fonts/webfonts/Ubuntu-Light.ttf');
+    font-weight: 300;
+    font-display: swap;
+}
+
 :root {
     --primary: rgb(29, 29, 29);
     --secondary: rgb(63, 63, 63);

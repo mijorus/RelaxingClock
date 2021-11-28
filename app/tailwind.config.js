@@ -33,6 +33,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 'clock': ['Source Code Pro', 'monospace'],
+                'ubuntu': ['Ubuntu', 'sans-serif'],
                 'primary': ['DM Mono', 'monospace'],
                 'title': ['Comfortaa', 'monospace'],
             },
@@ -43,6 +44,7 @@ module.exports = {
                 'dark': 'rgb(29, 29, 29)',
             },
             fontSize: {
+                'xxs': '0.5rem',
                 'giant-1': '15rem',
                 'giant-2': '20rem',
                 'giant-3': '25rem',
