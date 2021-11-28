@@ -273,6 +273,7 @@ import type { RoosterExamples } from "../../types";
     <div class="fixed bottom-0 w-full flex flex-col items-center justify-center z-50">
         <Examples bind:this={exampleComponent} command={command} examples={examples} wait={exampleWait}/>
         <div
+            id="rooster"
             bind:this={rooster}
             class="flex w-11/12 sm:w-4/5 lg:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
             in:fade={{ duration: 100 }}
@@ -281,6 +282,7 @@ import type { RoosterExamples } from "../../types";
         >
             <i class="lnr lnr-chevron-right text-primary justify-self-start	inline-block px-3 text-xl"></i>
             <span
+                id="rooster-command"
                 on:keydown={handleInputKeydown}
                 bind:this={commandBox}
                 bind:textContent={command}
