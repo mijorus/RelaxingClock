@@ -1,11 +1,30 @@
 <script lang="ts">
-import { fly, slide } from "svelte/transition";
-    export let animate = true;
+import { fly } from "svelte/transition";
 
-    const slideAnimationConfig = {x: 50, duration: 1500};
-    const slideOutAnimationConfig = {x: -50, duration: 250};
+
+
 </script>
     
-<div class="md:w-4/5 m-auto" in:fly={animate ? {...slideAnimationConfig} : {}} out:fly={{...slideOutAnimationConfig}}>
+<div class="flex flex-col justify-center h-full relative tutorial-step tutorial-step-count" >
     <slot></slot>
 </div>
+
+<style>
+    @keyframes slide-in {
+        0% {
+            opacity: 0;
+            transform: translateX(50px) translateZ(.1px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0%) translateZ(.1px);
+        }
+    }
+
+    .tutorial-step {
+        animation: slide-in .5s cubic-bezier(0.33, 1, 0.68, 1);
+        animation-fill-mode: forwards;
+        will-change: opacity;
+    }
+</style>
