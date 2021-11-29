@@ -15,7 +15,7 @@ import { pinnedDBisReady } from '../../../stores/globalState';
 
 <SettingsBox unsupported={!$pinnedDBisReady}>
     <Title title="Pins">
-        <TitleIcon>
+        <TitleIcon noFill>
             <Pin color="red" size="36"/>
         </TitleIcon>
     </Title>
