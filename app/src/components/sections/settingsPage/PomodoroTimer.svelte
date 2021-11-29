@@ -26,7 +26,7 @@ import time from '../../../stores/time';
     let timeLeft = '';
 
     $: {
-        if (pomodoroIsRunning && $time) timeLeft = `[${cycleEndsAt.fromNow(true)}]`;
+        if (pomodoroIsRunning && $time) timeLeft = `[${cycleEndsAt.fromNow(true) === 'an hour' ? '45 minutes' : cycleEndsAt.fromNow(true)}]`;
         else if (!pomodoroIsRunning) timeLeft = '';
     }
 
@@ -81,7 +81,7 @@ import time from '../../../stores/time';
                 'start': {
                     async callback(p) {
                         if (!pomodoroIsRunning) {
-                            p = p.replaceAll(/\s/, '');
+                            p = p.replace(/\s/g, '');
                             if (p === '+') longPomodoro.set(true);
                             else if (p === '-') longPomodoro.set(false);
                             toggleTimer();
