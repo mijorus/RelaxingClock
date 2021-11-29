@@ -15,6 +15,7 @@ import SettingsBox from '../elements/SettingsBox.svelte';
 import DangerZone from './settingsPage/DangerZone.svelte';
 import SaveBattery from './settingsPage/SaveBattery.svelte';
 import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
+import ShowTutorial from './settingsPage/ShowTutorial.svelte';
 </script>
 
 <div class="relative">
@@ -33,6 +34,7 @@ import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
                 <HighContrast />
                 <BlinkingDots />
                 <SaveBattery />
+                <ShowTutorial />
                 <div class="mt-20"><DangerZone /></div>
             </div>
         </div>

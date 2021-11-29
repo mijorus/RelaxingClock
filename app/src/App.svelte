@@ -51,6 +51,7 @@ import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
         if (!localStorage.getItem('hasSeenTutorial')) {
             await tick();
             modalContent.set(IntroTutorialModal);
+            localStorage.setItem('hasSeenTutorial', 'true');
         }
     });
 </script>

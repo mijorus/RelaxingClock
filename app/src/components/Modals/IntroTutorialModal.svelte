@@ -70,7 +70,7 @@ import TutorialStep from "./components/TutorialStep.svelte";
                     <div class="text-center">
                         <h2 class="text-5xl font-title">Choose your soundtrack 🎧! Directly from Spotify!</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="1">
-                            Are you a premium user? The Spotify integration allows you to pick your favourite album or playlist while working or just browsing the web
+                            Are you a premium user? The <span class="text-spotify">Spotify</span> integration allows you to pick your favourite album or playlist while working or just browsing the web
                         </TutorialElement>
                         <TutorialElement customClass="mt-10 text-xl" index="2">
                             Explore a list of <em>"Playlists for you"</em> or search that lofi collection you enjoy with the command box
