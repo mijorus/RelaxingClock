@@ -48,11 +48,13 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 </script>
 
 <FullScreenBtn />
-<div class="absolute left-2/4" style="transform: translateX(-50%); z-index: 1;">
-    <WeatherWidget />
+<div class="absolute w-full top-0 left-0 hidden md:flex md:justify-end xl:justify-center" style="z-index: 1;">
+    <span>
+        <WeatherWidget />
+    </span>
 </div>
 
-<div class="absolute top-0">
+<div class="absolute top-0" style="z-index: -999;">
     <FloatingBlobs />
 </div>
 
@@ -67,6 +69,6 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 <SpotifyBox />
 <Tips />
 
-<div class="absolute top-0 left-0">
+<div class="absolute top-0 left-0" style="z-index: 2;">
     <Pinned />
 </div>

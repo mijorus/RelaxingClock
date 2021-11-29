@@ -17,7 +17,6 @@ import { pinnedDBisReady } from "../../../stores/globalState";
     let adjustedPinned: StoredPinned[] = [];
     let selectedElement: HTMLElement;
     let pinBox: HTMLElement;
-    let pinBoxSize: {x: number, y: number};
     let readyToMove = false;
     let scrollPaused = false;
     const bubblePinPos = 50;
@@ -36,7 +35,7 @@ import { pinnedDBisReady } from "../../../stores/globalState";
     }
 
     async function releasePinBubble() {
-        if (!selectedElement === null) return;
+        if (!selectedElement || window.getComputedStyle(selectedElement).display === 'none') return;
         
         selectedElement.classList.remove('is-moving');
         const selY = parseInt(anime.get(selectedElement, 'translateY').toString());
@@ -108,9 +107,9 @@ import { pinnedDBisReady } from "../../../stores/globalState";
             resizeTimeout = setTimeout(async () => {
                 for (let p of pinned) {
                     selectedElement = document.getElementById('pinned-'+p.id);
-                    await releasePinBubble();
+                    await releasePinBubble().catch(e => console.log(e));   
                 }
-            }, 1000);
+            }, 750);
         }
     }
 
@@ -161,12 +160,12 @@ import { pinnedDBisReady } from "../../../stores/globalState";
 
 <svelte:window on:resize={getPinBoxSize}/>
 {#if pinnedDBisReady}
-    <div bind:this={pinBox} class="hidden md:block md:w-104 xl:w-132 h-60 z-10 pin-box transition-all border 
+    <div bind:this={pinBox} class="hidden md:block md:w-104 xl:w-132 md:h-44 xl:h-60 z-10 pin-box transition-all border 
         {pinned.length ? 'border-secondary': 'border-transparent'} hover:border-secondary rounded-xl m-3" on:mousemove={handleDragOnMouseMove}>
         {#each pinned as p, i (p.id)}
-            <div id="pinned-{p.id}" data-id={p.id} class="absolute top-0 left-0 pinned" on:mousedown|stopPropagation={() => bringElementUp(document.getElementById('pinned-'+p.id))}
-                style="transform: translateY({p.top ?? 0}px) translateX({p.left ? `${p.left}px` : '0'});">
-                <div class="pinned-inner bg-black relative m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
+            <div id="pinned-{p.id}" data-id={p.id} class="hidden md:block absolute top-0 left-0 pinned" on:mousedown|stopPropagation={() => bringElementUp(document.getElementById('pinned-'+p.id))}
+                style="transform: translateY({p.top > 0 ? p.top :  0}px) translateX({p.left > 0 ? `${p.left}px` : '0'});">
+                <div class="pinned-inner bg-black relative m-2 xl:m-6 rounded-2xl p-0 text-primary w-80" transition:scale>
                     <div class="pinned-bg p-3 rounded-2xl" style="background-color: {colors(p.color).alpha(0.2).css()};">
                         <div class="flex items-center z-10 bg-transparent">
                             <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" 
