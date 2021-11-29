@@ -48,7 +48,7 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 </script>
 
 <FullScreenBtn />
-<div class="absolute w-full top-0 left-0 hidden md:flex md:justify-end xl:justify-center" style="z-index: 1;">
+<div class="absolute w-full top-0 left-0 hidden md:p-5 xl:pr-0 md:flex md:justify-end xl:justify-center" style="z-index: 1;">
     <span>
         <WeatherWidget />
     </span>
