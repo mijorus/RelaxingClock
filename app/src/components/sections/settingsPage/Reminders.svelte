@@ -136,7 +136,7 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
         else if (event.code === 'Escape') { closeCreationBox() }
     }
 
-    async function handleRoosterShortcut(params: string) {
+    async function handleRoosterShortcut(params: string, action) {
         const tokens = params.split(/\s(.+)/);
         let title = (tokens[1] ?? tokens[0]).trim(), at: Moment;
         
@@ -159,12 +159,7 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
             at = moment().add(10, 'm');
         }
         
-        let type: ReminderType = $remindersRepeatedDefault ? 'repeated' : 'simple';
-        if (params.match(/!$/)) {
-           type = $remindersRepeatedDefault ? 'simple' : 'repeated';
-           title = title.replace(/!$/, '');
-        }
-        
+        let type: ReminderType = action ? 'repeated' : 'simple';
         await createReminder(title, at, type);
         notifications.create({ 
             title: 'Reminder set!', 
@@ -192,7 +187,7 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
                     create: {
                         active: true,
                         quickLaunch: 'r',
-                        callback: p => handleRoosterShortcut(p),
+                        callback: (p, i, action) => handleRoosterShortcut(p, action)
                     },
                     dismiss: {
                         active: true,
@@ -209,19 +204,21 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
                     }
                 },
                 async examples(arg, p) {
-                    let tips: RoosterExample[] = [];
+                    let tips = undefined;
+                    let group: RoosterExample[] = [];
                     if (arg.startsWith('d') ) {
-                        if (!futureReminders.length) tips.push({ argument: 'dismiss', example: 'No pending reminders' })
-                        else futureReminders.forEach(r => tips.push({ argument: '', example: r.title, tip: moment(r.at, 'X').fromNow(), selectable: true, id: r.id }));
+                        if (!futureReminders.length) group.push({ argument: 'dismiss', example: 'No pending reminders' })
+                        else futureReminders.forEach(r => group.push({ argument: '', example: r.title, tip: moment(r.at, 'X').fromNow(), selectable: true, id: r.id }));
                     } else {
-                        tips = [ 
+                        tips = {'0': 'Create reminder', '1': 'Create repeated reminder'}
+                        group = [ 
                             { argument: 'create', example: '10m Do some yoga', tip: 'Set a reminder in 10 minutes' },
                             { argument: 'create', example: '1h Check for new emails !', tip: 'Use trailing ! for persistent reminders' },
                             { argument: 'dismiss', example: '#', tip: 'Dismiss reminder #'}
                         ]
                     }
                     
-                    return {'group': tips, 'namespace': 'Dismiss'};
+                    return {'group': group, 'namespace': 'Dismiss', tips};
                 }
             });
         } catch(err) {
