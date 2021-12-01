@@ -4,6 +4,7 @@ import { tips } from "../../stores/globalState";
 import { summoned } from "../../stores/rooster";
 import type { RoosterExample, RoosterExamples } from "../../types"; 
 import { capitalize } from "../../utils/utils";
+import Tips from "../tips/Tips.svelte";
     
     let examplesContainer: HTMLElement;
     let selected = 0;
@@ -41,11 +42,11 @@ import { capitalize } from "../../utils/utils";
         }
 
         if (examples?.tips) {
-            tips.set([
-                {'shortcut': 'Enter', 'name': examples.tips?.[0]}, 
-                {'shortcut': 'Ctrl+Enter', 'name': examples.tips?.[1]}, 
-                {'shortcut': 'Ctrl+Shift+Enter', 'name': examples.tips?.[2]}
-            ]);
+            let t = [];
+            if (examples.tips?.[0]) t.push({'shortcut': 'Enter', 'name': examples.tips?.[0]}, )
+            if (examples.tips?.[1]) t.push({'shortcut': 'Ctrl+Enter', 'name': examples.tips?.[1]}, )
+            if (examples.tips?.[2]) t.push({'shortcut': 'Ctrl+Shift+Enter', 'name': examples.tips?.[2]})
+            tips.set(t);
 
             tipsAreSet = true;
         }
