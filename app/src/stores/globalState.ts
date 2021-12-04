@@ -1,5 +1,6 @@
 import { windowReady } from 'html-ready';
 import type { SvelteComponent } from 'svelte';
+import type { SvelteComponentDev } from 'svelte/internal';
 import { derived, readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import type { Tip } from '../types';
 import { saveEnergy } from './storedSettings';
@@ -75,4 +76,4 @@ export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) =>
     return !$w && $s;
 })
 
-export const modalContent: Writable<SvelteComponent> = writable(null);
+export const modalContent: Writable<any> = writable(null);

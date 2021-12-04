@@ -17,7 +17,8 @@ import LoadingScreen from './components/sections/LoadingScreen.svelte';
 import ColorSelector from './components/elements/ColorSelector.svelte';
 import Modal from './components/elements/Modal.svelte';
 import { windowReady } from 'html-ready';
-import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
+import IntroTutorialModal from './components/modals/IntroTutorialModal.svelte';
+import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -33,6 +34,13 @@ import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
             }
         }
     }   
+
+    function openQuestionmarkModal(e: KeyboardEvent) {
+        if (document.activeElement === document.querySelector('body') && e.key === '?') {
+            e.preventDefault();
+            modalContent.set(QuestionmarkModal);
+        }
+    }
 
 	onMount(async () => {
         if (process.env.production) console.log = function() {};
@@ -73,6 +81,7 @@ import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
 <AlarmRing />
 <ColorSelector />
 <Modal />
+<svelte:window on:keydown={openQuestionmarkModal} />
 
 <div class="w-12 hidden"></div>
 <style global>

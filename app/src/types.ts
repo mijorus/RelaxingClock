@@ -54,7 +54,7 @@ export interface RoosterArgument {
 export interface RoosterShortcuts {
     state: {[key: string]: RoosterShortcut};
     set: (key: string, value: RoosterShortcut) => void;
-    getAll: () => RoosterShortcut[];
+    getAll: () => RoosterShortcuts;
     get: (s: string) => RoosterShortcut;
 }
 

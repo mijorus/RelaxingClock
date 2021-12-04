@@ -5,7 +5,7 @@ import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from '../../elements/settings/Buttons/Action.svelte';
 import { modalContent } from '../../../stores/globalState';
-import IntroTutorialModal from '../../Modals/IntroTutorialModal.svelte';
+import IntroTutorialModal from '../../modals/IntroTutorialModal.svelte';
 </script>
 
 <SettingsBox bordered={false} id="show-tutorial">

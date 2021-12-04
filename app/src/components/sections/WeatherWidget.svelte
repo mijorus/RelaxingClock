@@ -9,7 +9,7 @@ import { kTemperatureConverter } from "../../utils/utils";
 import type { Tip } from "../../types";
 import { modalContent, tips } from "../../stores/globalState";
 import Modal from "../elements/Modal.svelte";
-import WeatherModal from "../Modals/WeatherModal.svelte";
+import WeatherModal from "../modals/WeatherModal.svelte";
 
     let data: Hourly[] = [];
     let icon: string;
