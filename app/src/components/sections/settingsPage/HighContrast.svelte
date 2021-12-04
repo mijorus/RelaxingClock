@@ -7,7 +7,7 @@ import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import { presentation } from '../../../stores/storedSettings';
 </script>
 
-<SettingsBox bordered={false}>
+<SettingsBox bordered={false} id="high-contrast">
     <Title title="High contrast">
         <TitleIcon>
             <i class="icon-lightbulb text-primary settings-title-icon transition-opacity" class:opacity-50={!$presentation} style="color: #fcf4ac;"></i>

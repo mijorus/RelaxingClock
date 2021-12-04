@@ -14,10 +14,8 @@ import { SpotifyClient } from "./lib/spotify/SpotifyClient";
 import AlarmRing from './components/elements/AlarmRing.svelte';
 import screenSaverHandler from "./handlers/screenSaver";
 import LoadingScreen from './components/sections/LoadingScreen.svelte';
-import animatedBg from "./handlers/animatedBg";
 import ColorSelector from './components/elements/ColorSelector.svelte';
 import Modal from './components/elements/Modal.svelte';
-import { notifications } from './stores/notifications';
 import { windowReady } from 'html-ready';
 import IntroTutorialModal from './components/Modals/IntroTutorialModal.svelte';
 

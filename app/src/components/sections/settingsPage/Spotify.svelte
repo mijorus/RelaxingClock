@@ -88,7 +88,7 @@ import moment from 'moment';
 
 </script>
 
-<SettingsBox>
+<SettingsBox id="spotify" collapsable={false}>
     <Title title="Spotify">
         <TitleIcon>
             <i class="fab fa-spotify settings-title-icon text-spotify text-5xl md:text-7xl transform -translate-y-2"></i>

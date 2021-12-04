@@ -39,7 +39,7 @@ import { shortcuts } from '../../../stores/rooster';
 
 </script>
 
-<SettingsBox bordered={false}>
+<SettingsBox bordered={false} id="efficiency-mode">
     <Title title="Efficiency mode">
         <TitleIcon>
             <i class="lnr lnr-leaf text-green-500 settings-title-icon"></i>

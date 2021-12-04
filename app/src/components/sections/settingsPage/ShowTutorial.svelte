@@ -8,7 +8,7 @@ import { modalContent } from '../../../stores/globalState';
 import IntroTutorialModal from '../../Modals/IntroTutorialModal.svelte';
 </script>
 
-<SettingsBox bordered={false}>
+<SettingsBox bordered={false} id="show-tutorial">
     <Title title="Show tutorial">
         <TitleIcon noFill>
             <i class="lnr lnr-spell-check text-primary settings-title-icon"></i>
