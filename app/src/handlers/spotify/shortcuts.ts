@@ -148,12 +148,14 @@ export function createShortcuts() {
         arguments: {
             ...args,
             pause: {
+                description: '[or press Space]',
                 async callback() {
                     try { await SpotifyClient.pause({device_id}); return true;}
                     catch(e) { console.error(e); return false;}
                 }
             },
             queue: {
+                description: 'Shows the incoming tracks',
                 async callback() {
                     return false;
                 }

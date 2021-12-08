@@ -14,10 +14,10 @@ import Key from "../elements/Key.svelte";
 
 <div class="text-primary pt-5 overflow-y-scroll max-h-full flex flex-col gap-2">
     <div>
-        <h2 class="font-title text-3xl mb-10 ">Command box</h2>
+        <h2 class="font-title text-3xl mb-10 ">Commands and shortcuts</h2>
         {#if rs}
-            <ul>
-                {#each Object.keys(rs) as key}
+            <ul class="grid grid-cols-1 md:grid-cols-2">
+                {#each Object.keys(rs) as key, i}
                     <li class="mb-6">
                         <div class="flex flex-col items-start gap-1">
                             <h3 class="font-title text-xl">
@@ -44,7 +44,7 @@ import Key from "../elements/Key.svelte";
 
 <style>
     ul {
-        column-count: 2;
+        /* column-count: 2; */
     }
 
     @media only screen and (max-width: 768px) {
