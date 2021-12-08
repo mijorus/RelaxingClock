@@ -108,6 +108,7 @@ export function createShortcuts() {
     let args: {[key: string]: RoosterArgument} = {};
     ['search','album','playlist', 'track'].forEach(el => {
         args[el] = {
+            description: `Search for  ${el === 'search' ? 'everything' : el} on Spotify`,
             async callback(p, id: string, action) {
                 try {
                     const skipToQueue = (action === 2);

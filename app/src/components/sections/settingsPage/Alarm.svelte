@@ -143,11 +143,14 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
                     }
                 },
                 set: {
+                    description: 'Set the alarm', 
+                    quickLaunch: 'a',
                     async callback(p) {
                         return createFromRooster(p);
                     }
                 },
                 dismiss: {
+                    description: 'Dismiss the current alarm', 
                     async callback() {
                         if (!$alarmTime) return false;
                         dismissAlarm(true);
@@ -209,6 +212,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
 {/if}
 
 <SettingsBox id="alarm">
+    description: ',', 
     <Title title="Alarm">
         <TitleIcon>
             <i class="icon-clock-white bg-center settings-icon"><span class="path1"></span><span class="path2"></span></i>

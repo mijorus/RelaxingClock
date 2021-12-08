@@ -46,6 +46,7 @@ export interface RoosterShortcut {
 export type RoosterActionType = 1 | 2;
 
 export interface RoosterArgument {
+    description?: string;
     callback: (params?: string, selectedItem?: string | number, action?: RoosterActionType) => Promise<boolean>;
     active?: boolean;
     quickLaunch?: string; // a key that will autofill the rooster with command and argument

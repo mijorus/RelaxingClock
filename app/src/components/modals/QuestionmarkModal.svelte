@@ -12,26 +12,44 @@ import Key from "../elements/Key.svelte";
     })
 </script>
 
-<div class="text-primary mb-2 mt-10 overflow-y-scroll max-h-full">
-    <h2 class="font-title text-6xl mb-10">Command box</h2>
-    {#if rs}
-        <ul>
-            {#each Object.keys(rs) as key}
-                <li class="mb-6">
-                    <h3 class="font-title text-xl mb-3">
-                        <span class=" capitalize p-1.5 rounded-xl" style="background-color: {rs[key].background}; color: {rs[key].color}">{key}</span>
-                    </h3>
-                    {#each Object.keys(rs[key].arguments) as arg}
-                        {#await rs[key].examples(arg, '') then exs}
-                            {#each exs.group as exs}
-                                <div>
-                                    <span class="underline">{exs.argument}: </span>{exs.tip}
-                                </div>
-                            {/each}
-                        {/await}
-                    {/each}
-                </li>
-            {/each}
-        </ul>
-    {/if}
+<div class="text-primary pt-5 overflow-y-scroll max-h-full flex flex-col gap-2">
+    <div>
+        <h2 class="font-title text-3xl mb-10 ">Command box</h2>
+        {#if rs}
+            <ul>
+                {#each Object.keys(rs) as key}
+                    <li class="mb-6">
+                        <div class="flex flex-col items-start gap-1">
+                            <h3 class="font-title text-xl">
+                                <span class="capitalize rounded-xl" style="color: {rs[key].background}">{key}:</span>
+                            </h3>
+                            <div>
+                                {#each Object.keys(rs[key].arguments) as arg, i}
+                                    <div class="mt-3">
+                                        {#if arg.length}
+                                            <span class="bg-secondary p-1 rounded-md">{arg}</span>
+                                            <span class="text-xs">{#if rs[key].arguments[arg].quickLaunch}or <span class="bg-tertiary p-1 rounded-md">[Alt + {rs[key].arguments[arg].quickLaunch}]</span>{/if}</span>
+                                            <span class="p-1 rounded-md">{rs[key].arguments[arg].description ?? ''}</span>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+                    </li>
+                {/each}
+            </ul>
+        {/if}
+    </div>
 </div>
+
+<style>
+    ul {
+        column-count: 2;
+    }
+
+    @media only screen and (max-width: 768px) {
+        ul {
+            column-count: 1;
+        }
+    }
+</style>

@@ -185,12 +185,14 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
                 background: color,
                 arguments: {
                     create: {
+                        description: 'Create a new reminder',
                         active: true,
                         quickLaunch: 'r',
                         callback: (p, i, action) => handleRoosterShortcut(p, action)
                     },
                     dismiss: {
                         active: true,
+                        description: 'Dismiss a pending reminder',
                         callback: async (p, id: number) => {
                             try {
                                 await RemindersDB.setDone(id);
