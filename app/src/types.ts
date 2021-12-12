@@ -49,6 +49,7 @@ export interface RoosterArgument {
     description?: string;
     callback: (params?: string, selectedItem?: string | number, action?: RoosterActionType) => Promise<boolean>;
     active?: boolean;
+    hideInModal?: boolean;
     quickLaunch?: string; // a key that will autofill the rooster with command and argument
 }
 
@@ -94,4 +95,9 @@ export interface LastPlayedContexts {
     uri: string;
     name: string;
     date: number;
+}
+
+// Custom event for injecting Rooster actions
+export interface InjectRoosterActionEvent extends CustomEvent {
+    detail: {command: string, argument: string}
 }

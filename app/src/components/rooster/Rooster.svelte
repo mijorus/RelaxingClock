@@ -1,10 +1,10 @@
 <script lang="ts">
-import { tick } from "svelte";
+import { onMount, tick } from "svelte";
 import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
 import { fade } from "svelte/transition";
 import { caretToEnd, shakeElement } from "../../utils/utils";
 import Examples from "./Examples.svelte";
-import type { RoosterExamples } from "../../types";
+import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
 
     let rooster: HTMLElement;
 
@@ -35,6 +35,7 @@ import type { RoosterExamples } from "../../types";
     function injectAction(cmd: string, arg: string) {
         command = cmd + ':'; 
         argument = arg;
+        params = '';
         commandPill.background = shortcuts.get(clearCommand()).background ?? null;
         commandPill.color = shortcuts.get(clearCommand()).color ?? null;
         handleCommand(command);
@@ -265,6 +266,12 @@ import type { RoosterExamples } from "../../types";
             toFocus.childNodes[0] ? caretToEnd(toFocus) : toFocus.focus();
         });
     }
+
+    onMount(() => {
+        window.addEventListener('injectRoosterAction', (e: InjectRoosterActionEvent) => {
+            injectAction(e.detail.command, e.detail.argument);
+        })
+    })
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown} />
@@ -303,6 +310,7 @@ import type { RoosterExamples } from "../../types";
                 bind:textContent={argument}
                 bind:this={argumentBox}
                 contenteditable
+                id="rooster-argument"
                 class="bg-transparent text-primary text-xl font-primary underline mr-2 contenteditable"
             />
             <span
@@ -310,6 +318,7 @@ import type { RoosterExamples } from "../../types";
                 bind:textContent={params}
                 bind:this={paramsBox}
                 contenteditable
+                id="rooster-params"
                 class="bg-transparent text-primary text-opacity-75 text-xl font-primary contenteditable"
                 style="overflow-x: hidden"
             />

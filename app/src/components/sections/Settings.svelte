@@ -9,7 +9,7 @@ import Hours from '../clock/Hours.svelte';
 import Divisor from '../clock/Divisor.svelte';
 import Minutes from '../clock/Minutes.svelte';
 import { clockIsVisible } from '../../stores/globalState';
-import { fade } from 'svelte/transition';
+import { fade, fly, slide } from 'svelte/transition';
 import Pinned from './settingsPage/Pinned.svelte';
 import SettingsBox from '../elements/SettingsBox.svelte';
 import DangerZone from './settingsPage/DangerZone.svelte';
@@ -40,7 +40,7 @@ import ShowTutorial from './settingsPage/ShowTutorial.svelte';
         </div>
     </div>
     {#if !$clockIsVisible}
-        <div class="p-4 sticky bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block font-clock text-primary transition-all" transition:fade>
+        <div class="p-4 fixed bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block font-clock text-primary" transition:slide>
             <div><Hours interactive={false}/><Divisor /><Minutes /></div>
         </div>
     {/if}

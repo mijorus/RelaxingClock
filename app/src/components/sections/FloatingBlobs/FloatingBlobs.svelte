@@ -103,8 +103,14 @@ import { getFlob } from "./flobs";
         flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(50, 70) + 100}%)`;
         animateFlob(flobTwo);
 
+        flobThree = document.createElement('div');
+        flobThree.setAttribute('id', 'flobThree');
+        flobThree.classList.add('h-screen', 'w-screen', 'absolute');
+
         flobThree.append(...generateFlobDecoration((getFlob('random'))));
-        flobThree.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(0%)`;
+        flobThree.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-100%)`;
+
+        document.querySelector('#app').append(flobThree);
     }
 
 
@@ -121,6 +127,4 @@ import { getFlob } from "./flobs";
 <div id="flobTwo" bind:this={flobTwo} class="h-screen">
     <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
 </div>
-<div id="flobThree" bind:this={flobThree} class="h-screen">
-    <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
-</div>
+

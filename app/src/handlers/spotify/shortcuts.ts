@@ -3,12 +3,13 @@ import { SpotifyClient } from '../../lib/spotify/SpotifyClient';
 import { notifications } from '../../stores/notifications';
 import { shortcuts, summoned } from '../../stores/rooster';
 import { spotifyPlayerState } from '../../stores/spotify';
-import type { RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
+import type { InjectRoosterActionEvent, RoosterActionType, RoosterArgument, RoosterExample, RoosterExampleImageSize, RoosterExamples, RoosterShortcut } from '../../types';
 import { createCommaArray } from '../../utils/utils';
 import { refershOrGetOAuthToken, device_id } from './login';
 import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
 import { tips } from '../../stores/globalState';
+import { emit } from 'cluster';
 
 momentDurationFormatSetup(moment);
 
@@ -104,6 +105,57 @@ async function loadQueue(): Promise<RoosterExamples> {
     }
 }
 
+async function loadPodcastSearch(query: string): Promise<RoosterExamples> {
+    if (!query || query.length < 2) return {};
+    const { shows } = await SpotifyClient.searchShows(query, { limit: 10 });
+    console.log(shows);
+
+    let group: RoosterExample[] = [];
+    for (let i = 0; i < shows.items.length; i++) {
+        const show = shows.items[i];
+        group.push({
+            example: show.name, 
+            //@ts-ignore
+            tip: `${show.explicit ? '[E]' : ''} ${show.publisher} - ${show.total_episodes ? `${show.total_episodes} episodes` : ''}`, 
+            image: show.images[0].url, 
+            id: show.id,
+            selectable: true, 
+            size: 'sm', 
+            sortingKey: (-i)
+        });
+    }
+
+    const examples:RoosterExamples = {namespace: 'Podcasts', group, tips: {0: 'Play', 1: 'Select an episode'}};
+    return examples;
+}
+
+let selectedShowId = '';
+async function loadEpisodeSearch(): Promise<RoosterExamples> {
+    if (!selectedShowId.length) return {};
+    const show = await SpotifyClient.getShow(selectedShowId);
+
+    const episodes  = await SpotifyClient.getShowEpisodes(selectedShowId, { limit: 20 });
+    console.log(episodes);
+
+    let group: RoosterExample[] = [];
+    for (let i = 0; i < episodes.items.length; i++) {
+        const episode = episodes.items[i];
+        group.push({
+            example: episode.name, 
+            //@ts-ignore
+            tip: `${episode.explicit ? '[E]' : ''} ${show.publisher} - ${moment.duration(episode.duration_ms).format('mm:ss', {trim: false})} - ${episode.release_date}`, 
+            image: episode.images[0].url, 
+            id: episode.uri,
+            selectable: true, 
+            size: 'sm', 
+            sortingKey: (-i),
+        });
+    }
+
+    const examples:RoosterExamples = {namespace: 'Episodes of ' + show.name, group, tips: {0: 'Play???'}};
+    return examples;
+}
+
 export function createShortcuts() {
     let args: {[key: string]: RoosterArgument} = {};
     ['search','album','playlist', 'track'].forEach(el => {
@@ -147,6 +199,33 @@ export function createShortcuts() {
         color: process.env.BACKGROUND_DARK,
         arguments: {
             ...args,
+            podcast: {
+                quickLaunch: 'n',
+                description: 'Search for a podcast',
+                async callback(p: string, id: string, action: RoosterActionType) {
+                    if (action === 1) {
+                        selectedShowId = id;
+                        const e: InjectRoosterActionEvent = new CustomEvent('injectRoosterAction', {detail: {'command': 'spotify', 'argument': 'podcast ->'}})
+                        
+                        window.dispatchEvent(e);
+                        document.getElementById('rooster-argument').dispatchEvent(new KeyboardEvent('keydown', {'key': ' '}));
+
+                        return false;
+                    }
+
+                    const lastShow = await SpotifyClient.getShowEpisodes(id, {'limit': 1 });
+                    await SpotifyClient.play({'uris': [lastShow.items[0].uri], device_id});
+                    return true;
+                },
+            },
+            'podcast ->': {
+                active: selectedShowId.length > 0,
+                hideInModal: true,
+                async callback(p: string, id: string, action: RoosterActionType) {
+                    await SpotifyClient.play({uris: [id], device_id});
+                    return true;
+                },
+            },
             pause: {
                 description: '[or press Space]',
                 async callback() {
@@ -167,8 +246,23 @@ export function createShortcuts() {
                 return loadSearch(params, arg);
             }
 
+            else if (arg === 'podcast') {
+                //@ts-ignore
+                return loadPodcastSearch(params);
+            }
+
+            else if (arg === 'podcast ->') {
+                //@ts-ignore
+                console.log(selectedShowId);
+                return loadEpisodeSearch();
+            }
+
             else if (arg.startsWith('qu')) {
                 return loadQueue();
+            }
+
+            if (arg !== 'podcast ->') {
+                selectedShowId = '';
             }
 
             return null;
