@@ -211,8 +211,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     </div>
 {/if}
 
-<SettingsBox id="alarm">
-    description: ',', 
+<SettingsBox id="alarm" >
     <Title title="Alarm">
         <TitleIcon>
             <i class="icon-clock-white bg-center settings-icon"><span class="path1"></span><span class="path2"></span></i>

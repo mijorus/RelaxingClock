@@ -79,6 +79,7 @@ import time from '../../../stores/time';
             'background': 'red',
             'arguments': {
                 'start': {
+                    description: "Start the pomodoro timer",
                     async callback(p) {
                         if (!pomodoroIsRunning) {
                             p = p.replace(/\s/g, '');
@@ -91,6 +92,7 @@ import time from '../../../stores/time';
                     }
                 },
                 'stop': {
+                    description: 'Stop the pomodoro timer, if it\'s running',
                     async callback() {
                         if (pomodoroIsRunning) toggleTimer();
                         else return false;

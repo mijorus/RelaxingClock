@@ -67,6 +67,7 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
                 'color': 'white',
                 'arguments': {
                     'create': {
+                        description: 'Oooops 🤭. This is only for testing purposes, you should not have seen it',
                         async callback() {
                             notifications.create({'title': 'test' + Date.now(), 'content': 'lorem ipsum', 'icon': '', 'elementId': 'reminders'});
                             return true;

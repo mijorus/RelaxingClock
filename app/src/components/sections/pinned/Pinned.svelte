@@ -132,6 +132,7 @@ import { pinnedDBisReady } from "../../../stores/globalState";
                 'background': '#c80000',
                 'arguments': {
                     '': {
+                        description: 'Create a new pinned message straight-away',
                         'active': true,
                         'quickLaunch': 'P',
                         async callback(p) {

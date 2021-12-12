@@ -12,9 +12,11 @@ export const shortcuts: RoosterShortcuts = {
             background: 'white',
             arguments: {
                 format: {
+                    description: "Change the clock to 12 (or 24) hours-format ",
                     async callback(p) {
-                        if (p === '12h' || p === '24h') {
-                            clockFormat.set(p);
+                        p = p.replace('h', '');
+                        if (p === '12' || p === '24') {
+                            clockFormat.set(p + 'h');
                             return true;
                         }
 
@@ -23,7 +25,10 @@ export const shortcuts: RoosterShortcuts = {
                 }
             },
             async examples() {
-                return {'group': [{ argument: 'format', 'example': '12h or 24h', 'tip': 'change the format of the clock'}]}
+                return {'group': [{ 
+                    argument: 'format', 
+                    'example': '12h or 24h', 'tip': 'change the format of the clock'
+                }]}
             }
         },
     },
