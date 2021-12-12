@@ -71,7 +71,7 @@
 
 body {
 	background-color: var(--primary);
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     line-height: 1;
 }
 

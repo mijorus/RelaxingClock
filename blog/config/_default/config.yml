@@ -60,9 +60,9 @@ params:
 
     socialIcons:
         - name: twitter
-          url: "https://twitter.com/"
+          url: "https://twitter.com/Relaxingclock"
         - name: github
-          url: "https://github.com/"
+          url: "https://github.com/mijorus/RelaxingClock"
 
     # analytics:
     #     google:
@@ -74,9 +74,9 @@ params:
         hiddenInSingle: true # hide on single page
 
     editPost:
-        URL: "https://github.com/<path_to_repo>/content"
-        Text: "Suggest Changes or improvements" # edit text
-        appendFilePath: true # to append file path to Edit link
+        URL: "https://github.com/mijorus/RelaxingClock"
+        Text: "Get in touch" # edit text
+        appendFilePath: false # to append file path to Edit link
 
     # for search
     # https://fusejs.io/api/options.html
