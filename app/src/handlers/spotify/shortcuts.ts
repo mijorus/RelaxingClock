@@ -130,20 +130,32 @@ async function loadPodcastSearch(query: string): Promise<RoosterExamples> {
 }
 
 let selectedShowId = '';
-async function loadEpisodeSearch(): Promise<RoosterExamples> {
+let lastLoadedEpisodes: SpotifyApi.ShowEpisodesResponse;
+let lastLoadedShow: SpotifyApi.SingleShowResponse;
+async function loadEpisodeSearch(q: string = undefined): Promise<RoosterExamples> {
     if (!selectedShowId.length) return {};
-    const show = await SpotifyClient.getShow(selectedShowId);
 
-    const episodes  = await SpotifyClient.getShowEpisodes(selectedShowId, { limit: 20 });
-    console.log(episodes);
+    if (!lastLoadedShow || lastLoadedShow.id !== selectedShowId || !lastLoadedEpisodes) {
+        lastLoadedShow = await SpotifyClient.getShow(selectedShowId);
+        lastLoadedEpisodes  = await SpotifyClient.getShowEpisodes(selectedShowId, { limit: 50, q});
+    }
+
+    let episodes = [];
+    if (q) {
+        q = q.trim();
+        episodes = lastLoadedEpisodes.items.filter(ep => ep.name.match(new RegExp(q, 'i')) );
+    } else {
+        episodes = lastLoadedEpisodes.items;
+    }
+
 
     let group: RoosterExample[] = [];
-    for (let i = 0; i < episodes.items.length; i++) {
-        const episode = episodes.items[i];
+    for (let i = 0; i < (episodes.length > 20 ? 20 : episodes.length); i++) {
+        const episode = episodes[i];
         group.push({
             example: episode.name, 
             //@ts-ignore
-            tip: `${episode.explicit ? '[E]' : ''} ${show.publisher} - ${moment.duration(episode.duration_ms).format('mm:ss', {trim: false})} - ${episode.release_date}`, 
+            tip: `${episode.explicit ? '[E]' : ''} ${lastLoadedShow.publisher} - ${moment.duration(episode.duration_ms).format('mm:ss', {trim: false})} - ${episode.release_date}`, 
             image: episode.images[0].url, 
             id: episode.uri,
             selectable: true, 
@@ -152,7 +164,7 @@ async function loadEpisodeSearch(): Promise<RoosterExamples> {
         });
     }
 
-    const examples:RoosterExamples = {namespace: 'Episodes of ' + show.name, group, tips: {0: 'Play???'}};
+    const examples:RoosterExamples = {namespace: 'Episodes of ' + lastLoadedShow.name, group, tips: {0: 'Play'}};
     return examples;
 }
 
@@ -254,7 +266,7 @@ export function createShortcuts() {
             else if (arg === 'podcast ->') {
                 //@ts-ignore
                 console.log(selectedShowId);
-                return loadEpisodeSearch();
+                return loadEpisodeSearch(params);
             }
 
             else if (arg.startsWith('qu')) {
