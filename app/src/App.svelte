@@ -70,7 +70,7 @@ import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
 <Rooster />
 
 {#await windowReady then _}
-    <main class="w-screen h-screen overflow-x-hidden relative">
+    <main class="w-screen relative">
         <Home />
         <Settings />
         <NotificationsPanel />

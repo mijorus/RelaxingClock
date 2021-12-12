@@ -58,17 +58,19 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
     <FloatingBlobs />
 </div>
 
-<div id="big-clock-container" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
-    style="transform: translateY({bigClockSSoffset});"
-    on:click={disableScreenSaver}
-    on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
-    on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
-    <Clock />
-    <StyleSelectionBox />
-</div>
-<SpotifyBox />
-<Tips />
-
-<div class="absolute top-0 left-0" style="z-index: 2;">
-    <Pinned />
+<div class="h-screen relative">
+    <div id="big-clock-container" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
+        style="transform: translateY({bigClockSSoffset});"
+        on:click={disableScreenSaver}
+        on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
+        on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
+        <Clock />
+        <StyleSelectionBox />
+    </div>
+    <SpotifyBox />
+    <Tips />
+    
+    <div class="absolute top-0 left-0" style="z-index: 2;">
+        <Pinned />
+    </div>
 </div>
