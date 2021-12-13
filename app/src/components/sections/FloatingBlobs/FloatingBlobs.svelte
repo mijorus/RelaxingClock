@@ -106,6 +106,7 @@ import { getFlob } from "./flobs";
         flobThree = document.createElement('div');
         flobThree.setAttribute('id', 'flobThree');
         flobThree.classList.add('h-screen', 'w-screen', 'absolute');
+        flobThree.style.zIndex = '-50';
 
         flobThree.append(...generateFlobDecoration((getFlob('random'))));
         flobThree.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-100%)`;
