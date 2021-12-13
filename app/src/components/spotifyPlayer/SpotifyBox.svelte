@@ -151,6 +151,7 @@ import SeekPicker from "./SeekPicker.svelte";
         if ($spotifyPlayerState?.paused === false && shiftKey) {
             if (lastScrollEvent) {
                 if ((Date.now() - lastScrollEvent) > 15) {
+                    e.preventDefault();
                     let amplitude = (~~($spotifyPlayerState.duration / 1000) > 600) ? 15 : 5;
                     let s = (seekPosition ?? songPosition) + ((e.deltaY > 0) ? amplitude : -(amplitude)); 
                     seekPosition = (s > 0) ? ( (s < ~~($spotifyPlayerState.duration / 1000)) ? s : ~~($spotifyPlayerState.duration / 1000) ) : 0;
