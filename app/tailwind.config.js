@@ -8,6 +8,13 @@ module.exports = {
                 ...(content.match(/(?<=class:)[^=>/\s]*/g) || []),
             ],
         },
+        safelist: [
+            "hidden",
+            "w-12",
+            "absolute",
+            "w-screen",
+            "h-screen",
+        ],
     },
     darkMode: false, // or 'media' or 'class'
     theme: {

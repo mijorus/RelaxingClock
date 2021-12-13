@@ -4,7 +4,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 import { fade, fly, slide } from "svelte/transition";
 import { SpotifyPlayer } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { screenSaver, tips } from "../../stores/globalState";
+import { darkenClock, screenSaver, tips } from "../../stores/globalState";
 import { notifications } from "../../stores/notifications";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
 import { contextHistory } from "../../stores/storedSettings";
@@ -17,7 +17,7 @@ import SmoothImage from "../elements/SmoothImage.svelte";
 import Heart from "../icons/Heart.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
-import Spotify from "../sections/settingsPage/Spotify.svelte";
+import SeekPicker from "./SeekPicker.svelte";
 
     momentDurationFormatSetup(moment);
 
@@ -124,6 +124,7 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
         if (SpotifyPlayer) SpotifyPlayer.nextTrack();
     }
 
+    let shiftKey = false;
     function handleWindowKeydown(e: KeyboardEvent) {
         if ($spotifyPlayerState && e.code === 'Space' && !e.ctrlKey && document.activeElement === document.querySelector('body')) {
             e.preventDefault();
@@ -135,7 +136,41 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
             e.preventDefault();
             expandedBox = !expandedBox;
         }
+
+        shiftKey = e.shiftKey;
     }
+
+    function handleWindowKeyUp(e: KeyboardEvent) {
+        shiftKey = e.shiftKey;
+    }
+
+    let lastScrollEvent: number;
+    let seekTimeout;
+    let seekPosition: number;
+    function handleWindowScroll(e: WheelEvent) {
+        if ($spotifyPlayerState?.paused === false && shiftKey) {
+            if (lastScrollEvent) {
+                if ((Date.now() - lastScrollEvent) > 15) {
+                    let amplitude = (~~($spotifyPlayerState.duration / 1000) > 600) ? 30 : 5;
+                    let s = (seekPosition ?? songPosition) + ((e.deltaY > 0) ? amplitude : -(amplitude)); 
+                    seekPosition = (s > 0) ? ( (s < ~~($spotifyPlayerState.duration / 1000)) ? s : ~~($spotifyPlayerState.duration / 1000) ) : 0;
+                }
+            }
+
+            darkenClock.set(true);
+            clearTimeout(seekTimeout);
+            seekTimeout = setTimeout(() => {
+                darkenClock.set(false);
+                SpotifyPlayer.seek(seekPosition * 1000)
+                    .then(() => seekPosition = undefined)
+                    .catch(e => console.error(e))
+            }, 750);
+
+            lastScrollEvent = Date.now();
+        }
+    }
+
+    document.addEventListener('wheel', handleWindowScroll);
 
     let goToPreviousTrackTimeout: NodeJS.Timeout;
     let gtptn = 0;
@@ -156,8 +191,13 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
     }
 </script>
 
-<svelte:window on:keydown={handleWindowKeydown}/>
+<svelte:window on:keydown={handleWindowKeydown} on:keyup={handleWindowKeyUp}/>
 <div class="absolute bottom-5 left-2 md:left-5 font-primary">
+    {#if !(expandedBox && albumCover) && seekPosition} 
+        <div class="text-center text-primary font-primary" transition:fade>
+            <SeekPicker seek={seekPosition} position={songPosition} duration={$spotifyPlayerState?.duration}/>
+        </div>
+    {/if}
     {#if expandedBox && albumCover}
         <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
             <SmoothImage src="{albumCover[0].url}" classes="w-full h-auto rounded-xl" />
@@ -181,8 +221,8 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
                 <i class="mx-2 fas fa-forward cursor-pointer inline-block text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
                     on:click={() => SpotifyPlayer.nextTrack()}></i>
             </p>
-            <p class="text-secondary mt-1">
-                {moment.duration(songPosition, 's').format('mm:ss', { trim: false })}/{moment.duration($spotifyPlayerState?.duration, 'millisecond').format('mm:ss', { trim: false })}
+            <p class="mt-1 transition-all {seekPosition ? 'text-xl text-primary' : 'text-secondary'}">
+                <SeekPicker seek={seekPosition} position={songPosition} duration={$spotifyPlayerState?.duration}/>
             </p>
             <p class="mt-1 text-xs text-secondary text-center" style="line-height: 1;">
                 <span class="lnr lnr-question-circle"></span> Use Spotify Connect to control <br>
@@ -199,7 +239,10 @@ import Spotify from "../sections/settingsPage/Spotify.svelte";
                         style="background-image: url({expandedBox ? '' : albumCover[0].url})"
                     >
                         <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" 
-                            on:click={() => expandedBox = !expandedBox} on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+Shift+E'}])} on:mouseleave={() => tips.set(null)}/>
+                            on:click={() => expandedBox = !expandedBox} 
+                            on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+Shift+E'}, {'name': 'Seek', 'shortcut': 'Shift+Scroll Wheel'}])} 
+                            on:mouseleave={() => tips.set(null)}
+                        />
                     </div>
                 {:else}
                     <!-- the spotify icon -->

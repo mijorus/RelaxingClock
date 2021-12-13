@@ -83,7 +83,6 @@ import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
 <Modal />
 <svelte:window on:keydown={openQuestionmarkModal} />
 
-<div class="w-12 hidden absolute w-screen h-screen"></div>
 <style global>
     @import '@csstools/normalize.css';
     @import 'loaders.css/loaders.min.css';
