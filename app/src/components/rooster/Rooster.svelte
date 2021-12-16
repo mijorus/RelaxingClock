@@ -117,6 +117,8 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
     }
 
     async function handleInputKeydown(event: KeyboardEvent) {
+        event.stopPropagation();
+
         if (event.code === 'ArrowRight' || event.code === 'Tab') {
             if (document.activeElement === argumentBox || document.activeElement === commandBox) {
                 event.preventDefault();
@@ -192,6 +194,11 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
             event.preventDefault();
         }
 
+        else if (event.code === 'Escape') {
+            resetInputs();
+            summoned.set(false);
+        }
+
         // Command execution
         const currentCommand = shortcuts.get(clearCommand());
         if (currentCommand) {
@@ -243,7 +250,7 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
             summoned.set(false);
         }
 
-        else if (event.altKey) {
+        if (event.altKey || ((event.key.length === 1) && (event.target === document.body))) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
                     if (arg.quickLaunch === event.key) {
@@ -255,6 +262,8 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
                 }
             }
         }
+
+        return;
 	}
 
     function handleFocus() {

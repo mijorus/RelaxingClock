@@ -138,6 +138,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
             background: 'rgb(255, 102, 0)',
             arguments: {
                 '': {
+                    hideInModal: true,
                     async callback(p) {
                         return createFromRooster(p);
                     }

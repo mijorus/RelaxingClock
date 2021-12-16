@@ -25,7 +25,6 @@ import Key from "../elements/Key.svelte";
         {#if rs}
             <ul class="grid grid-cols-1 md:grid-cols-2">
                 {#each Object.keys(rs) as key, i}
-                    {#if commandShouldShowUp(key)}
                         <li class="mb-6">
                             <div class="flex flex-col items-start gap-1">
                                 <h3 class="font-title text-xl">
@@ -34,9 +33,9 @@ import Key from "../elements/Key.svelte";
                                 <div>
                                     {#each Object.keys(rs[key].arguments) as arg, i}
                                         <div class="mt-3">
-                                            {#if arg.length && !rs[key].arguments[arg].hideInModal}
-                                                <span class="bg-secondary p-1 rounded-md">{arg}</span>
-                                                <span class="text-xs">{#if rs[key].arguments[arg].quickLaunch}or <span class="bg-tertiary p-1 rounded-md">[Alt + {rs[key].arguments[arg].quickLaunch}]</span>{/if}</span>
+                                            {#if !rs[key].arguments[arg].hideInModal}
+                                                {#if arg.length}<span class="bg-secondary p-1 rounded-md">{arg}</span>{/if}
+                                                <span class="text-xs">{#if rs[key].arguments[arg].quickLaunch}{arg.length ? 'or' : ''} <span class="bg-tertiary p-1 rounded-md">[ {rs[key].arguments[arg].quickLaunch} ]</span>{/if}</span>
                                                 <span class="p-1 rounded-md">{rs[key].arguments[arg].description ?? ''}</span>
                                             {/if}
                                         </div>
@@ -44,7 +43,6 @@ import Key from "../elements/Key.svelte";
                                 </div>
                             </div>
                         </li>
-                    {/if}
                 {/each}
             </ul>
         {/if}

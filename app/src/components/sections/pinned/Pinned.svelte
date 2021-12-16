@@ -134,6 +134,7 @@ import { pinnedDBisReady } from "../../../stores/globalState";
                     '': {
                         description: 'Create a new pinned message straight-away',
                         'active': true,
+                        hideInModal: false,
                         'quickLaunch': 'P',
                         async callback(p) {
                             const res = await createPinned(p);
