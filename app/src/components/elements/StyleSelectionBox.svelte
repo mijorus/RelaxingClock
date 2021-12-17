@@ -51,11 +51,23 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
 
     let wheelScrollTimeout, allowScroll = true;
     function handleBigClockScroll(e: WheelEvent) {
-        if (!allowScroll || (Math.abs(e.deltaX) < 20)) return;
-        if (e.deltaX !== 0) e.preventDefault();
+        if(!allowScroll) return;
+
+        const thold = 100;
+        const el = document.getElementById('move-' + (e.deltaX < 0 ? 'left' : 'right'));
+        el.style.transform = `scale(${(( (Math.abs(e.deltaX) > thold) ? thold : Math.abs(e.deltaX) ) / (thold / 2)) + 1})`;
+        
+        if ((Math.abs(e.deltaX) > thold)) {
+            ((e.deltaX > 0)) ? moveRight() : moveLeft();
+            allowScroll = false;
+            el.querySelector('i').style.color = `red`;
+        }
+        
         clearTimeout(wheelScrollTimeout);
         wheelScrollTimeout = setTimeout(() => {
-            (e.deltaX > 0) ? moveRight() : moveLeft();
+            el.style.transform = `scale(1)`;
+            el.querySelector('i').style.color = process.env.TEXT_PRIMARY;
+            allowScroll = true;
         }, 150);
     }
 
@@ -73,13 +85,13 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
             <div class="h-full flex flex-row transform -translate-x-2/4 relative top-0 left-2/4">
-                <button aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
+                <button id="move-left" aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
                     on:click={moveLeft}
                 >
                     <i class="fas fa-caret-left text-primary text-md opacity-{$activeStyle === 0 ? '20' : 1} fade"></i>
                 </button>
                 <span class="inline-block {viewFinderClass} opacity-0"></span>
-                <button aria-label="move right" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="forward" 
+                <button id="move-right" aria-label="move right" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="forward" 
                     on:click={moveRight}
                 >
                     <i class="fas fa-caret-right text-primary text-md opacity-{$activeStyle === styles.length - 1 ? '20' : '1'} fade"></i>
