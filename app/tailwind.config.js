@@ -52,6 +52,7 @@ module.exports = {
             },
             fontSize: {
                 'xxs': '0.5rem',
+                'giant-0.5': '12rem',
                 'giant-1': '15rem',
                 'giant-2': '20rem',
                 'giant-3': '25rem',

@@ -30,15 +30,27 @@ import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
         }
     }
 
+    let posRewrite = null;
+    function handleResize(e: UIEvent) {
+        if (window.innerWidth <= 768) {
+            posRewrite = (styles.find(s => s.label === 'Metropolis'));
+        } 
+
+        if (posRewrite) activeStyle.set(posRewrite.id);
+    }
+
     onMount(() => {
         if (!$activeStyle) activeStyle.set(0);
     })
 </script>
 
+<svelte:window on:resize={handleResize} />
+
 <div 
     bind:this={bigClock}
     id="big-clock" 
-    class="flex flex-row items-center flex-nowrap font-clock font-semibold text-primary text-giant-1 whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none"
+    class="flex flex-row items-center flex-nowrap font-clock font-semibold text-primary text-giant-0.5 lg:text-giant-1 
+        whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none"
 >
     {#each styles as style}
         <svelte:component this={style.component} />
