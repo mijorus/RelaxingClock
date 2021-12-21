@@ -36,6 +36,7 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
         command = cmd + ':'; 
         argument = arg;
         params = '';
+        examples = {};
         commandPill.background = shortcuts.get(clearCommand()).background ?? null;
         commandPill.color = shortcuts.get(clearCommand()).color ?? null;
         handleCommand(command);
@@ -118,6 +119,11 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
 
     async function handleInputKeydown(event: KeyboardEvent) {
         event.stopPropagation();
+
+        if (event.altKey) {
+            handleWindowKeydown(event);
+            return;
+        }
 
         if (event.code === 'ArrowRight' || event.code === 'Tab') {
             if (document.activeElement === argumentBox || document.activeElement === commandBox) {
@@ -250,7 +256,7 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
             summoned.set(false);
         }
 
-        if (event.altKey || ((event.key.length === 1) && (event.target === document.body))) {
+        if (event.altKey || ( (event.key.length === 1) && (event.target === document.body) )) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
                     if (arg.quickLaunch === event.key) {
