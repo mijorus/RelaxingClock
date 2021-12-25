@@ -44,6 +44,7 @@ import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
 
 	onMount(async () => {
         if (process.env.production) console.log = function() {};
+        document.querySelector('footer').classList.remove('hidden');
 
         // Var init
         localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
