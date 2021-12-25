@@ -171,7 +171,7 @@ import SeekPicker from "./SeekPicker.svelte";
         }
     }
 
-    document.addEventListener('wheel', handleWindowScroll);
+    document.addEventListener('wheel', handleWindowScroll, { passive: false });
 
     let goToPreviousTrackTimeout: NodeJS.Timeout;
     let gtptn = 0;
