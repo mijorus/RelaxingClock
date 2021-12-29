@@ -41,7 +41,7 @@ import ShowTutorial from './settingsPage/ShowTutorial.svelte';
     </div>
     {#if !$clockIsVisible}
         <div class="p-4 fixed bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block font-clock text-primary" transition:slide>
-            <a href="#big-clock-container"><Hours interactive={false}/><Divisor /><Minutes /></a>
+            <a href="#big-clock-container" class="cursor-pointer"><Hours interactive={false}/><Divisor /><Minutes /></a>
         </div>
     {/if}
 </div>
