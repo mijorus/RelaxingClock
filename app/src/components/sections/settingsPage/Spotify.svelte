@@ -4,7 +4,7 @@ import Title from "../../elements/settings/Title.svelte";
 import TitleIcon from "../../elements/settings/TitleIcon.svelte";
 import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from "../../elements/settings/Buttons/Action.svelte";
-import { spotifyPlayerState, spotifyPlayerStatus, spotifyUrl, spotifyUserData } from '../../../stores/spotify';
+import { nextSpotifySongEnd, spotifyPlayerState, spotifyPlayerStatus, spotifyUrl, spotifyUserData } from '../../../stores/spotify';
 import { logout } from '../../../handlers/spotify/login';
 import type { SpotifyPlayerStatus } from '../../../types';
 import NestedBox from '../../elements/settings/NestedBox.svelte';
@@ -14,9 +14,12 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
 import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
 import { device_id } from '../../../handlers/spotify/login';
 import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
-import moment from 'moment';
+import { incomingEventsMessages } from "../../../stores/notifications";
+import moment, { Moment } from 'moment';
+import time from '../../../stores/time';
 
     $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
+    $: periodicCheck($time);
 
     let boxLabel: string;
     let moreP = false;
@@ -24,6 +27,25 @@ import moment from 'moment';
     let myPlaylists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
     let firstTimeReady = false;
     let showLastPlayedBox = false;
+    let shownIncomingSpotifySongId: string = null;
+
+
+
+    function periodicCheck(time: Moment) {
+        if ((time.unix() % 3) !== 0) return;
+     
+        const nextIdSong = $spotifyPlayerState?.track_window?.next_tracks[0]?.id;
+        if (!nextIdSong) return;
+
+        const incomingSeconds = 25;
+        const timeLeftToNext = ($nextSpotifySongEnd - Date.now());
+
+        if (timeLeftToNext > 0 && (timeLeftToNext < (incomingSeconds * 1000)) && (nextIdSong !== shownIncomingSpotifySongId)) {
+            console.log('next Song incoming');
+            incomingEventsMessages.create({icon: 'fab fa-spotify', 'text': 'Next song · '+$spotifyPlayerState.track_window.next_tracks[0].name});
+            shownIncomingSpotifySongId = nextIdSong;
+        }
+    }
 
     async function handlePlaylistBox() {
         if (!featuredPlaylists) {
@@ -35,7 +57,7 @@ import moment from 'moment';
         }
     }
 
-    async function checkLastPlayerTrack(lastPlayerTheshold = 15) {
+    async function checkLastPlayedTrack(lastPlayerTheshold = 15) {
         if (localStorage.getItem('lastPlayedTrack') && device_id) {
             const lastPlayedTrackSplit = localStorage.getItem('lastPlayedTrack').split('::', 2);
             
@@ -73,7 +95,7 @@ import moment from 'moment';
 
         if (spotifyPlayerStatus === 'ready' && !firstTimeReady) {
             firstTimeReady = true;
-            checkLastPlayerTrack();
+            checkLastPlayedTrack();
         }
     }
 
