@@ -6,7 +6,7 @@ import { SpotifyPlayer } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { darkenClock, screenSaver, tips } from "../../stores/globalState";
 import { notifications } from "../../stores/notifications";
-import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl } from "../../stores/spotify";
+import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl, nextSpotifySongEnd } from "../../stores/spotify";
 import { contextHistory } from "../../stores/storedSettings";
 import time from "../../stores/time";
 import type { LastPlayedContexts, SpotifyPlayerStatus } from "../../types";
@@ -45,7 +45,7 @@ import SeekPicker from "./SeekPicker.svelte";
             albumCover = [...$spotifyPlayerState.track_window.current_track.album.images].sort((a, b) => b.height - a.height);
             songPosition = ~~($spotifyPlayerState.position / 1000);
 
-            sessionStorage.setItem('nextSpotifySongEnd', (($spotifyPlayerState.duration - $spotifyPlayerState.position) + Date.now()).toString());
+            nextSpotifySongEnd.set((($spotifyPlayerState.duration - $spotifyPlayerState.position) + Date.now()));
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
             if (thisUri !== lastUri) {
@@ -70,7 +70,7 @@ import SeekPicker from "./SeekPicker.svelte";
             lastUri = thisUri;
         } else {
             expandedBox = false;
-            sessionStorage.removeItem('nextSpotifySongEnd');
+            nextSpotifySongEnd.set(undefined);
         }
     }
 
