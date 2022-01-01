@@ -23,6 +23,7 @@ export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object'| 
 
 export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
 
+// Rooster (command bar)
 export type RoosterExamples = {group?: RoosterExample[], namespace?: string, tips?: {'0'?: string, '1'?: string, '2'?: string}};
 export type RoosterExampleImageSize = 'md' | 'sm';
 export interface RoosterExample {
@@ -101,3 +102,6 @@ export interface LastPlayedContexts {
 export interface InjectRoosterActionEvent extends CustomEvent {
     detail: {command: string, argument: string}
 }
+
+// Incoming events
+export type IncomingEventMessage = {icon: string, text?: string}

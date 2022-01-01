@@ -1,6 +1,6 @@
 import type { Readable } from "stream";
 import { derived, get, writable, Writable } from "svelte/store";
-import type { CustomNotification } from "../types";
+import type { CustomNotification, IncomingEventMessage } from "../types";
 
 function createNotification() {
 	const stored: Writable<CustomNotification[]> = writable([]);
@@ -45,3 +45,19 @@ export const notifications = createNotification();
 export const latestNotification = derived(notifications, notifications => {
     return notifications ? notifications[notifications.length - 1] : null;
 });
+
+// Incoming events
+function createIncomingEvent() {
+	const stored: Writable<IncomingEventMessage> = writable(null);
+
+    function create(e: IncomingEventMessage) {
+        stored.set(e);
+    }
+
+	return {
+		subscribe: stored.subscribe,
+		create,
+	};
+}
+
+export const incomingEventsMessages = createIncomingEvent();
