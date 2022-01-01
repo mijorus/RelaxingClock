@@ -6,31 +6,7 @@ import { RemindersDB } from '../../handlers/RemindersDB';
 import { alarmTime } from '../../stores/storedSettings';
 import IncomingEventsBox from './IncomingEventsBox.svelte';
 
-$: periodicCheck($time);
 let isHovered = false;
-let incoming: {[key: string]: {isIncoming: boolean, color: string, icon: string, link: boolean}} = {
-    alarm: {
-        isIncoming: false,
-        color: '#ff6b6b',
-        icon: 'lnr lnr-clock',
-        link: true
-    },
-    reminders: {
-        isIncoming: false,
-        color: '#57ceff',
-        icon: 'lnr lnr-calendar-full',
-        link: true
-    },
-};
-
-async function periodicCheck(time: Moment) {
-    if (time && !(time.unix() % 2)) {
-        incoming.reminders.isIncoming = (RemindersDB.db && (await RemindersDB.getAllByExpirationDate()).find(r => !r.done)) !== undefined;
-        incoming.alarm.isIncoming = ($alarmTime !== undefined);
-        incoming = incoming;
-    }
-}
-
 </script>
 
 <div class="absolute text-xl text-center text-bg left-2/4 -mt-14 transform -translate-x-1/2 z-20 datebox" 
