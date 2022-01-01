@@ -9,6 +9,8 @@ import css from 'rollup-plugin-css-only';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
+import packageConfig from './package.json';
+
 
 dotenv.config({path: '../.env'});
 const production = !process.env.ROLLUP_WATCH;
@@ -99,6 +101,7 @@ export default {
                     OW_APIKEY: process.env.OW_APIKEY,
                     SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,
                     CITIES_LANDSCAPES_SOURCE: process.env.CITIES_LANDSCAPES_SOURCE,
+                    VERISION: packageConfig.version,
                     production,
                 }
             })

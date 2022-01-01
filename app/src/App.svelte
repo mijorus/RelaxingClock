@@ -43,8 +43,11 @@ import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
     }
 
 	onMount(async () => {
+        console.log(process.env.VERISION);
+        
         if (process.env.production) console.log = function() {};
         document.querySelector('footer').classList.remove('hidden');
+        document.querySelectorAll('.version-print').forEach(el => el.innerText = process.env.VERISION);
 
         // Var init
         localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
