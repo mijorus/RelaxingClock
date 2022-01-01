@@ -46,6 +46,7 @@ async function loadSearch(query: string, type: searchType): Promise<RoosterExamp
             if (key === 'tracks') {
                 tip += item.explicit ? '[E] ' : ' ';
                 tip += createCommaArray(item.artists.map(a => a.name));
+                //@ts-ignore
                 tip += ' · '+ moment.duration(item.duration_ms, 'milliseconds').format('mm:ss', { trim: false })
             }
             
