@@ -1,20 +1,34 @@
+/**
+ * Icons by
+ * https://www.flaticon.com/packs/weather-255?style_id=136&family_id=48&group_id=1
+ */
 export const mainWeatherConditions: {[key: string]: {color: string, color_night?: string, icon?: string, icon_night?: string, conditions?: { range: number[], icon: string, icon_night?: string}[] }} = {
     'Thunderstorm': {
         color: '#476772',
-        icon: '5729387_cloudy_lightning_weather_cloud_forecast_icon.svg'
+        conditions: [
+            {
+                range: [200, 210],
+                icon: 'heavy-rain.png',
+            },
+            {
+                range: [211, 253],
+                icon: 'storm.png',
+                icon_night: 'cloudy.png',
+            }
+        ]
     },
     'Drizzle': {
         color: '#c6f5ff',
-        icon: '5729382_cloud_raining_sun_weather_forecast_icon.svg'
+        icon: 'rain.png'
     },
     'Rain': {
         color: '#1dcbe5',
-        icon: '5729383_cloud_raining_weather_forecast_rain_icon.svg',
-        icon_night: '5729384_forecast_moon_night_raining_weather_icon.svg',
+        icon: 'rainy.png',
+        icon_night: 'rain2.png',
     },
     'Snow': {
         color: '#fff',
-        icon: '5729379_snow_snowy_weather_winter_forecast_icon.svg'
+        icon: 'snow.png'
     },
     'Mist': {
         color: ''
@@ -30,7 +44,7 @@ export const mainWeatherConditions: {[key: string]: {color: string, color_night?
     },
     'Fog': {
         color: '#d6d6d6',
-        icon: '5729389_cloud_foggy_weather_cloudy_forecast_icon.svg'
+        icon: 'wind2.png'
     },
     'Sand': {
         color: '#d1a03f'
@@ -42,26 +56,27 @@ export const mainWeatherConditions: {[key: string]: {color: string, color_night?
         color: ''
     },
     'Tornado': {
-        color: '#fe0000'
+        color: '#fe0000',
+        icon: 'tornado.png'
     },
     'Clear': {
         color: '#ffd106',
         color_night: '#a600ff',
-        icon: '4102328_hot_sun_weather_icon.svg',
-        icon_night: '5729385_moon_night_weather_climate_crescent_icon.svg',
+        icon: 'sunny.png',
+        icon_night: 'full-moon.png',
     },
     'Clouds': {
         color: '#8f8f8f',
         conditions: [
             {
                 range: [800, 802],
-                icon: '5729392_cloudy_sunny_weather_cloud_forecast_icon.svg',
-                icon_night: '5729393_cloudy_moon_night_cloud_weather_icon.svg',
+                icon: 'cloudy3.png',
+                icon_night: 'cloudy.png',
             },
             {
                 range: [802, 806],
-                icon: '5729391_cloudy_weather_cloud_forecast_rain_icon.svg',
-                icon_night: '5729391_cloudy_weather_cloud_forecast_rain_icon.svg',
+                icon: 'cloudy3.png',
+                icon_night: 'cloudy.png',
             }
         ]
     },
