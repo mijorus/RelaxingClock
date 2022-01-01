@@ -39,7 +39,7 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 
     function screenSaverApply(status: boolean) {
          anime({
-            targets: document.getElementById('big-clock-container'),
+            targets: document.getElementById('clock'),
             duration: 1000,
             translateY: status ? 0 : bigClockSSoffset,
             easing: cbDefault,
@@ -59,7 +59,7 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
 </div>
 
 <div class="h-screen relative">
-    <div id="big-clock-container" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
+    <div id="clock" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
         style="transform: translateY({bigClockSSoffset});"
         on:click={disableScreenSaver}
         on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
