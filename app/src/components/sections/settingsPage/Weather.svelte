@@ -94,8 +94,6 @@ import anime from "animejs";
         }
     }
 
-    
-
     onMount(() => {
         if ($weather && localStorage.getItem('currentLocation')) {
             autoUpdate(true);
