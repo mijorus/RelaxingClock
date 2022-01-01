@@ -1,56 +1,26 @@
 <script lang="ts">
-import time from '../../stores/time';
 import { fly, slide, fade } from 'svelte/transition';
-import type { Moment } from 'moment';
-import { RemindersDB } from '../../handlers/RemindersDB';
-import { alarmTime } from '../../stores/storedSettings';
 import { locSto, sleep } from '../../utils/utils';
-import AnimatedText from '../elements/AnimatedText.svelte';
-import { spotifyPlayerState } from '../../stores/spotify';
+import type { IncomingEventMessage } from "../../types";
+import { incomingEventsMessages } from '../../stores/notifications';
 
-type IncomingEvent = {icon: string, text?: string}
+let displayMessage: IncomingEventMessage;
+let queue: IncomingEventMessage[] = [];
 
-let displayMessage: IncomingEvent;
-let incomingEvents: IncomingEvent[] = [];
+$: updateDisplayText(queue);
+$: updateQueue($incomingEventsMessages);
 
-let incomingSpotifySongId: string;
+function updateQueue(incomingEvent: IncomingEventMessage) {
+    queue.push(incomingEvent);
+}
 
-$: periodicCheck($time);
-
-async function updateDisplayText() {
+async function updateDisplayText(incomingEvents: IncomingEventMessage[]) {
     if (incomingEvents.length > 0) {
         displayMessage = incomingEvents[0];
         await sleep(10000);
-        console.log('Label updated');
 
-        if (displayMessage) {
-            incomingEvents.shift();
-        }
-
-    } else {
         displayMessage = null;
-    }
-}
-
-async function periodicCheck(time: Moment) {
-    if (time && !(time.unix() % 3)) {
-        // Spotify
-        if (sessionStorage.getItem('nextSpotifySongEnd')) {
-            const nextId = $spotifyPlayerState?.track_window?.next_tracks[0]?.id;
-            if (nextId) {
-                const incomingSeconds = 25;
-                const timeLeftToNext = (parseInt(sessionStorage.getItem('nextSpotifySongEnd')) - Date.now());
-
-                if (timeLeftToNext > 0 && (timeLeftToNext  < (incomingSeconds * 1000)) && (nextId !== incomingSpotifySongId)) {
-                    console.log('next Song incoming');
-                    incomingEvents.push({icon: 'fab fa-spotify', 'text': 'Next song · '+$spotifyPlayerState.track_window.next_tracks[0].name});
-                    incomingSpotifySongId = nextId;
-                }
-            }
-        }
-
-
-       updateDisplayText();
+        queue.shift();
     }
 }
 
