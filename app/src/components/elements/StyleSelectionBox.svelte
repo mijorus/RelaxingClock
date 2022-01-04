@@ -7,6 +7,7 @@ import { onMount } from 'svelte';
 import { windowReady } from 'html-ready';
 import anime from "animejs";
 import { cbDefault, eaElasticDefault } from '../../utils/animations';
+import { locSto } from '../../utils/utils';
 
     let bigClock: HTMLElement;
     const viewFinderClass: string = 'w-44';
@@ -60,7 +61,7 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
         if ((Math.abs(e.deltaX) > thold)) {
             ((e.deltaX > 0)) ? moveRight() : moveLeft();
             allowScroll = false;
-            el.querySelector('i').style.color = `red`;
+            el.querySelector('i').style.color = locSto('hoursColor') ?? `red`;
         }
         
         clearTimeout(wheelScrollTimeout);
@@ -86,13 +87,13 @@ import { cbDefault, eaElasticDefault } from '../../utils/animations';
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
             <div class="h-full flex flex-row transform -translate-x-2/4 relative top-0 left-2/4">
                 <button id="move-left" aria-label="move left" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="backward" 
-                    on:click={moveLeft}
+                    on:click={moveLeft} 
                 >
                     <i class="fas fa-caret-left text-primary text-md opacity-{$activeStyle === 0 ? '20' : 1} fade"></i>
                 </button>
                 <span class="inline-block {viewFinderClass} opacity-0"></span>
                 <button id="move-right" aria-label="move right" class="cursor-pointer outline-none border-none focus:outline-none w-4" data-direction="forward" 
-                    on:click={moveRight}
+                    on:click={moveRight} 
                 >
                     <i class="fas fa-caret-right text-primary text-md opacity-{$activeStyle === styles.length - 1 ? '20' : '1'} fade"></i>
                 </button>

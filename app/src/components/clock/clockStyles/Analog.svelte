@@ -11,6 +11,7 @@ import Minutes from "../Minutes.svelte";
 import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
 import IncomingEventsBox from "../IncomingEventsBox.svelte";
+import { locSto, randomCustomColor } from "../../../utils/utils";
 
     let analogClock: HTMLElement;
     const handClasses = 'absolute rounded-full top-2/4 left-2/4 origin-right-2/4 ';
@@ -23,12 +24,12 @@ import IncomingEventsBox from "../IncomingEventsBox.svelte";
     $: sec = parseInt($time.format('s'));
 
     function setHandSecColor() {
-        handSecColor = randomcolor({ luminosity: 'bright' });
-        localStorage.setItem('handSecCustomColor', handSecColor);
+        handSecColor = randomCustomColor();
+        locSto('hoursColor', handSecColor);
     }
 
     onMount(() => {
-        if (localStorage.getItem('handSecCustomColor')) handSecColor = localStorage.getItem('handSecCustomColor');
+        if (localStorage.getItem('handSecCustomColor')) handSecColor = locSto('hoursColor');
         else setHandSecColor(); 
     })
 </script>
