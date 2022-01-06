@@ -2,6 +2,7 @@
 import anime from "animejs";
 import { afterUpdate, onDestroy, onMount, tick } from "svelte";
 import { reduceAnimations, windowFocus } from "../../stores/globalState";
+import { saveEnergy } from "../../stores/storedSettings";
 import { cbDefault } from "../../utils/animations";
 import { getRandomIntInclusive } from "../../utils/utils";
 
@@ -13,14 +14,11 @@ import { getRandomIntInclusive } from "../../utils/utils";
     let displayedText = '';
     let scrollTl = undefined;
     let fadeTextTl =  undefined;
-    let loopCompleted = 0;
-
-    let pauseScrollTimeout;
 
     $: pauseScroll(paused);
     $: $windowFocus ? pauseScroll(false) : null;
 
-    $: { restartAnimation() }
+    // $: { restartAnimation() }
 
     function restartAnimation() {
         if (el && (text !== displayedText)) {
@@ -60,8 +58,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
             autoplay: true,
             delay: getRandomIntInclusive(5000, 7000),
             loopComplete: function(anim) {
-                loopCompleted++;
-                if ($reduceAnimations && loopCompleted % 2 === 0) pauseScroll(true);
+                if ($saveEnergy) pauseScroll(true);
             }
         })
             .add({
