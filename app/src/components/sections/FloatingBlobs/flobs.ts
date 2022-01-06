@@ -4,8 +4,12 @@ import { accentColor, saveEnergy } from "../../../stores/storedSettings";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive } from "../../../utils/utils";
 
+let isPulsing = false;
 export function pulse(loop = 4) {
-    return anime({
+    if (isPulsing) return;
+    
+    anime({
+        begin() { isPulsing = true },
         targets: [
             document.getElementById('flobOne').getElementsByTagName('path'),
             document.getElementById('flobTwo').getElementsByTagName('path')
@@ -16,6 +20,7 @@ export function pulse(loop = 4) {
         direction: 'reverse',
         duration: 800,
         loop,
+        complete() { isPulsing = false }
     })
 }
 
