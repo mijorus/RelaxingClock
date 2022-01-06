@@ -3,10 +3,10 @@ import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
 import { windowFocus } from "../../../stores/globalState";
-import { saveEnergy } from "../../../stores/storedSettings";
+import { accentColor, saveEnergy } from "../../../stores/storedSettings";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
-import { getFlob } from "./flobs";
+import { getFlob, pulse } from "./flobs";
 
     const flobStokeColor = process.env.TEXT_SECONDARY;
     let flobOne: HTMLElement;
@@ -40,18 +40,6 @@ import { getFlob } from "./flobs";
     }
 
     function animateFlob(flob: HTMLElement) {
-        if (!$saveEnergy) {
-            anime({
-                'targets': flob.getElementsByTagName('path'),
-                easing: 'linear',
-                'stroke': ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
-                delay: anime.stagger(100, {start: 1500}),
-                direction: 'reverse',
-                duration: 800,
-                loop: 4,
-            })
-        }
-
         const tl = anime.timeline({
             begin(a) {
                 if ($saveEnergy) a.pause();
@@ -70,21 +58,21 @@ import { getFlob } from "./flobs";
             direction: 'alternate',
         })
             .add({ 
-                duration: 4000,
+                duration: 40000,
                 easing: eaElasticDefault,
                 rotate: `+=${anime.random(-10, 10)}`,
                 scale: '+='+ (anime.random(5, 30) / 100),
                 delay: anime.stagger(200, {start: anime.random(2000, 5000)}),
             })
             .add({
-                duration: 4000,
+                duration: 40000,
                 easing: eaElasticDefault,
                 rotate: `+=${anime.random(-10, 10)}`,
                 scale: '1',
                 delay: anime.stagger(200, {start: anime.random(1000, 5000)}),
             })
             .add({
-                duration: 10000,
+                duration: 50000,
                 easing: eaElasticDefault,
                 rotate: `+=${anime.random(-30, 30)}`,
                 delay: anime.stagger(300, {start: anime.random(1000, 5000)}),
@@ -100,8 +88,10 @@ import { getFlob } from "./flobs";
         animateFlob(flobOne);
 
         flobTwo.append(...generateFlobDecoration((getFlob('random'))));
-        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(50, 70) + 100}%)`;
+        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(70, 90) + 100}%)`;
         animateFlob(flobTwo);
+
+        pulse();
 
         flobThree = document.createElement('div');
         flobThree.setAttribute('id', 'flobThree');

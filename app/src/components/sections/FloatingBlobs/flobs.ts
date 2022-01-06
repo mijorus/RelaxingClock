@@ -1,4 +1,23 @@
+import anime from "animejs";
+import { get } from "svelte/store";
+import { accentColor, saveEnergy } from "../../../stores/storedSettings";
+import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive } from "../../../utils/utils";
+
+export function pulse(loop = 4) {
+    return anime({
+        targets: [
+            document.getElementById('flobOne').getElementsByTagName('path'),
+            document.getElementById('flobTwo').getElementsByTagName('path')
+        ],
+        easing: 'linear',
+        stroke: ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
+        delay: anime.stagger(100, {start: 1500}),
+        direction: 'reverse',
+        duration: 800,
+        loop,
+    })
+}
 
 export const flobs: string[] = [
 `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
