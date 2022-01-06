@@ -1,6 +1,6 @@
 <script lang="ts">
 import time from "../../stores/time";
-import { clockFormat } from "../../stores/storedSettings";
+import { accentColor, clockFormat } from "../../stores/storedSettings";
 import type { Moment } from "moment";
 import anime from "animejs";
 import randomcolor from 'randomcolor';
@@ -55,7 +55,7 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
     function changeColor(c = null, animation = true) {
         color = c;
         textShadow = color ? '2px 2px #fff' :  null;
-        locSto('hoursColor', color || undefined);
+        accentColor.set(color || undefined);
     }
 
     function handleClockMousedown(e) {
@@ -96,8 +96,8 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
     onMount(async() => {
         await tick();
         
-        if (!locSto('hours') || locSto('hours') === 'scaled') scaleUp(true, false);
-        locSto('hoursColor') ? changeColor(locSto('hoursColor'), false) : changeColor(randomCustomColor(), true);
+        if (!$accentColor || locSto('hours') === 'scaled') scaleUp(true, false);
+        $accentColor ? changeColor($accentColor, false) : changeColor(randomCustomColor(), true);
     })
 </script>
 

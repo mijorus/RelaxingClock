@@ -3,7 +3,7 @@ import randomcolor from "randomcolor";
 import { onMount } from "svelte";
 import { fade } from "svelte/transition";
 import { screenSaver } from "../../../stores/globalState";
-import { analogTimeLocked } from "../../../stores/storedSettings";
+import { accentColor, analogTimeLocked } from "../../../stores/storedSettings";
 import time from "../../../stores/time";
 import Divisor from "../Divisor.svelte";
 import Hours from "../Hours.svelte";
@@ -24,13 +24,11 @@ import { locSto, randomCustomColor } from "../../../utils/utils";
     $: sec = parseInt($time.format('s'));
 
     function setHandSecColor() {
-        handSecColor = randomCustomColor();
-        locSto('hoursColor', handSecColor);
+        accentColor.set(randomCustomColor());
     }
 
     onMount(() => {
-        if (localStorage.getItem('handSecCustomColor')) handSecColor = locSto('hoursColor');
-        else setHandSecColor(); 
+        if (!$accentColor) setHandSecColor(); 
     })
 </script>
 
@@ -70,7 +68,7 @@ import { locSto, randomCustomColor } from "../../../utils/utils";
             >
             </span>
             <span id="hand-seconds" 
-                style="transform: translate(0%, -50%) rotate({((sec * 6) - 90)}deg); background-color: {handSecColor}; transition: background-color .1s linear"
+                style="transform: translate(0%, -50%) rotate({((sec * 6) - 90)}deg); background-color: {$accentColor}; transition: background-color .1s linear"
                 class="hand {handClasses} w-40 h-1.5 z-30"
             >
             </span>

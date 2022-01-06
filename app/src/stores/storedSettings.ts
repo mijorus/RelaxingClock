@@ -83,3 +83,5 @@ export const analogTimeLocked = userSetting('analogTimeLocked', false, 'boolean'
 export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
 // Reminders
 export const remindersRepeatedDefault = userSetting('remindersRepeatedDefault', false, 'boolean');
+// accent color
+export const accentColor = userSetting('hoursColor', undefined, 'string');
