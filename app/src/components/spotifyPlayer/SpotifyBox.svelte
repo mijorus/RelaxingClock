@@ -17,6 +17,7 @@ import SmoothImage from "../elements/SmoothImage.svelte";
 import Heart from "../icons/Heart.svelte";
 import Repeat from "../icons/Repeat.svelte";
 import Shuffle from "../icons/Shuffle.svelte";
+import { pulse } from "../sections/FloatingBlobs/flobs";
 import SeekPicker from "./SeekPicker.svelte";
 
     momentDurationFormatSetup(moment);
@@ -40,6 +41,10 @@ import SeekPicker from "./SeekPicker.svelte";
     $: {
         if ($spotifyPlayerState?.track_window) {
             playbackStarted = true;
+            if (!lastUri) {
+                pulse();
+            }
+
             trackName = $spotifyPlayerState.track_window.current_track.name;
             artistsName = $spotifyPlayerState.track_window.current_track.artists.map(a => a.name);
             albumCover = [...$spotifyPlayerState.track_window.current_track.album.images].sort((a, b) => b.height - a.height);
