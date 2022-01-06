@@ -20,7 +20,7 @@ export let inPanel = false;
                     <i class="{data.icon ?? 'fas fa-bell'} text-5xl" style="color: {data.color};"/>
                 </span>
             </div>
-            <div class="overflow-x-hidden whitespace-nowrap">
+            <div class="overflow-x-hidden whitespace-nowrap font-primary">
                 <h4 class="text-3xl font-bold">
                     <AnimatedText text={data.title} fade={false}/>
                 </h4>
