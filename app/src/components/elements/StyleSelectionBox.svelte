@@ -1,6 +1,6 @@
 <script lang="ts">
 import { spring } from 'svelte/motion';
-import { activeStyle, clockFormat } from "../../stores/storedSettings";
+import { accentColor, activeStyle, clockFormat } from "../../stores/storedSettings";
 import { screenSaver, styleChangeLock } from '../../stores/globalState';
 import styles from "../clock/clockStyles/styles";
 import { onMount } from 'svelte';
@@ -61,7 +61,7 @@ import { locSto } from '../../utils/utils';
         if ((Math.abs(e.deltaX) > thold)) {
             ((e.deltaX > 0)) ? moveRight() : moveLeft();
             allowScroll = false;
-            el.querySelector('i').style.color = locSto('hoursColor') ?? `red`;
+            el.querySelector('i').style.color = $accentColor ?? `red`;
         }
         
         clearTimeout(wheelScrollTimeout);
