@@ -10,6 +10,7 @@ import moment from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
 import { tips } from '../../stores/globalState';
 import { emit } from 'cluster';
+import { pulse } from '../../components/sections/FloatingBlobs/flobs';
 
 momentDurationFormatSetup(moment);
 
@@ -192,6 +193,7 @@ export function createShortcuts() {
                         let params: SpotifyApi.PlayParameterObject = {device_id};
                         id.match("spotify:track:") ? params.uris = [id] : params.context_uri = id; 
                         await SpotifyClient.play(params);
+                        pulse(1);
                     }
                     
                     return true;
