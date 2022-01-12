@@ -18,22 +18,15 @@ import { getRandomIntInclusive } from "../../utils/utils";
     $: pauseScroll(paused);
     $: $windowFocus ? pauseScroll(false) : null;
 
-    // $: { restartAnimation() }
-
     function restartAnimation() {
         if (el && (text !== displayedText)) {
             el.style.transform = 'translateX(0px)';
             
-            if (scrollTl) {
+            if (scrollTl || fadeTextTl) {
                 scrollTl.pause();
                 scrollTl = undefined;
             }
             
-            if (fadeTextTl) {
-                fadeTextTl.pause();
-                fadeTextTl = undefined;
-            }
-
             fadeTextTl = anime({
                 targets: el,
                 duration: fade ? 250 : 0,
@@ -50,6 +43,7 @@ import { getRandomIntInclusive } from "../../utils/utils";
     }
 
     function scrollText(textEl: HTMLElement) {
+        let loopCompleted = 0;
         scrollTl = anime.timeline({
             targets: textEl,
             easing: cbDefault,
@@ -58,7 +52,8 @@ import { getRandomIntInclusive } from "../../utils/utils";
             autoplay: true,
             delay: getRandomIntInclusive(5000, 7000),
             loopComplete: function(anim) {
-                if ($saveEnergy) pauseScroll(true);
+                loopCompleted++;
+                if ($saveEnergy && (loopCompleted % 2)) pauseScroll(true);
             }
         })
             .add({
@@ -83,7 +78,8 @@ import { getRandomIntInclusive } from "../../utils/utils";
     })
 </script> 
 
-<span bind:this={el} class="inline-block w-full transform-gpu" style="will-change: transform, opacity;">
+<span bind:this={el} class="inline-block w-full transform-gpu" style="will-change: transform, opacity;"
+    on:mouseenter={() => { if (paused && scrollTl) scrollTl.play() }}>
     <span>
         { displayedText }
         <slot></slot>
