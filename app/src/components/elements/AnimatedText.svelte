@@ -22,9 +22,14 @@ import { getRandomIntInclusive } from "../../utils/utils";
         if (el && (text !== displayedText)) {
             el.style.transform = 'translateX(0px)';
             
-            if (scrollTl || fadeTextTl) {
+            if (scrollTl) {
                 scrollTl.pause();
                 scrollTl = undefined;
+            }
+            
+            if (fadeTextTl) {
+                fadeTextTl.pause();
+                fadeTextTl = undefined;
             }
             
             fadeTextTl = anime({
