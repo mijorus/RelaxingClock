@@ -3,26 +3,59 @@ import { fly, slide, fade } from 'svelte/transition';
 import { locSto, sleep } from '../../utils/utils';
 import type { IncomingEventMessage } from "../../types";
 import { incomingEventsMessages } from '../../stores/notifications';
+import { onMount } from 'svelte';
+import { shortcuts } from '../../stores/rooster';
+import anime from 'animejs';
 
 let displayMessage: IncomingEventMessage;
 let queue: IncomingEventMessage[] = [];
+let animation = anime.timeline()
 
-$: updateDisplayText(queue);
 $: updateQueue($incomingEventsMessages);
 
+let running = false;
 function updateQueue(incomingEvent: IncomingEventMessage) {
-    queue.push(incomingEvent);
+    if (!incomingEvent) return;
+    queue = [...queue, incomingEvent];
+    updateDisplayText();
 }
 
-async function updateDisplayText(incomingEvents: IncomingEventMessage[]) {
-    if (incomingEvents.length > 0) {
-        displayMessage = incomingEvents[0];
+async function updateDisplayText() {
+    if (running) return;
+    console.log('incoming event received');
+
+    while (queue.length) {
+        running = true;
+        console.log('incoming event processing');
+
+        displayMessage = queue[0];
         await sleep(10000);
 
         displayMessage = null;
+        await sleep(500);
+        
         queue.shift();
     }
+
+    running = false;
 }
+
+onMount(() => {
+    if (!process.env.production) {
+        shortcuts.set('incoming', {
+            'background': 'white',
+            'color': 'black',
+            'arguments': {
+                'create': {
+                    async callback() {
+                        incomingEventsMessages.create({'icon': 'fas fa-building', 'text': 'test '})
+                        return true;
+                    }
+                }
+            },
+        })
+    }
+})
 
 </script>
 
