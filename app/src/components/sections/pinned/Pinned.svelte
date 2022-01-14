@@ -12,6 +12,7 @@ import { eaElasticDefault } from "../../../utils/animations";
 import colors  from "simple-color-functions";
 import { notifications } from "../../../stores/notifications";
 import { pinnedDBisReady } from "../../../stores/globalState";
+import { getRandomIntInclusive } from "../../../utils/utils";
 
     let pinned: StoredPinned[] = [];
     let adjustedPinned: StoredPinned[] = [];
@@ -187,6 +188,16 @@ import { pinnedDBisReady } from "../../../stores/globalState";
             Keep your pins inside this box! {#if !pinned.length}Type <strong>pin: [space]</strong> in the Rooster{/if}
         </div>
     </div>
+    <div class="pinned-box-sm block md:hidden border" style="position: absolute; top: 0px;">
+        {#each pinned as p, i (p.id)}
+            <div class="absolute rounded-full w-12 h-12 bg-black" 
+                style="transform: translate(5px, {5 + (i * 10)}px);">
+                <div class="flex justify-center items-center w-full h-full rounded-full" style="background-color: {colors(p.color).alpha(0.2).css()};">
+                    <Pin color={p.color ?? 'red'} size="28"/>
+                </div>
+            </div>
+        {/each}
+    </div>
 {/if}
 
 <style>
@@ -219,5 +230,14 @@ import { pinnedDBisReady } from "../../../stores/globalState";
 
     .pin-box:hover .pinned-hint {
         opacity: 100% !important;
+    }
+
+    .pinned-box-sm {
+        animation: reveal .2s linear;
+    }
+
+    @keyframes reveal {
+        0% { opacity: 0; transform: translateX(-20%);}
+        100% { opacity: 1; transform: translateX(0%);}
     }
 </style>

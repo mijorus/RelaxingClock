@@ -4,7 +4,7 @@ import momentDurationFormatSetup from 'moment-duration-format';
 import { fade, fly, slide } from "svelte/transition";
 import { SpotifyPlayer } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-import { darkenClock, screenSaver, tips } from "../../stores/globalState";
+import { darkenClock, screenSaver, screenSize, tips } from "../../stores/globalState";
 import { notifications } from "../../stores/notifications";
 import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl, nextSpotifySongEnd } from "../../stores/spotify";
 import { contextHistory } from "../../stores/storedSettings";
@@ -82,6 +82,10 @@ import SeekPicker from "./SeekPicker.svelte";
     }
     
     $: setLabel($spotifyPlayerStatus);
+
+    $: {
+        if ($screenSize < 768) expandedBox = false;
+    }
 
     let interval: NodeJS.Timeout;
     function setLabel(spotifyStatus: SpotifyPlayerStatus) {
@@ -240,7 +244,7 @@ import SeekPicker from "./SeekPicker.svelte";
                     <div class="bg-cover w-14 h-14 rounded-md bg-no-repeat flex items-center justify-center" 
                         style="background-image: url({expandedBox ? '' : albumCover[0].url})"
                     >
-                        <span class="lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" 
+                        <span class="hidden md:inline lnr lnr-chevron-up cursor-pointer {expandedBox ? 'opacity-100' : 'opacity-0'} hover:opacity-100 transition-all bg-primary bg-opacity-60 p-2 text-primary rounded-full" 
                             on:click={() => expandedBox = !expandedBox} 
                             on:mouseenter={() => tips.set([{'name': 'Expand', 'shortcut': 'Ctrl+Shift+E'}, {'name': 'Seek', 'shortcut': 'Shift+Scroll Wheel'}])} 
                             on:mouseleave={() => tips.set(null)}

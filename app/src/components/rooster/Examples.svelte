@@ -31,7 +31,7 @@ import Tips from "../tips/Tips.svelte";
     }
 
     export function trigger() {
-        if (!examples || !(examples.group.filter(e => e.selectable).length)) return null;
+        if (!examples || !(examples.group) || !(examples.group.filter(e => e.selectable).length)) return null;
         return sortedList[selected].id || selected; 
     }
 

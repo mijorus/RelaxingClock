@@ -9,6 +9,7 @@ import NotificationComponent from "./CustomNotificationComponent.svelte";
 import anime from "animejs";
 import { bigClockSSoffset, cbDefault, eaElasticDefault } from "../../../utils/animations";
 import { canBeSummoned, shortcuts } from "../../../stores/rooster";
+import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
 
     let notificationToShow: CustomNotification = null;
     let notificationsInPanel: CustomNotification[] = [];
@@ -62,6 +63,19 @@ import { canBeSummoned, shortcuts } from "../../../stores/rooster";
 
     onMount(() => {
         if (!process.env.production) {
+            shortcuts.set('incoming', {
+                    'background': 'white',
+                    'color': 'black',
+                    'arguments': {
+                        'create': {
+                            async callback() {
+                                createIncomingEvent({'icon': 'fas fa-building', 'text': 'test '})
+                                return true;
+                            }
+                        }
+                    },
+                })
+
             shortcuts.set('notifications', {
                 'background': 'purple',
                 'color': 'white',

@@ -32,7 +32,7 @@ import anime from "animejs";
 
 {#if isLoading}
     <div class="flex flex-col items-center justify-center text-primary w-full h-full fixed top-0 bg-tertiary rounded-b-2xl pointer-events-none" style="z-index: 999;" transition:slide>
-        <img class="w-3/6 md:w-2/12 mb-10 md:mb-20" src="/media/relaxing-clock-logo-transparent-smile.svg" alt="">
+        <img class="w-6/12 md:w-3/12 lg:w-2/12 mb-10 md:mb-20" src="/media/relaxing-clock-logo-transparent-smile.svg" alt="">
         <div class="w-52 md:w-60 h-1 rounded-full bg-secondary">
             <div class="h-full bg-white bg-opacity-80 rounded-full" style="width: {bar}%; transition: all {paddingTime / 1000}s ease-in-out;"></div>
         </div>
