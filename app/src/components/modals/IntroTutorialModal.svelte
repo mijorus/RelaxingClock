@@ -27,7 +27,7 @@ import TutorialStep from "./components/TutorialStep.svelte";
                     <TutorialElement customClass="text-center" index="1">
                         <h2 class="text-5xl font-title">Hi, welcome to Relaxing Clock</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="2">
-                            Many things have chaged since last time, may I show you what's new?
+                            Many things have changed since last time, may I show you what's new?
                         </TutorialElement>
                     </TutorialElement>
                 </TutorialStep>
@@ -58,7 +58,7 @@ import TutorialStep from "./components/TutorialStep.svelte";
                             The command box can do a lot! An example? Set and manage remiders without lifting the fingers from the keyboard!
                         </TutorialElement>
                         <TutorialElement customClass="mt-10 text-xl" index="2">
-                            Type "<span class="text-blue-300">remider:</span> create play some games"<br>
+                            Type "<span class="text-blue-300">reminder:</span> create play some games"<br>
                             Or maybe "<span class="text-yellow-600">alarm:</span> set 16:20"<br>
                             Not enought? "<span class="text-red-300">pin:</span> Just stay there!"<br><br>
                             <em>More on all of that later, keep reading</em>
@@ -90,9 +90,9 @@ import TutorialStep from "./components/TutorialStep.svelte";
             {:else if step === 5}
                 <TutorialStep >
                     <div class="text-center">
-                        <h2 class="text-5xl font-title">Do you need to quickly annotate something for later? Just set a <span class="text-blue-300">remider</span>!</h2>
+                        <h2 class="text-5xl font-title">Do you need to quickly annotate something for later? Just set a <span class="text-blue-300">reminder</span>!</h2>
                         <TutorialElement customClass="mt-10 text-2xl" index="1">
-                            Futhermore, <strong>persistent reminders</strong> will not expire the first time and they keep sendign you notifications until you manually dismiss them: so don't worry if you are too busy to do it now, you won't forget that important call!
+                            Futhermore, <strong>persistent reminders</strong> will not expire the first time and they keep sending you notifications until you manually dismiss them: so don't worry if you are too busy to do it now, you won't forget that important call!
                         </TutorialElement>
                     </div>
                 </TutorialStep>
@@ -101,7 +101,7 @@ import TutorialStep from "./components/TutorialStep.svelte";
                     <div class="text-center">
                         <h2 class="text-5xl font-title">Do more with keyboard shortcuts! 🤓</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="1">
-                            I've scattered shortcuts all over the placem so that you can call all the important features quickly. <br>
+                            I've scattered shortcuts all over the place so that you can call all the important features quickly. <br>
                             For example:
                         </TutorialElement>
                         <TutorialElement customClass="mt-10 text-xl" index="2">
