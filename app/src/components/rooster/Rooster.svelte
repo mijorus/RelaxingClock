@@ -256,7 +256,7 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
             summoned.set(false);
         }
 
-        if (event.altKey || ( !event.ctrlKey && (event.key.length === 1) && (event.target === document.body) )) {
+        if (event.altKey && (event.key.length === 1)) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
                     if (arg.quickLaunch === event.key) {

@@ -35,7 +35,7 @@ import Key from "../elements/Key.svelte";
                                         <div class="mt-3">
                                             {#if !rs[key].arguments[arg].hideInModal}
                                                 {#if arg.length}<span class="bg-secondary p-1 rounded-md">{arg}</span>{/if}
-                                                <span class="text-xs">{#if rs[key].arguments[arg].quickLaunch}{arg.length ? 'or' : ''} <span class="bg-tertiary p-1 rounded-md">[ {rs[key].arguments[arg].quickLaunch} ]</span>{/if}</span>
+                                                <span class="text-xs">{#if rs[key].arguments[arg].quickLaunch}{arg.length ? 'or' : ''} <span class="bg-tertiary p-1 rounded-md">[Alt + {rs[key].arguments[arg].quickLaunch} ]</span>{/if}</span>
                                                 <span class="p-1 rounded-md">{rs[key].arguments[arg].description ?? ''}</span>
                                             {/if}
                                         </div>
