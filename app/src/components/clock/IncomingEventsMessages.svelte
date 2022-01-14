@@ -1,59 +1,41 @@
+<script context="module" lang="ts">
+    let updateDisplayText;
+    let queue: IncomingEventMessage[] = [];
+    
+    export function createIncomingEvent(incomingEvent: IncomingEventMessage) {
+        if (!incomingEvent) return;
+        queue = [...queue, incomingEvent];
+        updateDisplayText();
+    }
+</script>
+
 <script lang="ts">
 import { fly, slide, fade } from 'svelte/transition';
 import { locSto, sleep } from '../../utils/utils';
 import type { IncomingEventMessage } from "../../types";
-import { incomingEventsMessages } from '../../stores/notifications';
 import { onMount } from 'svelte';
-import { shortcuts } from '../../stores/rooster';
-import anime from 'animejs';
 
 let displayMessage: IncomingEventMessage;
-let queue: IncomingEventMessage[] = [];
-let animation = anime.timeline()
-
-$: updateQueue($incomingEventsMessages);
-
 let running = false;
-function updateQueue(incomingEvent: IncomingEventMessage) {
-    if (!incomingEvent) return;
-    queue = [...queue, incomingEvent];
-    updateDisplayText();
-}
-
-async function updateDisplayText() {
-    if (running) return;
-    console.log('incoming event received');
-
-    while (queue.length) {
-        running = true;
-        console.log('incoming event processing');
-
-        displayMessage = queue[0];
-        await sleep(10000);
-
-        displayMessage = null;
-        await sleep(500);
-        
-        queue.shift();
-    }
-
-    running = false;
-}
-
 onMount(() => {
-    if (!process.env.production) {
-        shortcuts.set('incoming', {
-            'background': 'white',
-            'color': 'black',
-            'arguments': {
-                'create': {
-                    async callback() {
-                        incomingEventsMessages.create({'icon': 'fas fa-building', 'text': 'test '})
-                        return true;
-                    }
-                }
-            },
-        })
+    updateDisplayText = async function() {
+        if (running) return;
+        console.log('incoming event received');
+
+        while (queue.length) {
+            running = true;
+            console.log('incoming event processing');
+
+            displayMessage = queue[0];
+            await sleep(10000);
+
+            displayMessage = null;
+            await sleep(500);
+            
+            queue.shift();
+        }
+
+        running = false;
     }
 })
 
@@ -100,6 +82,7 @@ onMount(() => {
         overflow: hidden;
         animation: grow 1.5s linear 2.25s;
         animation-fill-mode: forwards;
+        text-overflow: ellipsis;
         /* animation-delay: 1000s; */
     }
 

@@ -17,6 +17,7 @@ import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/stor
 import { incomingEventsMessages } from "../../../stores/notifications";
 import moment, { Moment } from 'moment';
 import time from '../../../stores/time';
+import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
 
     $: changeStatus($spotifyPlayerStatus, $spotifyUserData);
     $: periodicCheck($time);
@@ -33,16 +34,16 @@ import time from '../../../stores/time';
 
     function periodicCheck(time: Moment) {
         if ((time.unix() % 3) !== 0) return;
-     
+        
         const nextIdSong = $spotifyPlayerState?.track_window?.next_tracks[0]?.id;
         if (!nextIdSong) return;
 
         const incomingSeconds = 25;
         const timeLeftToNext = ($nextSpotifySongEnd - Date.now());
-
-        if (timeLeftToNext > 0 && (timeLeftToNext < (incomingSeconds * 1000)) && (nextIdSong !== shownIncomingSpotifySongId)) {
+        
+        if ((timeLeftToNext < (incomingSeconds * 1000)) && (nextIdSong !== shownIncomingSpotifySongId)) {
             console.log('next Song incoming');
-            incomingEventsMessages.create({icon: 'fab fa-spotify', 'text': 'Next song · '+$spotifyPlayerState.track_window.next_tracks[0].name});
+            createIncomingEvent({icon: 'fab fa-spotify', 'text': 'Next song · '+$spotifyPlayerState.track_window.next_tracks[0].name});
             shownIncomingSpotifySongId = nextIdSong;
         }
     }
