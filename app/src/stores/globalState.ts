@@ -30,6 +30,17 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
         window.removeEventListener('online', setOfflineStatus);
     };
 });
+
+export const screenSize: Readable<number> = readable(99999999, (set: Subscriber<number>) => {
+    window.addEventListener('resize', setMobileStatus);
+    
+    function setMobileStatus(e: UIEvent) {
+       set(window.innerWidth);
+    }
+
+    return () => {};
+});
+
 // tips
 export const tips: Writable<Tip[]> = writable(null);
 export const alarmIsRinging: Writable<boolean> = writable(false);
