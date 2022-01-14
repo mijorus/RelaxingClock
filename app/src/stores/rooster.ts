@@ -30,7 +30,7 @@ export const shortcuts: RoosterShortcuts = {
                     'example': '12h or 24h', 'tip': 'change the format of the clock'
                 }]}
             }
-        },
+        },  
     },
 
     set(key, value) {
