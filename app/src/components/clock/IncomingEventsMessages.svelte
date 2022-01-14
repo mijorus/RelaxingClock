@@ -1,9 +1,9 @@
 <script context="module" lang="ts">
-    let updateDisplayText;
+    let updateDisplayText: CallableFunction;
     let queue: IncomingEventMessage[] = [];
     
     export function createIncomingEvent(incomingEvent: IncomingEventMessage) {
-        if (!incomingEvent) return;
+        if (!incomingEvent || !updateDisplayText) return;
         queue = [...queue, incomingEvent];
         updateDisplayText();
     }
@@ -13,7 +13,7 @@
 import { fly, slide, fade } from 'svelte/transition';
 import { locSto, sleep } from '../../utils/utils';
 import type { IncomingEventMessage } from "../../types";
-import { onMount } from 'svelte';
+import { onDestroy, onMount } from 'svelte';
 
 let displayMessage: IncomingEventMessage;
 let running = false;
@@ -38,6 +38,8 @@ onMount(() => {
         running = false;
     }
 })
+
+onDestroy(() => updateDisplayText = undefined)
 
 </script>
 
