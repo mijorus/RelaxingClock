@@ -13,12 +13,12 @@ import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
 
 <StyleBase styleId={0}>
         <div class="relative">
+            <div class="absolute left-1/2 transform -translate-x-2/4">
+                <IncomingEventsMessages />
+            </div>
             <div><Hours /><Divisor /><Minutes /><Divisor /><Seconds /><AmPmBadge /></div>
             {#if $screenSaver}
                 <DateBox />
-                <div class="absolute left-1/2 transform -translate-x-2/4">
-                    <IncomingEventsMessages />
-                </div>
             {/if}
         </div>
 </StyleBase>
