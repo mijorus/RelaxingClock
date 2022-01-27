@@ -3,6 +3,8 @@
     let queue: IncomingEventMessage[] = [];
     
     export function createIncomingEvent(incomingEvent: IncomingEventMessage) {
+        console.log('creating event: ' + incomingEvent.text);
+        
         if (!incomingEvent || !updateDisplayText) return;
         queue = [...queue, incomingEvent];
         updateDisplayText();
@@ -82,7 +84,7 @@ onDestroy(() => updateDisplayText = undefined)
     .grow {
         max-width: 0;
         overflow: hidden;
-        animation: grow 1.5s linear 2.25s;
+        animation: grow 1.5s ease-out 2.25s;
         animation-fill-mode: forwards;
         text-overflow: ellipsis;
         /* animation-delay: 1000s; */

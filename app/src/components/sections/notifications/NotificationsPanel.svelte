@@ -69,7 +69,7 @@ import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
                     'arguments': {
                         'create': {
                             async callback() {
-                                createIncomingEvent({'icon': 'fas fa-building', 'text': 'test '})
+                                createIncomingEvent({'icon': 'fas fa-building', 'text': 'test test test test test'})
                                 return true;
                             }
                         }

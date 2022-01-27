@@ -11,6 +11,7 @@ import Pinned from './pinned/Pinned.svelte';
 import anime from "animejs";
 import { bigClockSSoffset, cbDefault } from '../../utils/animations';
 import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
+import RunningEvents from '../clock/RunningEvents.svelte';
 
     let bigClockContainer: HTMLElement;
 
@@ -67,6 +68,7 @@ import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
         <Clock />
         <StyleSelectionBox />
     </div>
+    <RunningEvents />
     <SpotifyBox />
     <Tips />
     

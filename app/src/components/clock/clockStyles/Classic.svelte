@@ -15,7 +15,7 @@ import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
         <div class="relative">
             <div class="absolute left-1/2 transform -translate-x-2/4">
                 <IncomingEventsMessages />
-            </div>
+            </div> 
             <div><Hours /><Divisor /><Minutes /><Divisor /><Seconds /><AmPmBadge /></div>
             {#if $screenSaver}
                 <DateBox />

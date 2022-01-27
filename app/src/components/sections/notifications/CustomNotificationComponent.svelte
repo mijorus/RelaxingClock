@@ -21,16 +21,16 @@ export let inPanel = false;
                 </span>
             </div>
             <div class="overflow-x-hidden whitespace-nowrap font-primary">
-                <h4 class="text-3xl font-bold">
+                <h4 class="text-3xl font-bold font-title">
                     <AnimatedText text={data.title} fade={false}/>
                 </h4>
                 {#if data.content}
                     {#if !inPanel}
-                        <p class="whitespace-nowrap">
+                        <p class="whitespace-nowrap font-primary">
                             <AnimatedText text={data.content} fade={false}/>
                         </p>
                     {:else}
-                        <p class="whitespace-normal">{data.content}</p>
+                        <p class="whitespace-normal font-primary">{data.content}</p>
                     {/if}
                 {/if}
                 {#if showTimestamp}

@@ -16,6 +16,7 @@ import { locSto } from '../../../utils/utils';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import time from '../../../stores/time';
+import { createIncomingEvent } from '../../clock/IncomingEventsMessages.svelte';
 
     const defaultTitle = 'Start the timer';
     let label = defaultTitle;
@@ -24,10 +25,22 @@ import time from '../../../stores/time';
     let cycleEndsAt: Moment;
     let pomodoroTimer: NodeJS.Timeout;
     let timeLeft = '';
+    let notificationTime: string[] = [];
 
     $: {
-        if (pomodoroIsRunning && $time) timeLeft = `[${cycleEndsAt.fromNow(true) === 'an hour' ? '45 minutes' : cycleEndsAt.fromNow(true)}]`;
-        else if (!pomodoroIsRunning) timeLeft = '';
+        if (pomodoroIsRunning && $time) {
+            const t = `${cycleEndsAt.fromNow(true) === 'an hour' ? '45 minutes' : cycleEndsAt.fromNow(true)}`;
+
+            if (notificationTime.includes(t)) {
+                createIncomingEvent({'icon': 'icon-tomato-bw', text: `Pomodoro timer: ${t} left`});
+                notificationTime.splice(notificationTime.indexOf(t), 1);
+            }
+
+            timeLeft = `[${t}]`;
+
+        } else if (!pomodoroIsRunning) {
+            timeLeft = '';
+        } 
     }
 
     function startRelaxSession() {
@@ -47,6 +60,7 @@ import time from '../../../stores/time';
     }
 
     function startFocusSession() {
+        notificationTime = ['5 minutes', '2 minutes', '10 minutes'];
         label = 'Focus on your work! 🤓';
         pomodoroIsRunning = 'focus';
         locSto('pomodoroState', pomodoroIsRunning);
