@@ -15,7 +15,7 @@ import { getFlob, pulse } from "./flobs";
     let tls: anime.AnimeTimelineInstance[] = [];
 
     $: {
-        if ($saveEnergy && tls.length) {
+        if (($saveEnergy === false) && tls.length) {
             tls.forEach(t => {
                 t.play();
                 console.log('background animation resumed');
@@ -60,8 +60,8 @@ import { getFlob, pulse } from "./flobs";
             .add({ 
                 duration: 40000,
                 easing: eaElasticDefault,
-                rotate: `+=${anime.random(-10, 10)}`,
-                scale: '+='+ (anime.random(5, 30) / 100),
+                rotate: `+=${anime.random(-15, 15)}`,
+                scale: '+='+ (anime.random(5, 45) / 100),
                 delay: anime.stagger(200, {start: anime.random(2000, 5000)}),
             })
             .add({
