@@ -29,7 +29,7 @@ import { PinnedDB } from '../../../handlers/PinnedDB';
         </Title>    
         <PrimaryBox 
             label={{text: 'Clear data'}} 
-            description={{text:'Clear all you data including reminders, pins, your Spotify credentials and setting. This cannot be undone.', iconClass: 'lnr lnr-question-circle'}}
+            description={{text:'Clear all your data including reminders, pins, your Spotify credentials and setting. This cannot be undone.', iconClass: 'lnr lnr-question-circle'}}
             available={true}
         >
             <Action label="Delete" custom customClass="text-primary bg-red-600 border-2 border-red-600" on:click={() => clearData()}/>
