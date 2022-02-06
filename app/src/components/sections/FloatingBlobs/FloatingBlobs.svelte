@@ -2,7 +2,7 @@
 import anime from "animejs";
 import { windowReady } from "html-ready";
 import { onMount } from "svelte";
-import { windowFocus } from "../../../stores/globalState";
+import { screenSize, windowFocus } from "../../../stores/globalState";
 import { accentColor, saveEnergy } from "../../../stores/storedSettings";
 import { eaElasticDefault } from "../../../utils/animations";
 import { getRandomIntInclusive, randomBool } from "../../../utils/utils";
@@ -13,6 +13,7 @@ import { getFlob, pulse } from "./flobs";
     let flobTwo: HTMLElement;
     let flobThree: HTMLElement;
     let tls: anime.AnimeTimelineInstance[] = [];
+    let lastDescorationSize = null;
 
     $: {
         if (($saveEnergy === false) && tls.length) {
@@ -20,6 +21,10 @@ import { getFlob, pulse } from "./flobs";
                 t.play();
                 console.log('background animation resumed');
             });
+        }
+
+        if ($screenSize) {
+            decorateWindow();
         }
     }
 
@@ -82,13 +87,29 @@ import { getFlob, pulse } from "./flobs";
     }
 
     function decorateWindow() {
+        if (lastDescorationSize && ( (($screenSize < 768) && (lastDescorationSize < 768)) || (($screenSize > 768) && (lastDescorationSize > 768)) ) ) {
+            return;
+        }
+
+        lastDescorationSize = $screenSize;
+
+        ['One', 'Two', 'Three'].forEach(el => {
+            if (document.querySelector(`#flob${el}`)) document.querySelector(`#flob${el}`).innerHTML = null
+        });
+
+        console.log($screenSize);
+        
         const randomPos = randomBool();
         flobOne.append(...generateFlobDecoration((getFlob('random'))));
-        flobOne.style.transform = `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60)}%)`;
+        flobOne.style.transform = ($screenSize > 768) 
+            ? `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(40, 60)}%) scale(1)`
+            : `translateX(${randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(10, 30)}%) scale(1.5)`;
         animateFlob(flobOne);
 
         flobTwo.append(...generateFlobDecoration((getFlob('random'))));
-        flobTwo.style.transform = `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(70, 90) + 100}%)`;
+        flobTwo.style.transform = ($screenSize > 768)
+            ? `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(70, 90) + 100}%) scale(1)`
+            : `translateX(${!randomPos ? '' : '-'}${getRandomIntInclusive(40, 60)}%) translateY(-${getRandomIntInclusive(0, 20)}%) scale(1.5)`;
         animateFlob(flobTwo);
 
         pulse();
@@ -112,10 +133,9 @@ import { getFlob, pulse } from "./flobs";
 </script>
 
 
-<div id="flobOne" bind:this={flobOne} class="w-screen">
+<div id="flobOne" bind:this={flobOne} class="flob w-screen">
     <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
 </div>
-<div id="flobTwo" bind:this={flobTwo} class="h-screen">
+<div id="flobTwo" bind:this={flobTwo} class="flob h-screen">
     <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-screen absolute top-0"></svg> -->
 </div>
-
