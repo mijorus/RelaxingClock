@@ -1,7 +1,7 @@
 <script lang="ts">
 import { spring } from 'svelte/motion';
 import { accentColor, activeStyle, clockFormat } from "../../stores/storedSettings";
-import { screenSaver, styleChangeLock } from '../../stores/globalState';
+import { mobileStatus, screenSaver, screenSize, styleChangeLock } from '../../stores/globalState';
 import styles from "../clock/clockStyles/styles";
 import { onMount } from 'svelte';
 import { windowReady } from 'html-ready';
@@ -13,6 +13,7 @@ import { locSto } from '../../utils/utils';
     const viewFinderClass: string = 'w-44';
     const buttonClass: string = 'text-primary outline-none c-format focus:outline-none cursor-pointer';
     const l: number = styles.length; //the number of available styles
+    let lastStyleBeforeMobileApplied = null;
 
     let selectionPosition = spring(0, {
         stiffness: 0.07,
@@ -20,6 +21,12 @@ import { locSto } from '../../utils/utils';
     });
 
     changeStyle($activeStyle);
+
+    $: {
+        if ($mobileStatus) {
+            changeStyle((styles.find(s => s.label === 'Metropolis')).id);
+        }
+    }
 
     function changeStyle(toStyle: number) {
         if (toStyle >= 0 && toStyle <= (l - 1)) {

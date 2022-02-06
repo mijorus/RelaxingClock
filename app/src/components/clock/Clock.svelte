@@ -5,7 +5,7 @@ import styles from "./clockStyles/styles";
 import { activeStyle } from "../../stores/storedSettings";
 import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
 import anime from "animejs";
-import { eaElasticDefault, lockApp } from "../../utils/animations";
+import { eaElasticDefault } from "../../utils/animations";
 import { onMount, tick } from 'svelte';
 import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
 
@@ -30,21 +30,10 @@ import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
         }
     }
 
-    let posRewrite = null;
-    function handleResize(e: UIEvent) {
-        if (window.innerWidth <= 768) {
-            posRewrite = (styles.find(s => s.label === 'Metropolis'));
-        } 
-
-        if (posRewrite) activeStyle.set(posRewrite.id);
-    }
-
     onMount(() => {
         if (!$activeStyle) activeStyle.set(0);
     })
 </script>
-
-<svelte:window on:resize={handleResize} />
 
 <div 
     bind:this={bigClock}

@@ -32,14 +32,18 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
 });
 
 export const screenSize: Readable<number> = readable(99999999, (set: Subscriber<number>) => {
-    window.addEventListener('resize', setMobileStatus);
+    window.addEventListener('resize', setScreenSize);
     
-    function setMobileStatus(e: UIEvent) {
+    function setScreenSize(e: UIEvent) {
        set(window.innerWidth);
     }
 
     return () => {};
 });
+
+export const mobileStatus = derived(screenSize, function(value) {
+    return (value < 768);
+})
 
 // tips
 export const tips: Writable<Tip[]> = writable(null);

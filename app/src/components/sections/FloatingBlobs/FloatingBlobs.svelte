@@ -23,7 +23,7 @@ import { getFlob, pulse } from "./flobs";
             });
         }
 
-        if ($screenSize) {
+        if ($screenSize && flobThree) {
             decorateWindow();
         }
     }
