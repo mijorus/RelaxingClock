@@ -12,6 +12,7 @@ import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
 import IncomingEventsBox from "../IncomingEventsBox.svelte";
 import { locSto, randomCustomColor } from "../../../utils/utils";
+import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
 
     let analogClock: HTMLElement;
     const handClasses = 'absolute rounded-full top-2/4 left-2/4 origin-right-2/4 ';
@@ -72,6 +73,9 @@ import { locSto, randomCustomColor } from "../../../utils/utils";
                 class="hand {handClasses} w-40 h-1.5 z-30"
             >
             </span>
+            <div class="{$screenSaver ? 'absolute' : 'hidden'} left-1/2 transform -translate-x-2/4 top-full mt-10">
+                <IncomingEventsMessages />
+            </div>
         </div>
 </StyleBase>
 

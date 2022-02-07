@@ -4,8 +4,10 @@
     
     export function createIncomingEvent(incomingEvent: IncomingEventMessage) {
         console.log('creating event: ' + incomingEvent.text);
+        console.log(updateDisplayText);
         
-        if (!incomingEvent || !updateDisplayText) return;
+        
+        if (!updateDisplayText) return;
         queue = [...queue, incomingEvent];
         updateDisplayText();
     }
@@ -40,8 +42,6 @@ onMount(() => {
         running = false;
     }
 })
-
-onDestroy(() => updateDisplayText = undefined)
 
 </script>
 
