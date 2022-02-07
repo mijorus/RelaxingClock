@@ -31,29 +31,36 @@ export const mainWeatherConditions: {[key: string]: {color: string, color_night?
         icon: 'snow.png'
     },
     'Mist': {
-        color: ''
+        color: '#c0c0c0',
+        icon: 'mist.png'
     },
     'Smoke': {
-        color: ''
+        color: '#494949',
+        icon: 'wind.png',
     },
     'Haze': {
-        color: ''
+        color: '#73a3b6',
+        icon: 'haze.png'
     },
     'Dust': {
-        color: ''
+        color: '#d1a41f',
+        icon: 'sandstorm.png',
     },
     'Fog': {
         color: '#d6d6d6',
         icon: 'wind2.png'
     },
     'Sand': {
-        color: '#d1a03f'
+        color: '#d1a03f',
+        icon: 'sandstorm.png',
     },
     'Ash': {
-        color: ''
+        color: '#4e2929',
+        icon: 'sandstorm.png',
     },
     'Squall': {
-        color: ''
+        color: '#6e6e6e',
+        icon: 'tornado.opng',
     },
     'Tornado': {
         color: '#fe0000',
