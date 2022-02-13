@@ -10,6 +10,7 @@ import moment from 'moment';
 import { clockFormat } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import IncomingEventsBox from '../IncomingEventsBox.svelte';
+import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
 
     let animationReady = false;
     let galaxyContainer: HTMLElement, galaxyHours:HTMLElement, galaxyMin:HTMLElement, galaxySec:HTMLElement; 
@@ -72,6 +73,9 @@ import IncomingEventsBox from '../IncomingEventsBox.svelte';
                     </span>
                 </div>
                 <svg class="galaxy-orbit"><path d="" /></svg>
+                <div class="{$screenSaver ? 'absolute' : 'hidden'} left-1/2 transform -translate-x-2/4 top-full">
+                    <IncomingEventsMessages />
+                </div>
             </div>
             <div bind:this={galaxyMin} class="orbit-container w-64 h-64">
                 <div class="galaxy-time z-10" class:gt-animated={animationReady}>
