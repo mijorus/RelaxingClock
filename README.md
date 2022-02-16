@@ -1,7 +1,7 @@
 # Relaxing Clock 
-<div style="text-align: center;">
+<p  align="center">
     <img src="docs/clock.png" width="500"/>
-</div>
+</p>
 
 The sidecar of your working days, Relaxing Clock is an awesome web app you can keep opened in the background while concentrating. Login with **Spotify** and play your favourite lo-fi tracks, playlist and podcasts to study/relax to.
 
