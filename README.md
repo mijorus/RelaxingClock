@@ -6,18 +6,18 @@
 The sidecar of your working days, Relaxing Clock is an awesome web app you can keep opened in the background while concentrating. Login with **Spotify** and play your favourite lo-fi tracks, playlist and podcasts to study/relax to.
 
 ## Introducing the command box
-<div style="text-align: center;">
+<p align="center">
     <img src="docs/commandbox1.gif" width="500"/>
-</div>
+</p>
 
 The new version of Relaxing Clock includes a new "command box" feature. It can be opened by pressing `Ctrl + Space` and unlocks lots of possibilities. Learn more about the usage of the command box [in the blog](https://blog.relaxingclock.com/posts/how_to_use_the_command_line/).
 
 Missing something? Pressing `?` at any time will reveal a modal with all the available shortcuts/commands.
 
 ### Spotify integration
-<div style="text-align: center;">
+<p  align="center">
     <img src="docs/commandbox2.gif" width="600"/>
-</div>
+</p>
 
 Your music can now be controlled from the command box: get started by typing `spotify:` and the type content you are looking for: it doesn't matter if want to fill your day with a relaxing `playlist` of listen to the latest `podcast` of your favourite content creator, Relaxing Clock has it all.
 
