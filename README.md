@@ -1,4 +1,4 @@
 # Relaxing Clock 
 
 
-a proprer reeadme is coming soon
+a proprer readme is coming soon
