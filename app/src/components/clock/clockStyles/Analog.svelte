@@ -2,7 +2,7 @@
 import randomcolor from "randomcolor";
 import { onMount } from "svelte";
 import { fade } from "svelte/transition";
-import { screenSaver } from "../../../stores/globalState";
+import { screenSaver, tips } from "../../../stores/globalState";
 import { accentColor, analogTimeLocked } from "../../../stores/storedSettings";
 import time from "../../../stores/time";
 import Divisor from "../Divisor.svelte";
@@ -11,7 +11,7 @@ import Minutes from "../Minutes.svelte";
 import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
 import IncomingEventsBox from "../IncomingEventsBox.svelte";
-import { locSto, randomCustomColor } from "../../../utils/utils";
+import { locSto, randomCustomColor, shakeElement } from "../../../utils/utils";
 import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
 
     let analogClock: HTMLElement;
@@ -28,6 +28,24 @@ import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
         accentColor.set(randomCustomColor());
     }
 
+    function handleMouseEnter(e) {
+        showTime = true;
+        tips.set([
+            { name:"Always show the digital clock", shortcut:'Lock button' },
+            { name:"Change accent color", shortcut:'Click on the center dot' }
+        ]);
+    }
+
+    function handleMouseLeave(e) {
+        showTime = false;
+        tips.set(null);
+    }
+
+    function changeAnalogTimeLockedState() {
+        analogTimeLocked.set(!$analogTimeLocked);
+        shakeElement(document.getElementById('analog-lock-time'));
+    }
+
     onMount(() => {
         if (!$accentColor) setHandSecColor(); 
     })
@@ -35,13 +53,13 @@ import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
 
 <StyleBase styleId={2}>
         <div
-            on:mouseenter={() => showTime = true}
-            on:mouseleave={() => showTime = false}
+            on:mouseenter={handleMouseEnter}
+            on:mouseleave={handleMouseLeave}
             bind:this={analogClock}
             class="rounded-full border-none w-96 h-96 to-screensaver transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
         >
             <div class="text-center text-2xl mt-16 -z-1 smooth-fade {showTime || $analogTimeLocked ? 'opacity-70' : 'opacity-0'}" style="filter:grayscale(1);" transition:fade>
-                <div class="{showTime ? 'opacity-70' : 'opacity-20'} text-base transition-opacity  cursor-pointer" on:click|stopPropagation={() => analogTimeLocked.set(!$analogTimeLocked)}>
+                <div id="analog-lock-time" class="{showTime ? 'opacity-70' : 'opacity-20'} text-base transition-opacity  cursor-pointer" on:click|stopPropagation={changeAnalogTimeLockedState}>
                     <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
                 </div>
                 <div><Hours interactive={false}/><Divisor /><Minutes /><AmPmBadge size="xs"/></div>

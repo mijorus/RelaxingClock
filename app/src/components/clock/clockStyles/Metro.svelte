@@ -13,7 +13,8 @@ import { blink } from '../../../stores/storedSettings';
 import AmPmBadge from '../AmPmBadge.svelte';
 import IncomingEventsBox from '../IncomingEventsBox.svelte';
 import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
-    
+import { handleMouseEnterCommon, handleMouseLeaveCommon } from './common';
+
     let container: HTMLElement;
     const zoomedOut = 0.7;
     let isHovered = false;
@@ -33,7 +34,11 @@ import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
 </script>
 
 <StyleBase styleId={3}>
-        <div bind:this={container} class="flex flex-col" style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});">
+        <div bind:this={container} class="flex flex-col" 
+            style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});"
+            on:mouseenter={handleMouseEnterCommon} 
+            on:mouseleave={handleMouseLeaveCommon}
+        >
             {#if $screenSaver}
                 <div class="absolute text-base w-full top-5 z-20" on:mouseenter={() => isHovered = true} on:mouseleave={() => isHovered = false}>
                     <IncomingEventsBox {isHovered} />
