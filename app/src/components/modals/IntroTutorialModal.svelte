@@ -1,7 +1,7 @@
 <script lang="ts">
 import { windowReady } from "html-ready";
 import { fly, slide } from "svelte/transition";
-import { modalContent } from "../../stores/globalState";
+import { modalContent, tips } from "../../stores/globalState";
 import { summoned } from "../../stores/rooster";
 import Key from "../elements/Key.svelte";
 import Action from "../elements/settings/Buttons/Action.svelte";
@@ -14,6 +14,10 @@ import TutorialStep from "./components/TutorialStep.svelte";
     function handleStepChange(step: number) {
         if (step === 2) {
             document.getElementById('rooster-command')?.focus();
+        } else if (step === 7) {
+            tips.set([{shortcut: 'Here', 'name': 'Look at me! 🙌'}]);
+        } else {
+            tips.set(null);
         }
     }
 </script>
@@ -117,9 +121,12 @@ import TutorialStep from "./components/TutorialStep.svelte";
                     <div class="text-center">
                         <h2 class="text-5xl font-title">Did you miss something? 🤔</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="1">
-                            You can open the help modal by pressing <br>
                             <Key key="?" /><br>
-                            at any time
+                            You can open the help modal by pressing '?' at any time<br><br>
+                        </TutorialElement>
+                        <TutorialElement customClass="mt-10 text-xl" index=2 >
+                            Also, keep an eye on the bottom-right size of the screen, where many contextual tips will be shown and <b>check out <a href="blog.relaxingclock.it" class="underline">the blog</a></b>
+                            where many tutorials and updates are posted.
                         </TutorialElement>
                     </div>
                 </TutorialStep>
