@@ -2,7 +2,7 @@
 import anime from 'animejs';
 import { visibleStylesId } from '../../../stores/clockStyle';
 import time from '../../../stores/time';
-import { screenSaver } from '../../../stores/globalState'
+import { screenSaver } from '../../../stores/globalState';
 import { cbDefault, eaElasticDefault } from '../../../utils/animations';
 import { cities } from '../../../handlers/citiesBg';
 import { windowReady } from 'html-ready';

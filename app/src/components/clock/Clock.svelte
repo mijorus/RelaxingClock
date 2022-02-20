@@ -2,12 +2,13 @@
 import { windowReady } from 'html-ready';
 
 import styles from "./clockStyles/styles";
-import { activeStyle } from "../../stores/storedSettings";
+import { activeStyle, presentation } from "../../stores/storedSettings";
 import { activeStyleId, nextStyleId } from "../../stores/clockStyle";
 import anime from "animejs";
 import { eaElasticDefault } from "../../utils/animations";
 import { onMount, tick } from 'svelte';
 import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
+import { screenSaver } from '../../stores/globalState';
 
     let bigClock: HTMLElement;
     $: setCurrentPosition($activeStyle);
@@ -38,8 +39,8 @@ import { clockIsVisible, styleChangeLock } from '../../stores/globalState';
 <div 
     bind:this={bigClock}
     id="big-clock" 
-    class="flex flex-row items-center flex-nowrap font-clock font-semibold text-primary text-giant-0.5 lg:text-giant-1 
-        whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none"
+    class="flex flex-row items-center flex-nowrap font-clock font-semibold text-primary text-giant-0.5 lg:text-giant-1  transition-opacity
+        whitespace-nowrap w-auto h-full z-10 absolute top-0 left-0 select-none {($screenSaver && !$presentation) ? 'opacity-75' : ''}"
 >
     {#each styles as style}
         <svelte:component this={style.component} />
