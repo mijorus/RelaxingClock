@@ -10,6 +10,8 @@ import { fade } from "svelte/transition";
 import { colorSelector, darkenClock } from "../../stores/globalState";
 
     $: setHours($time, $clockFormat);
+    $: changeColor($accentColor);
+
     export let interactive = true;
     let hours: HTMLElement;
     let color: string;
@@ -52,10 +54,9 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
         })
     }
 
-    function changeColor(c = null, animation = true) {
+    function changeColor(c = null) {
         color = c;
-        textShadow = color ? '2px 2px #fff' :  null;
-        accentColor.set(color || undefined);
+        textShadow = (color !== 'white') ? '2px 2px #fff' :  null;
     }
 
     function handleClockMousedown(e) {
@@ -88,7 +89,7 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
             y: e.pageY,
             colors: [...customColors, 'white'],
             callback(c) {
-                if (c) changeColor(c === 'white' ? null : c);
+                if (c) accentColor.set(c);
             }
         });
     }
@@ -97,7 +98,7 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
         await tick();
         
         if (!$accentColor || locSto('hours') === 'scaled') scaleUp(true, false);
-        $accentColor ? changeColor($accentColor, false) : changeColor(randomCustomColor(), true);
+        $accentColor ? changeColor($accentColor) : changeColor(randomCustomColor());
     })
 </script>
 
