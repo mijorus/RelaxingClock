@@ -5,6 +5,7 @@ import { fade } from "svelte/transition";
 import { caretToEnd, shakeElement } from "../../utils/utils";
 import Examples from "./Examples.svelte";
 import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
+import { tips } from "../../stores/globalState";
 
     let rooster: HTMLElement;
 
@@ -52,7 +53,12 @@ import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
     }
 
     function handleSummon(summoned: boolean) {
-        if (!summoned) resetInputs();
+        if (!summoned) {
+            resetInputs();
+            tips.set(null);
+        } else {
+            tips.set([{shortcut: 'Page Up / Down', name: 'Move in history'}]);
+        }
     }
 
     function handleCommand(command: string) {

@@ -158,8 +158,13 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
             title = params.trim()
             at = moment().add(10, 'm');
         }
-        
-        let type: ReminderType = action ? 'repeated' : 'simple';
+
+        let type: ReminderType = (action || title.endsWith('!')) ? 'repeated' : 'simple';
+        if (title.endsWith('!')) {
+            title = title.replace(/!$/, '');
+            let type = 'repeated';
+        }
+
         await createReminder(title, at, type);
         notifications.create({ 
             title: 'Reminder set!', 
