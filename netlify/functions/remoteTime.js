@@ -7,12 +7,12 @@ exports.handler = async function (event, context) {
         try {
             const res = await axios.get('https://ipapi.co/' + ip + '/json/');
 
-            if (res.data.timezone) {
+            if (res.timezone) {
                 return {
                     statusCode: 200,
                     body: JSON.stringify({
                         unixtime: Math.floor(Date.now()),
-                        timezone: res.data.timezone,
+                        timezone: res.timezone,
                     })
                 }
             } else { 
