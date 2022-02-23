@@ -1,4 +1,7 @@
 <script lang="ts">
+import anime from "animejs";
+import { duration } from "moment";
+
 import { afterUpdate, onMount, tick } from "svelte";
 
     export let unsupported = false;
@@ -28,6 +31,11 @@ import { afterUpdate, onMount, tick } from "svelte";
                 el.style.opacity = '0';
                 slotContainer.querySelector('.settings-box-element-title-arrow')?.classList.add('-rotate-90')
             });
+            
+            slotContainer.querySelectorAll('.settings-hint').forEach((el: HTMLElement) => {
+                el.style.maxHeight = '0px';
+            });
+
         } else {
             slotContainer.querySelectorAll('.settings-box-element').forEach((el: HTMLElement) => {
                 el.style.maxHeight = null;
@@ -36,6 +44,10 @@ import { afterUpdate, onMount, tick } from "svelte";
                 el.style.overflow = null;
                 el.style.opacity = null;
                 slotContainer.querySelector('.settings-box-element-title-arrow')?.classList.remove('-rotate-90')
+            });
+            
+            slotContainer.querySelectorAll('.settings-hint').forEach((el: HTMLElement) => {
+                el.style.maxHeight = '1000px';
             });
         }
     }
