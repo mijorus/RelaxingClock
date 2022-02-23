@@ -14,7 +14,7 @@ import axios from 'axios';
         async function syncClock(remoteTime: boolean) {
             if (!remoteTime) return;
 
-            const timeRes: {[key: string]: string} = (await axios.get('/.netlify/functions/remoteTime')).data;
+            const timeRes: {unixtime: number, timezone: string|null} = (await axios.get('/.netlify/functions/remoteTime')).data;
             console.log(timeRes);
             
         }

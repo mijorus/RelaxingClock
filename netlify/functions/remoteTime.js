@@ -14,7 +14,7 @@ exports.handler = async function (event, context) {
                 },
                 body: JSON.stringify({
                     unixtime: Math.floor(Date.now()),
-                    timezione: res.timezione ?? null,
+                    timezone: res.timezone ?? null,
                 })
             }
 
