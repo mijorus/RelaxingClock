@@ -12,7 +12,6 @@ import axios from 'axios';
 
     interface RemoteTimeResponse {
         unixtime: number, 
-        timezone: string|null, 
         compleated: number
     }
     
