@@ -17,6 +17,7 @@ import SaveBattery from './settingsPage/SaveBattery.svelte';
 import PomodoroTimer from './settingsPage/PomodoroTimer.svelte';
 import ShowTutorial from './settingsPage/ShowTutorial.svelte';
 import ChangeAccentColor from './settingsPage/ChangeAccentColor.svelte';
+import RemoteTime from './settingsPage/RemoteTime.svelte';
 </script>
 
 <div class="relative">
@@ -33,6 +34,7 @@ import ChangeAccentColor from './settingsPage/ChangeAccentColor.svelte';
             <SettingsBox collapsable={false} bordered={false}><span class="pl-5 md:p-0 text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <ChangeAccentColor />
+                <RemoteTime />
                 <HighContrast />
                 <BlinkingDots />
                 <SaveBattery />
