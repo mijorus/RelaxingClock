@@ -7,24 +7,19 @@ exports.handler = async function (event, context) {
         try {
             const res = (await axios.get('https://ipapi.co/' + ip + '/json/')).data;
 
-            if (res.timezone) {
-                return {
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        unixtime: Math.floor(Date.now()),
-                        timezone: res.timezone,
-                    })
-                }
-            } else { 
-                throw 'Request Errors' 
+            return {
+                statusCode: 200,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    unixtime: Math.floor(Date.now()),
+                    timezione: res.timezione ?? null,
+                })
             }
-
 
         } catch (err) {
-            return {
-                statusCode: 500,
-                body: 'Request failed'
-            }
+            return err;
         }
     } else {
         return {
