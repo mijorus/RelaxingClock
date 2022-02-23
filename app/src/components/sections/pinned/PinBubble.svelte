@@ -42,3 +42,45 @@ import { tips } from "../../../stores/globalState";
         </div>
     </div>
 </div>
+
+<style>
+    .pinned {
+        will-change: transform;
+    }
+
+    .pinned-bg {
+        transition: .05s border linear;
+        border: 2px solid transparent;
+    }
+
+    .pinned-bg:hover {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+   :global(.pinned .pinned-inner){
+        transform: scale(1);
+        border: transparent !important;
+        transition: transform .1s ease-in-out;
+    }
+
+    :global(.pinned.is-moving .pinned-inner)  {
+        transform: scale(1.1);
+    }
+
+    .pinned:hover .remove-pin{
+        opacity: 100% !important;
+    }
+
+    .pin-box:hover .pinned-hint {
+        opacity: 100% !important;
+    }
+
+    .pinned-box-sm {
+        animation: reveal .2s linear;
+    }
+
+    @keyframes reveal {
+        0% { opacity: 0; transform: translateX(-20%);}
+        100% { opacity: 1; transform: translateX(0%);}
+    }
+</style>
