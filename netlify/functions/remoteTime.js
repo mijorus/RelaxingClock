@@ -5,6 +5,7 @@ exports.handler = async function (event, context) {
 
     if (event.httpMethod === 'GET') {
         try {
+            const received = Date.now();
             const res = (await axios.get('https://ipapi.co/' + ip + '/json/')).data;
 
             return {
@@ -15,6 +16,7 @@ exports.handler = async function (event, context) {
                 body: JSON.stringify({
                     unixtime: Math.floor(Date.now()),
                     timezone: res.timezone ?? null,
+                    compleated: Date.now() - received,
                 })
             }
 

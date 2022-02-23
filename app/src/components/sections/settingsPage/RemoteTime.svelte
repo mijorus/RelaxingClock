@@ -7,17 +7,33 @@ import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
 import { blink, remoteTime, saveEnergy } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
+import { fade } from "svelte/transition";
 import axios from 'axios';
+
+    interface RemoteTimeResponse {
+        unixtime: number, 
+        timezone: string|null, 
+        compleated: number
+    }
     
-        $: syncClock($remoteTime);
+    let ping: number;
+    $: syncClock($remoteTime);
 
-        async function syncClock(remoteTime: boolean) {
-            if (!remoteTime) return;
+    async function syncClock(remoteTime: boolean) {
+        if (!remoteTime) return;
 
-            const timeRes: {unixtime: number, timezone: string|null} = (await axios.get('/.netlify/functions/remoteTime')).data;
-            console.log(timeRes);
+        try {
+            ping = 0;
             
+            const start = Date.now();
+            const timeRes: RemoteTimeResponse = (await axios.get('/.netlify/functions/remoteTime')).data;
+            ping = Date.now() - start - timeRes.compleated;
+        } catch (err) {
+            ping = -1;
+            console.error(err);
         }
+        
+    }
     
     </script>
     
@@ -29,9 +45,20 @@ import axios from 'axios';
         </Title>
         <PrimaryBox 
             label={{text: 'Get time from the internet'}} 
-            description={{text:'Syncronize the clock with a remote server'}}
+            description={{text:`In order to determine your correct time zone, a service provided by ipapi.co will be used.
+                Please note that ipapi.co is fully GDPR compliant and stores this data only for a limited amount of time. Read their privacy policy at https://ipapi.co/privacy if you need more information
+            `}}
             available={true}
         >
+        <div class="flex items-center">
+            {#if $remoteTime && (ping > 0)}
+                <span class="inline-block text-xs mr-6 rounded-full text-primary" >{ping}ms</span>
+            {:else if $remoteTime && (ping < 0)}
+                <span class="inline-block text-red-500 mr-6 rounded-full" >
+                    <i class="fas fa-exclamation-circle"></i>
+                </span>
+            {/if}
             <Booleans state={$remoteTime} label={'efficiency mode'} on:change={(e) => remoteTime.set(e.detail)}/>
+        </div>
         </PrimaryBox>
     </SettingsBox>
