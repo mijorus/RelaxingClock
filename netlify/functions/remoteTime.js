@@ -5,7 +5,7 @@ exports.handler = async function (event, context) {
 
     if (event.httpMethod === 'GET') {
         try {
-            const res = (await axios.get('https://ipapi.co/' + ip + '/json/')).body;
+            const res = (await axios.get('https://ipapi.co/' + ip + '/json/')).data;
 
             if (res.timezone) {
                 return {
