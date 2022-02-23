@@ -193,18 +193,6 @@ import PinBubble from "./PinBubble.svelte";
 {/if}
 
 <style>
-    .pinned {
-        will-change: transform;
-    }
-
-    .pinned-bg {
-        transition: .05s border linear;
-        border: 2px solid transparent;
-    }
-
-    .pinned-bg:hover {
-        border: 2px solid rgba(255, 255, 255, 0.5);
-    }
 
    :global(.pinned .pinned-inner){
         transform: scale(1);
@@ -214,10 +202,6 @@ import PinBubble from "./PinBubble.svelte";
 
     :global(.pinned.is-moving .pinned-inner)  {
         transform: scale(1.1);
-    }
-
-    .pinned:hover .remove-pin{
-        opacity: 100% !important;
     }
 
     .pin-box:hover .pinned-hint {
