@@ -26,6 +26,7 @@ import axios from 'axios';
             
             const start = Date.now();
             const timeRes: RemoteTimeResponse = (await axios.get('/.netlify/functions/remoteTime')).data;
+            const timeResTest: RemoteTimeResponse = (await axios.get('https://www.timeapi.io/api/TimeZone/zone', {'params': {timeZone: 'Europe/Amsterdam'}})).data;
             ping = Date.now() - start - timeRes.compleated;
         } catch (err) {
             ping = -1;
