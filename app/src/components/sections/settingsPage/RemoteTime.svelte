@@ -9,6 +9,7 @@ import { onMount } from 'svelte';
 import { shortcuts } from '../../../stores/rooster';
 import { fade } from "svelte/transition";
 import axios from 'axios';
+import { remoteTimeAdjustmets } from '../../../stores/time';
 
     interface RemoteTimeResponse {
         unixtime: number, 
@@ -19,21 +20,29 @@ import axios from 'axios';
     $: syncClock($remoteTime);
 
     async function syncClock(remoteTime: boolean) {
-        if (!remoteTime) return;
+        if (!remoteTime) {
+            remoteTimeAdjustmets.set(null);
+            return;
+        }
 
         try {
             ping = 0;
+
+            // warm-up function
             await axios.get('/.netlify/functions/remoteTime');
             
             const start = Date.now();
             const timeRes: RemoteTimeResponse = (await axios.get('/.netlify/functions/remoteTime')).data;
-            // const timeResTest: RemoteTimeResponse = (await axios.get('https://www.timeapi.io/api/TimeZone/zone', {'params': {timeZone: 'Europe/Amsterdam'}})).data;
+            // const timeRes: RemoteTimeResponse = {unixtime: Date.now(), compleated: 0 }
             ping = Date.now() - start - timeRes.compleated;
+
+            const { timezone } = (await axios.get('https://ipapi.co/json/')).data;
+            remoteTimeAdjustmets.set({ delta: (Date.now() - timeRes.unixtime), timezone });
         } catch (err) {
             ping = -1;
+            remoteTimeAdjustmets.set(null);
             console.error(err);
         }
-        
     }
     
     </script>
