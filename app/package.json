@@ -1,5 +1,5 @@
 {
-  "name": "svelte-app",
+  "name": "relaxing/clock",
   "version": "4.0.0",
   "private": true,
   "scripts": {
