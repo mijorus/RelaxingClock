@@ -126,7 +126,7 @@ import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
     </PrimaryBox>
     <NestedBox label="Search tracks, albums and more!" 
         available={$spotifyPlayerStatus === 'ready'}
-        description="Search was moved to the Roosted"
+        description="Search was moved to the command box!"
     >
         <!-- svelte-ignore missing-declaration -->
         <Action label="Open" on:click={() => window.dispatchEvent( new KeyboardEvent('keydown', {key: 'l', altKey: true}))}/>
