@@ -22,6 +22,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/media/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/media/icons/favicon-16x16.png">
     <meta name="description" content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
+    <link rel="manifest" href="/manifest.json">
     <!-- Open Graph -->
     <meta property="og:title" content="Relaxing Clock">
     <meta property="og:description" content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
@@ -64,5 +65,12 @@
 	<noscript>
 		This website requires javascript
 	</noscript>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceWorker.js', {
+                scope: '/'
+            });
+        }
+    </script>
 </body>
 </html>
