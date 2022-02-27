@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "deploy": "npm install && rollup -c && node ./src/postbuild.js",
+    "deploy": "npm install && rollup -c",
     "dev": "rollup -c -w",
     "localdev": "HOST=0.0.0.0 rollup -c -w",
     "start": "sirv ../public --no-clear",
