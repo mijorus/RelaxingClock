@@ -13,7 +13,7 @@
   publish = "public/"
 
   # Default build command.
-  command = "cd app && npm run fullbuild"
+  command = "cd app && npm run deploy"
 
 # [[plugins]]
 #   # Installs the Lighthouse Build Plugin for all deploy contexts
