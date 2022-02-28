@@ -6,7 +6,7 @@ manifest.version = packageConfig.version;
 baseUrl = (process.env.SPOTIFY_REDIRECT_URL).replace(/\/$/g, '');
 
 let output = JSON.stringify(manifest);
-output.replace('{{base_url}}', baseUrl);
+output.replace(/{{base_url}}/g, baseUrl);
 
 console.log('Building web manifest...');
 fs.writeFile(__dirname + '/../../public/manifest.json', output, err => {
