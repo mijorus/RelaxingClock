@@ -81,16 +81,33 @@ import Tips from "../tips/Tips.svelte";
                         {#each sortedList as example, i}
                             <div data-id="example-{example.id ?? null}" class:bg-primary={(i === selected && example.selectable)} 
                                 class="py-1 {example.image ? 'pl-2 items-center' : 'pl-8'} m-1 rounded-lg pr-8 flex overflow-x-hidden flyup">
-                                {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
                                 <!-- svelte-ignore a11y-missing-attribute -->
-                                {#if example.image}<img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block">{/if} 
-                                {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
-                                <div class="inline-block ml-2">
-                                    <div class="{example.image ? 'flex flex-col' : 'inline'}">
-                                        <span class="example example-title font-bold">{example.example}</span>
-                                        <span class="example example-image text-secondary {example.image ? 'text-sm' : 'text-md'}">{example.tip ?? ''}</span>
+                                {#if example.image}
+                                    {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
+                                    <img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block">
+                                    {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
+                                    <div class="inline-block ml-2">
+                                        <!-- <div class="{example.image ? 'flex flex-col' : 'inline'}"> -->
+                                        <div class="flex flex-col">
+                                            <span class="example example-title font-bold">{example.example}</span>
+                                            <span class="example example-image text-secondary text-sm">{example.tip ?? ''}</span>
+                                        </div>
+                                    </div>
+                                {:else}
+                                <div class="flex flex-row items-baseline">
+                                    <div class="flex flex-row items-center">
+                                        {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
+                                        <i class="lnr lnr-chevron-right pr-2"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <div>
+                                            {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
+                                            <span class="example example-title font-bold">{example.example}</span>
+                                        </div>
+                                        <span class="example example-image text-secondary text-sm">{example.tip ?? ''}</span>
                                     </div>
                                 </div>
+                                {/if} 
                             </div>
                         {/each}
                     {/if}
