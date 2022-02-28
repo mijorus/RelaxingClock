@@ -95,6 +95,7 @@ export const customColors: string[] = [
     "#f9c74f",
     "#fee440",
     "#00ff00",
+    "#32CD32",
     "#277da1", 
     "#0060ff",
     "#00bbf9",

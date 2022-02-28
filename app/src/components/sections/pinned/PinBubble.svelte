@@ -31,7 +31,7 @@ import { tips } from "../../../stores/globalState";
                 <span class="inline-block p-2 cursor-move transform hover:scale-125 transition-transform" on:mousedown={(e) => dispatch('drag', e) }>
                     <Pin color={p.color ?? 'red'} size="32"/>
                 </span>
-                <span class="text-{p.title.length > 15 ? '' : '3'}xl font-bold w-full overflow-hidden whitespace-nowrap block max-w-full">
+                <span class="{p.title.length > 15 ? 'text-xl' : 'text-2xl'} font- font-title w-full overflow-hidden whitespace-nowrap block max-w-full">
                     <AnimatedText fade={false} text={p.title} paused={scrollPaused}/>
                 </span>
             </div>
@@ -50,7 +50,7 @@ import { tips } from "../../../stores/globalState";
 
     .pinned-bg {
         transition: .05s border linear;
-        border: 2px solid transparent;
+        border: 2px ridge rgba(255, 255, 255, 0.1);
     }
 
     .pinned-bg:hover {

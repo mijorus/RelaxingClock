@@ -44,4 +44,4 @@ function createNotification() {
 export const notifications = createNotification();
 export const latestNotification = derived(notifications, notifications => {
     return notifications ? notifications[notifications.length - 1] : null;
-});
+}); 

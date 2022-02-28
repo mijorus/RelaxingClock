@@ -20,22 +20,24 @@ export let inPanel = false;
                     <i class="{data.icon ?? 'fas fa-bell'} text-5xl" style="color: {data.color};"/>
                 </span>
             </div>
-            <div class="overflow-x-hidden whitespace-nowrap font-primary">
+            <div class="overflow-x-hidden whitespace-nowrap font-ubuntu">
                 <h4 class="text-3xl font-bold font-title">
                     <AnimatedText text={data.title} fade={false}/>
                 </h4>
-                {#if data.content}
-                    {#if !inPanel}
-                        <p class="whitespace-nowrap font-primary">
-                            <AnimatedText text={data.content} fade={false}/>
-                        </p>
-                    {:else}
-                        <p class="whitespace-normal font-primary">{data.content}</p>
+                <div class="pl-2 border-l border-primary">
+                    {#if data.content}
+                        {#if !inPanel}
+                            <p class="whitespace-nowrap font-ubuntu">
+                                <AnimatedText text={data.content} fade={false}/>
+                            </p>
+                        {:else}
+                            <p class="whitespace-normal text-sm font-ubuntu" style="line-height: 1;">{data.content}</p>
+                        {/if}
                     {/if}
-                {/if}
-                {#if showTimestamp}
-                    <p class="whitespace-nowrap text-primary opacity-50 text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
-                {/if}
+                    {#if showTimestamp}
+                        <p class="whitespace-nowrap text-primary opacity-50 text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
+                    {/if}
+                </div>
             </div>
         </div>
         <!-- svelte-ignore a11y-media-has-caption -->
