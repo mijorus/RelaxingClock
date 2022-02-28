@@ -8,6 +8,7 @@ import { onMount, tick } from "svelte";
 import { customColors, locSto, randomCustomColor } from "../../utils/utils";
 import { fade } from "svelte/transition";
 import { colorSelector, darkenClock } from "../../stores/globalState";
+import { handleMouseEnterCommon, handleMouseLeaveCommon } from "./clockStyles/common";
 
     $: setHours($time, $clockFormat);
     $: changeColor($accentColor);
@@ -94,6 +95,11 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
         });
     }
 
+    function handleMouseEnter(e) {
+        handleMouseEnterCommon(e);
+        if (!$colorSelector || !$colorSelector.show) anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })
+    }
+
     onMount(async() => {
         await tick();
         
@@ -104,9 +110,10 @@ import { colorSelector, darkenClock } from "../../stores/globalState";
 
 {#if interactive}
     <span bind:this={hours} class="inline-block z-10 relative" 
-        on:mouseenter={() => {if (!$colorSelector || !$colorSelector.show) anime({targets: hours, duration: 250, rotate: [0, -5, 5, 0], easing: 'linear' })}} 
+        on:mouseenter={handleMouseEnter} 
         on:mousedown={handleClockMousedown} 
         on:mouseup={handleClockMouseUp} 
+        on:mouseleave={handleMouseLeaveCommon}
         on:contextmenu|preventDefault={handleClockCM} 
         style="transition: color .05s linear; color: {color}; text-shadow: {textShadow}">
         { $time.format($clockFormat === '24h' ? 'HH' : 'hh') }

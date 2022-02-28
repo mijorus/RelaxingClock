@@ -36,8 +36,6 @@ import { handleMouseEnterCommon, handleMouseLeaveCommon } from './common';
 <StyleBase styleId={3}>
         <div bind:this={container} class="flex flex-col" 
             style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});"
-            on:mouseenter={handleMouseEnterCommon} 
-            on:mouseleave={handleMouseLeaveCommon}
         >
             {#if $screenSaver}
                 <div class="absolute text-base w-full top-5 z-20" on:mouseenter={() => isHovered = true} on:mouseleave={() => isHovered = false}>

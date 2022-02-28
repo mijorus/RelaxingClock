@@ -13,7 +13,7 @@ import { handleMouseEnterCommon, handleMouseLeaveCommon } from './common';
 </script>
 
 <StyleBase styleId={0}>
-    <div class="relative" on:mouseenter={handleMouseEnterCommon} on:mouseleave={handleMouseLeaveCommon}>
+    <div class="relative">
         <div class="absolute left-1/2 transform -translate-x-2/4">
             <IncomingEventsMessages />
         </div> 

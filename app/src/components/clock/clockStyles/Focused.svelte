@@ -15,7 +15,7 @@ $: hour = parseInt($time.format('HH'));
 </script>
 
 <StyleBase styleId={1}>
-        <div class="relative" on:mouseenter={handleMouseEnterCommon} on:mouseleave={handleMouseLeaveCommon}>
+        <div class="relative">
             <div class="absolute left-1/2 transform -translate-x-2/4">
                 <IncomingEventsMessages />
             </div>
