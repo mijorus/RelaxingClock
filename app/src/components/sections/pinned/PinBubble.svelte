@@ -71,14 +71,6 @@ import { tips } from "../../../stores/globalState";
         opacity: 100% !important;
     }
 
-    .pin-box:hover .pinned-hint {
-        opacity: 100% !important;
-    }
-
-    .pinned-box-sm {
-        animation: reveal .2s linear;
-    }
-
     @keyframes reveal {
         0% { opacity: 0; transform: translateX(-20%);}
         100% { opacity: 1; transform: translateX(0%);}
