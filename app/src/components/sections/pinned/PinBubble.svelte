@@ -12,7 +12,7 @@ import { tips } from "../../../stores/globalState";
     let dispatch = createEventDispatcher();
 
     function handleMouseEnter() {
-        tips.set([{shortcut: 'Long press pin and move', name: 'Drag the bubble around'}])
+        tips.set([{shortcut: 'Pin', name: 'Drag the bubble around'}])
     }
 
     function handleMouseLeave() {
