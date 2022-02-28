@@ -1,4 +1,6 @@
 # Relaxing Clock 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b9215e11-983a-4dba-a627-203ade441980/deploy-status)](https://app.netlify.com/sites/vigorous-murdock-a45fe2/deploys)
+
 <p  align="center">
     <img src="docs/clock.png" width="500"/>
 </p>
