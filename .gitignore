@@ -14,3 +14,4 @@ rc.code-workspace
 .netlify
 
 public/blog
+public/manifest.json
