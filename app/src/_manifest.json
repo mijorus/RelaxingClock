@@ -8,15 +8,15 @@
     "version": "1.0.0",
     "icons": [
         {
-            "src": "/media/icons/android-chrome-192x192.png",
+            "src": "{{base_url}}/media/icons/android-chrome-192x192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "/media/icons/android-chrome-512x512.png",
+            "src": "{{base_url}}/media/icons/android-chrome-512x512.png",
             "type": "image/png",
             "sizes": "512x512"
         }
     ],
-    "start_url": ""
+    "start_url": "{{base_url}}"
 }
