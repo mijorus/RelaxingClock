@@ -70,6 +70,10 @@
             navigator.serviceWorker.register('/service-worker.js', {
                 scope: '/'
             });
+
+            window.addEventListener('beforeinstallprompt', function(e){
+                // 
+            });
         }
     </script>
 </body>
