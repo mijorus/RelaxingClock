@@ -8,7 +8,8 @@ baseUrl = (process.env.SPOTIFY_REDIRECT_URL).replace(/\/$/g, '');
 let output = JSON.stringify(manifest);
 output.replace('{{base_url}}', baseUrl);
 
-fs.writeFile(__dirname + '/../../public/manifest.json', , err => {
+console.log('Building web manifest...');
+fs.writeFile(__dirname + '/../../public/manifest.json', output, err => {
     if (err) {
         console.error(err);
         process.exit(1);
