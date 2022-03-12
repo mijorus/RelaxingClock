@@ -27,7 +27,7 @@ export class RemindersDB {
     }
 
     static async create(reminder: Reminder) {
-        return RemindersDB.db.add('reminders', reminder);
+        return RemindersDB.db.add('reminders', { ...reminder } );
     }
 
     static async get(key: number) {

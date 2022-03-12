@@ -76,12 +76,16 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
         reminders.forEach(r => r.done ? doneReminders.unshift(r) : futureReminders.push(r));
     }
 
-    async function createReminder(title: string, at: Moment, type: ReminderType, edit = false) {
-        edit  
+    async function createReminder(title: string, at: Moment, type: ReminderType, editing = false) {
+        editing  
             ? await RemindersDB.updatePending(reminderToEdit.id, { title, type, 'at': at.unix(), done: false })
             : await RemindersDB.create({ title, at: at.unix(), type, done: false });
 
         runListCheck();
+    }
+
+    function reCreateReminder(r: StoredReminder) {
+        openEditBox(r.id);
     }
     
     async function saveInput() {
@@ -128,7 +132,8 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
         reminderToEdit = await RemindersDB.get(id);
         title = reminderToEdit.title;
         creationBoxType = 'Edit';
-        openCreationBox(moment(reminderToEdit.at, 'X').diff(moment(), 'minutes'), reminderToEdit.type === 'repeated');
+        const mFromNow = reminderToEdit.at > moment().unix() ? moment(reminderToEdit.at, 'X').diff(moment(), 'minutes') : 10;
+        openCreationBox(mFromNow, reminderToEdit.type === 'repeated');
     }
 
     function handleShortcuts(event: KeyboardEvent) {
@@ -318,10 +323,11 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
                 {#each doneReminders as r }
                     <div class="my-2 overflow-x-hidden reminder p-2 border border-secondary rounded-md done-reminder" transition:fly={{y: -10}}>
                         <span class="whitespace-nowrap"><AnimatedText fade={false} text={r.title} /></span>
-                        {#if r.doneAt}<span class="text-secondary">{moment(r.doneAt, 'X').fromNow()}</span>{/if}
-                        <span class="float-right cursor-pointer" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}>
+                        {#if r.doneAt}<span class="text-secondary">done: {moment(r.doneAt, 'X').fromNow()}</span>{/if}
+                        <span class="float-right cursor-pointer">
+                            <i class="lnr lnr-redo text-md r-icon text-secondary" on:click={() => reCreateReminder(r)}></i>
                             <i class="icon-checkmark text-md r-icon text-green-400 delete-rem-i-check" ></i>
-                            <i class="lnr lnr-trash text-md r-icon text-red-600 delete-rem-i-cross hidden"></i>
+                            <i class="lnr lnr-trash text-md r-icon text-red-600 delete-rem-i-cross hidden" on:click={async () => { await RemindersDB.remove(r.id); runListCheck() }}></i>
                         </span>
                     </div>
                 {/each}
