@@ -50,13 +50,15 @@ import SeekPicker from "./SeekPicker.svelte";
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
             if (thisUri !== lastUri) {
+                
                 const ctx = $spotifyPlayerState.context.uri;
-                if (ctx.length) {
+                if (ctx.length && $spotifyPlayerState.context?.metadata?.name) {
                     let history: LastPlayedContexts[] = deepClone($contextHistory);
                     
                     if (history.length > 5) history.pop();
                     if (!history.find(el => el.uri === ctx)) history.unshift({
-                        uri: ctx, name: $spotifyPlayerState.context.metadata.context_description, 
+                        uri: ctx, 
+                        name: $spotifyPlayerState.context.metadata.name, 
                         date: Date.now()
                     });
                     
