@@ -54,7 +54,7 @@
     "loaders.css": "^0.1.2",
     "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.34",
+    "moment-timezone": "^0.5.35",
     "nosleep.js": "^0.12.0",
     "qs": "^6.10.1",
     "randomcolor": "^0.6.2",
