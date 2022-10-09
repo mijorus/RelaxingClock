@@ -1,46 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width,initial-scale=1'>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
 
-	<title>Relaxing Clock</title>
+    <title>Relaxing Clock</title>
 
-	<!-- icons -->
-	<link rel="stylesheet" href="/custom-fonts.css">
-	<link rel="stylesheet" href="/vendors/linearicons/style.css">
-	<link rel="stylesheet" href="/vendors/font-awesome/css/fontawesome.min.css">
-	<link rel="stylesheet" href="/vendors/font-awesome/css/solid.min.css">
-	<link rel="stylesheet" href="/vendors/font-awesome/css/regular.min.css">
-	<link rel="stylesheet" href="/vendors/font-awesome/css/brands.min.css">
+    <!-- icons -->
+    <link rel="stylesheet" href="/custom-fonts.css">
+    <link rel="stylesheet" href="/vendors/linearicons/style.css">
+    <link rel="stylesheet" href="/vendors/font-awesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/vendors/font-awesome/css/solid.min.css">
+    <link rel="stylesheet" href="/vendors/font-awesome/css/regular.min.css">
+    <link rel="stylesheet" href="/vendors/font-awesome/css/brands.min.css">
 
     <meta name="author" content="mijorus">
     <meta name="theme-color" content="#1d1d1d">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     <meta name="robots" content="index, follow">
-    <meta name="keywords" content="Spotify, LoFi, Relax, Alarm, Clock, Music, spotify, alarm, relax, relaxing, time, clock, worldclock, styles, screensaver, black">
+    <meta name="keywords"
+        content="Spotify, LoFi, Relax, Alarm, Clock, Music, spotify, alarm, relax, relaxing, time, clock, worldclock, styles, screensaver, black">
     <link rel="apple-touch-icon" sizes="180x180" href="/media/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/media/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/media/icons/favicon-16x16.png">
-    <meta name="description" content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
+    <meta name="description"
+        content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
     <link rel="manifest" href="/manifest.json">
     <!-- Open Graph -->
     <meta property="og:title" content="Relaxing Clock">
-    <meta property="og:description" content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
+    <meta property="og:description"
+        content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
     <meta property="og:image" content="https://relaxingclock.com/media/thumb-01.png">
     <meta property="og:url" content="https://relaxingclock.com/">
     <!-- Twitter -->
     <meta name="twitter:title" content="Relaxing Clock">
-    <meta name="twitter:description" content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
+    <meta name="twitter:description"
+        content="Relaxing Clock is just an awesome way to relax yourself - Powered by Spotify. It can play a great selection of Lo-Fi music with a minimalistic UI. You can also set alarms and start the Pomodoro Timer.">
     <meta name="twitter:image" content="https://relaxingclock.com/media/thumb-01.png">
     <meta name="twitter:card" content="summary_large_image">
-    
-	<link rel='icon' type='image/png' href='/media/favicon.svg'>
-	<link rel='stylesheet' href='/global.css'>
-	<link rel='stylesheet' href='/build/bundle.css'>
 
-	<script defer src='/build/bundle.js'></script>
+    <link rel='icon' type='image/png' href='/media/favicon.svg'>
+    <link rel='stylesheet' href='/global.css'>
+    <link rel='stylesheet' href='/build/bundle.css'>
+
+    <script defer src='/build/bundle.js'></script>
 </head>
+
 <body class="font-ubuntu overflow-x-hidden">
     <h1 class="hidden">Relaxing Clock</h1>
     <div id="app" style="position: relative; overflow-x: clip;"></div>
@@ -49,23 +55,33 @@
             <h2 class="text-6xl font-title mb-10">Follow Relaxing Clock</h2>
             <div class="flex flex-row justify-center gap-10">
                 <a href="https://github.com/mijorus/RelaxingClock"><i class="text-white text-5xl fab fa-github"></i></a>
-                <a href="https://twitter.com/Relaxingclock"><i class="text-5xl fab fa-twitter" style="color: #50abf1"></i></a>
-                <a href="https://open.spotify.com/playlist/4ZTZhFPPyRzpfHZsWEXAW9?si=kvCqe0nMSdGbSmOB5ccQWA"><i class="text-spotify text-5xl fab fa-spotify"></i></a>
+                <a href="https://twitter.com/Relaxingclock"><i class="text-5xl fab fa-twitter"
+                        style="color: #50abf1"></i></a>
+                <a href="https://open.spotify.com/playlist/4ZTZhFPPyRzpfHZsWEXAW9?si=kvCqe0nMSdGbSmOB5ccQWA"><i
+                        class="text-spotify text-5xl fab fa-spotify"></i></a>
             </div>
             <p class="text-center text-3xl my-10">* * *</p>
             <div class="flex flex-row justify-center gap-16 text-3xl">
-                <a target="_blank" href="https://blog.relaxingclock.com/credits" class="border-b-2 border-transparent hover:border-white transition-all">Credits</a>
-                <a target="_blank" href="https://blog.relaxingclock.com" class="relative border-b-2 border-transparent hover:border-white transition-all">Blog</a>
-                <a target="_blank" href="https://blog.relaxingclock.com/cookies" class="border-b-2 border-transparent hover:border-white transition-all">Cookies</a>
+                <a target="_blank" href="https://blog.relaxingclock.com/credits"
+                    class="border-b-2 border-transparent hover:border-white transition-all">Credits</a>
+                <a target="_blank" href="https://blog.relaxingclock.com"
+                    class="relative border-b-2 border-transparent hover:border-white transition-all">Blog</a>
+                <a target="_blank" href="https://blog.relaxingclock.com/cookies"
+                    class="border-b-2 border-transparent hover:border-white transition-all">Cookies</a>
             </div>
             <p class="text-center text-3xl my-10">* * *</p>
-            <p class="text-lg text-center font-primary">Made with <i class="fas fa-heart text-red-500"></i> by @mijorus</p>
+            <p class="text-lg text-center font-primary">Made with <i class="fas fa-heart text-red-500"></i> by @mijorus
+            </p>
             <p class="text-lg text-center font-primary text-secondary">version v<span class="version-print"></span></p>
+            <div class="mt-5 text-center">
+                <div class="counterapi" style="min-height:44px" color="white" bg="transparent"></div>
+            </div>
         </div>
     </footer>
-	<noscript>
-		This website requires javascript
-	</noscript>
+    <noscript>
+        This website requires javascript
+    </noscript>
+    <script src="https://counterapi.com/c.js?ns=relaxingclock.com" async></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
@@ -73,10 +89,11 @@
                     console.log(`Service Worker registered!`);
                 });
 
-            window.addEventListener('beforeinstallprompt', function(e){
+            window.addEventListener('beforeinstallprompt', function (e) {
                 event.preventDefault();
             });
         }
     </script>
 </body>
+
 </html>
