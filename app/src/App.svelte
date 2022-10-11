@@ -19,6 +19,7 @@ import Modal from './components/elements/Modal.svelte';
 import { windowReady } from 'html-ready';
 import IntroTutorialModal from './components/modals/IntroTutorialModal.svelte';
 import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
+import SurveyModal from './components/modals/SurveyModal.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -62,6 +63,9 @@ import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
             await tick();
             modalContent.set(IntroTutorialModal);
             localStorage.setItem('hasSeenTutorial', 'true');
+        } else if (!localStorage.getItem('askSurvey')) {
+            modalContent.set(SurveyModal);
+            localStorage.setItem('askSurvey', 'true');
         }
     });
 </script>
