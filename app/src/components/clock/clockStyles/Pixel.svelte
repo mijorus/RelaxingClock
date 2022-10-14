@@ -12,6 +12,7 @@
     import IncomingEventsBox from "../IncomingEventsBox.svelte";
     import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
     import { activeStyleId, nextStyleId } from "../../../stores/clockStyle";
+    import Hours from "../Hours.svelte";
 
     let animationReady = false;
     let rotateSec = 0;
@@ -85,6 +86,9 @@
                 {/if}
                 </div>
             {/each}
+        </div>
+        <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -25%)">
+            <span class="text-6xl">{$time.hours()}</span>
         </div>
     </div>
 </StyleBase>
