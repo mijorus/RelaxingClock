@@ -25,13 +25,24 @@
     $: load($nextStyleId);
     $: screenSaverMode($screenSaver);
 
+    let lastsec = 0;
+    function getSecRotation(time: Moment) {
+        if (!time.seconds()) lastsec ++;
+        return (time.seconds() * 6) + (186 + (360 * lastsec));
+    }
+
+    function getMinRotation(time: Moment) {
+        return (time.minutes() * 6) + 186;
+    }
+
     function load(style) {
         if (style === 5) {
-            rotateSec -= 30;
-            rotateMin += 30;
+            rotateSec = getSecRotation(moment()) - 30;
+            rotateMin = getSecRotation(moment()) + 15;
+
             setTimeout(() => {
-                rotateSec += 30;
-                rotateMin -= 30;
+                rotateSec = getSecRotation(moment());
+                rotateMin = getMinRotation(moment());
             }, 250);
 
             entrance = true;
@@ -42,8 +53,8 @@
 
     function handleClock(time: Moment) {
         if (entrance) {
-            rotateSec += 6;
-            if (time.seconds() === 0) rotateMin += 6;
+            rotateSec = getSecRotation(time);
+            if (time.seconds() === 0) rotateMin = getMinRotation(time);
         }
     }
 
@@ -52,42 +63,40 @@
             targets: container,
             duration: 1500,
             easing: eaElasticDefault,
-            scale: screenSaver ? 1.6 : 1
-        })
+            scale: screenSaver ? 1.6 : 1,
+        });
     }
 
     onMount(() => {
         setTimeout(() => {
-            animationReady = true
+            animationReady = true;
         }, 750);
     });
 </script>
 
 <StyleBase styleId={5}>
     <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title" style="transition: padding .2s ease-out;">
-        <div class="absolute w-96" style="transform: translateX(-50%);">
+        <div class="absolute w-96" style="transform: translateX(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform;">
             {#each Array(60) as _, s}
-                <div class="absolute transform-gpu flex items-center rounded-full w-96 h-2" 
-                    style="transform: rotate({6 * s + rotateSec}deg); transition: transform .25s ease-out; will-change: transform;"
-                >
+                <div class="absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: rotate({6 * s}deg);">
                     <div class="w-2 h-0.5 bg-white opacity-20" />
-                    {#if !((s+1) % 5)}
-                    <span class="pr-2 {6 * s + rotateSec % 180 ? 'text-sm' :"text-xs"} transform-gpu" style="transform: scale(-1);">{60 - (s + 1)}</span>
+                    {#if !((s + 1) % 5)}
+                        <span class="pr-2 {6 * s + (rotateSec % 180) ? 'text-sm' : 'text-xs'} transform-gpu" style="transform: scale(-1);">{60 - (s + 1)}</span>
                     {/if}
-                </div>
-                {/each}
-        </div>
-        <div class="absolute w-60" style="transform: translateX(-50%);">
-            {#each Array(60) as _, s}
-            <div class="absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: rotate({6 * s + rotateMin}deg); transition: transform .25s ease-out;">
-                <div class="w-2 h-0.5 bg-white opacity-20" />
-                {#if !((s+1) % 5)}
-                    <span class="pr-3 transform-gpu text-base" style="transform: scale(-1);">{60 - (s + 1)}</span>
-                {/if}
                 </div>
             {/each}
         </div>
-        <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -25%)">
+        <div class="absolute w-60" style="transform: translateX(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
+            {#each Array(60) as _, s}
+                <div class="absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: rotate({6 * s}deg);">
+                    <div class="w-2 h-0.5 bg-white opacity-20" />
+                    {#if !((s + 1) % 5)}
+                        <span class="pr-3 transform-gpu text-base" style="transform: scale(-1);">{60 - (s + 1)}</span>
+                    {/if}
+                </div>
+            {/each}
+        </div>
+        <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
             <span class="text-6xl">{$time.hours()}</span>
         </div>
     </div>
