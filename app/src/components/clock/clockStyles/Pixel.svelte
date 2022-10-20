@@ -72,9 +72,9 @@
 
 <StyleBase styleId={5}>
     <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title" style="transition: padding .2s ease-out;">
-        <div class="absolute w-96" style="transform: translateX(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform;">
+        <div class="absolute h-96 w-96" style="transform: translate(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform; transform-origin: 50% 0%;">
             {#each Array(60) as _, s}
-                <div class="absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: rotate({6 * s}deg);">
+                <div class=" absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
                     <div class="w-2 h-0.5 bg-white opacity-20" />
                     {#if !((s + 1) % 5)}
                         <span class="pr-2 {6 * s + (rotateSec % 180) ? 'text-sm' : 'text-xs'} transform-gpu" style="transform: scale(-1);">{60 - (s + 1)}</span>
@@ -82,9 +82,9 @@
                 </div>
             {/each}
         </div>
-        <div class="absolute w-60" style="transform: translateX(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
+        <div class="absolute w-60 " style="transform; transform-origin: 50% 0%; transform: translate(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
             {#each Array(60) as _, s}
-                <div class:z-10={isCurrentMinute(s, $time)} class="absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: rotate({6 * s}deg);">
+                <div class:z-10={isCurrentMinute(s, $time)} class=" absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
                     <div class="w-2 h-0.5 bg-white opacity-20" />
                     {#if !((s + 1) % 5) || isCurrentMinute(s, $time)}
                         <div 
@@ -110,4 +110,7 @@
 </StyleBase>
 
 <style>
+    .origin-center {
+        transform-origin: center center;
+    }
 </style>
