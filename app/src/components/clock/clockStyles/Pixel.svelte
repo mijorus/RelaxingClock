@@ -2,19 +2,17 @@
     import anime from "animejs";
     import time from "../../../stores/time";
     import { screenSaver } from "../../../stores/globalState";
-    import { cbDefault, eaElasticDefault } from "../../../utils/animations";
+    import { accentColor } from "../../../stores/storedSettings";
+    import { eaElasticDefault } from "../../../utils/animations";
     import StyleBase from "./StyleBase.svelte";
-    import { describeArc } from "../../../utils/utils";
     import type { Moment } from "moment";
     import moment from "moment";
-    import { clockFormat } from "../../../stores/storedSettings";
     import { onMount } from "svelte";
+    import { nextStyleId } from "../../../stores/clockStyle";
+    import { slide } from "svelte/transition";
     import IncomingEventsBox from "../IncomingEventsBox.svelte";
-    import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
-    import { activeStyleId, nextStyleId } from "../../../stores/clockStyle";
-    import Hours from "../Hours.svelte";
 
-    let animationReady = false;
+    let hoursHovered = false;
     let rotateSec = 0;
     let rotateMin = 0;
     let container: HTMLElement;
@@ -67,11 +65,9 @@
         });
     }
 
-    onMount(() => {
-        setTimeout(() => {
-            animationReady = true;
-        }, 750);
-    });
+    function isCurrentMinute(s: number, time: Moment) {
+        return ((60 - (s + 1)) === time.minutes());
+    }
 </script>
 
 <StyleBase styleId={5}>
@@ -88,16 +84,27 @@
         </div>
         <div class="absolute w-60" style="transform: translateX(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
             {#each Array(60) as _, s}
-                <div class="absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: rotate({6 * s}deg);">
+                <div class:z-10={isCurrentMinute(s, $time)} class="absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: rotate({6 * s}deg);">
                     <div class="w-2 h-0.5 bg-white opacity-20" />
-                    {#if !((s + 1) % 5)}
-                        <span class="pr-3 transform-gpu text-base" style="transform: scale(-1);">{60 - (s + 1)}</span>
+                    {#if !((s + 1) % 5) || isCurrentMinute(s, $time)}
+                        <div 
+                            transition:slide
+                            class="leading-normal mr-3 px-2 py-1 transform-gpu {isCurrentMinute(s, $time) ? 'shadow-2xl shadow-primary bg-primary text-2xl rounded-full border-2' : 'text-base'}" 
+                            style="transform: scale(-1); border-color: {$accentColor}">
+                            {60 - (s + 1)}
+                        </div>
                     {/if}
                 </div>
             {/each}
         </div>
-        <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
+        <div
+            on:mouseenter={() => hoursHovered = true} 
+            on:mouseleave={() => hoursHovered = false} 
+            class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
             <span class="text-6xl">{$time.hours()}</span>
+            <div class="absolute -bottom-1/2 text-lg" style="transform: translateX(25%);">
+                <IncomingEventsBox isHovered={hoursHovered} />
+            </div>
         </div>
     </div>
 </StyleBase>

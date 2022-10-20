@@ -102,7 +102,7 @@ export default {
                     OW_APIKEY: process.env.OW_APIKEY,
                     SPOTIFY_REDIRECT_URL: process.env.SPOTIFY_REDIRECT_URL,
                     CITIES_LANDSCAPES_SOURCE: process.env.CITIES_LANDSCAPES_SOURCE,
-                    VERISION: packageConfig.version,
+                    VERSION: packageConfig.version,
                     production,
                 }
             })

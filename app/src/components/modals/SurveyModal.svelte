@@ -1,12 +1,5 @@
 <script lang="ts">
 import { windowReady } from "html-ready";
-import { fly, slide } from "svelte/transition";
-import { modalContent, tips } from "../../stores/globalState";
-import { summoned } from "../../stores/rooster";
-import Key from "../elements/Key.svelte";
-import Action from "../elements/settings/Buttons/Action.svelte";
-import TutorialElement from "./components/TutorialElement.svelte";
-import TutorialStep from "./components/TutorialStep.svelte";
 
 </script>
 

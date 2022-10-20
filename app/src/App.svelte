@@ -20,6 +20,7 @@ import { windowReady } from 'html-ready';
 import IntroTutorialModal from './components/modals/IntroTutorialModal.svelte';
 import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
 import SurveyModal from './components/modals/SurveyModal.svelte';
+    import UpdateModal from './components/modals/UpdateModal.svelte';
 
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
@@ -44,11 +45,11 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
     }
 
 	onMount(async () => {
-        console.log(process.env.VERISION);
-        
+        console.log(process.env.VERSION);
+
         if (process.env.production) console.log = function() {};
         document.querySelector('footer').classList.remove('hidden');
-        document.querySelectorAll('.version-print').forEach(el => el.innerText = process.env.VERISION);
+        document.querySelectorAll('.version-print').forEach(el => el.innerText = process.env.VERSION);
 
         // Var init
         localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
@@ -66,6 +67,10 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
         } else if (!localStorage.getItem('askSurvey')) {
             modalContent.set(SurveyModal);
             localStorage.setItem('askSurvey', 'true');
+        } else if (localStorage.getItem('version') !== process.env.VERSION) {
+        // } else {
+            modalContent.set(UpdateModal);
+            localStorage.setItem('version', process.env.VERSION);
         }
     });
 </script>
