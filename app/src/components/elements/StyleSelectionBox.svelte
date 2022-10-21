@@ -29,7 +29,6 @@
     }
 
     function changeStyle(toStyle: number) {
-        console.log('qwe');
         if (toStyle >= 0 && toStyle <= l - 1) {
             activeStyle.set(toStyle);
             selectionPosition.set(-(100 / l) * $activeStyle);

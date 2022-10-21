@@ -287,7 +287,11 @@ import SeekPicker from "./SeekPicker.svelte";
                 {#if $spotifyPlayerStatus === 'ready' && !$spotifyPlayerState?.loading}
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
-                        <i class="fas fa-play cursor-pointer" on:click={togglePlay}/>
+                        <i class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'}" 
+                            on:click={togglePlay}
+                            on:mouseenter={() => tips.set([{'name': 'Next track', 'shortcut': 'Right-click'}])} 
+                            on:mouseleave={() => tips.set(null)}
+                        />
                         {:else}
                             <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward}/>
                         {/if} 

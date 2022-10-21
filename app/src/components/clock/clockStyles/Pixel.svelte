@@ -19,7 +19,6 @@
     let entrance = false;
 
     $: handleClock($time);
-    // $: load($activeStyleId);
     $: load($nextStyleId);
     $: screenSaverMode($screenSaver);
 
