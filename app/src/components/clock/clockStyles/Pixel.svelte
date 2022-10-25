@@ -2,7 +2,7 @@
     import anime from "animejs";
     import time from "../../../stores/time";
     import { screenSaver } from "../../../stores/globalState";
-    import { accentColor } from "../../../stores/storedSettings";
+    import { accentColor, clockFormat } from "../../../stores/storedSettings";
     import { eaElasticDefault } from "../../../utils/animations";
     import StyleBase from "./StyleBase.svelte";
     import type { Moment } from "moment";
@@ -100,7 +100,7 @@
             on:mouseenter={() => hoursHovered = true} 
             on:mouseleave={() => hoursHovered = false} 
             class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
-            <span class="text-6xl">{$time.hours()}</span>
+            <span class="text-6xl">{$time.format($clockFormat === '24h' ? 'HH' : 'hh')}</span>
             <div class="absolute -bottom-1/2 text-lg" style="transform: translateX(25%);">
                 <IncomingEventsBox isHovered={hoursHovered} />
             </div>
