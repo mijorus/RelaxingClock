@@ -75,6 +75,8 @@ export function logout() {
 export async function refershOrGetOAuthToken() {
     let response;
     refreshingToken.set(true);
+    console.info('Spotify: refreshing access token');
+
     //We request a token for the first time
     if (localStorage.getItem('code') && localStorage.getItem('verifier')) {
         response = await authClient.requestToken(localStorage.getItem('code'), process.env.SPOTIFY_REDIRECT_URL, localStorage.getItem('verifier'));
