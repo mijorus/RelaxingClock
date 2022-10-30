@@ -1,40 +1,89 @@
 <script lang="ts">
-import { documentReady, windowReady } from "html-ready";
-import { onMount } from "svelte";
-import { slide } from "svelte/transition";
-import anime from "animejs";
+    import { documentReady, windowReady } from "html-ready";
+    import { onMount } from "svelte";
+    import { slide } from "svelte/transition";
+    import anime from "animejs";
+    import Loader from "../elements/Loader.svelte";
 
     let isLoading = true;
-    let bar = 5;
-    let paddingTime = 750;
+    const paddingTime = 750;
 
     onMount(async () => {
         await documentReady;
-        bar = 50;
         await windowReady;
-        bar = 100;
-        
-        setTimeout(() =>{
-             isLoading = false
-             anime({
-                 targets: 'main',
-                 opacity: [0.3, 1],
-                 translateY: [30, 0],
-                 duration: 750,
-                 easing: 'easeOutQuad',
-                 complete() {
-                     document.querySelector('main').style.transform = null;
-                 }
-             });
+
+        setTimeout(() => {
+            isLoading = false;
         }, paddingTime);
-    })
+    });
 </script>
 
 {#if isLoading}
     <div class="flex flex-col items-center justify-center text-primary w-full h-full fixed top-0 bg-tertiary rounded-b-2xl pointer-events-none" style="z-index: 999;" transition:slide>
-        <img class="w-6/12 md:w-3/12 lg:w-2/12 mb-10 md:mb-20" src="/media/relaxing-clock-logo-transparent-smile.svg" alt="">
-        <div class="w-52 md:w-60 h-1 rounded-full bg-secondary">
-            <div class="h-full bg-white bg-opacity-80 rounded-full" style="width: {bar}%; transition: all {paddingTime / 1000}s ease-in-out;"></div>
+        <img class="w-6/12 md:w-3/12 lg:w-2/12 mb-0 md:mb-0" src="/media/relaxing-clock-logo-transparent-smile.svg" alt="" />
+        <div class="lds-ellipsis">
+            <div />
+            <div />
+            <div />
+            <div />
         </div>
     </div>
+
+    <style>
+        .lds-ellipsis {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .lds-ellipsis div {
+            position: absolute;
+            top: 33px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #fff;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        .lds-ellipsis div:nth-child(1) {
+            left: 8px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(2) {
+            left: 8px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(3) {
+            left: 32px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(4) {
+            left: 56px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+        @keyframes lds-ellipsis1 {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes lds-ellipsis3 {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+        @keyframes lds-ellipsis2 {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(24px, 0);
+            }
+        }
+    </style>
 {/if}
