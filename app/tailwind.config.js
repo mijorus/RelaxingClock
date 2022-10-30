@@ -13,6 +13,7 @@ module.exports = {
             "w-12",
             "absolute",
             "w-screen",
+            "md:flex-row",
             "h-screen",
         ],
     },
