@@ -62,7 +62,10 @@ export async function attemptSpotifyLogin() {
                     spotifyPlayerStatus.set('error');
                     console.log(err);
                 }) 
-                .finally(() => clearTimeout(loginTimeout))
+                .finally(() => {
+                    console.info('onSpotifyWebPlaybackSDKReady event fired!')
+                    clearTimeout(loginTimeout);
+                })
         };
     }
 }
@@ -119,7 +122,7 @@ function autoRefeshToken(seconds: number, enable = true) {
 }
 
 async function createNewSpotifyPlayer() {
-    console.log('creating spotify player');
+    console.info('creating spotify player');
 
     SpotifyPlayer = new Spotify.Player({
         name: 'Relaxing Clock',
@@ -128,6 +131,8 @@ async function createNewSpotifyPlayer() {
             callback(access_token);
         }
     });
+
+    window.addEventListener('beforeunload', () => SpotifyPlayer.disconnect());
 
     // Error handling
     SpotifyPlayer.addListener('initialization_error', ({ message }) => { console.error(message); });
