@@ -2,7 +2,7 @@
 import moment from "moment";
 import momentDurationFormatSetup from 'moment-duration-format';
 import { fade, fly, slide } from "svelte/transition";
-import { SpotifyPlayer } from "../../handlers/spotify/login";
+import { SpotifyPlayer, device_id } from "../../handlers/spotify/login";
 import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
 import { darkenClock, screenSaver, screenSize, tips } from "../../stores/globalState";
 import { notifications } from "../../stores/notifications";
@@ -199,6 +199,20 @@ import SeekPicker from "./SeekPicker.svelte";
         navigator.clipboard.writeText('https://open.spotify.com/track/'+ $spotifyPlayerState?.track_window.current_track.id);
         notifications.create({'limitDisplay': 'notificationOnly', 'title': 'Track link copied', 'content': 'The track link was copied to the clipboard', 'icon': 'fas fa-link'});
     }
+
+    function setRepeat() {
+        //@ts-ignore
+        if ($spotifyPlayerState.context.metadata.current_item.content_type === 'TRACK') {
+            if ($spotifyPlayerState?.repeat_mode === 0) SpotifyClient.setRepeat('track', {device_id})
+            else SpotifyClient.setRepeat('off', {device_id})
+
+        } else {
+            if ($spotifyPlayerState?.repeat_mode === 0) SpotifyClient.setRepeat('context', {device_id})
+            if ($spotifyPlayerState?.repeat_mode === 1) SpotifyClient.setRepeat('track', {device_id})
+            else SpotifyClient.setRepeat('off', {device_id})
+        }
+
+    }
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown} on:keyup={handleWindowKeyUp}/>
@@ -225,7 +239,7 @@ import SeekPicker from "./SeekPicker.svelte";
                 </i>
                 <i class="mx-1 fas fa-link cursor-pointer hover:text-spotify transition-colors" on:click={() => copyCurrentTrackLink()}>
                 </i>
-                <i class="mx-1 cursor-pointer inline-block" on:click={() => SpotifyClient.setRepeat($spotifyPlayerState?.repeat_mode === 0 ? 'context' : 'off')}>
+                <i class="mx-1 cursor-pointer inline-block" on:click={() => setRepeat()}>
                     <Repeat color={$spotifyPlayerState?.repeat_mode === 0 ? process.env.TEXT_SECONDARY : process.env.SPOTIFY_COLOR} />
                 </i>
                 <i class="mx-2 fas fa-forward cursor-pointer inline-block text-{$spotifyPlayerState?.loading ? 'secondary pointer-events-none' : 'primary'}" 
