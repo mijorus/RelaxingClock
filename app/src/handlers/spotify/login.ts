@@ -132,7 +132,11 @@ async function createNewSpotifyPlayer() {
         }
     });
 
-    window.addEventListener('beforeunload', () => SpotifyPlayer.disconnect());
+    
+    window.addEventListener('beforeunload', (e) => {
+        SpotifyPlayer.disconnect();
+    });
+    // window.addEventListener('unload', () => SpotifyPlayer.disconnect());
 
     // Error handling
     SpotifyPlayer.addListener('initialization_error', ({ message }) => { console.error(message); });
@@ -152,7 +156,7 @@ async function createNewSpotifyPlayer() {
     });
 
     SpotifyPlayer.addListener('player_state_changed', (state) => {
-        console.log(state);
+        console.log('Spotify player_state_changed', state);
         spotifyPlayerState.set(state ? {...state} : null);
     });
 }
