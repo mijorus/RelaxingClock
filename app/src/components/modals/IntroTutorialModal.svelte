@@ -139,7 +139,7 @@ import TutorialStep from "./components/TutorialStep.svelte";
                 </TutorialStep>
             {/if}
         </div>
-        <footer class="flex flex-col justify-center justify-self-end">
+        <footer class="flex flex-col justify-center justify-self-end bg-primary z-10">
             <div class="flex justify-center mb-3">
                 {#each Array(9) as _, index}
                     <i class="mx-1 fas fa-circle {step === index ? 'text-primary' : 'text-secondary'} text-xxs cursor-pointer" on:click={() => step = index}></i>
