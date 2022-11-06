@@ -4,5 +4,17 @@
     },
     {
         "text": "You can also play Podcasts by typing <em>spotify: podcast</em> in the the command box"
+    },
+    {
+        "text": "Running on battery? Enable <span style='color: green;'>Efficiency mode</span> in the settings to reduce background animations!"
+    },
+    {
+        "text": "<span style='color: lightblue'>Repeated reminders</span> will keep sending you notifications until you manually dismiss them"
+    },
+    {
+        "text": "Use <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kdb>P</kdb> to create a new 📌 pinned message "
+    },
+    {
+        "text": "If you see some little dots on the bottom, move the mouse over them to see running timers or activities, like the Pomodoro Timer or the next alarm."
     }
 ]
