@@ -10,7 +10,6 @@ import Hours from "../Hours.svelte";
 import Minutes from "../Minutes.svelte";
 import AmPmBadge from "../AmPmBadge.svelte";
 import StyleBase from "./StyleBase.svelte";
-import IncomingEventsBox from "../IncomingEventsBox.svelte";
 import { locSto, randomCustomColor, shakeElement } from "../../../utils/utils";
 import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
 
@@ -63,9 +62,6 @@ import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
                     <i class="fas fa-{$analogTimeLocked ? 'lock' : 'unlock'}"></i>
                 </div>
                 <div><Hours interactive={false}/><Divisor /><Minutes /><AmPmBadge size="xs"/></div>
-            </div>
-            <div class="text-center text-xl mt-0 -z-1">
-                 <IncomingEventsBox isHovered={showTime} />
             </div>
             
             <span id="little-dot" class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4 bg-highlighted 

@@ -43,12 +43,19 @@ import { createIncomingEvent } from '../../clock/IncomingEventsMessages.svelte';
         } 
     }
 
+    function setPomodoroEndsAt(cycleEndsIn: number ) {
+        cycleEndsAt = moment().add(cycleEndsIn, 'milliseconds');
+        locSto('pomodoroEndsAt', cycleEndsAt.unix().toString());
+    }
+
     function startRelaxSession() {
         pomodoroIsRunning = 'relax';
         label = 'It\'s time for a break 😊';
         locSto('pomodoroState', pomodoroIsRunning);
+        
         cycleEndsIn = ($longPomodoro ? 15 : 5) * 60000;
-        cycleEndsAt = moment().add(cycleEndsIn, 'milliseconds');
+        setPomodoroEndsAt(cycleEndsIn);
+
         pomodoroTimer = setTimeout(() => startFocusSession(), cycleEndsIn);
         notifications.create({
             'title': label,
@@ -65,8 +72,10 @@ import { createIncomingEvent } from '../../clock/IncomingEventsMessages.svelte';
         pomodoroIsRunning = 'focus';
         locSto('pomodoroState', pomodoroIsRunning);
         const length = $longPomodoro ? 45 : 25;
+        
         cycleEndsIn = length * 60000;
-        cycleEndsAt = moment().add(cycleEndsIn, 'milliseconds');
+        setPomodoroEndsAt(cycleEndsIn);
+
         pomodoroTimer = setTimeout(() => startRelaxSession(), cycleEndsIn);
         notifications.create({
             'title': label,

@@ -1,10 +1,6 @@
 <script lang="ts">
 import time from '../../stores/time';
 import { fly, fade, scale } from 'svelte/transition';
-import type { Moment } from 'moment';
-import { RemindersDB } from '../../handlers/RemindersDB';
-import { alarmTime } from '../../stores/storedSettings';
-import IncomingEventsBox from './IncomingEventsBox.svelte';
 
 let isHovered = false;
 </script>
@@ -17,5 +13,4 @@ let isHovered = false;
     <div class="mb-1">
         <div class="bg-highlighted rounded-full inline-block px-2 py-1">{$time.format('dddd, D MMMM')}</div>
     </div>
-    <IncomingEventsBox {isHovered} />
 </div>

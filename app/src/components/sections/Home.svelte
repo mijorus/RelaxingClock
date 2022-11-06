@@ -1,35 +1,41 @@
 <script lang="ts">
-import { darkenClock, screenSaver } from '../../stores/globalState';
-import screenSaverHandler from "../../handlers/screenSaver";
-import Tips from '../tips/Tips.svelte';
-import Clock from '../clock/Clock.svelte';
-import FullScreenBtn from '../elements/FullScreenBtn.svelte';
-import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
-import SpotifyBox from '../spotifyPlayer/SpotifyBox.svelte';
-import WeatherWidget from './WeatherWidget.svelte';
-import Pinned from './pinned/Pinned.svelte';
-import anime from "animejs";
-import { bigClockSSoffset, cbDefault } from '../../utils/animations';
-import FloatingBlobs from './FloatingBlobs/FloatingBlobs.svelte';
-import RunningEvents from '../clock/RunningEvents.svelte';
+    import { darkenClock, screenSaver } from "../../stores/globalState";
+    import screenSaverHandler from "../../handlers/screenSaver";
+    import Tips from "../tips/Tips.svelte";
+    import Clock from "../clock/Clock.svelte";
+    import FullScreenBtn from "../elements/FullScreenBtn.svelte";
+    import StyleSelectionBox from "../elements/StyleSelectionBox.svelte";
+    import SpotifyBox from "../spotifyPlayer/SpotifyBox.svelte";
+    import WeatherWidget from "./WeatherWidget.svelte";
+    import Pinned from "./pinned/Pinned.svelte";
+    import anime from "animejs";
+    import { bigClockSSoffset, cbDefault } from "../../utils/animations";
+    import FloatingBlobs from "./FloatingBlobs/FloatingBlobs.svelte";
+    import IncomingEventsBox from "../clock/IncomingEventsBox.svelte";
+    import Bubble from "../elements/Bubble.svelte";
 
     let bigClockContainer: HTMLElement;
+    let incomingEventsBoxHovered = false;
 
     $: screenSaverApply($screenSaver);
     $: darken($darkenClock);
 
     function darken(obscure: boolean) {
-       if (!bigClockContainer) return;
-       anime({
-            begin() { bigClockContainer.classList.add('pointer-events-none') },
+        if (!bigClockContainer) return;
+        anime({
+            begin() {
+                bigClockContainer.classList.add("pointer-events-none");
+            },
             targets: bigClockContainer,
             duration: 500,
             opacity: obscure ? 0.5 : 1,
-            easing: 'easeOutQuad',
+            easing: "easeOutQuad",
             update(a) {
-                bigClockContainer.style.filter = `blur(${Math.round((obscure ? 0 : -3) + (a.progress / 33))}px)`
+                bigClockContainer.style.filter = `blur(${Math.round((obscure ? 0 : -3) + a.progress / 33)}px)`;
             },
-            complete() { bigClockContainer.classList.remove('pointer-events-none') },
+            complete() {
+                bigClockContainer.classList.remove("pointer-events-none");
+            },
         });
     }
 
@@ -39,8 +45,8 @@ import RunningEvents from '../clock/RunningEvents.svelte';
     }
 
     function screenSaverApply(status: boolean) {
-         anime({
-            targets: document.getElementById('clock'),
+        anime({
+            targets: document.getElementById("clock"),
             duration: 1000,
             translateY: status ? 0 : bigClockSSoffset,
             easing: cbDefault,
@@ -60,18 +66,35 @@ import RunningEvents from '../clock/RunningEvents.svelte';
 </div>
 
 <div class="h-screen relative">
-    <div id="clock" bind:this={bigClockContainer} class="h-full flex flex-col justify-center items-center"
+    <div
+        id="clock"
+        bind:this={bigClockContainer}
+        class="h-full flex flex-col justify-center items-center"
         style="transform: translateY({bigClockSSoffset});"
         on:click={disableScreenSaver}
-        on:mousemove={() => { if (!$screenSaver) disableScreenSaver}}
-        on:wheel={() => { if (!$screenSaver) disableScreenSaver}}>
+        on:mousemove={() => {
+            if (!$screenSaver) disableScreenSaver;
+        }}
+        on:wheel={() => {
+            if (!$screenSaver) disableScreenSaver;
+        }}
+    >
         <Clock />
         <StyleSelectionBox />
     </div>
-    <RunningEvents />
+
     <SpotifyBox />
+
+    <div class="w-full hidden md:flex justify-center absolute bottom-5 lg:transform lg:scale-125">
+        <Bubble>
+            <div on:mouseenter|stopPropagation={() => (incomingEventsBoxHovered = true)} on:mouseleave|stopPropagation={() => (incomingEventsBoxHovered = false)}>
+                <IncomingEventsBox isHovered={incomingEventsBoxHovered} />
+            </div>
+        </Bubble>
+    </div>
+
     <Tips />
-    
+
     <div class="absolute top-0 left-0" style="z-index: 2;">
         <Pinned />
     </div>

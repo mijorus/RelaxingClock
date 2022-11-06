@@ -9,10 +9,10 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import { clockFormat } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
-import IncomingEventsBox from '../IncomingEventsBox.svelte';
 import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
 
     let animationReady = false;
+    let isHovered = false;
     let galaxyContainer: HTMLElement, galaxyHours:HTMLElement, galaxyMin:HTMLElement, galaxySec:HTMLElement; 
     $: handleGalaxyClock($time);
     $: screenSaverMode($screenSaver);
@@ -60,10 +60,10 @@ import IncomingEventsMessages from '../IncomingEventsMessages.svelte';
 </script>
 
 <StyleBase styleId={4}>
-    <div bind:this={galaxyContainer} id="galaxy-container" class="{!$screenSaver ? 'mb-36' : 'mb-0'}">
+    <div bind:this={galaxyContainer} id="galaxy-container" class="{!$screenSaver ? 'mb-36' : 'mb-0'}" >
         <div class="w-80 h-80 rounded-full  absolute transform -translate-x-1/2 -translate-y-1/2 " style="background-color: rgb(35,35,35);"></div>
         <div class="w-1 h-1 rounded-full bg-white absolute transform -translate-x-1/2 -translate-y-1/2 "></div>
-        <div class="absolute transform -translate-x-1/2 -translate-y-1/2 text-xl mt-6"><IncomingEventsBox /></div>
+
         <div id="galaxy-space" class="relative">
             <div id="galaxy-dot"></div>
             <div bind:this={galaxyHours} class="orbit-container w-96 h-96">

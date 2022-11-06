@@ -10,9 +10,7 @@
     import { onMount } from "svelte";
     import { nextStyleId } from "../../../stores/clockStyle";
     import { slide } from "svelte/transition";
-    import IncomingEventsBox from "../IncomingEventsBox.svelte";
 
-    let hoursHovered = false;
     let rotateSec = 0;
     let rotateMin = 0;
     let container: HTMLElement;
@@ -97,13 +95,8 @@
             {/each}
         </div>
         <div
-            on:mouseenter={() => hoursHovered = true} 
-            on:mouseleave={() => hoursHovered = false} 
             class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
             <span class="text-6xl">{$time.format($clockFormat === '24h' ? 'HH' : 'hh')}</span>
-            <div class="absolute -bottom-1/2 text-lg" style="transform: translateX(25%);">
-                <IncomingEventsBox isHovered={hoursHovered} />
-            </div>
         </div>
     </div>
 </StyleBase>
