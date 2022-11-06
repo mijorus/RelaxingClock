@@ -19,6 +19,7 @@
     import ChangeAccentColor from "./settingsPage/ChangeAccentColor.svelte";
     import RemoteTime from "./settingsPage/RemoteTime.svelte";
     import ProTips from "./settingsPage/ProTips.svelte";
+    import Donate from "./settingsPage/Donate.svelte";
 
     $: {
         if (!$clockIsVisible && !$tips) tips.set([{name: 'Show keyboard shortcuts', shortcut: '?'}]);
@@ -29,6 +30,7 @@
 <div class="relative">
     <div class="relative flex flex-col w-full md:w-8/12 max-w-2xl p-2 md:p-0 m-auto mt-20 text-primary font-primary">
         <SettingsBox collapsable={false} bordered={false}><h1 class="pl-5 md:p-0 text-7xl md:text-8xl text-primary font-title font-bold">Relaxing<br />Clock</h1></SettingsBox>
+        <Donate />
         <ProTips />
         <Spotify />
         <Weather />
