@@ -54,7 +54,7 @@
         <div transition:fade>
             <p class="text-white py-5">{@html protip}</p>
             <div>
-                <Action custom customClass="bg-transparend border-white" label="Next tip" on:click={nextTip}/>
+                <Action custom customClass="bg-transparend border-2 border-white" label="Next tip" on:click={nextTip}/>
             </div>
         </div>
     {/if}
