@@ -29,7 +29,7 @@
     });
 </script>
 
-<SettingsBox collapsable={false} unsupported={protip === null}>
+<SettingsBox id="protips" collapsable={true} unsupported={protip === null}>
     <Title title="Tips and tricks">
         <TitleIcon>
             <svg width="65" height="65" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,10 +51,12 @@
         </TitleIcon>
     </Title>
     {#if protip}
-        <div transition:fade>
-            <p class="text-white py-5">{@html protip}</p>
-            <div>
-                <Action custom customClass="bg-transparend border-2 border-white" label="Next tip" on:click={nextTip}/>
+        <div class="settings-box-element-title">
+            <div transition:fade class="settings-box-element">
+                <p class="text-white py-5">{@html protip}</p>
+                <div>
+                    <Action custom customClass="bg-transparend border-2 border-white" label="Next tip" on:click={nextTip}/>
+                </div>
             </div>
         </div>
     {/if}
