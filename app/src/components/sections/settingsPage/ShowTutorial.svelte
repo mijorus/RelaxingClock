@@ -7,6 +7,7 @@
     import { modalContent } from "../../../stores/globalState";
     import IntroTutorialModal from "../../modals/IntroTutorialModal.svelte";
     import SurveyModal from "../../modals/SurveyModal.svelte";
+    import UpdateModal from "../../modals/UpdateModal.svelte";
 </script>
 
 <SettingsBox bordered={false} id="show-tutorial">
@@ -17,6 +18,9 @@
     </Title>
     <PrimaryBox label={{ text: "Show the introduction tutorial again" }} description={{ text: "Just in case you missed something...", iconClass: "lnr lnr-question-circle" }} available={true}>
         <Action label="Open" on:click={() => modalContent.set(IntroTutorialModal)} />
+    </PrimaryBox>
+    <PrimaryBox label={{ text: "Latest news" }} description={{ text: "Check what\'s new with te latest version", iconClass: "lnr lnr-question-circle" }} available={true}>
+        <Action label="Open" on:click={() => modalContent.set(UpdateModal)} />
     </PrimaryBox>
     <PrimaryBox label={{ text: "Take a survey" }} description={{ text: "Help us imporving Relaxing Clock", iconClass: "lnr lnr-question-circle" }} available={true}>
         <Action label="Show me" on:click={() => modalContent.set(SurveyModal)} />
