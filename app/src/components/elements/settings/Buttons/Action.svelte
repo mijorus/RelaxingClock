@@ -8,7 +8,7 @@
 </script>
 
 {#if custom}
-    <button class="{btnsClass} {customClass} transition-all boreder-2" alt="{label}" on:click>{label}</button>
+    <button class="{btnsClass} {customClass} transition-all border-2" alt="{label}" on:click>{label}</button>
 {:else}
     <button class="{btnsClass} text-secondary bg-highlighted border-primary border-2 {customClass}" alt="{label}" on:click>{label}</button>
 {/if}
