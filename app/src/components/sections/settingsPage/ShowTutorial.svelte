@@ -19,10 +19,4 @@
     <PrimaryBox label={{ text: "Show the introduction tutorial again" }} description={{ text: "Just in case you missed something...", iconClass: "lnr lnr-question-circle" }} available={true}>
         <Action label="Open" on:click={() => modalContent.set(IntroTutorialModal)} />
     </PrimaryBox>
-    <PrimaryBox label={{ text: "Latest news" }} description={{ text: "Check what\'s new with the latest version", iconClass: "lnr lnr-question-circle" }} available={true}>
-        <Action label="Open" on:click={() => modalContent.set(UpdateModal)} />
-    </PrimaryBox>
-    <PrimaryBox label={{ text: "Take a survey" }} description={{ text: "Help us improving Relaxing Clock", iconClass: "lnr lnr-question-circle" }} available={true}>
-        <Action label="Show me" on:click={() => modalContent.set(SurveyModal)} />
-    </PrimaryBox>
 </SettingsBox>

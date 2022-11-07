@@ -7,6 +7,11 @@
     import Action from "../../elements/settings/Buttons/Action.svelte";
     import { fade } from "svelte/transition";
     import { getRandomIntInclusive } from "../../../utils/utils";
+    import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
+    import { modalContent } from "../../../stores/globalState";
+    import SurveyModal from "../../modals/SurveyModal.svelte";
+    import UpdateModal from "../../modals/UpdateModal.svelte";
+    import NestedBox from "../../elements/settings/NestedBox.svelte";
 
     let protip: string|null = null;
     let protips: {text: string}[] = [];
@@ -50,8 +55,9 @@
             </svg>
         </TitleIcon>
     </Title>
+   
     {#if protip}
-        <div class="settings-box-element-title">
+        <div class="settings-box-element-title my-5 mx-2">
             <div transition:fade class="settings-box-element">
                 <p class="text-white py-5">{@html protip}</p>
                 <div>
@@ -60,4 +66,11 @@
             </div>
         </div>
     {/if}
+
+    <NestedBox bordered label={"Take a survey" } description={"Help us improving Relaxing Clock"} available={true}>
+        <Action label="Show me" on:click={() => modalContent.set(SurveyModal)} />
+    </NestedBox >
+    <NestedBox bordered label={"Latest news" } description={"Check what\'s new with the latest version"} available={true}>
+        <Action label="Open" on:click={() => modalContent.set(UpdateModal)} />
+    </NestedBox >
 </SettingsBox>
