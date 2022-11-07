@@ -67,8 +67,8 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
         } else if (!localStorage.getItem('askSurvey')) {
             modalContent.set(SurveyModal);
             localStorage.setItem('askSurvey', 'true');
-        // } else if (localStorage.getItem('version') !== process.env.VERSION) {
-        } else {
+        } else if (localStorage.getItem('version') !== process.env.VERSION) {
+        // } else {
             modalContent.set(UpdateModal);
             localStorage.setItem('version', process.env.VERSION);
         }
