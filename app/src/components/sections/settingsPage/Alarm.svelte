@@ -53,7 +53,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     }
 
     function timeCompensation() {
-        return ($clockFormat === '12h' && (parseInt(hours) < moment().hours()) ? 12 : 0);
+        return ($clockFormat === '12h' && !isAM ? 12 : 0);
     }
 
     function handleAlarmKeyUp() {
@@ -130,6 +130,11 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         return true;
     }
 
+    function changeIsAm(e) {
+        isAM = e.detail;
+        handleAlarmKeyUp()    
+    }
+
     onMount(() => {
         periodicCheck(moment(), true);
     
@@ -195,7 +200,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
                     </span>
                     <div class="text-sm mt-1">
                         <div class="text-secondary my-1"><AnimatedText text={alarmIsTomorrow ? 'tomorrow' : ''}/></div>
-                        {#if $clockFormat === '12h'}<div class="inline-block"><Booleans state={isAM} states={['AM', 'PM']} label=""/></div>{/if}
+                        {#if $clockFormat === '12h'}<div class="inline-block"><Booleans state={isAM} states={['AM', 'PM']} label="" on:change={changeIsAm} /></div>{/if}
                     </div>
                 </div>
                 <div class="inline-block m-auto">

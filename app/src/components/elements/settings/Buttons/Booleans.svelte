@@ -11,8 +11,8 @@
     const btnsClass: string = 'text-md text-center settings-btn px-2 py-1 rounded-xl font-primary font-bold relative z-10';
 
     function handleBtnClick({target}) {
-        state = target.dataset.option === 'on' ? true : false;
-        dispatch('change', state);
+        let s = target.dataset.option === 'on' ? true : false;
+        dispatch('change', s);
     }
 </script>
 
