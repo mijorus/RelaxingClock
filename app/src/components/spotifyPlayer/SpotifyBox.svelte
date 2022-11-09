@@ -316,15 +316,24 @@
             <span
                 class="justify-self-end text-xl absolute p-1 right-4 transition-all {playbackStarted ? 'rounded-full bg-opacity-60 bg-primary' : ''}"
                 style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};"
-                on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
-                on:mouseleave={() => tips.set(null)}
             >
                 {#if $spotifyPlayerStatus === "ready" && !$spotifyPlayerState?.loading}
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
-                            <i class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'}" on:click={togglePlay} />
+                            <i
+                                class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'}"
+                                on:click={togglePlay}
+                                on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
+                                on:mouseleave={() => tips.set(null)}
+                            />
                         {:else}
-                            <i class="fas fa-pause cursor-pointer" on:click={togglePause} on:contextmenu={handleForward} />
+                            <i
+                                class="fas fa-pause cursor-pointer"
+                                on:click={togglePause}
+                                on:contextmenu={handleForward}
+                                on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
+                                on:mouseleave={() => tips.set(null)}
+                            />
                         {/if}
                     {/if}
                 {:else if $spotifyPlayerStatus === "connecting" || ($spotifyPlayerStatus === "ready" && $spotifyPlayerState?.loading)}
