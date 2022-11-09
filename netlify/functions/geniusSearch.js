@@ -18,7 +18,7 @@ exports.handler = async function (event, context) {
             query: {
                 q: event.queryStringParameters.q
             }
-        });
+        }).json();
 
         let responseData = res;
         // let responseData = res.response.hits.find(el = el.type === 'song');
