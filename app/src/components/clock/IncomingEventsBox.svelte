@@ -7,6 +7,8 @@
     import { locSto } from "../../utils/utils";
     import moment from "moment";
     import momentDurationFormatSetup from "moment-duration-format";
+    import { spotifyPlayerState } from "../../stores/spotify";
+    import axios from "axios";
 
     export let isHovered = false;
 
@@ -51,6 +53,12 @@
         incoming.pomodoro.color = pomodoroColor;
         incoming.pomodoro.iconColor = pomodoroColor;
         incoming.pomodoro.label = locSto("pomodoroState") ? moment.duration(moment(locSto("pomodoroEndsAt"), 'X').diff(time)).format('mm:ss') : null;
+
+        if ($spotifyPlayerState?.track_window?.current_track?.name) {
+            const geniusQ = (await axios.get("/.netlify/functions/geniusSearch")).data;
+            console.log(geniusQ);
+            
+        }
     }
 </script>
 
