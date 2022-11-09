@@ -1,6 +1,8 @@
 const got = require('got');
 
 exports.handler = async function (event, context) {
+    console.log(event);
+    console.log(context);
 
     if (event.httpMethod === 'GET') {
         if (!event.queryStringParameters.q) {
