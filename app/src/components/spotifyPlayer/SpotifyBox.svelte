@@ -314,13 +314,13 @@
             {/if}
             <!-- the box to the right of the bubble where the play button is located -->
             <span
-                class="justify-self-end text-xl absolute p-1 right-4 transition-all {playbackStarted ? 'rounded-full bg-opacity-60 bg-primary' : ''}"
-                style="box-shadow: 0px 0px 20px {playbackStarted ? process.env.BACKGROUND_DARK : 'transparent'};"
+                class="justify-self-end text-xl absolute p-1 right-4 transition-all"
             >
                 {#if $spotifyPlayerStatus === "ready" && !$spotifyPlayerState?.loading}
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                             <i
+                                style="box-shadow: 0px 0px 45px 10px #000;"
                                 class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'}"
                                 on:click={togglePlay}
                                 on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
@@ -328,6 +328,7 @@
                             />
                         {:else}
                             <i
+                                style="box-shadow: 0px 0px 45px 10px #000;"
                                 class="fas fa-pause cursor-pointer"
                                 on:click={togglePause}
                                 on:contextmenu={handleForward}
@@ -338,11 +339,11 @@
                     {/if}
                 {:else if $spotifyPlayerStatus === "connecting" || ($spotifyPlayerStatus === "ready" && $spotifyPlayerState?.loading)}
                     <div class="transform scale-50 relative" style="transform-origin: right;">
-                        <div class="line-scale m-0 p-1">
-                            <div class="rounded-full" style="margin: 0;" />
-                            <div class="rounded-full" style="margin: 0;" />
-                            <div class="rounded-full" style="margin: 0;" />
-                            <div class="rounded-full" style="margin: 0;" />
+                        <div class="line-scale flex gap-1 justify-center items-center m-0 p-1">
+                            <div class="rounded-full" style="margin: 0; padding: 0;" />
+                            <div class="rounded-full" style="margin: 0; padding: 0;" />
+                            <div class="rounded-full" style="margin: 0; padding: 0;" />
+                            <div class="rounded-full" style="margin: 0; padding: 0;" />
                         </div>
                     </div>
                 {:else if $spotifyPlayerStatus !== "disconnected"}
