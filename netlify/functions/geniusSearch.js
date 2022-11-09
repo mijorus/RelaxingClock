@@ -11,6 +11,7 @@ exports.handler = async function (event, context) {
         }
 
         const res = await got.get('https://api.genius.com/search', {
+            responseType: 'json',
             headers: {
                 'Authorization': 'Bearer ' + process.env.GENIUS_ACCESS_TOKEN
             },
