@@ -19,7 +19,7 @@ exports.handler = async function (event, context) {
             }
         });
 
-        const responseData = res.response.hints.length ? res.response.hints[0] : null;
+        const responseData = res.response?.hits.length ? res.response.hits[0] : null;
 
         return {
             statusCode: 200,
