@@ -55,21 +55,21 @@
 </script>
 
 {#if Object.keys(incoming).find((k) => incoming[k].isIncoming)}
-    <div class="my-1 text-md flex justify-center incoming-elements {isHovered ? 'opacity-100' : 'opacity-50'}">
+    <div class="my-1 flex justify-center incoming-elements {isHovered ? 'opacity-100' : 'opacity-50'}">
         <div class="flex justify-center w-min {isHovered ? 'bg-tertiary rounded-full' : ''}">
             {#each Object.keys(incoming) as k (k)}
                 {#if incoming[k].isIncoming}
                     {#if isHovered && !incoming[k].link}
-                        <i class="inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
+                        <i class="text-md  inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
                     {:else if isHovered && incoming[k].link }
-                        <a on:click|stopPropagation href="#{k}">
+                        <a on:click|stopPropagation href="#{k}" class="text-md">
                             <div class="mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
                                 <i class="inline-block {incoming[k].icon}" style="color: {incoming[k].iconColor ?? incoming[k].color};" in:fade />
                                 {#if incoming[k].label}<span class="text-white text-xs">{incoming[k].label}</span>{/if}
                             </div>
                         </a>
                     {:else}
-                        <span class="mx-1 p-2 inline-block" style="color: {incoming[k].color};" in:fade>&middot;</span>
+                        <span class="mx-1 p-2 inline-block text-3xl" style="color: {incoming[k].color};" in:fade>&middot;</span>
                     {/if}
                 {/if}
             {/each}
