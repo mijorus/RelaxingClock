@@ -231,7 +231,7 @@ import { tips } from "../../stores/globalState";
                             resetInputs();
                             summoned.set(false);
                         } else {
-                            throw Error('something went wrong in ' + command + ' triyng to execute ' + argument +'; however it could be just a wrong user input');
+                            throw Error('something went wrong in ' + command + ' trying to execute ' + argument +'; however it could be just a wrong user input');
                         }
                     } catch (e) {
                         console.warn(e);
