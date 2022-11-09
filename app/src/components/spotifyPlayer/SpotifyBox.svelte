@@ -338,12 +338,11 @@
                     {/if}
                 {:else if $spotifyPlayerStatus === "connecting" || ($spotifyPlayerStatus === "ready" && $spotifyPlayerState?.loading)}
                     <div class="transform scale-50 relative" style="transform-origin: right;">
-                        <div class="line-scale m-0 p-0">
-                            <div />
-                            <div />
-                            <div />
-                            <div />
-                            <div />
+                        <div class="line-scale m-0 p-1">
+                            <div class="rounded-full" style="margin: 0;" />
+                            <div class="rounded-full" style="margin: 0;" />
+                            <div class="rounded-full" style="margin: 0;" />
+                            <div class="rounded-full" style="margin: 0;" />
                         </div>
                     </div>
                 {:else if $spotifyPlayerStatus !== "disconnected"}
