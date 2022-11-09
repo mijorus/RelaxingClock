@@ -37,6 +37,14 @@
             link: true,
             label: null,
         },
+        genius: {
+            isIncoming: false,
+            color: "yellow",
+            iconColor: "yellow",
+            icon: "icon-tomato-bw",
+            link: true,
+            label: null,
+        },
     };
 
     async function periodicCheck(time: Moment) {
@@ -56,7 +64,6 @@
 
         if ($spotifyPlayerState?.track_window?.current_track?.name) {
             const geniusQ = (await axios.get("/.netlify/functions/geniusSearch")).data;
-            console.log(geniusQ);
             
         }
     }
