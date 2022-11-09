@@ -19,7 +19,9 @@ exports.handler = async function (event, context) {
             }
         });
 
-        const responseData = res.response?.hits.length ? res.response.hits[0] : null;
+
+
+        let responseData = res.response.hits.find(el = el.type === 'song');
 
         return {
             statusCode: 200,
