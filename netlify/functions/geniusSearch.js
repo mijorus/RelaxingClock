@@ -19,8 +19,6 @@ exports.handler = async function (event, context) {
             }
         });
 
-
-
         let responseData = res.response.hits.find(el = el.type === 'song');
 
         return {
