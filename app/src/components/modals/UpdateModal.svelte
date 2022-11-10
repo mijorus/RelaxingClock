@@ -9,12 +9,16 @@
         <div class="text-4xl mb-10 text-center">
             <b>Relaxing Clock</b> update {version}
         </div>
-        {#if version === "4.1.0" || version === "4.1.1"}
+        {#if version === "4.1.0" || version === "4.1.1" || version === "4.2.0"}
             <div class="my-3 mb-10 w-1/2">
                 <ul>
                     <li>- Fixed an error when creating alarms with 12h format</li>
                 </ul>
             </div>
+            <div class="my-3 w-1/2">
+                <img class="border rounded-xl border-white" src="/media/genius-search.gif" alt="verison 4.1.0" />
+            </div>
+            <div class="mb-10 text-center text-2xl">Search lyrics from Genius</div>
             <div class="my-3 w-1/2">
                 <img class="border rounded-xl border-white" src="/media/4-1-0.gif" alt="verison 4.1.0" />
             </div>
