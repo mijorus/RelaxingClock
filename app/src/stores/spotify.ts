@@ -6,4 +6,5 @@ export const spotifyAccessToken: Writable<string> = writable(undefined);
 export const spotifyPlayerStatus: Writable<SpotifyPlayerStatus> = writable('disconnected');
 export const spotifyUserData: Writable<SpotifyApi.CurrentUsersProfileResponse> = writable(undefined);
 export const spotifyPlayerState: Writable<Spotify.PlaybackState> = writable(undefined);
-export let nextSpotifySongEnd: Writable<number> = writable(undefined);;
+export const nextSpotifySongEnd: Writable<number> = writable(undefined);;
+export const geniusLink: Writable<string|null> = writable(null);;

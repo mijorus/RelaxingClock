@@ -87,8 +87,8 @@
 
     <div class="hidden md:flex justify-center absolute bottom-5 left-1/2 transform -translate-x-1/2 lg:scale-125">
         <Bubble>
-            <div on:mouseenter|stopPropagation={() => (incomingEventsBoxHovered = true)} on:mouseleave|stopPropagation={() => (incomingEventsBoxHovered = false)}>
-                <IncomingEventsBox isHovered={incomingEventsBoxHovered} />
+            <div >
+                <IncomingEventsBox />
             </div>
         </Bubble>
     </div>
