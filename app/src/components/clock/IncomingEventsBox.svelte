@@ -10,7 +10,7 @@
     import { geniusLink, spotifyPlayerState } from "../../stores/spotify";
     import axios from "axios";
 
-    export let isHovered = false;
+    let isHovered = false;
 
     momentDurationFormatSetup(moment);
 
@@ -70,24 +70,53 @@
 </script>
 
 {#if Object.keys(incoming).find((k) => incoming[k].isIncoming)}
-    <div class="my-1 flex justify-center incoming-elements {isHovered ? 'opacity-100' : 'opacity-50'}">
-        <div class="flex justify-center items-center w-min {isHovered ? 'bg-tertiary rounded-full' : ''}">
+    <div 
+    class="my-1 flex justify-center incoming-events-box incoming-elements">
+        <div class="flex justify-center items-center w-min incoming-el-container">
             {#each Object.keys(incoming) as k (k)}
                 {#if incoming[k].isIncoming}
-                    {#if isHovered && !incoming[k].link}
-                        <i class="text-md  inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
-                    {:else if isHovered && incoming[k].link}
-                        <a on:click|stopPropagation href={typeof incoming[k].link === "boolean" ? `#${k}` : incoming[k].link} class="text-md" target="{typeof incoming[k].link === 'string' ? '_blank' : null}">
-                            <div class="mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
+                    {#if !incoming[k].link}
+                        <i class="status-icon  text-md  mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
+                    {:else if incoming[k].link}
+                        <a on:click|stopPropagation href={typeof incoming[k].link === "boolean" ? `#${k}` : incoming[k].link} class="status-icon text-md" target="{typeof incoming[k].link === 'string' ? '_blank' : null}">
+                            <div class=" mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
                                 <i class="inline-block {incoming[k].icon}" style="color: {incoming[k].iconColor ?? incoming[k].color};" in:fade />
                                 {#if incoming[k].label}<span class="text-white text-xs">{incoming[k].label}</span>{/if}
                             </div>
                         </a>
-                    {:else}
-                        <span class="mx-1 p-2 inline-block text-3xl" style="color: {incoming[k].color};" in:fade>&middot;</span>
+                    <!-- {:else} -->
                     {/if}
+                    <span class="middot mx-1 p-2 inline-block text-3xl" style="color: {incoming[k].color};" in:fade>&middot;</span>
                 {/if}
             {/each}
         </div>
     </div>
 {/if}
+
+
+<style>
+    .incoming-events-box {
+        opacity: .5;
+    }
+
+    .incoming-events-box:hover {
+        opacity: 1;
+    }
+
+    .incoming-events-box:hover .incoming-el-container {
+        background-color: var(--tertiary) !important;
+        border-radius: 999px !important;
+    }
+
+    .incoming-events-box:hover .middot{
+        display: none !important;
+    }
+
+    .status-icon {
+        display: none !important;
+    }
+
+    .incoming-events-box:hover .status-icon{
+        display: inline-block !important;
+    }
+</style>
