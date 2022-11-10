@@ -15,13 +15,13 @@
     momentDurationFormatSetup(moment);
 
     $: periodicCheck($time);
-    let incoming: { [key: string]: { isIncoming: boolean; color: string; icon: string; link: boolean|string; iconColor?: string; label?: string } } = {
+    let incoming: { [key: string]: { isIncoming: boolean; color: string; icon: string; link: boolean | string; iconColor?: string; label?: string } } = {
         alarm: {
             isIncoming: false,
             color: "orange",
             icon: "lnr lnr-clock",
             link: true,
-            label: null
+            label: null,
         },
         reminders: {
             isIncoming: false,
@@ -51,8 +51,8 @@
         if (!time) return;
 
         incoming.reminders.isIncoming = (RemindersDB.db && (await RemindersDB.getAllByExpirationDate()).find((r) => !r.done)) !== undefined;
-        incoming.alarm.isIncoming = ($alarmTime !== undefined);
-        incoming.alarm.label = locSto("alarmTime") ? moment(locSto("alarmTime"), 'X').format($clockFormat === '24h' ? 'HH:mm' : 'hh:mm') : null;
+        incoming.alarm.isIncoming = $alarmTime !== undefined;
+        incoming.alarm.label = locSto("alarmTime") ? moment(locSto("alarmTime"), "X").format($clockFormat === "24h" ? "HH:mm" : "hh:mm") : null;
 
         incoming.pomodoro.isIncoming = locSto("pomodoroState") ? true : false;
 
@@ -60,9 +60,9 @@
 
         incoming.pomodoro.color = pomodoroColor;
         incoming.pomodoro.iconColor = pomodoroColor;
-        incoming.pomodoro.label = locSto("pomodoroState") ? moment.duration(moment(locSto("pomodoroEndsAt"), 'X').diff(time)).format('mm:ss') : null;
+        incoming.pomodoro.label = locSto("pomodoroState") ? moment.duration(moment(locSto("pomodoroEndsAt"), "X").diff(time)).format("mm:ss") : null;
 
-        incoming.genius.isIncoming =($geniusLink !== null);
+        incoming.genius.isIncoming = $geniusLink !== null;
         if ($geniusLink) {
             incoming.genius.link = $geniusLink;
         }
@@ -76,8 +76,8 @@
                 {#if incoming[k].isIncoming}
                     {#if isHovered && !incoming[k].link}
                         <i class="text-md  inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
-                    {:else if isHovered && incoming[k].link }
-                        <a on:click|stopPropagation href="{(typeof incoming[k].link === 'boolean') ? `#${k}` : incoming[k].link }" class="text-md">
+                    {:else if isHovered && incoming[k].link}
+                        <a on:click|stopPropagation href={typeof incoming[k].link === "boolean" ? `#${k}` : incoming[k].link} class="text-md">
                             <div class="mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
                                 <i class="inline-block {incoming[k].icon}" style="color: {incoming[k].iconColor ?? incoming[k].color};" in:fade />
                                 {#if incoming[k].label}<span class="text-white text-xs">{incoming[k].label}</span>{/if}
