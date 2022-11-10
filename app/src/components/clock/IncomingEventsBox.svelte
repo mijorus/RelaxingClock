@@ -77,7 +77,7 @@
                     {#if isHovered && !incoming[k].link}
                         <i class="text-md  inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
                     {:else if isHovered && incoming[k].link}
-                        <a on:click|stopPropagation href={typeof incoming[k].link === "boolean" ? `#${k}` : incoming[k].link} class="text-md">
+                        <a on:click|stopPropagation href={typeof incoming[k].link === "boolean" ? `#${k}` : incoming[k].link} class="text-md" target="{typeof incoming[k].link === 'string' ? '_blank' : null}">
                             <div class="mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
                                 <i class="inline-block {incoming[k].icon}" style="color: {incoming[k].iconColor ?? incoming[k].color};" in:fade />
                                 {#if incoming[k].label}<span class="text-white text-xs">{incoming[k].label}</span>{/if}
