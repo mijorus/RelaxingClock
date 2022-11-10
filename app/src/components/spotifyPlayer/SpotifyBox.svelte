@@ -1,4 +1,5 @@
 <script lang="ts">
+    import axios from "axios";
     import moment from "moment";
     import momentDurationFormatSetup from "moment-duration-format";
     import { fade, fly, slide } from "svelte/transition";
@@ -6,7 +7,7 @@
     import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
     import { darkenClock, screenSaver, screenSize, tips } from "../../stores/globalState";
     import { notifications } from "../../stores/notifications";
-    import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl, nextSpotifySongEnd } from "../../stores/spotify";
+    import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl, nextSpotifySongEnd, geniusLink } from "../../stores/spotify";
     import { contextHistory } from "../../stores/storedSettings";
     import time from "../../stores/time";
     import type { LastPlayedContexts, SpotifyPlayerStatus } from "../../types";
@@ -56,6 +57,14 @@
                 const ctx = $spotifyPlayerState.context.uri || $spotifyPlayerState.context?.metadata?.current_item.uri;
                 const itemName = $spotifyPlayerState.context?.metadata?.name || $spotifyPlayerState.context?.metadata?.current_item.name || false;
 
+                const geniusQuery = `${$spotifyPlayerState?.track_window?.current_track?.name} ${$spotifyPlayerState?.track_window?.current_track?.artists.join(" ")}`;
+                axios.get("https://preview.relaxingclock.com/.netlify/functions/geniusSearch/.netlify/functions/geniusSearch", { params: { q: geniusQuery } }).then( geniusRes => {
+                    geniusLink.set(null);
+                    if (geniusRes.data.data) {
+                        geniusLink.set(geniusRes.data.data.url)
+                    }
+                })
+
                 if (ctx.length && itemName) {
                     let history: LastPlayedContexts[] = deepClone($contextHistory);
 
@@ -78,6 +87,7 @@
         } else {
             expandedBox = false;
             nextSpotifySongEnd.set(undefined);
+            geniusLink.set(null);
         }
     }
 
@@ -313,9 +323,7 @@
                 </div>
             {/if}
             <!-- the box to the right of the bubble where the play button is located -->
-            <span
-                class="justify-self-end text-xl absolute p-1 right-4 transition-all"
-            >
+            <span class="justify-self-end text-xl absolute p-1 right-4 transition-all">
                 {#if $spotifyPlayerStatus === "ready" && !$spotifyPlayerState?.loading}
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}

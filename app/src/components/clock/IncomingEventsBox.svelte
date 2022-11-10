@@ -7,7 +7,7 @@
     import { locSto } from "../../utils/utils";
     import moment from "moment";
     import momentDurationFormatSetup from "moment-duration-format";
-    import { spotifyPlayerState } from "../../stores/spotify";
+    import { geniusLink, spotifyPlayerState } from "../../stores/spotify";
     import axios from "axios";
 
     export let isHovered = false;
@@ -15,7 +15,7 @@
     momentDurationFormatSetup(moment);
 
     $: periodicCheck($time);
-    let incoming: { [key: string]: { isIncoming: boolean; color: string; icon: string; link: boolean; iconColor?: string; label?: string } } = {
+    let incoming: { [key: string]: { isIncoming: boolean; color: string; icon: string; link: boolean|string; iconColor?: string; label?: string } } = {
         alarm: {
             isIncoming: false,
             color: "orange",
@@ -41,7 +41,7 @@
             isIncoming: false,
             color: "yellow",
             iconColor: "yellow",
-            icon: "icon-tomato-bw",
+            icon: "genius-icon",
             link: true,
             label: null,
         },
@@ -62,22 +62,22 @@
         incoming.pomodoro.iconColor = pomodoroColor;
         incoming.pomodoro.label = locSto("pomodoroState") ? moment.duration(moment(locSto("pomodoroEndsAt"), 'X').diff(time)).format('mm:ss') : null;
 
-        if ($spotifyPlayerState?.track_window?.current_track?.name) {
-            const geniusQ = (await axios.get("/.netlify/functions/geniusSearch")).data;
-            
+        incoming.genius.isIncoming =($geniusLink !== null);
+        if ($geniusLink) {
+            incoming.genius.link = $geniusLink;
         }
     }
 </script>
 
 {#if Object.keys(incoming).find((k) => incoming[k].isIncoming)}
     <div class="my-1 flex justify-center incoming-elements {isHovered ? 'opacity-100' : 'opacity-50'}">
-        <div class="flex justify-center w-min {isHovered ? 'bg-tertiary rounded-full' : ''}">
+        <div class="flex justify-center items-center w-min {isHovered ? 'bg-tertiary rounded-full' : ''}">
             {#each Object.keys(incoming) as k (k)}
                 {#if incoming[k].isIncoming}
                     {#if isHovered && !incoming[k].link}
                         <i class="text-md  inline-block mx-1 p-2 {incoming[k].icon}" style="color: {incoming[k].color};" in:fade />
                     {:else if isHovered && incoming[k].link }
-                        <a on:click|stopPropagation href="#{k}" class="text-md">
+                        <a on:click|stopPropagation href="{(typeof incoming[k].link === 'boolean') ? `#${k}` : incoming[k].link }" class="text-md">
                             <div class="mx-1 p-2 flex flex-row items-center gap-1 {incoming[k].label ? 'border rounded-full border-white' : ''}">
                                 <i class="inline-block {incoming[k].icon}" style="color: {incoming[k].iconColor ?? incoming[k].color};" in:fade />
                                 {#if incoming[k].label}<span class="text-white text-xs">{incoming[k].label}</span>{/if}
