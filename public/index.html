@@ -75,7 +75,8 @@
             <p class="text-sm text-center font-primary text-secondary">
                 All product names, logos and brands are property of their respective owners.
             </p>
-            <p class="text-md text-center font-primary text-secondary" style="opacity: .7;">version v<span class="version-print"></span></p>
+            <p class="text-md text-center font-primary text-secondary" style="opacity: .7;">version v<span
+                    class="version-print"></span></p>
             <div class="mt-5 text-center">
                 <div class="counterapi" style="min-height:44px" color="white" bg="transparent"></div>
             </div>
@@ -84,9 +85,17 @@
     <noscript>
         This website requires javascript
     </noscript>
-    <script src="https://counterapi.com/c.js?ns=relaxingclock.com" async defer></script>
-    
+
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const s = document.createElement('script');
+                s.setAttribute('src', "https://counterapi.com/c.js?ns=relaxingclock.com");
+                document.body.appendChild( s );
+                console.info('Loading CounterAPI');
+            }, 3000);
+        });
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
                 .then((registration) => {
