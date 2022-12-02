@@ -21,7 +21,7 @@ module.exports = {
     theme: {
         backgroundColor: theme =>({
             ...theme('colors'),
-            'primary': 'rgb(24, 24, 24)',
+            'primary': 'rgb(20, 20, 20)',
             'secondary': 'rgb(63, 63, 63)',
             'tertiary': 'rgb(40, 40, 40)',
             'highlighted': 'rgb(245, 245, 245)',
