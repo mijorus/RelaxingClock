@@ -14,7 +14,7 @@ import { shortcuts } from '../../../stores/rooster';
             'background': 'green',
             'arguments': {
                 'enable': {
-                    description: 'Reduce movements and animations when you are not interacting',
+                    description: 'Reduce animations when not interacting',
                     async callback() {
                         saveEnergy.set(true)
                         return true;

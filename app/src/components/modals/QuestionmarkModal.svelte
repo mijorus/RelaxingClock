@@ -23,16 +23,16 @@ import Key from "../elements/Key.svelte";
     <div>
         <h2 class="font-title text-3xl mb-10 ">Commands and shortcuts</h2>
         {#if rs}
-            <ul class="grid grid-cols-1 md:grid-cols-2">
+            <ul class="flex flex-col justify-center items-center">
                 {#each Object.keys(rs) as key, i}
-                        <li class="mb-6">
+                        <li class=" w-full md:w-132 mb-6 bg-tertiary p-4 rounded-xl">
                             <div class="flex flex-col items-start gap-1">
-                                <h3 class="font-title text-xl">
-                                    <span class="capitalize rounded-xl" style="color: {rs[key].background}">{key}:</span>
+                                <h3 class="font-title text-3xl">
+                                    <span class="capitalize rounded-xl" style="color: {rs[key].background}">{key}</span>
                                 </h3>
-                                <div>
+                                <div class="w-full">
                                     {#each Object.keys(rs[key].arguments) as arg, i}
-                                        <div class="mt-3">
+                                        <div class="mt-3 p-5 bg-primary rounded-xl w-full" class:hidden={rs[key].arguments[arg].hideInModal}>
                                             {#if !rs[key].arguments[arg].hideInModal}
                                                 {#if arg.length}<span class="bg-secondary p-1 rounded-md">{arg}</span>{/if}
                                                 <span class="text-xs">
