@@ -6,7 +6,7 @@ import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
 import Action from '../../elements/settings/Buttons/Action.svelte';
 import { colorSelector, modalContent } from '../../../stores/globalState';
 import IntroTutorialModal from '../../modals/IntroTutorialModal.svelte';
-import { customColors } from '../../../utils/utils';
+import { bgColors, customColors } from '../../../utils/utils';
 import { accentColor } from '../../../stores/storedSettings';
 
     function openColorPicker(e) {

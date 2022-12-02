@@ -100,7 +100,25 @@ export const customColors: string[] = [
     "#0060ff",
     "#00bbf9",
     "#00f5d4",
-]; 
+];
+
+export const bgColors: string[] = [
+    "#170E22",
+    "#240E1B",
+    "#190005",
+    "#260000",
+    "#241107",
+    "#251E0C",
+    "#26220A",
+    "#002600",
+    "#002710",
+    "#061318", 
+    "#000E26",
+    "#000E26",
+    "#002520",
+];
+
+
 export function randomCustomColor() {
   let availableColors = [];
   customColors.forEach(el => { if (el !== lastCustomColor) availableColors.push(el)});

@@ -1,13 +1,14 @@
 <script lang="ts">
 import { fade } from "svelte/transition";
 import { colorSelector, darkenClock } from "../../stores/globalState";
+import tinycolor from 'tinycolor2';
 
     $: if ($colorSelector !== undefined) darkenClock.set($colorSelector && $colorSelector.show);
     $: size = $colorSelector && $colorSelector.size ? $colorSelector.size : 6.5;
 
     function closeSelector(color?: string) {
         $colorSelector.callback(color);
-        colorSelector.set({...$colorSelector, show: false})
+        colorSelector.set({...$colorSelector, show: false});
     }
 </script>
 
