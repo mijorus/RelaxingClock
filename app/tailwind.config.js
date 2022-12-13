@@ -49,7 +49,7 @@ module.exports = {
                 'primary': 'rgb(245, 245, 245)',
                 'secondary': 'rgb(63, 63, 63)',
                 'spotify': 'rgb(29, 185, 84)',
-                'dark': 'rgb(29, 29, 29)',
+                'dark': 'rgb(20, 20, 20)',
             },
             fontSize: {
                 'xxs': '0.5rem',
