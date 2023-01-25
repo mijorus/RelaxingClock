@@ -12,11 +12,7 @@ import { fade, slide } from 'svelte/transition';
 import { convertCountryCode } from '../../../lib/openweathermap/ccodes';
 import { clockFormat, lastWeatherUpdate, tempUnit, weather } from '../../../stores/storedSettings';
 import { onMount } from 'svelte';
-import { shortcuts } from '../../../stores/rooster';
 import moment, { Moment } from 'moment';
-import { tips } from '../../../stores/globalState';
-import { mainWeatherConditions } from '../../../lib/openweathermap/mainConditions';
-import type { Tip } from '../../../types';
 import time from '../../../stores/time';
 import anime from "animejs";
 
@@ -39,6 +35,7 @@ import anime from "animejs";
     }
 
     function autoUpdate(enable = true) {
+        enable = false;
         if (enable) {
             console.log('auto update weather in '+maxOWUpdateAge+' minutes');
             nextWeatherUpdate = moment().add(maxOWUpdateAge, 'minutes');
@@ -48,7 +45,8 @@ import anime from "animejs";
     }
 
     function handleWeatherSwitch(status: boolean) {
-        weather.set(status); 
+        // temporary disable weather
+        weather.set(false); 
         autoUpdate(status);
         if (!status) {
             lastWeatherUpdate.set(null);
@@ -113,9 +111,9 @@ import anime from "animejs";
     </Title>
     <div>
         <PrimaryBox
-            label={{text: $weather && !currentLocation ? 'Please set a location below' : 'Enable weather'}}
-            description={{text:'Forecast provided by openweathermap.org', iconClass: 'lnr lnr-question-circle'}}
-            available={true}
+            label={{text:($weather && !currentLocation) ? 'Please set a location below' : 'Out of service'}}
+            description={{text:'The forecast service is temporarily unavailable, thanks for your undestanding', iconClass: 'lnr lnr-question-circle'}}
+            available={false}
         >
             <div class="flex items-center">
                 <span id="refresh-weather-btn" class="fas fa-sync-alt opacity-50 mr-4 hover:opacity-100 cursor-pointer" on:click={() => updateWeatherData()} 

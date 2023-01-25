@@ -5,7 +5,7 @@ import MainBg from './components/elements/MainBg.svelte';
 import Rooster from './components/rooster/Rooster.svelte';
 import Home from './components/sections/Home.svelte';
 import Settings from './components/sections/Settings.svelte';
-import { loggedWithSpotify } from './stores/storedSettings';
+import { loggedWithSpotify, weather } from './stores/storedSettings';
 import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
 import { modalContent, onlineStatus } from './stores/globalState';
 import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
@@ -46,6 +46,9 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
 
 	onMount(async () => {
         console.log(process.env.VERSION);
+        
+        // temporary disable weather
+        weather.set(false);
 
         if (process.env.production) console.log = function() {};
         document.querySelector('footer').classList.remove('hidden');
