@@ -8,7 +8,7 @@ import Action from '../../elements/settings/Buttons/Action.svelte';
 import { pinnedDBisReady } from '../../../stores/globalState';
 
     function triggerRooster(e) {
-        window.dispatchEvent( new KeyboardEvent('keydown', {key: 'p', altKey: true}));
+        window.dispatchEvent( new KeyboardEvent('keydown', {key: 'k', code: 'KeyP', altKey: true}));
     }
 
 </script>
