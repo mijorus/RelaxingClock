@@ -33,7 +33,7 @@
         <Donate />
         <ProTips />
         <Spotify />
-        <Weather />
+        <!-- <Weather /> -->
         <Alarm />
         <PomodoroTimer />
         <Pinned />

@@ -1,85 +1,95 @@
 <script lang="ts">
-import { onMount, tick } from 'svelte';
+    import { onMount, tick } from "svelte";
 
-import MainBg from './components/elements/MainBg.svelte';
-import Rooster from './components/rooster/Rooster.svelte';
-import Home from './components/sections/Home.svelte';
-import Settings from './components/sections/Settings.svelte';
-import { loggedWithSpotify, weather } from './stores/storedSettings';
-import NotificationsPanel from './components/sections/notifications/NotificationsPanel.svelte';
-import { modalContent, onlineStatus } from './stores/globalState';
-import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from './stores/spotify';
-import { attemptSpotifyLogin } from './handlers/spotify/login';
-import { SpotifyClient } from "./lib/spotify/SpotifyClient";
-import AlarmRing from './components/elements/AlarmRing.svelte';
-import screenSaverHandler from "./handlers/screenSaver";
-import LoadingScreen from './components/sections/LoadingScreen.svelte';
-import ColorSelector from './components/elements/ColorSelector.svelte';
-import Modal from './components/elements/Modal.svelte';
-import { windowReady } from 'html-ready';
-import IntroTutorialModal from './components/modals/IntroTutorialModal.svelte';
-import QuestionmarkModal from './components/modals/QuestionmarkModal.svelte';
-import SurveyModal from './components/modals/SurveyModal.svelte';
-    import UpdateModal from './components/modals/UpdateModal.svelte';
+    import MainBg from "./components/elements/MainBg.svelte";
+    import Rooster from "./components/rooster/Rooster.svelte";
+    import Home from "./components/sections/Home.svelte";
+    import Settings from "./components/sections/Settings.svelte";
+    import { loggedWithSpotify, weather } from "./stores/storedSettings";
+    import NotificationsPanel from "./components/sections/notifications/NotificationsPanel.svelte";
+    import { modalContent, onlineStatus } from "./stores/globalState";
+    import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from "./stores/spotify";
+    import { attemptSpotifyLogin } from "./handlers/spotify/login";
+    import { SpotifyClient } from "./lib/spotify/SpotifyClient";
+    import AlarmRing from "./components/elements/AlarmRing.svelte";
+    import screenSaverHandler from "./handlers/screenSaver";
+    import LoadingScreen from "./components/sections/LoadingScreen.svelte";
+    import ColorSelector from "./components/elements/ColorSelector.svelte";
+    import Modal from "./components/elements/Modal.svelte";
+    import { windowReady } from "html-ready";
+    import IntroTutorialModal from "./components/modals/IntroTutorialModal.svelte";
+    import QuestionmarkModal from "./components/modals/QuestionmarkModal.svelte";
+    import SurveyModal from "./components/modals/SurveyModal.svelte";
+    import UpdateModal from "./components/modals/UpdateModal.svelte";
 
+    let userInteraction = false;
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
+    
+    document.addEventListener('click', setInteraction);
 
     $: getUserData($spotifyAccessToken);
 
+    function setInteraction(e) {
+        userInteraction = true;
+        document.removeEventListener('click', setInteraction);
+        console.log('User Interaction');
+    }
+    
     async function getUserData(accessToken: string) {
         if (accessToken) {
             const me = await SpotifyClient.getMe();
             spotifyUserData.set(me);
-            if (me.product !== 'premium') { 
-                spotifyPlayerStatus.set('non-premium');
+            if (me.product !== "premium") {
+                spotifyPlayerStatus.set("non-premium");
             }
         }
-    }   
+    }
 
     function openQuestionmarkModal(e: KeyboardEvent) {
-        if (document.activeElement === document.querySelector('body') && e.key === '?') {
+        if (document.activeElement === document.querySelector("body") && e.key === "?") {
             e.preventDefault();
             modalContent.set(QuestionmarkModal);
         }
     }
 
-	onMount(async () => {
+    onMount(async () => {
         console.log(process.env.VERSION);
-        
+
         // temporary disable weather
         weather.set(false);
 
-        if (process.env.production) console.log = function() {};
-        document.querySelector('footer').classList.remove('hidden');
-        document.querySelectorAll('.version-print').forEach(el => el.innerText = process.env.VERSION);
+        if (process.env.production) console.log = function () {};
+        document.querySelector("footer").classList.remove("hidden");
+        document.querySelectorAll(".version-print").forEach((el) => (el.innerText = process.env.VERSION));
 
         // Var init
-        localStorage.setItem('settingBoxCollapedStatus', JSON.stringify({}));
-        
+        localStorage.setItem("settingBoxCollapedStatus", JSON.stringify({}));
+
         // Spotify Login
         if ($onlineStatus) {
-            attemptSpotifyLogin()
-                .catch((e) => console.error(e))
+            attemptSpotifyLogin().catch((e) => console.error(e));
         }
 
-        if (!localStorage.getItem('hasSeenTutorial')) {
+        if (!localStorage.getItem("hasSeenTutorial")) {
             await tick();
             modalContent.set(IntroTutorialModal);
-            localStorage.setItem('hasSeenTutorial', 'true');
-        } else if (!localStorage.getItem('askSurvey')) {
+            localStorage.setItem("hasSeenTutorial", "true");
+        } else if (!localStorage.getItem("askSurvey")) {
             modalContent.set(SurveyModal);
-            localStorage.setItem('askSurvey', 'true');
-        } else if (localStorage.getItem('version') !== process.env.VERSION) {
-        // } else {
+            localStorage.setItem("askSurvey", "true");
+        } else if (localStorage.getItem("version") !== process.env.VERSION) {
+            // } else {
             modalContent.set(UpdateModal);
-            localStorage.setItem('version', process.env.VERSION);
+            localStorage.setItem("version", process.env.VERSION);
         }
     });
 </script>
 
 <svelte:head>
-    {#if $loggedWithSpotify}<script src="https://sdk.scdn.co/spotify-player.js" defer></script>{/if}
+    {#if $loggedWithSpotify && userInteraction}
+        <script src="https://sdk.scdn.co/spotify-player.js" defer></script>
+    {/if}
 </svelte:head>
 
 <LoadingScreen />
@@ -100,8 +110,8 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
 <svelte:window on:keydown={openQuestionmarkModal} />
 
 <style global>
-    @import '@csstools/normalize.css';
-    @import 'loaders.css/loaders.min.css';
+    @import "@csstools/normalize.css";
+    @import "loaders.css/loaders.min.css";
 
     /* purgecss start ignore */
     @tailwind base;
@@ -116,13 +126,13 @@ import SurveyModal from './components/modals/SurveyModal.svelte';
             background-color: transparent;
             outline: none;
         }
-        
+
         .transp-btn:focus {
             border: none;
             background-color: transparent;
             outline: none;
         }
-        
+
         .transp-btn:active {
             border: none;
             background-color: transparent;
