@@ -21,25 +21,27 @@
     import QuestionmarkModal from "./components/modals/QuestionmarkModal.svelte";
     import SurveyModal from "./components/modals/SurveyModal.svelte";
     import UpdateModal from "./components/modals/UpdateModal.svelte";
+    import { createIncomingEvent } from "./components/clock/IncomingEventsMessages.svelte";
 
     let userInteraction = false;
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
-    
-    document.addEventListener('click', setInteraction);
+
+    document.addEventListener("click", setInteraction);
 
     $: getUserData($spotifyAccessToken);
 
     function setInteraction(e) {
         userInteraction = true;
-        document.removeEventListener('click', setInteraction);
-        console.log('User Interaction');
+        document.removeEventListener("click", setInteraction);
+        console.log("User Interaction");
     }
-    
+
     async function getUserData(accessToken: string) {
         if (accessToken) {
             const me = await SpotifyClient.getMe();
             spotifyUserData.set(me);
+
             if (me.product !== "premium") {
                 spotifyPlayerStatus.set("non-premium");
             }
@@ -83,6 +85,16 @@
             modalContent.set(UpdateModal);
             localStorage.setItem("version", process.env.VERSION);
         }
+
+        await windowReady;
+        setTimeout(() => {
+            if (!userInteraction) {
+                createIncomingEvent({
+                    icon: "fas fa-info",
+                    text: "Tap anywhere to enable Spotify",
+                });
+            }
+        }, 2500);
     });
 </script>
 

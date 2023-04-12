@@ -1,12 +1,10 @@
 <script context="module" lang="ts">
     let updateDisplayText: CallableFunction;
     let queue: IncomingEventMessage[] = [];
-    
+
     export function createIncomingEvent(incomingEvent: IncomingEventMessage) {
-        console.log('creating event: ' + incomingEvent.text);
-        console.log(updateDisplayText);
-        
-        
+        console.log("creating event: " + incomingEvent.text);
+
         if (!updateDisplayText) return;
         queue = [...queue, incomingEvent];
         updateDisplayText();
@@ -14,41 +12,40 @@
 </script>
 
 <script lang="ts">
-import { fly, slide, fade } from 'svelte/transition';
-import { locSto, sleep } from '../../utils/utils';
-import type { IncomingEventMessage } from "../../types";
-import { onDestroy, onMount } from 'svelte';
+    import { fly, slide, fade } from "svelte/transition";
+    import { locSto, sleep } from "../../utils/utils";
+    import type { IncomingEventMessage } from "../../types";
+    import { onDestroy, onMount } from "svelte";
 
-let displayMessage: IncomingEventMessage;
-let running = false;
-onMount(() => {
-    updateDisplayText = async function() {
-        if (running) return;
-        console.log('incoming event received');
+    let displayMessage: IncomingEventMessage;
+    let running = false;
+    onMount(() => {
+        updateDisplayText = async function () {
+            if (running) return;
+            console.log("incoming event received");
 
-        while (queue.length) {
-            running = true;
-            console.log('incoming event processing');
+            while (queue.length) {
+                running = true;
+                console.log("incoming event processing");
 
-            displayMessage = queue[0];
-            await sleep(10000);
+                displayMessage = queue[0];
+                await sleep(10000);
 
-            displayMessage = null;
-            await sleep(500);
-            
-            queue.shift();
-        }
+                displayMessage = null;
+                await sleep(500);
 
-        running = false;
-    }
-})
+                queue.shift();
+            }
 
+            running = false;
+        };
+    });
 </script>
 
 {#if displayMessage}
     <div class="my-1 opacity-75 incoming-messages" transition:fly={{ y: 10 }}>
-        <div class="text-primary text-base flex flex-row items-center gap-1 justify-center">
-            <i class="bump {displayMessage.icon} text-2xl"></i> 
+        <div class="text-primary text-sm flex flex-row items-center gap-1 justify-center">
+            <i class="bump {displayMessage.icon} text-2xl" />
             <span class="max-w-80 flex flex-row justify-center">
                 <span class="grow inline-block">{displayMessage.text}</span>
             </span>
@@ -94,5 +91,4 @@ onMount(() => {
         animation: bump 0.75s ease-out;
         animation-iteration-count: 2;
     }
-
 </style>
