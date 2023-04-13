@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-    {#if $loggedWithSpotify && userInteraction}
+    {#if userInteraction && localStorage.getItem('userHasLogged')}
         <script src="https://sdk.scdn.co/spotify-player.js" defer></script>
     {/if}
 </svelte:head>
