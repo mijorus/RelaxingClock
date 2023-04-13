@@ -88,7 +88,7 @@
 
         await windowReady;
         setTimeout(() => {
-            if (!userInteraction) {
+            if (!userInteraction && localStorage.getItem('userHasLogged')) {
                 createIncomingEvent({
                     icon: "fas fa-info",
                     text: "Tap anywhere to enable Spotify",
