@@ -3,8 +3,11 @@ import { onMount } from "svelte";
 import { shortcuts } from "../../stores/rooster";
 import type { RoosterShortcuts } from "../../types";
 import Key from "../elements/Key.svelte";
+    import { isMacintosh } from "../../utils/utils";
 
     let rs: RoosterShortcuts;
+    
+    const altLabel = isMacintosh() ? '⌥' : 'Alt';
 
     function commandShouldShowUp(key: string): boolean {
         if (!rs) return false;
@@ -21,7 +24,7 @@ import Key from "../elements/Key.svelte";
 
 <div class="text-primary pt-5 overflow-y-scroll max-h-full flex flex-col gap-2">
     <div>
-        <h2 class="font-title text-3xl mb-10 ">Commands and shortcuts</h2>
+        <h2 class="font-title text-3xl mb-10 text-center">Commands and shortcuts</h2>
         {#if rs}
             <ul class="flex flex-col justify-center items-center">
                 {#each Object.keys(rs) as key, i}
@@ -37,7 +40,7 @@ import Key from "../elements/Key.svelte";
                                                 {#if arg.length}<span class="bg-secondary p-1 rounded-md">{arg}</span>{/if}
                                                 <span class="text-xs">
                                                     {#if rs[key].arguments[arg].quickLaunch}{arg.length ? 'or' : ''} 
-                                                    <span class="bg-tertiary p-1 rounded-md">[Alt + {rs[key].arguments[arg].quickLaunch.match(/[A-Z]/g) ? 'Shift + ' : ''} {rs[key].arguments[arg].quickLaunch}]</span>
+                                                    <span class="bg-tertiary p-1 rounded-md">{altLabel} + {rs[key].arguments[arg].quickLaunch.match(/[A-Z]/g) ? 'Shift + ' : ''} {rs[key].arguments[arg].quickLaunch}</span>
                                                     {/if}
                                                 </span>
                                                 <span class="p-1 rounded-md">{rs[key].arguments[arg].description ?? ''}</span>

@@ -285,7 +285,7 @@
                             on:click={() => (expandedBox = !expandedBox)}
                             on:mouseenter={() =>
                                 tips.set([
-                                    { name: "Expand", shortcut: "Ctrl+Shift+E" },
+                                    { name: "Expand", shortcut: `Ctrl+Shift+E` },
                                     { name: "Seek", shortcut: "Shift+Scroll Wheel" },
                                 ])}
                             on:mouseleave={() => tips.set(null)}

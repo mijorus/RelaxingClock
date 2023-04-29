@@ -2,7 +2,7 @@
     import { onMount, tick } from "svelte";
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
-    import { caretToEnd, shakeElement } from "../../utils/utils";
+    import { caretToEnd, isMacintosh, shakeElement } from "../../utils/utils";
     import Examples from "./Examples.svelte";
     import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
     import { tips } from "../../stores/globalState";
@@ -253,7 +253,7 @@
         console.log(event);
         
         if (event.code === "Space") {
-            if ((navigator.userAgent.indexOf('Mac OS X') && event.altKey) || event.ctrlKey) {
+            if ((isMacintosh && event.altKey) || event.ctrlKey) {
                 event.preventDefault(); 
                 summoned.set(!$summoned);
                 tick().then(() => commandBox.focus());
