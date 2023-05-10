@@ -89,17 +89,17 @@
     </noscript>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://api.countapi.xyz/hit/relaxingclock.com/home");
-            xhr.responseType = "json";
-            xhr.onload = function () {
-                const result = 59401 + this.response.value;
-                document.querySelector('.counterapi').textContent = result.toLocaleString();
-            }
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.open("GET", "https://api.countapi.xyz/hit/relaxingclock.com/home");
+        //     xhr.responseType = "json";
+        //     xhr.onload = function () {
+        //         const result = 59401 + this.response.value;
+        //         document.querySelector('.counterapi').textContent = result.toLocaleString();
+        //     }
 
-            xhr.send();
-        });
+        //     xhr.send();
+        // });
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
