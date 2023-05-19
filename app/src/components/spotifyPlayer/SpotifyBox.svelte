@@ -295,7 +295,7 @@
                     <!-- the spotify icon -->
                     <i
                         class="fab fa-spotify text-5xl 
-                        {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}
+                        {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}"
                         class:text-spotify={$spotifyPlayerStatus === "ready" && !$screenSaver}
                         class:text-secondary={$spotifyPlayerStatus !== "ready"}
                         class:cursor-pointer={$spotifyUrl || $spotifyPlayerStatus === 'waiting_interaction'}
