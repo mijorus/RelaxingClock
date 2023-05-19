@@ -34,7 +34,7 @@
     function setInteraction(e) {
         userInteraction = true;
         document.removeEventListener("click", setInteraction);
-        console.log("User Interaction");
+        // console.log("User Interaction");
     }
 
     async function getUserData(accessToken: string) {
@@ -89,6 +89,7 @@
         await windowReady;
         setTimeout(() => {
             if (!userInteraction && localStorage.getItem('userHasLogged')) {
+                spotifyPlayerStatus.set('waiting_interaction');
                 createIncomingEvent({
                     icon: "fas fa-info",
                     text: "Tap anywhere to enable Spotify",

@@ -121,7 +121,7 @@
         } else {
             loader = "";
             if (spotifyStatus === "ready") preloadLabel = "Ready to play!";
-            else if (spotifyStatus !== "disconnected") preloadLabel = "Ooops!";
+            else if (spotifyStatus !== "disconnected" && spotifyStatus !== 'waiting_interaction') preloadLabel = "Ooops!";
         }
     }
 
@@ -295,10 +295,10 @@
                     <!-- the spotify icon -->
                     <i
                         class="fab fa-spotify text-5xl 
-                        {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}"
+                        {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}
                         class:text-spotify={$spotifyPlayerStatus === "ready" && !$screenSaver}
                         class:text-secondary={$spotifyPlayerStatus !== "ready"}
-                        class:cursor-pointer={$spotifyUrl}
+                        class:cursor-pointer={$spotifyUrl || $spotifyPlayerStatus === 'waiting_interaction'}
                         on:click={() => {
                             if ($spotifyUrl) window.location.replace($spotifyUrl);
                         }}
@@ -354,7 +354,7 @@
                             <div class="rounded-full" style="margin: 0; padding: 0;" />
                         </div>
                     </div>
-                {:else if $spotifyPlayerStatus !== "disconnected"}
+                {:else if $spotifyPlayerStatus !== "disconnected" && $spotifyPlayerStatus !== 'waiting_interaction'}
                     <i class="fas fa-exclamation-triangle" class:opacity-50={$screenSaver} />
                 {/if}
             </span>

@@ -73,6 +73,9 @@ import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
             case 'disconnected':
                 boxLabel = 'Login with Spotify';
                 break;
+            case 'waiting_interaction':
+                boxLabel = 'Tap anywhere to enable Spotify';
+                break;
             case 'connecting':
                 boxLabel = 'Connecting...';
                 break;

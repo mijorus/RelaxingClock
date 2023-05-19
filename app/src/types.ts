@@ -21,7 +21,7 @@ export interface ClockElementBox {
 export type mouseWatcherState = 'watch' | 'hide' | 'leave';
 export type userSettingType = 'string' | 'int' | 'float' | 'boolean'| 'object'| 'array';
 
-export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied';
+export type SpotifyPlayerStatus = 'ready' | 'disconnected' | 'error' | 'connecting' | 'expired' | 'non-premium' | 'access_denied' | 'waiting_interaction';
 
 // Rooster (command bar)
 export type RoosterExamples = {group?: RoosterExample[], namespace?: string, tips?: {'0'?: string, '1'?: string, '2'?: string}};
