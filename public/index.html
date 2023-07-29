@@ -75,12 +75,6 @@
                 All product names, logos and brands are property of their respective owners.
             </p>
             <p class="text-md text-center font-primary text-secondary" style="opacity: .7;">version v<span class="version-print"></span></p>
-            <div class="mt-5 text-center">
-                <div style="min-height:44px" color="white" bg="transparent">
-                    <i class="fas fa-eye"></i>
-                    <span class="counterapi"></span>
-                </div>
-            </div>
         </div>
     </footer>
 
@@ -88,19 +82,17 @@
         This website requires javascript
     </noscript>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MCHNKXNSFG"></script>
     <script>
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     let xhr = new XMLHttpRequest();
-        //     xhr.open("GET", "https://api.countapi.xyz/hit/relaxingclock.com/home");
-        //     xhr.responseType = "json";
-        //     xhr.onload = function () {
-        //         const result = 59401 + this.response.value;
-        //         document.querySelector('.counterapi').textContent = result.toLocaleString();
-        //     }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-        //     xhr.send();
-        // });
+        gtag('config', 'G-MCHNKXNSFG', { 'anonymize_ip': true });
+    </script>
 
+    <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
                 .then((registration) => {
