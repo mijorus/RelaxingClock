@@ -88,8 +88,8 @@
 
         await windowReady;
         setTimeout(() => {
-            if (!userInteraction && localStorage.getItem('userHasLogged')) {
-                spotifyPlayerStatus.set('waiting_interaction');
+            if (!userInteraction && localStorage.getItem("userHasLogged")) {
+                spotifyPlayerStatus.set("waiting_interaction");
                 createIncomingEvent({
                     icon: "fas fa-info",
                     text: "Tap anywhere to enable Spotify",
@@ -100,7 +100,7 @@
 </script>
 
 <svelte:head>
-    {#if userInteraction && localStorage.getItem('userHasLogged')}
+    {#if userInteraction && localStorage.getItem("userHasLogged")}
         <script src="https://sdk.scdn.co/spotify-player.js" defer></script>
     {/if}
 </svelte:head>
