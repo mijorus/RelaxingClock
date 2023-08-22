@@ -5,6 +5,14 @@
     <img src="docs/clock.png" width="500"/>
 </p>
 
+<p align="center">
+    <a href="https://ko-fi.com/mijorus" align="center">
+  <img width="250" src="https://mijorus.it/kofi-support.png">
+</a>
+</p>
+
+
+
 The sidecar of your working days, Relaxing Clock is an awesome web app you can keep opened in the background while concentrating. Login with **Spotify** and play your favourite lo-fi tracks, playlist and podcasts to study/relax to.
 
 ## Introducing the command box
