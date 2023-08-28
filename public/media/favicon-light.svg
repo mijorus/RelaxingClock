@@ -5,11 +5,8 @@
    height="1000"
    viewBox="0 0 1243.0081 2929.6876"
    id="svg35"
-   sodipodi:docname="favicon.svg"
+   sodipodi:docname="favicon-light.svg"
    inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   inkscape:export-filename="favicon.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +31,7 @@
      inkscape:snap-page="true"
      inkscape:snap-grids="false"
      inkscape:zoom="0.68436359"
-     inkscape:cx="474.16315"
+     inkscape:cx="474.89376"
      inkscape:cy="289.31989"
      inkscape:window-width="2496"
      inkscape:window-height="1558"
@@ -68,11 +65,12 @@
   <g
      aria-label="R"
      id="text14933"
-     style="font-size:3515.62px;line-height:1.25;font-family:Comfortaa;-inkscape-font-specification:'Comfortaa, Normal';stroke-width:2.92969"
+     style="font-size:3515.62px;line-height:1.25;font-family:Comfortaa;-inkscape-font-specification:'Comfortaa, Normal';stroke-width:2.92969;fill:#ffffff"
      transform="matrix(0.88336554,0,0,0.88336554,72.490326,170.85133)">
     <path
        d="m -105.2671,2837.6934 q -77.34364,0 -130.07794,-52.7343 -52.73431,-52.7343 -52.73431,-130.078 V 274.80629 q 0,-80.85926 52.73431,-130.07794 52.7343,-52.734302 130.07794,-52.734302 h 632.81162 q 263.67151,0 467.57748,112.499842 203.906,108.98423 316.4058,302.34333 116.0155,193.35911 116.0155,449.99938 0,239.0622 -116.0155,425.39 -112.4998,186.3279 -316.4058,291.7965 -203.90597,105.4686 -467.57748,105.4686 H 77.545146 v 875.3894 q 0,77.3437 -52.734301,130.078 -49.218682,52.7343 -130.077945,52.7343 z m 1458.9823,0 q -49.2186,0 -91.4061,-21.0938 -38.6718,-21.0937 -66.7968,-66.7967 L 562.70072,1730.273 917.77835,1628.32 1494.3401,2556.4438 q 63.2811,101.9529 17.5781,193.3591 -45.7031,87.8905 -158.203,87.8905 z M 77.545146,1441.9922 H 527.54452 q 161.71853,0 284.76523,-59.7656 123.04671,-63.2811 193.35915,-172.2654 70.3124,-112.4998 70.3124,-253.1246 0,-154.68729 -70.3124,-274.21837 Q 935.35646,563.08714 812.30975,496.29036 689.26305,429.49358 527.54452,429.49358 H 77.545146 Z"
-       id="path1030" />
+       id="path1030"
+       style="fill:#ffffff" />
   </g>
   <path
      style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.92969px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
