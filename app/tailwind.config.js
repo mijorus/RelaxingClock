@@ -41,6 +41,8 @@ module.exports = {
         extend: {
             fontFamily: {
                 'clock': ['Source Code Pro', 'monospace'],
+                'monofur': ['monofur', 'monospace'], 
+                'courier': ['Courier Prime', 'monospace'],
                 'ubuntu': ['Ubuntu', 'sans-serif'],
                 'primary': ['DM Mono', 'monospace'],
                 'title': ['Comfortaa', 'monospace'],

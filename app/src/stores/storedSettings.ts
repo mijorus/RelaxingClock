@@ -86,3 +86,5 @@ export const longPomodoro = userSetting('longPomodoro', false, 'boolean');
 export const remindersRepeatedDefault = userSetting('remindersRepeatedDefault', false, 'boolean');
 // accent color
 export const accentColor = userSetting('hoursColor', undefined, 'string');
+// clock class
+export const clockStyleClass = userSetting('clockStyleClass', 'font-clock', 'string');

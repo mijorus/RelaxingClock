@@ -14,6 +14,18 @@
     font-display: block;
 }
 
+@font-face {
+    font-family: 'monofur';
+    src:  url('/fonts/webfonts/monof55.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+.font-monofur {
+    letter-spacing: 2px;
+}
+
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
