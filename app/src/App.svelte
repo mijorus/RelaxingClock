@@ -24,6 +24,7 @@
     import { createIncomingEvent } from "./components/clock/IncomingEventsMessages.svelte";
 
     let userInteraction = false;
+    const isProd = process.env.production;
     screenSaverHandler.set(20 * 1000);
     // screenSaverHandler.set(1 * 1000);
 
@@ -121,6 +122,21 @@
 <ColorSelector />
 <Modal />
 <svelte:window on:keydown={openQuestionmarkModal} />
+
+{#if isProd}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MCHNKXNSFG"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4693990468679494" crossorigin="anonymous"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "G-MCHNKXNSFG", { anonymize_ip: true });
+    </script>
+{/if}
 
 <style global>
     @import "@csstools/normalize.css";
