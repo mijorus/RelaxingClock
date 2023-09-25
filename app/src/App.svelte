@@ -5,7 +5,7 @@
     import Rooster from "./components/rooster/Rooster.svelte";
     import Home from "./components/sections/Home.svelte";
     import Settings from "./components/sections/Settings.svelte";
-    import { loggedWithSpotify, weather } from "./stores/storedSettings";
+    import { loggedWithSpotify, saveEnergy, weather } from "./stores/storedSettings";
     import NotificationsPanel from "./components/sections/notifications/NotificationsPanel.svelte";
     import { modalContent, onlineStatus } from "./stores/globalState";
     import { spotifyAccessToken, spotifyPlayerStatus, spotifyUserData } from "./stores/spotify";
@@ -22,6 +22,7 @@
     import SurveyModal from "./components/modals/SurveyModal.svelte";
     import UpdateModal from "./components/modals/UpdateModal.svelte";
     import { createIncomingEvent } from "./components/clock/IncomingEventsMessages.svelte";
+    import axios from "axios";
 
     let userInteraction = false;
     const isProd = process.env.production;
@@ -59,8 +60,13 @@
     onMount(async () => {
         console.log(process.env.VERSION);
 
-        // temporary disable weather
+        if (!localStorage.getItem("backup_saveEnergy")) {
+            localStorage.setItem("backup_saveEnergy", JSON.stringify($saveEnergy));
+        }
+
+        // temporary set discontinued features
         weather.set(false);
+        saveEnergy.set(true);
 
         if (process.env.production) console.log = function () {};
         document.querySelector("footer").classList.remove("hidden");
@@ -88,7 +94,7 @@
         }
 
         await windowReady;
-        setTimeout(() => {
+        setTimeout(async () => {
             if (!userInteraction && localStorage.getItem("userHasLogged")) {
                 spotifyPlayerStatus.set("waiting_interaction");
                 createIncomingEvent({
@@ -96,6 +102,9 @@
                     text: "Tap anywhere to enable Spotify",
                 });
             }
+
+            let bingDailyImg = await axios.get("https://peapix.com/bing/feed?country=us");
+            console.log(bingDailyImg.data);
         }, 2500);
     });
 </script>
@@ -124,6 +133,7 @@
 <svelte:window on:keydown={openQuestionmarkModal} />
 
 {#if isProd}
+    <!-- Google tag (gtag.js) -->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MCHNKXNSFG"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4693990468679494" crossorigin="anonymous"></script>

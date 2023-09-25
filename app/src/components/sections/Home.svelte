@@ -13,6 +13,7 @@
     import FloatingBlobs from "./FloatingBlobs/FloatingBlobs.svelte";
     import IncomingEventsBox from "../clock/IncomingEventsBox.svelte";
     import Bubble from "../elements/Bubble.svelte";
+    import { backgroundImage } from "../../stores/storedSettings";
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;
@@ -65,7 +66,7 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative">
+<div class="h-screen relative" style={`background-image: ${$backgroundImage?.length ? "url(" + $backgroundImage + ")" : null}`}>
     <div
         id="clock"
         bind:this={bigClockContainer}
@@ -87,7 +88,7 @@
 
     <div class="hidden md:flex justify-center absolute bottom-5 left-1/2 transform -translate-x-1/2 lg:scale-125">
         <Bubble>
-            <div >
+            <div>
                 <IncomingEventsBox />
             </div>
         </Bubble>
