@@ -20,6 +20,9 @@
     import RemoteTime from "./settingsPage/RemoteTime.svelte";
     import ProTips from "./settingsPage/ProTips.svelte";
     import Donate from "./settingsPage/Donate.svelte";
+    import { clockStyleClass } from "../../stores/storedSettings";
+    import ClockFont from "./settingsPage/ClockFont.svelte";
+
 
     $: {
         if (!$clockIsVisible && !$tips) tips.set([{name: 'Show keyboard shortcuts', shortcut: '?'}]);
@@ -43,6 +46,7 @@
             <SettingsBox collapsable={false} bordered={false}><span class="pl-5 md:p-0 text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <ChangeAccentColor />
+                <ClockFont />
                 <RemoteTime />
                 <HighContrast />
                 <BlinkingDots />
@@ -53,7 +57,7 @@
         </div>
     </div>
     {#if !$clockIsVisible}
-        <div class="p-4 fixed bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block font-clock text-primary" transition:slide>
+        <div class="p-4 fixed bottom-0 left-0 xl:text-7xl opacity-50 lg:text-5xl md:text-4xl hidden md:block {$clockStyleClass} text-primary" transition:slide>
             <a href="#clock" class="cursor-pointer"><Hours interactive={false} /><Divisor /><Minutes /></a>
         </div>
     {/if}

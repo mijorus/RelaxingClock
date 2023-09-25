@@ -23,14 +23,20 @@
                 <img class="border rounded-xl border-white" src="/media/4-1-0.gif" alt="verison 4.1.0" />
             </div>
             <div class="mb-10 text-center text-2xl">Check the status of ongoing timers and reminders with the new widget.</div>
-            <div class="my-3 w-1/2  ">
+            <div class="my-3 w-1/2">
                 <img class="border-2 rounded-xl border-white" src="/media/4-1-0-protips.png" alt="verison 4.1.0" />
             </div>
             <div class="mb-10 text-center text-2xl">Discover Tips and tricks you didn't know about</div>
-            <div class="my-3 w-1/2  ">
+            <div class="my-3 w-1/2">
                 <img class="border-2 rounded-xl border-white" src="/media/4-1-0-kofi.png" alt="verison 4.1.0" />
             </div>
             <div class="mb-10 text-center text-2xl">Enjoying Relaxing Clock? Send me a kofi.</div>
+        {:else if version === "4.4.0"}
+            <div class="my-3 w-1/2">
+                <ul>
+                    <li>- ✒️Added an option to customize the font style of the clock </li>
+                </ul>
+            </div>
         {:else}
             <div class="my-3 w-1/2">
                 <ul>

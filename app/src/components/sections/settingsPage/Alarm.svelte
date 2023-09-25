@@ -11,7 +11,7 @@ import time from '../../../stores/time';
 import { alarmIsRinging, tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
 import { shakeElement } from '../../../utils/utils';
-import { alarmTime, clockFormat } from '../../../stores/storedSettings';
+import { alarmTime, clockFormat, clockStyleClass } from '../../../stores/storedSettings';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import { canBeSummoned, shortcuts } from '../../../stores/rooster';
@@ -189,7 +189,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
             class="py-4 h-auto font-primary bg-secondary text-primary rounded-2xl shadow-box">
             <h2 class="text-4xl font-bold mr-20 text-center font-title w-full">Set the alarm</h2>
             <div class="my-2 flex flex-col justify-center">
-                <div class="text-8xl p-2 mt-4 mb-1 text-center font-bold font-clock">
+                <div class="text-8xl p-2 mt-4 mb-1 text-center font-bold {$clockStyleClass}">
                     <span 
                         id="alarm-h-input" bind:innerHTML={hours} contenteditable class="time-input"
                         on:keydown={handleAlarmKeyDown} on:keyup={handleAlarmKeyUp}>
