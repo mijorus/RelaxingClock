@@ -57,7 +57,9 @@
         bind:this={analogClock}
         class:bg-highlighted={$bgImageBright === "light"}
         class:opacity-95={$bgImageBright === "light"}
-        class="rounded-full border-none w-104 h-104 to-screensaver transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
+        class:bg-primary={$bgImageBright === "dark"}
+        class="rounded-full border-none w-104 h-104 to-screensaver
+            transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
     >
         <div class="text-center text-2xl mt-16 -z-1 smooth-fade {showTime || $analogTimeLocked ? 'opacity-70' : 'opacity-0'}" style="filter:grayscale(1);" transition:fade>
             <div id="analog-lock-time" class="{showTime ? 'opacity-70' : 'opacity-20'} text-base transition-opacity cursor-pointer" on:click|stopPropagation={changeAnalogTimeLockedState}>

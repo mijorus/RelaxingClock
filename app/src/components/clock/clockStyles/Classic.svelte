@@ -4,15 +4,15 @@
     import Seconds from "../Seconds.svelte";
     import Divisor from "../Divisor.svelte";
     import StyleBase from "./StyleBase.svelte";
-    import { bgImageBright, screenSaver, tips } from "../../../stores/globalState";
+    import { screenSaver, tips } from "../../../stores/globalState";
     import DateBox from "../DateBox.svelte";
     import AmPmBadge from "../AmPmBadge.svelte";
     import IncomingEventsMessages from "../IncomingEventsMessages.svelte";
-    import { handleMouseEnterCommon, handleMouseLeaveCommon } from "./common";
+    import { backgroundImage } from "../../../stores/storedSettings";
 </script>
 
 <StyleBase styleId={0}>
-    <div class="relative" class:light={$bgImageBright.length}>
+    <div class="relative" class:light={$backgroundImage?.length}>
         <div class="absolute left-1/2 transform -translate-x-2/4">
             <IncomingEventsMessages />
         </div>
@@ -25,7 +25,7 @@
 
 <style>
     .light {
-        mix-blend-mode: luminosity;
+        opacity: .9;
         text-shadow: 0 0 20px var(--secondary);
     }
 </style>

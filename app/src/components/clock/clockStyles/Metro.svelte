@@ -43,7 +43,7 @@
 
 <style>
     .light {
-        mix-blend-mode: luminosity;
+        opacity: .9;
         text-shadow: 0 0 20px var(--secondary);
     }
 </style>

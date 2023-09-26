@@ -105,7 +105,6 @@
 
 <style>
     .bg-image-light-pixel {
-        mix-blend-mode: luminosity;
         color: black;
         text-shadow: 0 0 20px white;
     }
