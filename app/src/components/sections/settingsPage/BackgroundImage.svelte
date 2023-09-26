@@ -5,7 +5,7 @@
     import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
     import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
     import { backgroundImage, blink, saveEnergy } from "../../../stores/storedSettings";
-    import { bgImageBrigth } from "../../../stores/globalState";
+    import { bgImageBright } from "../../../stores/globalState";
 
     let imageReference: HTMLImageElement;
 
@@ -29,7 +29,7 @@
 
             const brightness = event.data < 127.5 ? "dark" : "light";
             console.log("Bg image is ", brightness, event.data);
-            bgImageBrigth.set(brightness);
+            bgImageBright.set(brightness);
         };
 
         worker.postMessage({ imageData, canvas: { width: canvas.width, height: canvas.height } });
@@ -54,7 +54,7 @@
             state={$backgroundImage?.length}
             label={"Background image"}
             on:change={(e) => {
-                if (!e.detail) bgImageBrigth.set("");
+                if (!e.detail) bgImageBright.set("");
                 backgroundImage.set(e.detail ? "https://bing.com//th?id=OHR.VeniceSkatePark_EN-US1972530060_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp" : "");
             }}
         />

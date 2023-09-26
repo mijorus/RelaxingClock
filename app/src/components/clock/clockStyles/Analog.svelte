@@ -2,7 +2,7 @@
     import randomcolor from "randomcolor";
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
-    import { bgImageBrigth, screenSaver, tips } from "../../../stores/globalState";
+    import { bgImageBright, screenSaver, tips } from "../../../stores/globalState";
     import { accentColor, analogTimeLocked } from "../../../stores/storedSettings";
     import time from "../../../stores/time";
     import Divisor from "../Divisor.svelte";
@@ -55,8 +55,8 @@
         on:mouseenter={handleMouseEnter}
         on:mouseleave={handleMouseLeave}
         bind:this={analogClock}
-        class:bg-highlighted={$bgImageBrigth === "light"}
-        class:opacity-95={$bgImageBrigth === "light"}
+        class:bg-highlighted={$bgImageBright === "light"}
+        class:opacity-95={$bgImageBright === "light"}
         class="rounded-full border-none w-104 h-104 to-screensaver transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
     >
         <div class="text-center text-2xl mt-16 -z-1 smooth-fade {showTime || $analogTimeLocked ? 'opacity-70' : 'opacity-0'}" style="filter:grayscale(1);" transition:fade>
@@ -68,8 +68,8 @@
 
         <span
             id="little-dot"
-            class:bg-highlighted={$bgImageBrigth !== "light"}
-            class:bg-primary={$bgImageBrigth === "light"}
+            class:bg-highlighted={$bgImageBright !== "light"}
+            class:bg-primary={$bgImageBright === "light"}
             class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4
                 rounded-full hover:scale-125"
             on:click|stopPropagation|preventDefault={(e) => {
@@ -79,8 +79,8 @@
         {#each Array(12) as _, i}
             <span class="hand smooth-move {handClasses} w-48" style="transform: rotate({i * 30}deg);">
                 <span
-                    class:bg-highlighted={$bgImageBrigth !== "light"}
-                    class:bg-primary={$bgImageBrigth === "light"}
+                    class:bg-highlighted={$bgImageBright !== "light"}
+                    class:bg-primary={$bgImageBright === "light"}
                     class="{i % 3 ? 'h-1.5 w-1.5 opacity-75' : 'h-3 w-3'} absolute top-0 right-0 transform -translate-x-2/4 -translate-y-2/4 inline-block rounded-full"
                 />
             </span>
@@ -88,14 +88,14 @@
         <span
             id="hand-hours"
             style="transform: translate(0%, -50%) rotate({hours * 30 + min / 2 - 90}deg)"
-            class="hand smooth-move bg-primary {handClasses} {$bgImageBrigth === 'light' ? 'border-6' : 'border-2'} border-primary w-24 h-3 z-10 flex items-center justify-center"
+            class="hand smooth-move bg-primary {handClasses} {$bgImageBright === 'light' ? 'border-6' : 'border-2'} border-primary w-24 h-3 z-10 flex items-center justify-center"
         >
-            <div class="hand smooth-move bg-white rounded-full {$bgImageBrigth === 'light' ? 'border-6' : 'border-2'} border-none w-12 h-0.5 z-10" />
+            <div class="hand smooth-move bg-white rounded-full {$bgImageBright === 'light' ? 'border-6' : 'border-2'} border-none w-12 h-0.5 z-10" />
         </span>
         <span
             id="hand-min"
             style="transform: translate(0%, -50%) rotate({min * 6 + sec / 10 - 90}deg)"
-            class="hand smooth-move bg-primary {handClasses} {$bgImageBrigth === 'light' ? 'border-6' : 'border-2'} border-primary w-32 h-2 z-20"
+            class="hand smooth-move bg-primary {handClasses} {$bgImageBright === 'light' ? 'border-6' : 'border-2'} border-primary w-32 h-2 z-20"
         />
         <span
             id="hand-seconds"

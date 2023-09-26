@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { bgImageClass, darkenClock, screenSaver } from "../../stores/globalState";
+    import { darkenClock, screenSaver } from "../../stores/globalState";
     import screenSaverHandler from "../../handlers/screenSaver";
     import Tips from "../tips/Tips.svelte";
     import Clock from "../clock/Clock.svelte";

@@ -98,4 +98,4 @@ export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) =>
 
 export const modalContent: Writable<any> = writable(null);
 
-export const bgImageBrigth: Writable<'' | 'light' | 'dark'> = writable('');
+export const bgImageBright: Writable<'' | 'light' | 'dark'> = writable('');

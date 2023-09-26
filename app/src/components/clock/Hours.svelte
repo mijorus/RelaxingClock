@@ -7,7 +7,7 @@
     import { onMount, tick } from "svelte";
     import { customColors, locSto, randomCustomColor } from "../../utils/utils";
     import { fade } from "svelte/transition";
-    import { colorSelector, darkenClock, bgImageBrigth } from "../../stores/globalState";
+    import { colorSelector, darkenClock, bgImageBright } from "../../stores/globalState";
     import { handleMouseEnterCommon, handleMouseLeaveCommon } from "./clockStyles/common";
 
     $: setHours($time, $clockFormat);
@@ -123,8 +123,8 @@
         on:mouseup={handleClockMouseUp}
         on:mouseleave={handleMouseLeaveCommon}
         on:contextmenu|preventDefault={handleClockCM}
-        class:pointer-events-none={$bgImageBrigth.length}
-        style="transition: color .05s linear; color: {$bgImageBrigth.length ? null : color}; text-shadow: {$bgImageBrigth.length ? null : textShadow}"
+        class:pointer-events-none={$bgImageBright.length}
+        style="transition: color .05s linear; color: {$bgImageBright.length ? null : color}; text-shadow: {$bgImageBright.length ? null : textShadow}"
     >
         {$time.format($clockFormat === "24h" ? "HH" : "hh")}
     </span>

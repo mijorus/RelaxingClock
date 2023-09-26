@@ -11,8 +11,8 @@ export function pulse(loop = 4) {
     anime({
         begin() { isPulsing = true },
         targets: [
-            document.getElementById('flobOne').getElementsByTagName('path'),
-            document.getElementById('flobTwo').getElementsByTagName('path')
+            document.getElementById('flob1').getElementsByTagName('path'),
+            document.getElementById('flob2').getElementsByTagName('path')
         ],
         easing: 'linear',
         stroke: ['#3d3d3d', '#8e8e8e', '#3d3d3d'],
