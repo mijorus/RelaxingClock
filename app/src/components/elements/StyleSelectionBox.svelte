@@ -138,6 +138,5 @@
 
     .bg-image-light {
         text-shadow: 0 0 20px var(--secondary);
-        mix-blend-mode: lighten;
     }
 </style>
