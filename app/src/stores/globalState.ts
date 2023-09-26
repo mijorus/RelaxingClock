@@ -31,14 +31,19 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
     };
 });
 
+let changeSizeTimeout;
 export const screenSize: Readable<number> = readable(99999999, (set: Subscriber<number>) => {
     window.addEventListener('resize', setScreenSize);
 
     function setScreenSize(e: UIEvent) {
-        set(window.innerWidth);
+        clearTimeout(changeSizeTimeout);
+
+        changeSizeTimeout = setTimeout(() => {
+            set(window.innerWidth);
+        }, 250);
     }
 
-    return () => { };
+    return () => clearTimeout(changeSizeTimeout);
 });
 
 export const mobileStatus = derived(screenSize, function (value) {
@@ -93,4 +98,4 @@ export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) =>
 
 export const modalContent: Writable<any> = writable(null);
 
-export const bgImageBrigth: Writable<'' | 'light' | 'dark'> = writable('')
+export const bgImageBrigth: Writable<'' | 'light' | 'dark'> = writable('');

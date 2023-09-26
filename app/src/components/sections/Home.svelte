@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { bgImageBrigth, darkenClock, screenSaver } from "../../stores/globalState";
+    import { bgImageClass, darkenClock, screenSaver } from "../../stores/globalState";
     import screenSaverHandler from "../../handlers/screenSaver";
     import Tips from "../tips/Tips.svelte";
     import Clock from "../clock/Clock.svelte";
@@ -56,11 +56,11 @@
 </script>
 
 <FullScreenBtn />
-<div class="absolute w-full top-0 left-0 hidden md:p-5 xl:pr-0 md:flex md:justify-end xl:justify-center" style="z-index: 1;">
+<!-- <div class="absolute w-full top-0 left-0 hidden md:p-5 xl:pr-0 md:flex md:justify-end xl:justify-center" style="z-index: 1;">
     <span>
         <WeatherWidget />
     </span>
-</div>
+</div> -->
 
 <div class="absolute top-0" style="z-index: -999;">
     <FloatingBlobs />
