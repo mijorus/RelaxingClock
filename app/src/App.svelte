@@ -102,9 +102,6 @@
                     text: "Tap anywhere to enable Spotify",
                 });
             }
-
-            let bingDailyImg = await axios.get("https://peapix.com/bing/feed?country=us");
-            console.log(bingDailyImg.data);
         }, 2500);
     });
 </script>

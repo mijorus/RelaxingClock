@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { darkenClock, screenSaver } from "../../stores/globalState";
+    import { bgImageBrigth, darkenClock, screenSaver } from "../../stores/globalState";
     import screenSaverHandler from "../../handlers/screenSaver";
     import Tips from "../tips/Tips.svelte";
     import Clock from "../clock/Clock.svelte";
@@ -66,7 +66,7 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative" style={`background-image: ${$backgroundImage?.length ? "url(" + $backgroundImage + ")" : null}`}>
+<div class="h-screen relative" class:bg-image={$backgroundImage?.length} style={`background-image: ${$backgroundImage?.length ? "url(" + $backgroundImage + ")" : null}`}>
     <div
         id="clock"
         bind:this={bigClockContainer}
@@ -100,3 +100,12 @@
         <Pinned />
     </div>
 </div>
+
+<style>
+    .bg-image {
+        background-size: cover;
+        background-repeat: no-repeat;
+        box-shadow: 0px -40px 35px var(--primary) inset;
+        border-radius: 0 0 25px 5px;
+    }
+</style>
