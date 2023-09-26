@@ -14,6 +14,7 @@
     import IncomingEventsBox from "../clock/IncomingEventsBox.svelte";
     import Bubble from "../elements/Bubble.svelte";
     import { backgroundImage } from "../../stores/storedSettings";
+    import SmoothImage from "../elements/SmoothImage.svelte";
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;
@@ -66,7 +67,11 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative" class:bg-image={$backgroundImage?.length} style={`background-image: ${$backgroundImage?.length ? "url(" + $backgroundImage + ")" : null}`}>
+<div class="h-screen relative" class:home-bg-image={$backgroundImage?.length}>
+    {#if $backgroundImage?.length}
+        <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} />
+    {/if}
+
     <div
         id="clock"
         bind:this={bigClockContainer}
@@ -101,11 +106,17 @@
     </div>
 </div>
 
-<style>
-    .bg-image {
-        background-size: cover;
+<style global>
+    .clock-bg-image {
+        /* background-size: cover;
         background-repeat: no-repeat;
-        box-shadow: 0px -40px 35px var(--primary) inset;
+        box-shadow: 0px -40px 35px var(--primary) inset; */
         border-radius: 0 0 25px 5px;
+        z-index: -99;
+    }
+
+    .home-bg-image {
+        border-radius: 0 0 25px 5px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 70%, var(--primary) 100%);
     }
 </style>

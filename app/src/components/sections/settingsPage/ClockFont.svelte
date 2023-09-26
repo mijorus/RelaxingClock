@@ -6,7 +6,7 @@
     import Action from "../../elements/settings/Buttons/Action.svelte";
     import { clockStyleClass } from "../../../stores/storedSettings";
 
-    const customClass = "bg-transparend border-2 border-white";
+    const customClass = "bg-transparent border-2 border-white";
 
     function setCustomFont(tag: string) {
         if (tag.length) tag = "-" + tag;

@@ -70,6 +70,8 @@ export const presentation = userSetting('presentation', false, 'boolean');
 export const saveEnergy = userSetting('saveEnergy', false, 'boolean');
 
 export const backgroundImage = userSetting('backgroundImage', '');
+export const backgroundImageSource = userSetting('backgroundImageSource', 'default', 'string');
+
 
 // export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
 // export const remoteTime = userSetting('remoteTime', false, 'boolean');

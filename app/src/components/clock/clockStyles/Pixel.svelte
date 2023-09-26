@@ -68,7 +68,7 @@
 </script>
 
 <StyleBase styleId={5}>
-    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title" style="transition: padding .2s ease-out;">
+    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title {$bgImageBright === 'light' ? 'bg-image-light-pixel' : ''}" style="transition: padding .2s ease-out; color .2s linear;">
         <div class="absolute h-96 w-96" style="transform: translate(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform; transform-origin: 50% 0%;">
             {#each Array(60) as _, s}
                 <div class=" absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
@@ -98,15 +98,16 @@
             {/each}
         </div>
         <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
-            <span class="text-6xl {$bgImageBright === 'light' ? 'bg-image-light' : ''}">{$time.format($clockFormat === "24h" ? "HH" : "hh")}</span>
+            <span class="text-6xl">{$time.format($clockFormat === "24h" ? "HH" : "hh")}</span>
         </div>
     </div>
 </StyleBase>
 
 <style>
-    .bg-image-light {
+    .bg-image-light-pixel {
         mix-blend-mode: luminosity;
-        text-shadow: 0 0 30px var(--secondary);
+        color: black;
+        text-shadow: 0 0 20px white;
     }
 
     .origin-center {
