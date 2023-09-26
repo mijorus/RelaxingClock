@@ -117,6 +117,6 @@
         text-shadow: none !important;
         color: black !important;
         box-shadow: 0 0 30px var(--secondary);
-        opacity: .8;
+        opacity: .95;
     }
 </style>
