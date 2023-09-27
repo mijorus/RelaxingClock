@@ -169,8 +169,8 @@
     <div
         bind:this={pinBox}
         class="hidden md:block md:w-104 xl:w-132 md:h-44 xl:h-60 z-10 pin-box transition-all border
-        {pinned.length ? ($bgImageBright !== '' ? 'border-primary' : 'border-secondary') : 'border-transparent'} {$bgImageBright !== ''
-            ? 'hover:border-primary'
+        {pinned.length ? ($bgImageBright === 'light' ? 'shadow-lg border-transparent' : 'border-secondary') : 'border-transparent'} {$bgImageBright === 'light'
+            ? 'hover:shadow-xl'
             : 'hover:border-secondary'} rounded-xl m-3"
         on:mousemove={handleDragOnMouseMove}
     >
@@ -180,7 +180,7 @@
 
         <div
             class="transition-all -z-1 w-full absolute bottom-0 pt-10 opacity-0 transform
-            translate-y-1/2 text-center whitespace-nowrap pinned-hint {$bgImageBright !== '' ? 'text-white' : 'text-secondary'}"
+            translate-y-1/2 text-center whitespace-nowrap pinned-hint {$bgImageBright !== '' ? 'text-white light' : 'text-secondary'}"
         >
             Keep your pins inside this box! {#if !pinned.length}<br />Type <strong>pin: [space]</strong> in the command box{/if}
         </div>
@@ -213,6 +213,10 @@
 
     .pinned-box-sm {
         animation: reveal 0.2s linear;
+    }
+
+    .light {
+        text-shadow: 0 0 20px var(--secondary);
     }
 
     @keyframes reveal {

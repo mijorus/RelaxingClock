@@ -1,9 +1,7 @@
 import { windowReady } from 'html-ready';
-import type { SvelteComponent } from 'svelte';
-import type { SvelteComponentDev } from 'svelte/internal';
 import { derived, readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import type { Tip } from '../types';
-import { backgroundImage, saveEnergy } from './storedSettings';
+import { saveEnergy } from './storedSettings';
 
 export const screenSaver: Writable<boolean> = writable(false);
 export const darkenClock: Writable<boolean> = writable(false);

@@ -3,7 +3,6 @@
     import Title from "../../elements/settings/Title.svelte";
     import TitleIcon from "../../elements/settings/TitleIcon.svelte";
     import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
-    import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
     import { backgroundImage, backgroundImageSource, blink, saveEnergy } from "../../../stores/storedSettings";
     import { bgImageBright } from "../../../stores/globalState";
     import axios from "axios";
@@ -16,7 +15,8 @@
     const bingRefreshKey = "bingWallpaperRefresh";
     const customClass = "bg-transparent border-2 border-white";
 
-    const demoImage = "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MDc4NTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTU3NjA0MzR8&ixlib=rb-4.0.3&q=85";
+    // const demoImage = "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MDc4NTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTU3NjA0MzR8&ixlib=rb-4.0.3&q=85";
+    const demoImage = "https://images.unsplash.com/photo-1694532228681-2f6d94c2f768?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4752&q=80"
 
     function setImageBrigthness() {
         imageReference.crossOrigin = "Anonymous";
