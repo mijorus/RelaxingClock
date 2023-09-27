@@ -1,6 +1,6 @@
 <script lang="ts">
     import time from "../../stores/time";
-    import { accentColor, clockFormat } from "../../stores/storedSettings";
+    import { accentColor, backgroundImage, clockFormat } from "../../stores/storedSettings";
     import type { Moment } from "moment";
     import anime from "animejs";
     import randomcolor from "randomcolor";
@@ -123,7 +123,7 @@
         on:mouseup={handleClockMouseUp}
         on:mouseleave={handleMouseLeaveCommon}
         on:contextmenu|preventDefault={handleClockCM}
-        class:pointer-events-none={$bgImageBright.length}
+        class:pointer-events-none={$backgroundImage?.length}
         style="transition: color .05s linear; color: {$bgImageBright.length ? null : color}; text-shadow: {$bgImageBright.length ? null : textShadow}"
     >
         {$time.format($clockFormat === "24h" ? "HH" : "hh")}
