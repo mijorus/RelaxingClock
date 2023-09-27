@@ -91,6 +91,7 @@ import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";
                 async examples() {
                     return {
                         'group': [
+                            {'argument': 'Create', 'example': 'create', 'selectable': true, tip: 'create a test notification'},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},
                             {'argument': 'Test', 'example': 'test', 'selectable': true},

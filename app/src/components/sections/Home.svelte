@@ -15,6 +15,7 @@
     import Bubble from "../elements/Bubble.svelte";
     import { backgroundImage } from "../../stores/storedSettings";
     import SmoothImage from "../elements/SmoothImage.svelte";
+    import HomeBackgroud from "../elements/HomeBackgroud.svelte";
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;
@@ -69,7 +70,8 @@
 
 <div class="h-screen relative" class:home-bg-image={$backgroundImage?.length}>
     {#if $backgroundImage?.length}
-        <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} />
+        <!-- <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} /> -->
+        <HomeBackgroud cssClasses="absolute top-0 w-full h-full"></HomeBackgroud>
     {/if}
 
     <div

@@ -15,11 +15,12 @@ import Hint from "./Hint.svelte";
     export let label: SettingsLabel;
     export let available: boolean = true;
     export let description: SettingsDesc;
+    export let hideLabelOnMobile = false;
 </script>
 
-<div class="settings-box-element settings-box-primary max-h-96 {available ? 'opacity-100' : 'opacity-50 pointer-events-none'}">
-    <div class="{label.bgClass || 'bg-secondary'} flex flex-row items-center justify-between rounded-xl p-3 m-2 md:p-4 md:m-2">
-        <span class="text-primary md:text-xl font-primary whitespace-nowrap not-overflow overflow-x-hidden"><AnimatedText text={label.text}/></span>
+<div class="settings-box-element settings-box-primary max-h-96 {available ? 'opacity-100' : 'opacity-50 pointer-events-none'} ">
+    <div class="{label.bgClass || 'bg-secondary'} p-3 m-2 md:p-4 md:m-2 flex flex-row items-center md:justify-between rounded-xl {hideLabelOnMobile ? 'justify-center' : 'justify-between'}">
+        <span class="text-primary md:text-xl font-primary whitespace-nowrap not-overflow overflow-x-hidden {hideLabelOnMobile ? 'hidden md:inline-block' : ''}"><AnimatedText text={label.text}/></span>
         <div class="">
             <slot></slot>
         </div>
