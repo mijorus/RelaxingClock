@@ -10,7 +10,7 @@
 </script>
 
 <StyleBase styleId={1}>
-    <div class="relative" class:light={$bgImageBright.length}>
+    <div class="relative" class:common-clock-background-image={$bgImageBright.length}>
         <div class="absolute left-1/2 transform -translate-x-2/4">
             <IncomingEventsMessages />
         </div>
@@ -22,10 +22,3 @@
         {/if}
     </div>
 </StyleBase>
-
-<style>
-    .light {
-        opacity: .9;
-        text-shadow: 0 0 20px var(--secondary);
-    }
-</style>

@@ -55,11 +55,8 @@
         on:mouseenter={handleMouseEnter}
         on:mouseleave={handleMouseLeave}
         bind:this={analogClock}
-        class:bg-highlighted={$bgImageBright === "light"}
-        class:opacity-95={$bgImageBright === "light"}
-        class:bg-primary={$bgImageBright === "dark"}
         class="rounded-full border-none w-104 h-104 to-screensaver
-            transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'}"
+            transform {$screenSaver ? '-translate-y-0 scale-125' : '-translate-y-1/4'} {$bgImageBright === 'light' ? 'bg-highlighted opacity-95' : $bgImageBright === 'dark' ? 'bg-primary' : ''}"
     >
         <div class="text-center text-2xl mt-16 -z-1 smooth-fade {showTime || $analogTimeLocked ? 'opacity-70' : 'opacity-0'}" style="filter:grayscale(1);" transition:fade>
             <div id="analog-lock-time" class="{showTime ? 'opacity-70' : 'opacity-20'} text-base transition-opacity cursor-pointer" on:click|stopPropagation={changeAnalogTimeLockedState}>
@@ -70,10 +67,8 @@
 
         <span
             id="little-dot"
-            class:bg-highlighted={$bgImageBright !== "light"}
-            class:bg-primary={$bgImageBright === "light"}
             class="z-50 transition-transform h-4 w-4 absolute top-2/4 left-2/4 transform -translate-x-2/4 -translate-y-2/4
-                rounded-full hover:scale-125"
+                rounded-full hover:scale-125 {$bgImageBright === 'light' ? 'bg-primary' : 'bg-highlighted'}"
             on:click|stopPropagation|preventDefault={(e) => {
                 setHandSecColor();
             }}
@@ -81,9 +76,9 @@
         {#each Array(12) as _, i}
             <span class="hand smooth-move {handClasses} w-48" style="transform: rotate({i * 30}deg);">
                 <span
-                    class:bg-highlighted={$bgImageBright !== "light"}
-                    class:bg-primary={$bgImageBright === "light"}
-                    class="{i % 3 ? 'h-1.5 w-1.5 opacity-75' : 'h-3 w-3'} absolute top-0 right-0 transform -translate-x-2/4 -translate-y-2/4 inline-block rounded-full"
+                    class="{i % 3 ? 'h-1.5 w-1.5 opacity-75' : 'h-3 w-3'} absolute top-0 right-0 transform -translate-x-2/4 -translate-y-2/4 inline-block rounded-full {$bgImageBright === 'light'
+                        ? 'bg-primary'
+                        : 'bg-highlighted'}"
                 />
             </span>
         {/each}

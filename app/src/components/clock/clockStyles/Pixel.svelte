@@ -105,8 +105,8 @@
 
 <style>
     .bg-image-light-pixel {
-        color: black;
-        text-shadow: 0 0 20px white;
+        color: var(--primary);
+        text-shadow: 0 0 20px var(--highlighted);
     }
 
     .origin-center {
