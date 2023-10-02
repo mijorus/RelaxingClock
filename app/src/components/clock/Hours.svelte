@@ -123,8 +123,8 @@
         on:mouseup={handleClockMouseUp}
         on:mouseleave={handleMouseLeaveCommon}
         on:contextmenu|preventDefault={handleClockCM}
-        class:pointer-events-none={$backgroundImage?.length}
-        style="transition: color .05s linear; color: {$bgImageBright.length ? null : color}; text-shadow: {$bgImageBright.length ? null : textShadow}"
+        class:pointer-events-none={$backgroundImage !== 'none'}
+        style="transition: color .05s linear; color: {$bgImageBright !== 'none' ? null : color}; text-shadow: {$bgImageBright !== 'none' ? null : textShadow}"
     >
         {$time.format($clockFormat === "24h" ? "HH" : "hh")}
     </span>

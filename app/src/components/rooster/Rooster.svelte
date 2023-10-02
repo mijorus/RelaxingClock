@@ -33,7 +33,7 @@
     $: handleCommand(command);
     $: handleArgument(argument);
 
-    function injectAction(cmd: string, arg: string) {
+    async function injectAction(cmd: string, arg: string) {
         command = cmd + ":";
         argument = arg;
         params = "";
@@ -41,7 +41,9 @@
         commandPill.background = shortcuts.get(clearCommand()).background ?? null;
         commandPill.color = shortcuts.get(clearCommand()).color ?? null;
         handleCommand(command);
-        tick().then(() => paramsBox.focus());
+
+        await tick();
+        paramsBox.focus();
     }
 
     function clearCommand() {
@@ -249,12 +251,12 @@
         if (!$canBeSummoned) {
             return;
         }
-        
+
         console.log(event);
-        
+
         if (event.code === "Space") {
             if ((isMacintosh && event.altKey) || event.ctrlKey) {
-                event.preventDefault(); 
+                event.preventDefault();
                 summoned.set(!$summoned);
                 tick().then(() => commandBox.focus());
             }
@@ -266,10 +268,15 @@
         if (event.altKey && event.key.length === 1) {
             for (const [c, cmd] of Object.entries(shortcuts.getAll())) {
                 for (const [a, arg] of Object.entries(cmd.arguments)) {
-                    if (arg.quickLaunch && ('Key'+arg.quickLaunch.toUpperCase() === event.code)) {
+                    if (arg.quickLaunch && "Key" + arg.quickLaunch.toUpperCase() === event.code) {
                         event.preventDefault();
                         summoned.set(true);
                         injectAction(c, a);
+
+                        if (arg.callback && arg.quickLaunchTriggerActions) {
+                            arg.callback(params, -1, 3);
+                        }
+
                         return;
                     }
                 }
@@ -279,18 +286,18 @@
         return;
     }
 
-    function handleFocus() {
-        tick().then(() => {
-            let toFocus: HTMLElement;
-            if (params.length) toFocus = paramsBox;
-            else if (argument.length) toFocus = argumentBox;
-            else toFocus = commandBox;
-            toFocus.childNodes[0] ? caretToEnd(toFocus) : toFocus.focus();
-        });
+    async function handleFocus() {
+        await tick();
+        let toFocus: HTMLElement;
+        if (params.length) toFocus = paramsBox;
+        else if (argument.length) toFocus = argumentBox;
+        else toFocus = commandBox;
+        toFocus.childNodes[0] ? caretToEnd(toFocus) : toFocus.focus();
     }
 
     onMount(() => {
-        window.addEventListener("injectRoosterAction", (e: InjectRoosterActionEvent) => {
+        window.addEventListener("injectRoosterAction", async (e: InjectRoosterActionEvent) => {
+            summoned.set(true);
             injectAction(e.detail.command, e.detail.argument);
         });
     });
@@ -304,12 +311,12 @@
         <div
             id="rooster"
             bind:this={rooster}
-            class="flex w-11/12 sm:w-4/5 lg:w-2/5 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
+            class="flex w-11/12 sm:w-4/5 lg:w-2/5 xl:w-1/3 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
             in:fade={{ duration: 100 }}
             out:fade={{ duration: 100 }}
             on:click={handleFocus}
         >
-            <i class="lnr lnr-chevron-right text-primary justify-self-start	inline-block px-3 text-xl" />
+            <i class="lnr lnr-chevron-right text-primary justify-self-start inline-block px-3 text-xl" />
             <span
                 id="rooster-command"
                 on:keydown={handleInputKeydown}
@@ -320,7 +327,7 @@
                 contenteditable
                 style="color: {commandPill.color}; background-color: {commandPill.background}"
                 class="bg-highlighted text-dark text-xl font-primary rounded-lg {commandBoxHasFocus ? 'p-0.5 mr-2' : ''} 
-                    md:p-0.5 md:mr-2 opacity-80 focus:opacity-100  contenteditable command"
+                    md:p-0.5 md:mr-2 opacity-80 focus:opacity-100 contenteditable command"
             />
             <span
                 on:focus={() => commandBox.focus()}
@@ -360,6 +367,21 @@
 
     .contenteditable {
         white-space: nowrap;
+    }
+
+    @keyframes fakeCarret {
+        0% {
+            border-left: 1px solid var(--highlighted);
+        }
+        100% {
+            border-left: 1px solid transparent;
+        }
+    }
+
+    #rooster-params:empty:focus {
+        animation: fakeCarret 1s steps(2);
+        animation-iteration-count: infinite;
+        animation-fill-mode: forwards;
     }
 
     @media only screen and (max-width: 768px) {

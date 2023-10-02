@@ -29,7 +29,7 @@
 </script>
 
 <StyleBase styleId={3}>
-    <div bind:this={container} class="flex flex-col" class:common-clock-background-image={$bgImageBright.length} style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});">
+    <div bind:this={container} class="flex flex-col" class:common-clock-background-image={$bgImageBright !== 'none'} style="transform: scale({zoomedOut * 100}%) translateY({shiftedUp});">
         <Hours />
         <div class="{$clockStyleClass} text-primary text-giant-1 absolute top-1/2 left-1/2 transform -translate-x-2/4 -translate-y-2/4">
             {#if $time.second() % 2 && $blink}&middot{:else}&nbsp;{/if}

@@ -10,7 +10,7 @@
 </script>
 
 <StyleBase styleId={1}>
-    <div class="relative" class:common-clock-background-image={$bgImageBright.length}>
+    <div class="relative" class:common-clock-background-image={$bgImageBright !== 'none'}>
         <div class="absolute left-1/2 transform -translate-x-2/4">
             <IncomingEventsMessages />
         </div>

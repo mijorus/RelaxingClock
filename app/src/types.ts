@@ -44,10 +44,12 @@ export interface RoosterShortcut {
     examples?: (arg: string, params?: string) => Promise<RoosterExamples>;
 }
 
-export type RoosterActionType = 1 | 2;
+// 1 = Ctrl + Enter, 2 = Ctrl + Shift + Enter, 3 = Quick Launch
+export type RoosterActionType = 1 | 2 | 3;
 
 export interface RoosterArgument {
     description?: string;
+    quickLaunchTriggerActions?: boolean;
     callback: (params?: string, selectedItem?: string | number, action?: RoosterActionType) => Promise<boolean>;
     active?: boolean;
     hideInModal?: boolean;

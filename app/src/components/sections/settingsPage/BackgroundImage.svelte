@@ -11,6 +11,7 @@
     import { shortcuts } from "../../../stores/rooster";
     import Pin from "../../icons/Pin.svelte";
     import { userInfo } from "os";
+    import { fade } from "svelte/transition";
 
     interface UnsplashSearchResult {
         urls: { [key: string]: string };
@@ -99,6 +100,10 @@
 
         loadingStatus = "loaded";
     }
+    
+    function openUnsplashSearch() {
+        window.dispatchEvent(new CustomEvent("injectRoosterAction", { detail: { command: "background", argument: 'unsplash' } }));
+    }
 
     // function setSonoma() {
     //     backgroundImageSource.set("sonoma");
@@ -110,9 +115,9 @@
     function removeBgImage() {
         loadingStatus = "none";
 
-        backgroundImage.set("");
+        backgroundImage.set("none");
         backgroundImageSource.set("default");
-        bgImageBright.set("");
+        bgImageBright.set("none");
     }
 
     onMount(() => {
@@ -191,7 +196,7 @@
                             resolve({
                                 namespace: "Search on Unsplash",
                                 group: response.data.map((el) => {
-                                    return { example: el.user.name, tip: (new Date(el.created_at)).toDateString(), image: el.urls.small, selectable: true, id: el.urls.full };
+                                    return { example: el.user.name, tip: new Date(el.created_at).toDateString(), image: el.urls.small, selectable: true, id: el.urls.full };
                                 }),
                             });
                         }, 500);
@@ -222,7 +227,7 @@
         label={{ text: "Pick a style" }}
         hideLabelOnMobile={true}
         description={{
-            text: "Customize the background of the clock with images:<br>- Bing gets a new wallpaper every day<br>- Unsplash provides a full catalog of images to choose from<br>- Sonoma plays awesome landscapes videos that react to your events just like on MacOS",
+            text: "Customize the background of the clock with images:<br>- Bing gets a new wallpaper every day<br>- Unsplash provides a full catalog of images to choose from",
             iconClass: "lnr lnr-question-circle",
         }}
         available={true}
@@ -236,11 +241,13 @@
                 <span class="inline-block text-white animate-spin">
                     <i class="fas fa-sync-alt" />
                 </span>
-            {:else if loadingStatus === "loaded" && $backgroundImageSource === "unsplash"}
-                <!-- <span class="inline-block text-white cursor-pointer pointer" on:click={() => setUnsplashImage()} in:fade>
-                    <Shuffle color="#fff" />
-                </span>
-                <span>&middot</span> -->
+            {:else if loadingStatus === "loaded"}
+                {#if $backgroundImageSource === "unsplash"}
+                    <span class="inline-block text-white cursor-pointer pointer" on:click={() => openUnsplashSearch()} in:fade>
+                        <span class="lnr lnr-magnifier" />
+                    </span>
+                    <span>&middot</span>
+                {/if}
             {/if}
 
             <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== "default"} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
@@ -252,6 +259,6 @@
 </SettingsBox>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-{#if $backgroundImage?.length && !$backgroundImage.startsWith("video:")}
+{#if !$backgroundImage.startsWith("video:")}
     <img bind:this={imageReference} src={$backgroundImage} style="visibility: hidden" class="absolute bottom-0" on:load={setImageBrigthness} />
 {/if}

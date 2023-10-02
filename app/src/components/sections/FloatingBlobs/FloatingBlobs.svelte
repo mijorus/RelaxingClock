@@ -20,7 +20,7 @@
             decorateWindow($screenSize);
         }
 
-        hideFlobs($backgroundImage?.length > 0);
+        hideFlobs($backgroundImage !== 'none');
     }
 
     function hideFlobs(hide: boolean) {

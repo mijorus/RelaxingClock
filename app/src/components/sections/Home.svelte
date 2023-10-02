@@ -19,6 +19,8 @@
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;
+    console.log('image', $backgroundImage);
+    
 
     $: screenSaverApply($screenSaver);
     $: darken($darkenClock);
@@ -68,10 +70,10 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative" class:home-bg-image={$backgroundImage?.length}>
-    {#if $backgroundImage?.length}
-        <!-- <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} /> -->
-        <HomeBackgroud cssClasses="absolute top-0 w-full h-full"></HomeBackgroud>
+<div class="h-screen relative" class:home-bg-image={$backgroundImage !== 'none'}>
+    {#if $backgroundImage !== 'none'}
+        <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} />
+        <!-- <HomeBackgroud cssClasses="absolute top-0 w-full h-full"></HomeBackgroud> -->
     {/if}
 
     <div

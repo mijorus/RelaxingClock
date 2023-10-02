@@ -12,9 +12,9 @@
     import Hint from "../../elements/settings/Hint.svelte";
     import moment, { Moment } from "moment";
     import { notifications } from "../../../stores/notifications";
-    import { locSto } from "../../../utils/utils";
+    import { getAltLabel, isMacintosh, locSto } from "../../../utils/utils";
     import { onMount } from "svelte";
-    import { shortcuts } from "../../../stores/rooster";
+    import { shortcuts, summoned } from "../../../stores/rooster";
     import time from "../../../stores/time";
     import { createIncomingEvent } from "../../clock/IncomingEventsMessages.svelte";
 
@@ -101,8 +101,16 @@
             background: "red",
             arguments: {
                 start: {
+                    quickLaunch: "f",
+                    quickLaunchTriggerActions: true,
                     description: "Start the pomodoro timer",
-                    async callback(p) {
+                    async callback(p, item, action) {
+                        if (action === 3) {
+                            toggleTimer();
+                            summoned.set(false);
+                            return true;
+                        }
+
                         if (!pomodoroIsRunning) {
                             p = p.replace(/\s/g, "");
                             if (p === "+") longPomodoro.set(true);
@@ -144,7 +152,12 @@
         </TitleIcon>
     </Title>
     <div>
-        <PrimaryBox label={{ text: label, bgClass: pomodoroIsRunning === "focus" ? "bg-red-900" : pomodoroIsRunning === "relax" ? "bg-green-900" : null }} description={{ text: "" }} available={true}>
+        <PrimaryBox
+            label={{ text: label, bgClass: pomodoroIsRunning === "focus" ? "bg-red-900" : pomodoroIsRunning === "relax" ? "bg-green-900" : null }}
+            description={{ text: "" }}
+            available={true}
+            shortcut={getAltLabel() + " + f"}
+        >
             <Action custom customClass="bg-transparent text-primary text-sm" label={timeLeft} />
             <Action label={pomodoroIsRunning ? "Stop" : "Start"} on:click={toggleTimer} />
         </PrimaryBox>

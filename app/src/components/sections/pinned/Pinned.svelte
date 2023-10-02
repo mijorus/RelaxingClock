@@ -180,7 +180,7 @@
 
         <div
             class="transition-all -z-1 w-full absolute bottom-0 pt-10 opacity-0 transform
-            translate-y-1/2 text-center whitespace-nowrap pinned-hint {$bgImageBright !== '' ? 'text-white light' : 'text-secondary'}"
+            translate-y-1/2 text-center whitespace-nowrap pinned-hint {$bgImageBright !== 'none' ? 'text-white light' : 'text-secondary'}"
         >
             Keep your pins inside this box! {#if !pinned.length}<br />Type <strong>pin: [space]</strong> in the command box{/if}
         </div>

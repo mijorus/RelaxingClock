@@ -4,14 +4,14 @@ import anime from "animejs";
 const queryString = window.location.search;
 export const urlParams = new URLSearchParams(queryString);
 
-export function numToString(n: number) : string {
+export function numToString(n: number): string {
     return (typeof n === 'number') ? n.toString() : n;
 }
 
 export function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export function caretToEnd(textNode: HTMLElement) {
@@ -39,50 +39,50 @@ export function shakeElement(el: HTMLElement) {
 
 
 export function groupBy(array: Array<any>, key: string) {
-  // Return the end result
-  return array.reduce((result, currentValue) => {
-    // If an array already present for key, push it to the array. Else create an array and push the object
-    (result[currentValue[key]] = result[currentValue[key]] || []).push(
-      currentValue
-    );
-    // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-    return result;
-  }, {}); // empty object is the initial value for result object
+    // Return the end result
+    return array.reduce((result, currentValue) => {
+        // If an array already present for key, push it to the array. Else create an array and push the object
+        (result[currentValue[key]] = result[currentValue[key]] || []).push(
+            currentValue
+        );
+        // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+        return result;
+    }, {}); // empty object is the initial value for result object
 }
 
 
 export function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function createCommaArray(array: Array<string>) {
-  let string = '';
-  array.forEach((s, i) => (i < array.length - 1) ? string += `${s}, ` : string += s)
-  return string;
+    let string = '';
+    array.forEach((s, i) => (i < array.length - 1) ? string += `${s}, ` : string += s);
+    return string;
 }
 
 export function kTemperatureConverter(valNum: number, output: 'C' | 'F'): number {
-  return output === 'C' ? (valNum-273.15) : (((valNum-273.15)*1.8)+32);
+    return output === 'C' ? (valNum - 273.15) : (((valNum - 273.15) * 1.8) + 32);
 }
 
 export function outerWidth(el: HTMLElement) {
-  var width = el.offsetWidth;
-  var style = getComputedStyle(el);
+    var width = el.offsetWidth;
+    var style = getComputedStyle(el);
 
-  width += parseInt(style.marginLeft) + parseInt(style.marginRight);
-  return width;
+    width += parseInt(style.marginLeft) + parseInt(style.marginRight);
+    return width;
 }
 
 export function outerHeight(el: HTMLElement) {
-  var height = el.offsetHeight;
-  var style = getComputedStyle(el);
+    var height = el.offsetHeight;
+    var style = getComputedStyle(el);
 
-  height += parseInt(style.marginTop) + parseInt(style.marginBottom);
-  return height;
+    height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+    return height;
 }
 
 let lastCustomColor: string;
@@ -96,7 +96,7 @@ export const customColors: string[] = [
     "#fee440",
     "#00ff00",
     "#32CD32",
-    "#277da1", 
+    "#277da1",
     "#0060ff",
     "#00bbf9",
     "#00f5d4",
@@ -112,7 +112,7 @@ export const bgColors: string[] = [
     "#26220A",
     "#002600",
     "#002710",
-    "#061318", 
+    "#061318",
     "#000E26",
     "#000E26",
     "#002520",
@@ -120,10 +120,10 @@ export const bgColors: string[] = [
 
 
 export function randomCustomColor() {
-  let availableColors = [];
-  customColors.forEach(el => { if (el !== lastCustomColor) availableColors.push(el)});
-  lastCustomColor = availableColors[getRandomIntInclusive(0, (availableColors.length - 1))];
-  return lastCustomColor;
+    let availableColors = [];
+    customColors.forEach(el => { if (el !== lastCustomColor) availableColors.push(el); });
+    lastCustomColor = availableColors[getRandomIntInclusive(0, (availableColors.length - 1))];
+    return lastCustomColor;
 }
 
 export function polarToCartesian(radius, angleInDegrees, centerX = radius, centerY = radius) {
@@ -165,7 +165,7 @@ export function locSto(key: string, valueToSet: string = undefined) {
 }
 
 export function randomBool() {
-  return (Math.random() > 0.5);
+    return (Math.random() > 0.5);
 }
 
 export function deepClone(obj: any) {
@@ -174,5 +174,10 @@ export function deepClone(obj: any) {
 
 export function isMacintosh() {
     return navigator.userAgent.indexOf('Mac OS X');
-  }
-  
+}
+
+let altLabel;
+export function getAltLabel() {
+    if (!altLabel) altLabel = isMacintosh() ? '⌥' : 'Alt';
+    return altLabel;
+}
