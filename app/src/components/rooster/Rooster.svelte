@@ -311,7 +311,7 @@
         <div
             id="rooster"
             bind:this={rooster}
-            class="flex w-11/12 sm:w-4/5 lg:w-2/5 xl:w-1/3 h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
+            class="flex w-11/12 md:w-8/12 max-w-3xl h-14 rounded-xl mb-4 bg-secondary items-center shadow-box"
             in:fade={{ duration: 100 }}
             out:fade={{ duration: 100 }}
             on:click={handleFocus}
