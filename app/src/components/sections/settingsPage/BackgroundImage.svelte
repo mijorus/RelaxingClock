@@ -4,19 +4,27 @@
     import TitleIcon from "../../elements/settings/TitleIcon.svelte";
     import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
     import { backgroundImage, backgroundImageSource, blink, saveEnergy } from "../../../stores/storedSettings";
-    import { bgImageBright, mobileStatus } from "../../../stores/globalState";
-    import axios from "axios";
+    import { bgImageBright, mobileStatus, screenSaver, tips } from "../../../stores/globalState";
+    import axios, { AxiosResponse } from "axios";
     import Action from "../../elements/settings/Buttons/Action.svelte";
-    import Shuffle from "../../icons/Shuffle.svelte";
     import { onMount } from "svelte";
     import { shortcuts } from "../../../stores/rooster";
-    import { set_data_dev } from "svelte/internal";
-    import { fade } from "svelte/transition";
+    import Pin from "../../icons/Pin.svelte";
+    import { userInfo } from "os";
+
+    interface UnsplashSearchResult {
+        urls: { [key: string]: string };
+        user: { username: string; name: string };
+        location: string;
+        description: string;
+        created_at: string;
+    }
 
     let imageReference: HTMLImageElement;
     let loadingStatus: "error" | "loaded" | "loading" | "none" = "none";
     const bingRefreshKey = "bingWallpaperRefresh";
     const customClass = "bg-transparent border-2 border-transparent";
+    let unsplashSearchDebouncer;
 
     // const demoImage = "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MDc4NTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2OTU3NjA0MzR8&ixlib=rb-4.0.3&q=85";
     const demoImage = "https://images.unsplash.com/photo-1694532228681-2f6d94c2f768?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=4752&q=80";
@@ -81,7 +89,7 @@
         }
 
         try {
-            const response = await axios.get("/.netlify/functions/unsplashImage");
+            const response: AxiosResponse<UnsplashSearchResult> = await axios.get("/.netlify/functions/unsplashImage");
             backgroundImage.set(response.data.urls.full);
         } catch (e) {
             console.error(e);
@@ -91,6 +99,13 @@
 
         loadingStatus = "loaded";
     }
+
+    // function setSonoma() {
+    //     backgroundImageSource.set("sonoma");
+    //     bgImageBright.set("light");
+    //     backgroundImage.set("video:" + "/media/forest_short.mp4");
+    //     screenSaverHandler.enable();
+    // }
 
     function removeBgImage() {
         loadingStatus = "none";
@@ -109,7 +124,9 @@
             setBingImage();
         }
 
-        console.log("SETTI");
+        if ($backgroundImageSource === "sonoma") {
+            bgImageBright.set("light");
+        }
 
         shortcuts.set("background", {
             color: "white",
@@ -124,9 +141,14 @@
                 },
                 unsplash: {
                     description: "Set the default backgroud",
-                    async callback(p) {
+                    async callback(p, selectedItem) {
                         if (!p.length) {
                             setUnsplashImage();
+                            return true;
+                        }
+
+                        if (selectedItem) {
+                            backgroundImage.set(selectedItem);
                             return true;
                         }
                     },
@@ -150,15 +172,30 @@
                         };
                     }
 
-                    return {
-                        namespace: "Search on Unsplash",
-                        group: [
-                            { example: "Prova", tip: "Nome autore" },
-                            { example: "Prova", tip: "Nome autore" },
-                            { example: "Prova", tip: "Nome autore" },
-                            { example: "Prova", tip: "Nome autore" },
-                        ],
-                    };
+                    if (!process.env.production) {
+                        return {
+                            namespace: "Search on Unsplash",
+                            group: [
+                                { example: "Prova", tip: "Nome autore", image: demoImage, selectable: true, id: demoImage },
+                                { example: "Prova", tip: "Nome autore", image: demoImage, selectable: true, id: demoImage },
+                                { example: "Prova", tip: "Nome autore", image: demoImage, selectable: true, id: demoImage },
+                                { example: "Prova", tip: "Nome autore", image: demoImage, selectable: true, id: demoImage },
+                            ],
+                        };
+                    }
+
+                    return new Promise((resolve) => {
+                        clearTimeout(unsplashSearchDebouncer);
+                        unsplashSearchDebouncer = setTimeout(async () => {
+                            const response: AxiosResponse<UnsplashSearchResult[]> = await axios.get("/.netlify/functions/unsplashImage", { params: { q: p } });
+                            resolve({
+                                namespace: "Search on Unsplash",
+                                group: response.data.map((el) => {
+                                    return { example: el.user.name, tip: (new Date(el.created_at)).toDateString(), image: el.urls.small, selectable: true, id: el.urls.full };
+                                }),
+                            });
+                        }, 500);
+                    });
                 }
 
                 return {
@@ -182,10 +219,10 @@
         </TitleIcon>
     </Title>
     <PrimaryBox
-        label={{ text: "Select a style" }}
+        label={{ text: "Pick a style" }}
         hideLabelOnMobile={true}
         description={{
-            text: "Customize the background of the clock with images: use Bing to get a new wallpaper every day, while Unsplash provides a full catalog of images to choose from with the Randomize button",
+            text: "Customize the background of the clock with images:<br>- Bing gets a new wallpaper every day<br>- Unsplash provides a full catalog of images to choose from<br>- Sonoma plays awesome landscapes videos that react to your events just like on MacOS",
             iconClass: "lnr lnr-question-circle",
         }}
         available={true}
@@ -200,20 +237,21 @@
                     <i class="fas fa-sync-alt" />
                 </span>
             {:else if loadingStatus === "loaded" && $backgroundImageSource === "unsplash"}
-                <span class="inline-block text-white cursor-pointer pointer" on:click={() => setUnsplashImage()} in:fade>
+                <!-- <span class="inline-block text-white cursor-pointer pointer" on:click={() => setUnsplashImage()} in:fade>
                     <Shuffle color="#fff" />
                 </span>
-                <span>&middot</span>
+                <span>&middot</span> -->
             {/if}
 
             <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== "default"} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
             <Action on:click={() => setBingImage()} custom={$backgroundImageSource !== "bing"} customClass={$backgroundImageSource !== "bing" ? customClass : ""} label="Bing" />
             <Action on:click={() => setUnsplashImage()} custom={$backgroundImageSource !== "unsplash"} customClass={$backgroundImageSource !== "unsplash" ? customClass : ""} label="Unsplash" />
+            <!-- <Action on:click={() => setSonoma()} custom={$backgroundImageSource !== "sonoma"} customClass={$backgroundImageSource !== "sonoma" ? customClass : ""} label="Sonoma" /> -->
         </div>
     </PrimaryBox>
 </SettingsBox>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-{#if $backgroundImage?.length}
+{#if $backgroundImage?.length && !$backgroundImage.startsWith("video:")}
     <img bind:this={imageReference} src={$backgroundImage} style="visibility: hidden" class="absolute bottom-0" on:load={setImageBrigthness} />
 {/if}
