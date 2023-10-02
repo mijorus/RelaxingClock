@@ -51,6 +51,7 @@
             const brightness = event.data < 127.5 ? "dark" : "light";
             console.log("Bg image is ", brightness, event.data);
             bgImageBright.set(brightness);
+            // bgImageBright.set('dark')
         };
 
         worker.postMessage({ imageData, canvas: { width: canvas.width, height: canvas.height } });

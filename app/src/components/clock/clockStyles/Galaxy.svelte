@@ -61,14 +61,14 @@
 
 <StyleBase styleId={4}>
     <div bind:this={galaxyContainer} id="galaxy-container" class={!$screenSaver ? "mb-36" : "mb-0"}>
-        <div class="w-80 h-80 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-highlighted shadow-xl' : ($bgImageBright === 'dark' ?  'bg-black'  : 'bg-galaxy')}" />
+        <div class="w-80 h-80 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-highlighted shadow-xl' : ($bgImageBright === 'dark' ?  'bg-primary'  : 'bg-galaxy')}" />
         <div class="w-1 h-1 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-primary' : 'bg-highlighted'}" />
 
         <div id="galaxy-space" class="relative">
             <div id="galaxy-dot" />
             <div bind:this={galaxyHours} class="orbit-container w-96 h-96">
                 <div class="galaxy-time z-10" class:gt-animated={animationReady}>
-                    <span class="w-14 h-14 font-title galaxy-time-n bg-primary rounded-full text-3xl">
+                    <span class="w-14 h-14 font-title galaxy-time-n  {$bgImageBright === 'dark' ? 'bg-highlighted text-dark' : 'bg-primary'} rounded-full text-3xl">
                         <span class="galaxy-time-text" />
                     </span>
                 </div>
@@ -79,7 +79,7 @@
             </div>
             <div bind:this={galaxyMin} class="orbit-container w-64 h-64">
                 <div class="galaxy-time z-10" class:gt-animated={animationReady}>
-                    <span class="w-8 h-8 font-title galaxy-time-n bg-primary rounded-full text-xl">
+                    <span class="w-8 h-8 font-title galaxy-time-n {$bgImageBright === 'dark' ? 'bg-highlighted text-dark' : 'bg-primary'} rounded-full text-xl">
                         <span class="galaxy-time-text" />
                     </span>
                 </div>
@@ -87,7 +87,7 @@
             </div>
             <div bind:this={galaxySec} class="orbit-container w-32 h-32">
                 <div class="galaxy-time z-10" class:gt-animated={animationReady}>
-                    <span class="w-7 h-7 font-title galaxy-time-n bg-primary rounded-full text-sm">
+                    <span class="w-7 h-7 font-title galaxy-time-n {$bgImageBright === 'dark' ? 'bg-highlighted text-dark' : 'bg-primary'} rounded-full text-sm">
                         <span class="galaxy-time-text" />
                     </span>
                 </div>
