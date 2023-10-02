@@ -1,5 +1,6 @@
 <script lang="ts">
     import { windowReady } from "html-ready";
+    import { getAltLabel } from "../../utils/utils";
 
     const version = process.env.VERSION;
 </script>
@@ -34,7 +35,32 @@
         {:else if version === "4.4.0"}
             <div class="my-3 w-1/2">
                 <ul>
-                    <li>- ✒️Added an option to customize the font style of the clock </li>
+                    <li>- ✒️Added an option to customize the font style of the clock</li>
+                </ul>
+            </div>
+        {:else if version === "4.5.0"}
+            <div class="my-3 w-1/2 mx-auto">
+                <img src="/media/rc-update-bg.gif" alt="relaxing clock 4.5.0" class="rounded-xl" />
+                <ul>
+                    <li class="mt-10">
+                        <div class="text-xl">Background Customization!</div>
+                        <p>
+                            Relaxing Clock now has finally an option to customize its background!<br />Scroll down into the settings and choose between the bing daily image or explore the full
+                            Unsplash catalog.
+                        </p>
+                    </li>
+                    <li class="mt-10">
+                        <div class="text-xl">QOL update</div>
+                        <p>
+                            Start the Pomodoro timer with a new shortcut: {getAltLabel()} + f
+                        </p>
+                    </li>
+                    <li class="mt-10">
+                        <div class="text-xl">Minor UI tweaks</div>
+                        <p>
+                            You can now see the relative shortcuts directly from the menu
+                        </p>
+                    </li>
                 </ul>
             </div>
         {:else}

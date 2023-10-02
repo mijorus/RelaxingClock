@@ -25,7 +25,7 @@ import Hint from "./Hint.svelte";
             <span class="text-primary md:text-xl font-primary whitespace-nowrap not-overflow overflow-x-hidden {hideLabelOnMobile ? 'hidden md:inline-block' : ''}">
                 <AnimatedText text={label.text}/>
             </span>
-            {#if shortcut}<span class="bg-tertiary p-1 rounded-md text-xs opacity-75">{shortcut}</span>{/if}
+            {#if shortcut}<span class="hidden md:block bg-tertiary p-1 rounded-md text-xs opacity-75">{shortcut}</span>{/if}
         </div>
         <div class="">
             <slot></slot>
