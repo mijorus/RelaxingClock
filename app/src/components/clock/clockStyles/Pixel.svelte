@@ -89,7 +89,7 @@
                             class="leading-normal mr-3 px-2 py-1 transform-gpu {isCurrentMinute(s, $time)
                                 ? `shadow-2xl shadow-primary text-2xl rounded-full border-2 ${$bgImageBright === 'light' ? 'bg-white current-minute-light' : 'bg-primary'}`
                                 : 'text-base'}"
-                            style="transform: scale(-1); border-color: {$bgImageBright === 'light' ? 'white'  : ($bgImageBright === 'dark' ? 'bg-primary' : $accentColor)}"
+                            style="transform: scale(-1); border-color: {$bgImageBright === 'light' ? 'white'  : ($bgImageBright === 'dark' ? 'transparent' : $accentColor)}"
                         >
                             {60 - (s + 1)}
                         </div>
