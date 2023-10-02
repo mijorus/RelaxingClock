@@ -5,7 +5,7 @@
     import { fade, fly, slide } from "svelte/transition";
     import { SpotifyPlayer, device_id } from "../../handlers/spotify/login";
     import { SpotifyClient } from "../../lib/spotify/SpotifyClient";
-    import { darkenClock, screenSaver, screenSize, tips } from "../../stores/globalState";
+    import { bgImageBright, darkenClock, screenSaver, screenSize, tips } from "../../stores/globalState";
     import { notifications } from "../../stores/notifications";
     import { spotifyPlayerStatus, spotifyPlayerState, spotifyUrl, nextSpotifySongEnd, geniusLink } from "../../stores/spotify";
     import { contextHistory } from "../../stores/storedSettings";
@@ -33,13 +33,9 @@
     let expandedBox = false;
     let playbackStarted = false;
     let songPosition = 0; //seconds since the track started
+    let boxClasses: string;
 
-    $: boxClasses =
-        $screenSaver && !playbackStarted
-            ? "bg-transparent border-transparent"
-            : playbackStarted
-            ? "border-transparent text-primary bg-tertiary text-primary"
-            : "border-transparent bg-tertiary text-primary";
+    $: setBoxClasses($screenSaver, $bgImageBright);
 
     $: {
         if ($spotifyPlayerState?.track_window) {
@@ -58,12 +54,12 @@
                 const itemName = $spotifyPlayerState.context?.metadata?.name || $spotifyPlayerState.context?.metadata?.current_item.name || false;
 
                 const geniusQuery = `${$spotifyPlayerState?.track_window?.current_track?.name} ${artistsName.join(" ")}`;
-                axios.get("/.netlify/functions/geniusSearch", { params: { q: geniusQuery } }).then( geniusRes => {
+                axios.get("/.netlify/functions/geniusSearch", { params: { q: geniusQuery } }).then((geniusRes) => {
                     geniusLink.set(null);
                     if (geniusRes.data.data) {
-                        geniusLink.set(geniusRes.data.data.url)
+                        geniusLink.set(geniusRes.data.data.url);
                     }
-                })
+                });
 
                 if (ctx.length && itemName) {
                     let history: LastPlayedContexts[] = deepClone($contextHistory);
@@ -103,6 +99,14 @@
         if ($screenSize < 768) expandedBox = false;
     }
 
+    function setBoxClasses(screenSaver: boolean, bgImageBright: string) {
+        if (screenSaver && !playbackStarted) {
+            boxClasses = "bg-transparent border-transparent";
+        } else {
+            boxClasses = bgImageBright === "light" ? "border-transparent bg-highlighted text-dark" : "border-transparent bg-tertiary text-primary";
+        }
+    }
+
     let interval: NodeJS.Timeout;
     function setLabel(spotifyStatus: SpotifyPlayerStatus) {
         clearInterval(interval);
@@ -121,7 +125,7 @@
         } else {
             loader = "";
             if (spotifyStatus === "ready") preloadLabel = "Ready to play!";
-            else if (spotifyStatus !== "disconnected" && spotifyStatus !== 'waiting_interaction') preloadLabel = "Ooops!";
+            else if (spotifyStatus !== "disconnected" && spotifyStatus !== "waiting_interaction") preloadLabel = "Ooops!";
         }
     }
 
@@ -238,7 +242,7 @@
         </div>
     {/if}
     {#if expandedBox && albumCover}
-        <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center text-primary bg-tertiary">
+        <div transition:fly={{ y: 50, duration: 400 }} class="absolute w-80 bottom-full bg-cover mb-3 p-2 rounded-xl flex flex-col items-center {$bgImageBright === 'light' ? 'text-dark bg-highlighted' : 'text-primary bg-tertiary'}">
             <SmoothImage src={albumCover[0].url} classes="w-full h-auto rounded-xl" />
             <p class="mt-1 relative text-center whitespace-nowrap w-full overflow-hidden">
                 <AnimatedText
@@ -272,7 +276,7 @@
             </p>
         </div>
     {/if}
-    <Bubble classes={$spotifyPlayerStatus === "ready" ? boxClasses + " rounded-xl border-2 transition-all rounded-xl" : ""}>
+    <Bubble classes={$spotifyPlayerStatus === "ready" ? boxClasses + " border-2 transition-all" : ""}>
         <div class="flex flex-row items-center">
             <!-- the spotify or album icon -->
             <span class="pr-2" class:flex={albumCover}>
@@ -294,11 +298,11 @@
                 {:else}
                     <!-- the spotify icon -->
                     <i
-                        class="fab fa-spotify text-5xl 
+                        class="fab fa-spotify text-5xl
                         {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}"
                         class:text-spotify={$spotifyPlayerStatus === "ready" && !$screenSaver}
                         class:text-secondary={$spotifyPlayerStatus !== "ready"}
-                        class:cursor-pointer={$spotifyUrl || $spotifyPlayerStatus === 'waiting_interaction'}
+                        class:cursor-pointer={$spotifyUrl || $spotifyPlayerStatus === "waiting_interaction"}
                         on:click={() => {
                             if ($spotifyUrl) window.location.replace($spotifyUrl);
                         }}
@@ -328,16 +332,14 @@
                     {#if playbackStarted || !$screenSaver}
                         {#if !$spotifyPlayerState || $spotifyPlayerState?.paused}
                             <i
-                                style="box-shadow: 0px 0px 45px 10px #000;"
-                                class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'}"
+                                class="fas fa-play {playbackStarted ? 'cursor-pointer' : 'hidden'} {$bgImageBright === 'light' ? 'play-btn-light' : 'play-btn-dark'}"
                                 on:click={togglePlay}
                                 on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
                                 on:mouseleave={() => tips.set(null)}
                             />
                         {:else}
                             <i
-                                style="box-shadow: 0px 0px 45px 10px #000;"
-                                class="fas fa-pause cursor-pointer"
+                                class="fas fa-pause cursor-pointer  {$bgImageBright === 'light' ? 'play-btn-light' : 'play-btn-dark'}"
                                 on:click={togglePause}
                                 on:contextmenu={handleForward}
                                 on:mouseenter={() => tips.set([{ name: "Next track", shortcut: "Right-click" }])}
@@ -354,10 +356,20 @@
                             <div class="rounded-full" style="margin: 0; padding: 0;" />
                         </div>
                     </div>
-                {:else if $spotifyPlayerStatus !== "disconnected" && $spotifyPlayerStatus !== 'waiting_interaction'}
+                {:else if $spotifyPlayerStatus !== "disconnected" && $spotifyPlayerStatus !== "waiting_interaction"}
                     <i class="fas fa-exclamation-triangle" class:opacity-50={$screenSaver} />
                 {/if}
             </span>
         </div>
     </Bubble>
 </div>
+
+<style>
+    .play-btn-light {
+        box-shadow: none;
+    }
+    
+    .play-btn-dark {
+        box-shadow: 0px 0px 45px 10px #000;
+    }
+</style>

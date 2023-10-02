@@ -1,7 +1,7 @@
 <script lang="ts">
     import { spring } from "svelte/motion";
     import { accentColor, activeStyle, clockFormat } from "../../stores/storedSettings";
-    import { mobileStatus, screenSaver, screenSize, styleChangeLock } from "../../stores/globalState";
+    import { bgImageBright, mobileStatus, screenSaver, screenSize, styleChangeLock } from "../../stores/globalState";
     import styles from "../clock/clockStyles/styles";
     import { onMount } from "svelte";
     import { windowReady } from "html-ready";
@@ -89,7 +89,8 @@
 </script>
 
 <svelte:window on:keydown={handleWindowKeydown} />
-<div class="{$screenSaver ? '-z-1' : 'z-20'} absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}">
+<div class="{$screenSaver ? '-z-1' : 'z-20'} absolute flex flex-col items-center overflow-visible top-2/4 mt-36 fade select-none {$screenSaver ? 'opacity-0' : 'opacity-1'}"
+    class:bg-image-light={$bgImageBright !== 'none'}>
     <div class="font-primary text-xl text-primary">Select your clock style</div>
     <div class="relative flex overflow-hidden">
         <div class="flex flex-row z-10 absolute top-0 left-0 h-full w-full">
@@ -133,5 +134,9 @@
         opacity: 1;
         transform: scale(1.1);
         border-bottom: 2px solid white !important;
+    }
+
+    .bg-image-light {
+        text-shadow: 0 0 20px var(--secondary);
     }
 </style>

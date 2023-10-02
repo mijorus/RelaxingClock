@@ -22,17 +22,21 @@
     import Donate from "./settingsPage/Donate.svelte";
     import { clockStyleClass } from "../../stores/storedSettings";
     import ClockFont from "./settingsPage/ClockFont.svelte";
-
+    import BackgroundImage from "./settingsPage/BackgroundImage.svelte";
 
     $: {
-        if (!$clockIsVisible && !$tips) tips.set([{name: 'Show keyboard shortcuts', shortcut: '?'}]);
-        if ($clockIsVisible && ($tips && $tips[0].shortcut === '?')) tips.set(null);
+        if (!$clockIsVisible && !$tips) tips.set([{ name: "Show keyboard shortcuts", shortcut: "?" }]);
+        if ($clockIsVisible && $tips && $tips[0].shortcut === "?") tips.set(null);
     }
 </script>
 
 <div class="relative">
     <div class="relative flex flex-col w-full md:w-8/12 max-w-2xl p-2 md:p-0 m-auto mt-20 text-primary font-primary">
-        <SettingsBox collapsable={false} bordered={false}><h1 class="pl-5 md:p-0 text-7xl md:text-8xl text-primary font-title font-bold">Relaxing<br />Clock</h1></SettingsBox>
+        <SettingsBox collapsable={false} bordered={false}>
+            <h1 class="pl-5 md:p-0 text-7xl md:text-8xl text-primary font-title font-bold">
+                Relaxing<br />Clock
+            </h1>
+        </SettingsBox>
         <Donate />
         <ProTips />
         <Spotify />
@@ -46,11 +50,12 @@
             <SettingsBox collapsable={false} bordered={false}><span class="pl-5 md:p-0 text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <ChangeAccentColor />
+                <BackgroundImage />
                 <ClockFont />
                 <RemoteTime />
                 <HighContrast />
                 <BlinkingDots />
-                <SaveBattery />
+                <!-- <SaveBattery /> -->
                 <ShowTutorial />
                 <div class="mt-20"><DangerZone /></div>
             </div>

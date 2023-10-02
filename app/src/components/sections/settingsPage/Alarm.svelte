@@ -10,7 +10,7 @@ import { fly } from 'svelte/transition';
 import time from '../../../stores/time';
 import { alarmIsRinging, tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
-import { shakeElement } from '../../../utils/utils';
+import { getAltLabel, shakeElement } from '../../../utils/utils';
 import { alarmTime, clockFormat, clockStyleClass } from '../../../stores/storedSettings';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
@@ -227,6 +227,7 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         label={{text: primaryBoxTitle}} 
         description={{text:'Set an alarm that wakes you up with beautiful colors. And don\'t worry if you accidentally close the tab, I\'ll keep that in mind :)', iconClass: 'lnr lnr-question-circle'}}
         available={true}
+        shortcut={getAltLabel() + ' + a'}
     >
         <Action 
             custom

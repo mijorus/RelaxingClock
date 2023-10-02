@@ -6,7 +6,7 @@
     import Action from "../../elements/settings/Buttons/Action.svelte";
     import { clockStyleClass } from "../../../stores/storedSettings";
 
-    const customClass = "bg-transparend border-2 border-white";
+    const customClass = "bg-transparent z`";
 
     function setCustomFont(tag: string) {
         if (tag.length) tag = "-" + tag;
@@ -22,6 +22,7 @@
     </Title>
     <PrimaryBox
         label={{ text: "Select an option" }}
+        hideLabelOnMobile={true}
         description={{
             text: `Customize the font of the clock`,
         }}

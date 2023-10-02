@@ -15,7 +15,7 @@ import { RemindersDB } from '../../../handlers/RemindersDB';
 import { tips } from '../../../stores/globalState';
 import { notifications } from '../../../stores/notifications';
 import type { ReminderType, RoosterExample, StoredReminder } from '../../../types';
-import { shakeElement } from '../../../utils/utils';
+import { getAltLabel, shakeElement } from '../../../utils/utils';
 import AnimatedText from '../../elements/AnimatedText.svelte';
 import Booleans from '../../elements/settings/Buttons/Booleans.svelte';
 import { remindersRepeatedDefault } from '../../../stores/storedSettings';
@@ -294,6 +294,7 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
         label={{text: 'Create a reminder'}} 
         description={{text:'Set and manage reminders', iconClass: 'lnr lnr-question-circle'}}
         available={true}
+        shortcut={getAltLabel() + ' + r'}
     >
         <Action label="Create" on:click={() => openCreationBox()}></Action>
     </PrimaryBox>

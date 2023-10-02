@@ -14,7 +14,6 @@ import AnimatedText from '../../elements/AnimatedText.svelte';
 import { SpotifyClient } from "../../../lib/spotify/SpotifyClient";
 import { device_id } from '../../../handlers/spotify/login';
 import { contextHistory, saveTracksInCustomPlaylist } from '../../../stores/storedSettings';
-import { incomingEventsMessages } from "../../../stores/notifications";
 import moment, { Moment } from 'moment';
 import time from '../../../stores/time';
 import {createIncomingEvent} from "../../clock/IncomingEventsMessages.svelte";

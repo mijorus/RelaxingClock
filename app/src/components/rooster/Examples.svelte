@@ -111,7 +111,7 @@ import Tips from "../tips/Tips.svelte";
                             </div>
                         {/each}
                     {/if}
-                </div>s
+                </div>
         </div>
     {:else if wait}
         <div class="bg-tertiary rounded-t-lg pb-9 text-lg w-full pt-1 text-center">

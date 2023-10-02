@@ -1,13 +1,11 @@
 import { windowReady } from 'html-ready';
-import type { SvelteComponent } from 'svelte';
-import type { SvelteComponentDev } from 'svelte/internal';
 import { derived, readable, Readable, Subscriber, Unsubscriber, Writable, writable } from 'svelte/store';
 import type { Tip } from '../types';
 import { saveEnergy } from './storedSettings';
 
 export const screenSaver: Writable<boolean> = writable(false);
 export const darkenClock: Writable<boolean> = writable(false);
-export const colorSelector: Writable<{show: boolean, x: number, y: number, colors: string[], size?: number, callback: (color: string) => void}> = writable(undefined);
+export const colorSelector: Writable<{ show: boolean, x: number, y: number, colors: string[], size?: number, callback: (color: string) => void; }> = writable(undefined);
 // prevent style change until the lock is released
 export const styleChangeLock: Writable<boolean> = writable(false);
 // the source of the background image of the clock
@@ -31,25 +29,30 @@ export const onlineStatus: Readable<boolean> = readable(true, (set: Subscriber<b
     };
 });
 
+let changeSizeTimeout;
 export const screenSize: Readable<number> = readable(99999999, (set: Subscriber<number>) => {
     window.addEventListener('resize', setScreenSize);
-    
+
     function setScreenSize(e: UIEvent) {
-       set(window.innerWidth);
+        clearTimeout(changeSizeTimeout);
+
+        changeSizeTimeout = setTimeout(() => {
+            set(window.innerWidth);
+        }, 250);
     }
 
-    return () => {};
+    return () => clearTimeout(changeSizeTimeout);
 });
 
-export const mobileStatus = derived(screenSize, function(value) {
+export const mobileStatus = derived(screenSize, function (value) {
     return (value < 768);
-})
+});
 
 // tips
 export const tips: Writable<Tip[]> = writable(null);
 export const alarmIsRinging: Writable<boolean> = writable(false);
 export const pinnedDBisReady: Writable<boolean> = writable(false);
-export const clockIsVisible: Readable<boolean> =  readable(true, (set: Subscriber<boolean>): Unsubscriber => {
+export const clockIsVisible: Readable<boolean> = readable(true, (set: Subscriber<boolean>): Unsubscriber => {
     if (!('IntersectionObserver' in window)) {
         set(true);
         return () => 0;
@@ -73,7 +76,7 @@ export const windowFocus: Readable<boolean> = readable(true, (set: Subscriber<bo
     function setFocusStatus() {
         set(true);
         console.log('window has focus');
-        
+
     }
 
     function setBlurStatus() {
@@ -89,6 +92,8 @@ export const windowFocus: Readable<boolean> = readable(true, (set: Subscriber<bo
 
 export const reduceAnimations = derived([windowFocus, saveEnergy], ([$w, $s]) => {
     return !$w && $s;
-})
+});
 
 export const modalContent: Writable<any> = writable(null);
+
+export const bgImageBright: Writable<'none' | 'light' | 'dark'> = writable('none');

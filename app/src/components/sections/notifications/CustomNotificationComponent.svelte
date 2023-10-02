@@ -17,25 +17,25 @@ export let inPanel = false;
         <div class="flex items-center" class:cursor-pointer={data.elementId} on:click|stopPropagation={(e) => { if (data.elementId) window.location.replace('#' + data.elementId) }}>
             <div class="mr-2">
                 <span class="pr-2">
-                    <i class="{data.icon ?? 'fas fa-bell'} text-5xl" style="color: {data.color};"/>
+                    <i class="{data.icon ?? 'fas fa-bell'} text-xl" style="color: {data.color};"/>
                 </span>
             </div>
             <div class="overflow-x-hidden whitespace-nowrap font-ubuntu">
-                <h4 class="text-3xl font-bold font-title">
+                <h4 class="text-xl font-bold font-title">
                     <AnimatedText text={data.title} fade={false}/>
                 </h4>
-                <div class="pl-2 border-l border-primary">
+                <div>
                     {#if data.content}
                         {#if !inPanel}
-                            <p class="whitespace-nowrap font-ubuntu">
+                            <p class="whitespace-nowrap font-ubuntu text-secondary">
                                 <AnimatedText text={data.content} fade={false}/>
                             </p>
                         {:else}
-                            <p class="whitespace-normal text-sm font-ubuntu" style="line-height: 1;">{data.content}</p>
+                            <p class="whitespace-normal text-sm text-primary opacity-75 font-ubuntu" style="line-height: 1;">{data.content}</p>
                         {/if}
                     {/if}
                     {#if showTimestamp}
-                        <p class="whitespace-nowrap text-primary opacity-50 text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
+                        <p class="whitespace-nowrap text-secondary text-sm">{moment(data.timestamp, 'X').fromNow()}</p>
                     {/if}
                 </div>
             </div>

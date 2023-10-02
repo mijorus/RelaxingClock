@@ -1,7 +1,7 @@
 <script lang="ts">
     import anime from "animejs";
     import time from "../../../stores/time";
-    import { screenSaver } from "../../../stores/globalState";
+    import { bgImageBright, screenSaver } from "../../../stores/globalState";
     import { accentColor, clockFormat } from "../../../stores/storedSettings";
     import { eaElasticDefault } from "../../../utils/animations";
     import StyleBase from "./StyleBase.svelte";
@@ -22,12 +22,12 @@
 
     let lastsec = 0;
     function getSecRotation(time: Moment) {
-        if (!time.seconds()) lastsec ++;
-        return (time.seconds() * 6) + (186 + (360 * lastsec));
+        if (!time.seconds()) lastsec++;
+        return time.seconds() * 6 + (186 + 360 * lastsec);
     }
 
     function getMinRotation(time: Moment) {
-        return (time.minutes() * 6) + 186;
+        return time.minutes() * 6 + 186;
     }
 
     function load(style) {
@@ -63,12 +63,12 @@
     }
 
     function isCurrentMinute(s: number, time: Moment) {
-        return ((60 - (s + 1)) === time.minutes());
+        return 60 - (s + 1) === time.minutes();
     }
 </script>
 
 <StyleBase styleId={5}>
-    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title" style="transition: padding .2s ease-out;">
+    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title {$bgImageBright === 'light' ? 'bg-image-light-pixel' : ''}" style="transition: padding .2s ease-out; color .2s linear;">
         <div class="absolute h-96 w-96" style="transform: translate(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform; transform-origin: 50% 0%;">
             {#each Array(60) as _, s}
                 <div class=" absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
@@ -79,30 +79,44 @@
                 </div>
             {/each}
         </div>
-        <div class="absolute w-60 " style="transform; transform-origin: 50% 0%; transform: translate(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
+        <div class="absolute w-60" style="transform; transform-origin: 50% 0%; transform: translate(-50%) rotate({rotateMin}deg); transition: transform .25s ease-out;">
             {#each Array(60) as _, s}
                 <div class:z-10={isCurrentMinute(s, $time)} class=" absolute transform-gpu flex items-center rounded-full w-60 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
                     <div class="w-2 h-0.5 bg-white opacity-20" />
                     {#if !((s + 1) % 5) || isCurrentMinute(s, $time)}
-                        <div 
+                        <div
                             transition:slide
-                            class="leading-normal mr-3 px-2 py-1 transform-gpu {isCurrentMinute(s, $time) ? 'shadow-2xl shadow-primary bg-primary text-2xl rounded-full border-2' : 'text-base'}" 
-                            style="transform: scale(-1); border-color: {$accentColor}">
+                            class="leading-normal mr-3 px-2 py-1 transform-gpu {isCurrentMinute(s, $time)
+                                ? `shadow-2xl shadow-primary text-2xl rounded-full border-2 ${$bgImageBright === 'light' ? 'bg-white current-minute-light' : 'bg-primary'}`
+                                : 'text-base'}"
+                            style="transform: scale(-1); border-color: {$bgImageBright === 'light' ? 'white'  : $accentColor}"
+                        >
                             {60 - (s + 1)}
                         </div>
                     {/if}
                 </div>
             {/each}
         </div>
-        <div
-            class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
-            <span class="text-6xl">{$time.format($clockFormat === '24h' ? 'HH' : 'hh')}</span>
+        <div class="absolute flex justify-center items-center font-title" style="transform: translate(-50%, -50%)">
+            <span class="text-6xl">{$time.format($clockFormat === "24h" ? "HH" : "hh")}</span>
         </div>
     </div>
 </StyleBase>
 
 <style>
+    .bg-image-light-pixel {
+        color: var(--primary);
+        text-shadow: 0 0 20px var(--highlighted);
+    }
+
     .origin-center {
         transform-origin: center center;
+    }
+    
+    .current-minute-light {
+        text-shadow: none !important;
+        color: black !important;
+        box-shadow: 0 0 30px var(--secondary);
+        opacity: .95;
     }
 </style>
