@@ -68,7 +68,7 @@
 </script>
 
 <StyleBase styleId={5}>
-    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title {$bgImageBright === 'light' ? 'bg-image-light-pixel' : ''}" style="transition: padding .2s ease-out; color .2s linear;">
+    <div bind:this={container} class="relative {$screenSaver ? 'pb-0' : 'pb-36'} font-title {$bgImageBright !== 'none' ? 'bg-image-light-pixel' : ''}" style="transition: padding .2s ease-out; color .2s linear;">
         <div class="absolute h-96 w-96" style="transform: translate(-50%) rotate({rotateSec}deg); transition: transform .25s ease-out; will-change: transform; transform-origin: 50% 0%;">
             {#each Array(60) as _, s}
                 <div class=" absolute transform-gpu flex items-center rounded-full w-96 h-2" style="transform: translateY(-50%) rotate({6 * s}deg);">
@@ -89,7 +89,7 @@
                             class="leading-normal mr-3 px-2 py-1 transform-gpu {isCurrentMinute(s, $time)
                                 ? `shadow-2xl shadow-primary text-2xl rounded-full border-2 ${$bgImageBright === 'light' ? 'bg-white current-minute-light' : 'bg-primary'}`
                                 : 'text-base'}"
-                            style="transform: scale(-1); border-color: {$bgImageBright === 'light' ? 'white'  : $accentColor}"
+                            style="transform: scale(-1); border-color: {$bgImageBright === 'light' ? 'white'  : ($bgImageBright === 'dark' ? 'bg-primary' : $accentColor)}"
                         >
                             {60 - (s + 1)}
                         </div>

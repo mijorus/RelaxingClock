@@ -61,7 +61,7 @@
 
 <StyleBase styleId={4}>
     <div bind:this={galaxyContainer} id="galaxy-container" class={!$screenSaver ? "mb-36" : "mb-0"}>
-        <div class="w-80 h-80 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-highlighted shadow-xl' : 'bg-galaxy'}" />
+        <div class="w-80 h-80 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-highlighted shadow-xl' : ($bgImageBright === 'dark' ?  'bg-black'  : 'bg-galaxy')}" />
         <div class="w-1 h-1 rounded-full absolute transform -translate-x-1/2 -translate-y-1/2 {$bgImageBright === 'light' ? 'bg-primary' : 'bg-highlighted'}" />
 
         <div id="galaxy-space" class="relative">
