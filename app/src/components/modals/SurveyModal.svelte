@@ -1,5 +1,6 @@
 <script lang="ts">
 import { windowReady } from "html-ready";
+    import { surveyUrl } from "../../costants";
 
 </script>
 
@@ -11,7 +12,7 @@ import { windowReady } from "html-ready";
         <div class="my-10 text-center text-2xl">
             We need you feedback to keep improving this project! <br>Take a quick survey by visiting the link below
         </div>
-        <a class="text-3xl text-underline underline text-yellow-300" href="https://forms.gle/o2CV4tL7R29Np1bk6" target="_blank">https://forms.gle/o2CV4tL7R29Np1bk6</a>
+        <a class="text-3xl text-underline underline text-yellow-300" href={surveyUrl} target="_blank">{surveyUrl}</a>
         <div class="my-10 text-center text-2xl">
             If you dismiss this message, you can visit the form <br>at any time by clicking on "Take a survey" from the button below
         </div>

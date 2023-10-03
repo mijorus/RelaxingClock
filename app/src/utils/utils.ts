@@ -171,13 +171,3 @@ export function randomBool() {
 export function deepClone(obj: any) {
     return JSON.parse(JSON.stringify(obj));
 }
-
-export function isMacintosh() {
-    return navigator.userAgent.indexOf('Mac OS X');
-}
-
-let altLabel;
-export function getAltLabel() {
-    if (!altLabel) altLabel = isMacintosh() ? '⌥' : 'Alt';
-    return altLabel;
-}

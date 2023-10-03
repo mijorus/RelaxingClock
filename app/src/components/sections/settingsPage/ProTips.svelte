@@ -67,9 +67,6 @@
         </div>
     {/if}
 
-    <NestedBox bordered label={"Take a survey" } description={"Help us improving Relaxing Clock"} available={true}>
-        <Action label="Show me" on:click={() => modalContent.set(SurveyModal)} />
-    </NestedBox >
     <NestedBox bordered label={"Latest news" } description={"Check what\'s new with the latest version"} available={true}>
         <Action label="Open" on:click={() => modalContent.set(UpdateModal)} />
     </NestedBox >

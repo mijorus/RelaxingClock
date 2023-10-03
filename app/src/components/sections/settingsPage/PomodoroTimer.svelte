@@ -12,11 +12,12 @@
     import Hint from "../../elements/settings/Hint.svelte";
     import moment, { Moment } from "moment";
     import { notifications } from "../../../stores/notifications";
-    import { getAltLabel, isMacintosh, locSto } from "../../../utils/utils";
+    import { locSto } from "../../../utils/utils";
     import { onMount } from "svelte";
     import { shortcuts, summoned } from "../../../stores/rooster";
     import time from "../../../stores/time";
     import { createIncomingEvent } from "../../clock/IncomingEventsMessages.svelte";
+    import { altLabel } from "../../../costants";
 
     const defaultTitle = "Start the timer";
     let label = defaultTitle;
@@ -156,7 +157,7 @@
             label={{ text: label, bgClass: pomodoroIsRunning === "focus" ? "bg-red-900" : pomodoroIsRunning === "relax" ? "bg-green-900" : null }}
             description={{ text: "" }}
             available={true}
-            shortcut={getAltLabel() + " + f"}
+            shortcut={altLabel + " + f"}
         >
             <Action custom customClass="bg-transparent text-primary text-sm" label={timeLeft} />
             <Action label={pomodoroIsRunning ? "Stop" : "Start"} on:click={toggleTimer} />

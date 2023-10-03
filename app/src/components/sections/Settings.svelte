@@ -23,6 +23,7 @@
     import { clockStyleClass } from "../../stores/storedSettings";
     import ClockFont from "./settingsPage/ClockFont.svelte";
     import BackgroundImage from "./settingsPage/BackgroundImage.svelte";
+    import Feedback from "./settingsPage/Feedback.svelte";
 
     $: {
         if (!$clockIsVisible && !$tips) tips.set([{ name: "Show keyboard shortcuts", shortcut: "?" }]);
@@ -57,6 +58,7 @@
                 <BlinkingDots />
                 <!-- <SaveBattery /> -->
                 <ShowTutorial />
+                <Feedback />
                 <div class="mt-20"><DangerZone /></div>
             </div>
         </div>

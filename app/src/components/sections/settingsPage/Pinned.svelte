@@ -6,7 +6,7 @@
     import Pin from "../../icons/Pin.svelte";
     import Action from "../../elements/settings/Buttons/Action.svelte";
     import { pinnedDBisReady } from "../../../stores/globalState";
-    import { getAltLabel } from "../../../utils/utils";
+    import { altLabel } from "../../../costants";
 
     function triggerRooster(e) {
         window.dispatchEvent(new CustomEvent("injectRoosterAction", { detail: { command: "pin", argument: '' } }));
@@ -23,7 +23,7 @@
         label={{ text: "Pin a new message" }}
         description={{ text: "Create a new reminder which will always stay on top using the Rooster", iconClass: "lnr lnr-question-circle" }}
         available={true}
-        shortcut={getAltLabel() + ' + p'}
+        shortcut={altLabel + ' + p'}
         >
         <Action label="Create" on:click={triggerRooster} />
     </PrimaryBox>

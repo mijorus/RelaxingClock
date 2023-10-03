@@ -2,10 +2,11 @@
     import { onMount, tick } from "svelte";
     import { canBeSummoned, shortcuts, summoned } from "../../stores/rooster";
     import { fade } from "svelte/transition";
-    import { caretToEnd, isMacintosh, shakeElement } from "../../utils/utils";
+    import { caretToEnd, shakeElement } from "../../utils/utils";
     import Examples from "./Examples.svelte";
     import type { InjectRoosterActionEvent, RoosterExamples } from "../../types";
     import { tips } from "../../stores/globalState";
+    import { isMacintosh } from "../../costants";
 
     let rooster: HTMLElement;
 

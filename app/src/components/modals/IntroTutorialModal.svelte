@@ -7,9 +7,8 @@
     import Action from "../elements/settings/Buttons/Action.svelte";
     import TutorialElement from "./components/TutorialElement.svelte";
     import TutorialStep from "./components/TutorialStep.svelte";
-    import { isMacintosh } from "../../utils/utils";
+    import { altLabel } from "../../costants";
 
-    const altLabel = isMacintosh() ? "⌥" : "Alt";
     let step = 0;
     $: handleStepChange(step);
 
@@ -41,7 +40,7 @@
                         <h2 class="text-5xl font-title">Introducing, the command box</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="1">A new way of interacting with the app.</TutorialElement>
                         <TutorialElement customClass="mt-6 text-2xl" index="2">
-                            <Key key={isMacintosh ? "⌥" : "Ctrl"} /><Key key="space" />
+                            <Key key={altLabel} /><Key key="space" />
                         </TutorialElement>
                         <TutorialElement customClass="mt-6" index="3">
                             {#if $summoned}

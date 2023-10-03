@@ -2,8 +2,7 @@
     import { onMount } from "svelte";
     import { shortcuts } from "../../stores/rooster";
     import type { RoosterShortcuts } from "../../types";
-    import Key from "../elements/Key.svelte";
-    import { getAltLabel, isMacintosh } from "../../utils/utils";
+    import { altLabel } from "../../costants";
 
     let rs: RoosterShortcuts;
 
@@ -39,7 +38,7 @@
                                             <span class="text-xs">
                                                 {#if rs[key].arguments[arg].quickLaunch}{arg.length ? "or" : ""}
                                                     <span class="bg-tertiary p-1 rounded-md"
-                                                        >{getAltLabel()} + {rs[key].arguments[arg].quickLaunch.match(/[A-Z]/g) ? "Shift + " : ""} {rs[key].arguments[arg].quickLaunch}</span
+                                                        >{altLabel} + {rs[key].arguments[arg].quickLaunch.match(/[A-Z]/g) ? "Shift + " : ""} {rs[key].arguments[arg].quickLaunch}</span
                                                     >
                                                 {/if}
                                             </span>
