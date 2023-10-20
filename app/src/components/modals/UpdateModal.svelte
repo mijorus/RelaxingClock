@@ -17,19 +17,39 @@
                 </ul>
             </div>
             <div class="my-3">
-                <img class="border rounded-xl border-white" src="/media/genius-search.gif" alt="verison 4.1.0" />
+                <img
+                    class="border rounded-xl border-white"
+                    src="/media/genius-search.gif"
+                    alt="verison 4.1.0"
+                />
             </div>
             <div class="mb-10 text-center text-2xl">Search lyrics from Genius</div>
             <div class="my-3">
-                <img class="border rounded-xl border-white" src="/media/4-1-0.gif" alt="verison 4.1.0" />
+                <img
+                    class="border rounded-xl border-white"
+                    src="/media/4-1-0.gif"
+                    alt="verison 4.1.0"
+                />
             </div>
-            <div class="mb-10 text-center text-2xl">Check the status of ongoing timers and reminders with the new widget.</div>
-            <div class="my-3">
-                <img class="border-2 rounded-xl border-white" src="/media/4-1-0-protips.png" alt="verison 4.1.0" />
+            <div class="mb-10 text-center text-2xl">
+                Check the status of ongoing timers and reminders with the new widget.
             </div>
-            <div class="mb-10 text-center text-2xl">Discover Tips and tricks you didn't know about</div>
             <div class="my-3">
-                <img class="border-2 rounded-xl border-white" src="/media/4-1-0-kofi.png" alt="verison 4.1.0" />
+                <img
+                    class="border-2 rounded-xl border-white"
+                    src="/media/4-1-0-protips.png"
+                    alt="verison 4.1.0"
+                />
+            </div>
+            <div class="mb-10 text-center text-2xl">
+                Discover Tips and tricks you didn't know about
+            </div>
+            <div class="my-3">
+                <img
+                    class="border-2 rounded-xl border-white"
+                    src="/media/4-1-0-kofi.png"
+                    alt="verison 4.1.0"
+                />
             </div>
             <div class="mb-10 text-center text-2xl">Enjoying Relaxing Clock? Send me a kofi.</div>
         {:else if version === "4.4.0"}
@@ -40,13 +60,18 @@
             </div>
         {:else if version === "4.5.0"}
             <div class="my-3 mx-auto">
-                <img src="/media/rc-update-bg.gif" alt="relaxing clock 4.5.0" class="mx-auto rounded-xl" />
+                <img
+                    src="/media/rc-update-bg.gif"
+                    alt="relaxing clock 4.5.0"
+                    class="mx-auto rounded-xl"
+                />
                 <ul>
                     <li class="mt-10">
                         <div class="text-xl">Background Customization!</div>
                         <p>
-                            Relaxing Clock now has finally an option to customize its background!<br />Scroll down into the settings and choose between the bing daily image or explore the full
-                            Unsplash catalog.
+                            Relaxing Clock now has finally an option to customize its background!<br
+                            />Scroll down into the settings and choose between the bing daily image
+                            or explore the full Unsplash catalog.
                         </p>
                     </li>
                     <li class="mt-10">
@@ -57,8 +82,17 @@
                     </li>
                     <li class="mt-10">
                         <div class="text-xl">Minor UI tweaks</div>
+                        <p>You can now see the relative shortcuts directly from the menu</p>
+                    </li>
+                </ul>
+            </div>
+        {:else if version === "4.5.1"}
+            <div class="my-3 mx-auto">
+                <ul>
+                    <li class="mt-10">
+                        <div class="text-xl">Bug fix!</div>
                         <p>
-                            You can now see the relative shortcuts directly from the menu
+                            Fixed a bug causing Blinking dots to stay on when disabled.
                         </p>
                     </li>
                 </ul>
