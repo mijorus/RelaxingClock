@@ -50,8 +50,9 @@
 
             const thisUri = $spotifyPlayerState.track_window.current_track.uri;
             if (thisUri !== lastUri) {
-                const ctx = $spotifyPlayerState.context.uri || $spotifyPlayerState.context?.metadata?.current_item.uri;
-                const itemName = $spotifyPlayerState.context?.metadata?.name || $spotifyPlayerState.context?.metadata?.current_item.name || false;
+                const ctx = $spotifyPlayerState.track_window.current_track.uri || $spotifyPlayerState.context.uri || $spotifyPlayerState.context?.metadata?.current_item.uri;
+
+                const itemName = $spotifyPlayerState.track_window.current_track.name || $spotifyPlayerState.context?.metadata?.name || $spotifyPlayerState.context?.metadata?.current_item.name || false;
 
                 const geniusQuery = `${$spotifyPlayerState?.track_window?.current_track?.name} ${artistsName.join(" ")}`;
                 axios.get("/.netlify/functions/geniusSearch", { params: { q: geniusQuery } }).then((geniusRes) => {
