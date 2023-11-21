@@ -84,7 +84,7 @@ import Tips from "../tips/Tips.svelte";
                                 <!-- svelte-ignore a11y-missing-attribute -->
                                 {#if example.image}
                                     {#if i === selected && example.selectable}<span class="grow pr-1">&middot;</span>{/if}
-                                    <img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block">
+                                    <img src="{example.image}" class="{!example.size || example.size === 'md' ? 'h-16 w-16' : 'h-10 w-10'} mr-2 rounded-md inline-block object-cover">
                                     {#if example.argument}<span class="underline">{example.argument}</span>{/if} 
                                     <div class="inline-block ml-2">
                                         <!-- <div class="{example.image ? 'flex flex-col' : 'inline'}"> -->
