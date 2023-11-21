@@ -299,6 +299,8 @@
     onMount(() => {
         window.addEventListener("injectRoosterAction", async (e: InjectRoosterActionEvent) => {
             summoned.set(true);
+            console.log(e);
+            
             injectAction(e.detail.command, e.detail.argument);
         });
     });
