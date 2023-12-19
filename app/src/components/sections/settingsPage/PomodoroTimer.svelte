@@ -159,7 +159,6 @@
             available={true}
             shortcut={altLabel + " + f"}
         >
-            <Action custom customClass="bg-transparent text-primary text-sm" label={timeLeft} />
             <Action label={pomodoroIsRunning ? "Stop" : "Start"} on:click={toggleTimer} />
         </PrimaryBox>
     </div>
