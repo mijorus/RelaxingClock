@@ -15,7 +15,6 @@
     import Bubble from "../elements/Bubble.svelte";
     import { backgroundImage } from "../../stores/storedSettings";
     import SmoothImage from "../elements/SmoothImage.svelte";
-    import HomeBackgroud from "../elements/HomeBackgroud.svelte";
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;

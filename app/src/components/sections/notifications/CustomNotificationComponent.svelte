@@ -15,11 +15,11 @@ export let inPanel = false;
 <div in:fly="{ expire ? { x: 200, duration: 750 } : {}}" out:fade="{{ duration: 300 }}">
     <Bubble classes="bg-secondary">
         <div class="flex items-center" class:cursor-pointer={data.elementId} on:click|stopPropagation={(e) => { if (data.elementId) window.location.replace('#' + data.elementId) }}>
-            <div class="mr-2">
+            <!-- <div class="mr-2">
                 <span class="pr-2">
                     <i class="{data.icon ?? 'fas fa-bell'} text-xl" style="color: {data.color};"/>
                 </span>
-            </div>
+            </div> -->
             <div class="overflow-x-hidden whitespace-nowrap font-ubuntu">
                 <h4 class="text-xl font-bold font-title">
                     <AnimatedText text={data.title} fade={false}/>

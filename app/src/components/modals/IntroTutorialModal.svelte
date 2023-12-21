@@ -31,7 +31,6 @@
                     <div><img class="-mt-10 mb-20 w-2/5 m-auto" src="/media/relaxing-clock-logo-transparent-smile.svg" alt="logo" /></div>
                     <TutorialElement customClass="text-center" index="1">
                         <h2 class="text-5xl font-title">Hi, welcome to Relaxing Clock</h2>
-                        <TutorialElement customClass="mt-10 text-3xl" index="2">Many things have changed since last time, may I show you what's new?</TutorialElement>
                     </TutorialElement>
                 </TutorialStep>
             {:else if step === 1}

@@ -106,32 +106,26 @@
         window.dispatchEvent(new CustomEvent("injectRoosterAction", { detail: { command: "background", argument: 'unsplash' } }));
     }
 
-    // function setSonoma() {
-    //     backgroundImageSource.set("sonoma");
-    //     bgImageBright.set("light");
-    //     backgroundImage.set("video:" + "/media/forest_short.mp4");
-    //     screenSaverHandler.enable();
-    // }
-
     function removeBgImage() {
         loadingStatus = "none";
 
-        backgroundImage.set("none");
-        backgroundImageSource.set("default");
-        bgImageBright.set("none");
+        backgroundImage.set(loadingStatus);
+        backgroundImageSource.set("");
+        bgImageBright.set(loadingStatus);
     }
 
     onMount(() => {
+        // patch
+        if ($backgroundImage === 'default') {
+            removeBgImage()
+        }
+
         if ($backgroundImage.length) {
             loadingStatus = "loaded";
         }
 
         if ($backgroundImageSource === "bing" && sessionStorage.getItem(bingRefreshKey) === undefined) {
             setBingImage();
-        }
-
-        if ($backgroundImageSource === "sonoma") {
-            bgImageBright.set("light");
         }
 
         shortcuts.set("background", {
@@ -251,7 +245,7 @@
                 {/if}
             {/if}
 
-            <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== "default"} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
+            <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== "none"} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
             <Action on:click={() => setBingImage()} custom={$backgroundImageSource !== "bing"} customClass={$backgroundImageSource !== "bing" ? customClass : ""} label="Bing" />
             <Action on:click={() => setUnsplashImage()} custom={$backgroundImageSource !== "unsplash"} customClass={$backgroundImageSource !== "unsplash" ? customClass : ""} label="Unsplash" />
             <!-- <Action on:click={() => setSonoma()} custom={$backgroundImageSource !== "sonoma"} customClass={$backgroundImageSource !== "sonoma" ? customClass : ""} label="Sonoma" /> -->
