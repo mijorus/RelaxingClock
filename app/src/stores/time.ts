@@ -10,7 +10,7 @@ export const remoteTimeAdjustmets: Writable<RemoteTimeAdjustmetsInterface> = wri
 
 const time:Readable<Moment> = readable(moment(), (set) => {
     const i = setInterval(() => {
-        if (get(remoteTimeAdjustmets)) set( moment((Date.now() + (get(remoteTimeAdjustmets).delta)), 'x').tz(get(remoteTimeAdjustmets).timezone) );
+        if (get(remoteTimeAdjustmets)) set( moment((Date.now() - (get(remoteTimeAdjustmets).delta)), 'x').tz(get(remoteTimeAdjustmets).timezone) );
         else set(moment());
     }, 1000);
 
