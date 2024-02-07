@@ -245,7 +245,7 @@
                 {/if}
             {/if}
 
-            <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== "none"} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
+            <Action on:click={() => removeBgImage()} custom={$backgroundImageSource !== ""} customClass={$backgroundImageSource !== "default" ? customClass : ""} label="Default" />
             <Action on:click={() => setBingImage()} custom={$backgroundImageSource !== "bing"} customClass={$backgroundImageSource !== "bing" ? customClass : ""} label="Bing" />
             <Action on:click={() => setUnsplashImage()} custom={$backgroundImageSource !== "unsplash"} customClass={$backgroundImageSource !== "unsplash" ? customClass : ""} label="Unsplash" />
             <!-- <Action on:click={() => setSonoma()} custom={$backgroundImageSource !== "sonoma"} customClass={$backgroundImageSource !== "sonoma" ? customClass : ""} label="Sonoma" /> -->
@@ -254,6 +254,6 @@
 </SettingsBox>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-{#if !$backgroundImage.startsWith("video:")}
+{#if !$backgroundImage.startsWith("video:") && $backgroundImage !== 'none'}
     <img bind:this={imageReference} src={$backgroundImage} style="visibility: hidden" class="absolute bottom-0" on:load={setImageBrigthness} />
 {/if}
