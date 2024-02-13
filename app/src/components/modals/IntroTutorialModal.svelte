@@ -127,7 +127,7 @@
                         </TutorialElement>
                         <TutorialElement customClass="mt-10 text-xl" index="2">
                             Also, keep an eye on the bottom-right size of the screen, where many contextual tips will be shown and <b
-                                >check out <a href="blog.relaxingclock.it" class="underline">the blog</a></b
+                                >check out <a href="https://blog.relaxingclock.com/" class="underline">the blog</a></b
                             >
                             where many tutorials and updates are posted.
                         </TutorialElement>
