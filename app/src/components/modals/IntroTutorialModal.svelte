@@ -7,9 +7,10 @@
     import Action from "../elements/settings/Buttons/Action.svelte";
     import TutorialElement from "./components/TutorialElement.svelte";
     import TutorialStep from "./components/TutorialStep.svelte";
-    import { altLabel } from "../../costants";
+    import { altLabel, isMacintosh } from "../../costants";
 
     let step = 0;
+    let roosterInvokeKey = isMacintosh ? altLabel : 'ctrl';
     $: handleStepChange(step);
 
     function handleStepChange(step: number) {
@@ -39,7 +40,7 @@
                         <h2 class="text-5xl font-title">Introducing, the command box</h2>
                         <TutorialElement customClass="mt-10 text-3xl" index="1">A new way of interacting with the app.</TutorialElement>
                         <TutorialElement customClass="mt-6 text-2xl" index="2">
-                            <Key key={altLabel} /><Key key="space" />
+                            <Key key={roosterInvokeKey} /><Key key="space" />
                         </TutorialElement>
                         <TutorialElement customClass="mt-6" index="3">
                             {#if $summoned}
