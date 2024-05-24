@@ -115,6 +115,7 @@
         background-repeat: no-repeat;
         box-shadow: 0px -40px 35px var(--primary) inset; */
         border-radius: 0 0 25px 5px;
+        object-fit: cover;
         z-index: -99;
     }
 
