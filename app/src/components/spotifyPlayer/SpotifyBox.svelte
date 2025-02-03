@@ -295,7 +295,7 @@
                         {$spotifyPlayerStatus === 'ready' && !playbackStarted && $screenSaver ? 'text-primary opacity-80' : ''}"
                         class:text-spotify={$spotifyPlayerStatus === "ready" && !$screenSaver}
                         class:text-secondary={$spotifyPlayerStatus !== "ready"}
-                        class:cursor-pointer={$spotifyUrl || $spotifyPlayerStatus === "waiting_interaction"}
+                        class:hidden={$spotifyUrl || $spotifyPlayerStatus === "waiting_interaction"}
                         on:click={() => {
                             if ($spotifyUrl) window.location.replace($spotifyUrl);
                         }}
