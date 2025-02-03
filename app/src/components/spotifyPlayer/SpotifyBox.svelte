@@ -54,14 +54,6 @@
 
                 const itemName = $spotifyPlayerState.track_window.current_track.name || $spotifyPlayerState.context?.metadata?.name || $spotifyPlayerState.context?.metadata?.current_item.name || false;
 
-                const geniusQuery = `${$spotifyPlayerState?.track_window?.current_track?.name} ${artistsName.join(" ")}`;
-                axios.get("/.netlify/functions/geniusSearch", { params: { q: geniusQuery } }).then((geniusRes) => {
-                    geniusLink.set(null);
-                    if (geniusRes.data.data) {
-                        geniusLink.set(geniusRes.data.data.url);
-                    }
-                });
-
                 if (ctx.length && itemName) {
                     let history: LastPlayedContexts[] = deepClone($contextHistory);
 
