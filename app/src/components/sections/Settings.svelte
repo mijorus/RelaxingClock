@@ -22,7 +22,6 @@
     import Donate from "./settingsPage/Donate.svelte";
     import { clockStyleClass } from "../../stores/storedSettings";
     import ClockFont from "./settingsPage/ClockFont.svelte";
-    import BackgroundImage from "./settingsPage/BackgroundImage.svelte";
     import Feedback from "./settingsPage/Feedback.svelte";
 
     $: {
@@ -51,9 +50,8 @@
             <SettingsBox collapsable={false} bordered={false}><span class="pl-5 md:p-0 text-6xl text-primary font-title font-bold">Settings</span></SettingsBox>
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <ChangeAccentColor />
-                <BackgroundImage />
                 <ClockFont />
-                <RemoteTime />
+                <!-- <RemoteTime /> -->
                 <HighContrast />
                 <BlinkingDots />
                 <!-- <SaveBattery /> -->
