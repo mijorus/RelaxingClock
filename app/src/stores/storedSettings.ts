@@ -69,9 +69,8 @@ export const blink = userSetting('blink', true, 'boolean');
 export const presentation = userSetting('presentation', false, 'boolean');
 export const saveEnergy = userSetting('saveEnergy', false, 'boolean');
 
-export const backgroundImage = userSetting('backgroundImage', 'none');
-export const backgroundImageSource = userSetting('backgroundImageSource', '', 'string');
-
+export const backgroundImage = writable('none');
+export const backgroundImageSource = userSetting('backgroundImageSource', 'default', 'string');
 
 // export const longPomodoro = userSetting('longPomodoro', false, 'boolean');//
 // export const remoteTime = userSetting('remoteTime', false, 'boolean');
