@@ -37,8 +37,8 @@
                 Relaxing<br />Clock
             </h1>
         </SettingsBox>
-        <Donate />
-        <ProTips />
+        <!-- <Donate />
+        <ProTips /> -->
         <Spotify />
         <!-- <Weather /> -->
         <Alarm />
@@ -56,7 +56,7 @@
                 <BlinkingDots />
                 <!-- <SaveBattery /> -->
                 <ShowTutorial />
-                <Feedback />
+                <!-- <Feedback /> -->
                 <div class="mt-20"><DangerZone /></div>
             </div>
         </div>
