@@ -51,7 +51,7 @@
             <div class="relative pt-1 rounded-xl border-2 border-secondary">
                 <ChangeAccentColor />
                 <ClockFont />
-                <!-- <RemoteTime /> -->
+                <RemoteTime />
                 <HighContrast />
                 <BlinkingDots />
                 <!-- <SaveBattery /> -->

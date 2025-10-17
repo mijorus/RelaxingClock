@@ -10,6 +10,7 @@
     import { fade } from "svelte/transition";
     import axios from "axios";
     import { remoteTimeAdjustmets } from "../../../stores/time";
+    import moment from "moment";
 
     interface RemoteTimeResponse {
         unixtime: number;
@@ -28,16 +29,14 @@
         try {
             ping = 0;
 
-            // warm-up function
-            await axios.get("/.netlify/functions/remoteTime");
-
             const start = Date.now();
-            const timeRes: RemoteTimeResponse = (await axios.get("/.netlify/functions/remoteTime")).data;
-            // const timeRes: RemoteTimeResponse = {unixtime: Date.now(), compleated: 0 }
-            ping = Date.now() - start - timeRes.compleated;
-
+            const response = await axios.head("/");
+            const serverTime = moment(response.headers["date"]);
             const { timezone } = (await axios.get("https://ipapi.co/json/")).data;
-            remoteTimeAdjustmets.set({ delta: Date.now() - timeRes.unixtime, timezone });
+            const delta = Math.floor(start / 1000) - serverTime.unix();
+
+            console.log("Time offset: " + delta + "s");
+            remoteTimeAdjustmets.set({ delta, timezone });
         } catch (err) {
             ping = -1;
             remoteTimeAdjustmets.set(null);
@@ -69,7 +68,11 @@
                     <i class="fas fa-exclamation-circle" />
                 </span>
             {/if}
-            <Booleans state={$remoteTime} label={"efficiency mode"} on:change={(e) => remoteTime.set(e.detail)} />
+            <Booleans
+                state={$remoteTime}
+                label={"efficiency mode"}
+                on:change={(e) => remoteTime.set(e.detail)}
+            />
         </div>
     </PrimaryBox>
 </SettingsBox>
