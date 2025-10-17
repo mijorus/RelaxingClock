@@ -80,18 +80,19 @@
             attemptSpotifyLogin().catch((e) => console.error(e));
         }
 
-        if (!localStorage.getItem("hasSeenTutorial")) {
-            await tick();
-            modalContent.set(IntroTutorialModal);
-            localStorage.setItem("hasSeenTutorial", "true");
-        } else if (!localStorage.getItem("askSurvey")) {
-            modalContent.set(SurveyModal);
-            localStorage.setItem("askSurvey", "true");
-        } else if (localStorage.getItem("version") !== process.env.VERSION) {
-            // } else {
-            modalContent.set(UpdateModal);
-            localStorage.setItem("version", process.env.VERSION);
-        }
+        localStorage.setItem("hasSeenTutorial", "true");
+        localStorage.setItem("askSurvey", "true");
+        localStorage.setItem("version", process.env.VERSION);
+
+        // if (!localStorage.getItem("hasSeenTutorial")) {
+        //     // await tick();
+        //     // modalContent.set(IntroTutorialModal);
+        // } else if (!localStorage.getItem("askSurvey")) {
+        //     // modalContent.set(SurveyModal);
+        // } else if (localStorage.getItem("version") !== process.env.VERSION) {
+        //     // } else {
+        //     modalContent.set(UpdateModal);
+        // }
 
         await windowReady;
         setTimeout(async () => {
