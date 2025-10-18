@@ -13,13 +13,13 @@
     import FloatingBlobs from "./FloatingBlobs/FloatingBlobs.svelte";
     import IncomingEventsBox from "../clock/IncomingEventsBox.svelte";
     import Bubble from "../elements/Bubble.svelte";
-    import { backgroundImage } from "../../stores/storedSettings";
+    import { backgroundImage, timerTime } from "../../stores/storedSettings";
     import SmoothImage from "../elements/SmoothImage.svelte";
+    import Timer from "../clock/Timer.svelte";
 
     let bigClockContainer: HTMLElement;
     let incomingEventsBoxHovered = false;
-    console.log('image', $backgroundImage);
-    
+    console.log("image", $backgroundImage);
 
     $: screenSaverApply($screenSaver);
     $: darken($darkenClock);
@@ -69,8 +69,8 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative" class:home-bg-image={$backgroundImage !== 'none'}>
-    {#if $backgroundImage !== 'none'}
+<div class="h-screen relative" class:home-bg-image={$backgroundImage !== "none"}>
+    {#if $backgroundImage !== "none"}
         <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} />
         <!-- <HomeBackgroud cssClasses="absolute top-0 w-full h-full"></HomeBackgroud> -->
     {/if}
@@ -88,13 +88,19 @@
             if (!$screenSaver) disableScreenSaver;
         }}
     >
-        <Clock />
-        <StyleSelectionBox />
+        {#if $timerTime}
+            <Timer />
+        {:else}
+            <Clock />
+            <StyleSelectionBox />
+        {/if}
     </div>
 
     <SpotifyBox />
 
-    <div class="hidden md:flex justify-center absolute bottom-5 left-1/2 transform -translate-x-1/2 lg:scale-125">
+    <div
+        class="hidden md:flex justify-center absolute bottom-5 left-1/2 transform -translate-x-1/2 lg:scale-125"
+    >
         <Bubble>
             <div>
                 <IncomingEventsBox />
@@ -121,6 +127,11 @@
 
     .home-bg-image {
         border-radius: 0 0 25px 5px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 70%, var(--primary) 100%);
+        background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 70%,
+            var(--primary) 100%
+        );
     }
 </style>

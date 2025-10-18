@@ -23,12 +23,11 @@
     let seconds: string;
     let alarm: Moment = moment();
     let creationBox: HTMLElement;
-    let isAM = moment().hours() < 12;
 
     $: format = $clockFormat === "24h" ? "HH:mm:ss" : "h:mm:ss a";
     $: primaryBoxTitle =
         $timerTime && moment($timerTime, "X").isValid()
-            ? `${localStorage.getItem("alarmTitle") ? '"' + localStorage.getItem("alarmTitle") + '" r' : "R"}ings at ${moment($timerTime, "X").format(format)}`
+            ? `${localStorage.getItem("timerTitle") ? '"' + localStorage.getItem("timerTitle") + '" r' : "R"}ings at ${moment($timerTime, "X").format(format)}`
             : "Set a timer";
 
     let title: HTMLInputElement;
@@ -49,7 +48,7 @@
             } else if (
                 moment($timerTime, "X").isSameOrBefore(moment().subtract(minutesPassedCheck, "m"))
             ) {
-                console.log("removing old alarms");
+                console.log("removing old timers");
                 clearAlarmMemory();
             }
         }
