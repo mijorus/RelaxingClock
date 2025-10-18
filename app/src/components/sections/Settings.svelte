@@ -23,6 +23,7 @@
     import { clockStyleClass } from "../../stores/storedSettings";
     import ClockFont from "./settingsPage/ClockFont.svelte";
     import Feedback from "./settingsPage/Feedback.svelte";
+    import Timer from "./settingsPage/Timer.svelte";
 
     $: {
         if (!$clockIsVisible && !$tips) tips.set([{ name: "Show keyboard shortcuts", shortcut: "?" }]);
@@ -41,6 +42,7 @@
         <ProTips /> -->
         <Spotify />
         <!-- <Weather /> -->
+        <Timer />
         <Alarm />
         <PomodoroTimer />
         <Pinned />

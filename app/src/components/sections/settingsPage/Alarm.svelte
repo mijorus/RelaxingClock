@@ -70,6 +70,8 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
     async function openCreationBox() {
         canBeSummoned.set(false);
         alarm = moment().add(2, 'm');
+        hours = alarm.format( $clockFormat === '24h' ? 'HH' : 'h')
+        minutes = alarm.format('mm')
         creationBoxOpened = true;
         
         await tick();

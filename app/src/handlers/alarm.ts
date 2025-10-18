@@ -4,7 +4,7 @@ import { tick } from 'svelte';
 import { alarmIsRinging } from '../stores/globalState';
 import { notifications } from '../stores/notifications';
 import { canBeSummoned } from '../stores/rooster';
-import { alarmTime } from '../stores/storedSettings';
+import { alarmTime, timerTime } from '../stores/storedSettings';
 
 let tl: AnimeTimelineInstance;
 let target: HTMLElement;
@@ -62,4 +62,9 @@ export function dismiss(snooze = false) {
 export function clearAlarmMemory(removeTitle = true) {
     alarmTime.set(undefined);
     if (localStorage.getItem('alarmTitle') && removeTitle) localStorage.removeItem('alarmTitle');
+}
+
+export function clearTimerMemory(removeTitle = true) {
+    timerTime.set(undefined);
+    if (localStorage.getItem('timerTitle') && removeTitle) localStorage.removeItem('timerTitle');
 }
