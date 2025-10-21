@@ -30,13 +30,15 @@
             ping = 0;
 
             const start = Date.now();
-            const response = await axios.head("/");
+            const response = await axios.get("/media/time");
             const serverTime = moment(response.headers["date"]);
-            const { timezone } = (await axios.get("https://ipapi.co/json/")).data;
-            const delta = Math.floor(start / 1000) - serverTime.unix();
+            const { timezone } = response.data;
+            console.log(serverTime);
+
+            const delta = start - (serverTime.unix() * 1000);
 
             console.log("Time offset: " + delta + "s");
-            remoteTimeAdjustmets.set({ delta, timezone });
+            remoteTimeAdjustmets.set({ delta, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone });
         } catch (err) {
             ping = -1;
             remoteTimeAdjustmets.set(null);
@@ -54,9 +56,7 @@
     <PrimaryBox
         label={{ text: "Get time from the internet" }}
         description={{
-            text: `In order to determine your correct time zone, a service provided by ipapi.co will be used.
-                Please note that ipapi.co is fully GDPR compliant and stores this data only for a limited amount of time. Read their privacy policy at https://ipapi.co/privacy if you need more information
-            `,
+            text: `Syncs your time from the server`,
         }}
         available={true}
     >
