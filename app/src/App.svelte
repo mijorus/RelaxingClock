@@ -68,7 +68,6 @@
         weather.set(false);
         saveEnergy.set(true);
 
-        if (process.env.production) console.log = function () {};
         document.querySelector("footer").classList.remove("hidden");
         document.querySelectorAll(".version-print").forEach((el) => (el.innerText = process.env.VERSION));
 
