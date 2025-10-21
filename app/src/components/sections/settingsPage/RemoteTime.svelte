@@ -37,7 +37,7 @@
 
             const delta = start - (serverTime.unix() * 1000);
 
-            console.log("Time offset: " + delta + "s");
+            console.log("Time offset: " + Math.floor(delta / 1000) + "s");
             remoteTimeAdjustmets.set({ delta, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone });
         } catch (err) {
             ping = -1;
