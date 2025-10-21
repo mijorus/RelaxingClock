@@ -295,7 +295,6 @@ import { remindersRepeatedDefault } from '../../../stores/storedSettings';
         label={{text: 'Create a reminder'}} 
         description={{text:'Set and manage reminders', iconClass: 'lnr lnr-question-circle'}}
         available={true}
-        shortcut={altLabel + ' + r'}
     >
         <Action label="Create" on:click={() => openCreationBox()}></Action>
     </PrimaryBox>

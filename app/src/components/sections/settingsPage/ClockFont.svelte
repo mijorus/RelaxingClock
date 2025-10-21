@@ -28,22 +28,41 @@
         }}
         available={true}
     >
-        <div class="flex items-center gap-2">
-            <Action 
-                on:click={() => setCustomFont("clock")} 
-                custom={$clockStyleClass !== "font-clock"} 
-                customClass = {$clockStyleClass !=='font-clock' ? customClass : ''}
-                label="Default" />
-            <Action 
-                on:click={() => setCustomFont("monofur")} 
-                custom={$clockStyleClass !== "font-monofur"} 
-                customClass = {$clockStyleClass !=='font-monofur' ? customClass : ''} 
-                label="Monofur" />
-            <Action 
-                on:click={() => setCustomFont("courier")} 
-                custom={$clockStyleClass !== "font-courier"} 
-                customClass = {$clockStyleClass !=='font-courier' ? customClass : ''} 
-                label="Courier" />
+        <div class="flex flex-wrap items-center gap-2">
+            <Action
+                on:click={() => setCustomFont("clock")}
+                custom={$clockStyleClass !== "font-clock"}
+                label="Default"
+            />
+            <Action
+                on:click={() => setCustomFont("monofur")}
+                custom={$clockStyleClass !== "font-monofur"}
+                label="Monofur"
+            />
+            <Action
+                on:click={() => setCustomFont("courier")}
+                custom={$clockStyleClass !== "font-courier"}
+                label="Courier"
+            />
+            <Action
+                on:click={() => setCustomFont("sono")}
+                custom={$clockStyleClass !== "font-sono"}
+                label="Sono"
+            />
+            <Action
+                on:click={() => setCustomFont("workbench")}
+                custom={$clockStyleClass !== "font-workbench"}
+                label="Workbench"
+            />
+            <Action
+                on:click={() => setCustomFont("wenkai")}
+                custom={$clockStyleClass !== "font-wenkai"}
+                label="Wenkai"
+            />
         </div>
+        <!-- <div class="flex items-center gap-2">
+        </div>
+        <div class="flex items-center gap-2">
+        </div> -->
     </PrimaryBox>
 </SettingsBox>

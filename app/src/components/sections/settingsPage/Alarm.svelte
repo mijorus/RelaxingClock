@@ -230,7 +230,6 @@ import { ring, clearAlarmMemory } from '../../../handlers/alarm';
         label={{text: primaryBoxTitle}} 
         description={{text:'Set an alarm that wakes you up with beautiful colors. And don\'t worry if you accidentally close the tab, I\'ll keep that in mind :)', iconClass: 'lnr lnr-question-circle'}}
         available={true}
-        shortcut={altLabel + ' + a'}
     >
         <Action 
             custom

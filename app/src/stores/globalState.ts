@@ -51,6 +51,7 @@ export const mobileStatus = derived(screenSize, function (value) {
 // tips
 export const tips: Writable<Tip[]> = writable(null);
 export const alarmIsRinging: Writable<boolean> = writable(false);
+export const timerIsRinging: Writable<boolean> = writable(false);
 export const pinnedDBisReady: Writable<boolean> = writable(false);
 export const clockIsVisible: Readable<boolean> = readable(true, (set: Subscriber<boolean>): Unsubscriber => {
     if (!('IntersectionObserver' in window)) {

@@ -157,7 +157,6 @@
             label={{ text: label, bgClass: pomodoroIsRunning === "focus" ? "bg-red-900" : pomodoroIsRunning === "relax" ? "bg-green-900" : null }}
             description={{ text: "" }}
             available={true}
-            shortcut={altLabel + " + f"}
         >
             <Action label={pomodoroIsRunning ? "Stop" : "Start"} on:click={toggleTimer} />
         </PrimaryBox>

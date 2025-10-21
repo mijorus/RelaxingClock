@@ -44,12 +44,12 @@
                 time.unix() >= $timerTime &&
                 time.unix() - $timerTime < minutesPassedCheck * 60
             ) {
-                ring();
+                ring('timer');
             } else if (
                 moment($timerTime, "X").isSameOrBefore(moment().subtract(minutesPassedCheck, "m"))
             ) {
                 console.log("removing old timers");
-                clearAlarmMemory();
+                clearTimerMemory();
             }
         }
     }

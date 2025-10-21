@@ -2,7 +2,11 @@
     import { windowReady } from "html-ready";
 
     import styles from "./clockStyles/styles";
-    import { activeStyle, presentation, timerTime } from "../../stores/storedSettings";
+    import {
+        activeStyle,
+        presentation,
+        timerTime,
+    } from "../../stores/storedSettings";
     import { clockIsVisible, styleChangeLock } from "../../stores/globalState";
     import { screenSaver } from "../../stores/globalState";
     import { clockStyleClass } from "../../stores/storedSettings";
@@ -23,7 +27,14 @@
 
     function updateValues(time: Moment) {
         if ($timerTime) {
-            const alarm = moment($timerTime, 'X');
+            const alarm = moment($timerTime, "X");
+            if (alarm.isSameOrBefore(moment())) {
+                hours = "00";
+                minutes = "00";
+                seconds = "00";
+                return;
+            }
+
             const diffS = alarm.diff(moment(), "seconds");
             hours = Math.floor(diffS / 3600)
                 .toString()
@@ -47,8 +58,13 @@
         <div class="absolute left-1/2 transform -translate-x-2/4">
             <IncomingEventsMessages />
         </div>
-        <div>{#if hours !== '00'}
-            <ClockItem value={hours}/><Divisor />
-        {/if}<ClockItem value={minutes}/><Divisor /><ClockItem color value={seconds}/></div>
+        <div>
+            {#if hours !== "00"}
+                <ClockItem value={hours} /><Divisor />
+            {/if}<ClockItem value={minutes} /><Divisor /><ClockItem
+                color
+                value={seconds}
+            />
+        </div>
     </div>
 </div>
