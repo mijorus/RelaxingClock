@@ -4,6 +4,7 @@
     import TitleIcon from "../../elements/settings/TitleIcon.svelte";
     import PrimaryBox from "../../elements/settings/PrimaryBox.svelte";
     import Action from "../../elements/settings/Buttons/Action.svelte";
+    import Booleans from "../../elements/settings/Buttons/Booleans.svelte";
     import { onMount, tick } from "svelte";
     import moment, { Moment } from "moment";
     import momentDurationFormatSetup from "moment-duration-format";
@@ -15,6 +16,8 @@
     import { alarmTime, clockFormat, clockStyleClass, timerTime } from "../../../stores/storedSettings";
     import { canBeSummoned, shortcuts } from "../../../stores/rooster";
     import { ring, clearAlarmMemory, clearTimerMemory } from "../../../handlers/alarm";
+    import { showClockDuringTimer } from "../../../stores/storedSettings";
+    import NestedBox from "../../elements/settings/NestedBox.svelte";
 
     momentDurationFormatSetup(moment);
 
@@ -207,7 +210,7 @@
     <PrimaryBox
         label={{ text: primaryBoxTitle }}
         description={{
-            text: "Set a timer that will show on the main clock",
+            text: "Set a timer that will show on the main clock, unless the setting below is enabled",
             iconClass: "lnr lnr-question-circle",
         }}
         available={true}
@@ -223,6 +226,9 @@
                 : "text-secondary bg-highlighted border-primary"}
         ></Action>
     </PrimaryBox>
+    <NestedBox bordered label="Keep clock visible during timer">
+        <Booleans state={$showClockDuringTimer} label={"don't change main clock"} on:change={(e) => showClockDuringTimer.set(e.detail)} />
+    </NestedBox>
 </SettingsBox>
 
 <style>

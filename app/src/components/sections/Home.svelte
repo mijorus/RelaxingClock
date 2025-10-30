@@ -13,7 +13,11 @@
     import FloatingBlobs from "./FloatingBlobs/FloatingBlobs.svelte";
     import IncomingEventsBox from "../clock/IncomingEventsBox.svelte";
     import Bubble from "../elements/Bubble.svelte";
-    import { backgroundImage, timerTime } from "../../stores/storedSettings";
+    import {
+        backgroundImage,
+        timerTime,
+        showClockDuringTimer,
+    } from "../../stores/storedSettings";
     import SmoothImage from "../elements/SmoothImage.svelte";
     import Timer from "../clock/Timer.svelte";
 
@@ -69,9 +73,15 @@
     <FloatingBlobs />
 </div>
 
-<div class="h-screen relative" class:home-bg-image={$backgroundImage !== "none"}>
+<div
+    class="h-screen relative"
+    class:home-bg-image={$backgroundImage !== "none"}
+>
     {#if $backgroundImage !== "none"}
-        <SmoothImage classes="clock-bg-image absolute top-0 w-full h-full" src={$backgroundImage} />
+        <SmoothImage
+            classes="clock-bg-image absolute top-0 w-full h-full"
+            src={$backgroundImage}
+        />
         <!-- <HomeBackgroud cssClasses="absolute top-0 w-full h-full"></HomeBackgroud> -->
     {/if}
 
@@ -88,7 +98,7 @@
             if (!$screenSaver) disableScreenSaver;
         }}
     >
-        {#if $timerTime}
+        {#if $timerTime && !$showClockDuringTimer}
             <Timer />
         {:else}
             <Clock />
@@ -113,6 +123,12 @@
     <div class="absolute top-0 left-0" style="z-index: 2;">
         <Pinned />
     </div>
+
+    {#if $timerTime && $showClockDuringTimer}
+        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
+            <Timer isShowedAlongsideClock={true} />
+        </div>
+    {/if}
 </div>
 
 <style global>
