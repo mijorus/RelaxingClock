@@ -93,3 +93,5 @@ export const remindersRepeatedDefault = userSetting('remindersRepeatedDefault', 
 export const accentColor = userSetting('hoursColor', undefined, 'string');
 // clock class
 export const clockStyleClass = userSetting('clockStyleClass', 'font-monofur', 'string');
+// Timer
+export const showClockDuringTimer = userSetting('showClockDuringTimer', false, 'boolean');
